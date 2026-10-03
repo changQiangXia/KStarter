@@ -1,0 +1,64 @@
+<p>If we use only <code>cond</code> and <code>calc</code> in our classifiers, we get better scores than when using all features of the dataset (see below). The nice side effect is that models can easily be compared with the help of contour plots. Look at the six diagrams and judge which classifiers overfit and which ones underfit:</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F7917824%2Fdd4d674ec5653f67f9b4e91f60c2b515%2Fsix-contours.png?generation=1680836445971825&amp;alt=media" alt=""></p>
+<p>The following scatterplot represents the whole dataset. There aren't any more training points than what you see here. It is difficult to avoid overfitting. Now imagine the same points in three (or more) dimensions. The added dimensions make it almost impossible to avoid overfitting!</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F7917824%2Fd70f732e1e824fbe0e66464ce16d65f1%2Fscatterplot.png?generation=1680836419418664&amp;alt=media" alt=""></p>
+<p>A 1000-fold cross-validation should convince everybody that results are better with two features than with all features:</p>
+<pre><code>cv = RepeatedStratifiedKFold(n_splits=10, n_repeats=100, random_state=1)
+
+cvs = cross_val_score(ExtraTreesClassifier(n_estimators=800, min_samples_leaf=13,
+                                           max_features=1.0, criterion='entropy'),
+                      train[original_features],
+                      train[target],
+                      scoring='roc_auc',
+                      cv=cv)
+print(f"{cvs.mean():.3f} ExtraTreesClassifier with all features")
+# 0.803 ExtraTreesClassifier with all features
+
+cvs = cross_val_score(ExtraTreesClassifier(n_estimators=800, min_samples_leaf=13,
+                                           max_features=1.0, criterion='entropy'),
+                      train[['cond', 'calc']],
+                      train[target],
+                      scoring='roc_auc',
+                      cv=cv)
+print(f"{cvs.mean():.3f} ExtraTreesClassifier with two features")
+# 0.817 ExtraTreesClassifier with two features
+</code></pre>
+<p>Source code for the contour plots:</p>
+<pre><code>features = ['cond', 'calc']
+fig, axs = plt.subplots(3, 2, figsize=(8, 12), sharex=True, sharey=True)
+axs = axs.ravel()
+models = [ExtraTreesClassifier(n_estimators=800, min_samples_leaf=13,
+                               max_features=1.0, criterion='entropy'),
+          GradientBoostingClassifier(learning_rate=0.1, n_estimators=34,
+                                     max_features=2, min_samples_leaf=25,
+                                     max_depth=2),
+          RandomForestClassifier(n_estimators=400, min_samples_leaf=3),
+          make_pipeline(StandardScaler(),
+                        Nystroem(gamma=1, n_components=330),
+                        LogisticRegression(C=0.3)),
+          MyGAM(),
+          make_pipeline(StandardScaler(),
+                        GaussianProcessClassifier())
+         ]
+cv = RepeatedStratifiedKFold(n_splits=10, n_repeats=10, random_state=2)
+for ax, model in zip(axs, models):
+    cvs = cross_val_score(model,
+                      train[['cond', 'calc']],
+                      train[target],
+                      scoring='roc_auc',
+                      cv=10)
+
+    m = model
+    if type(m) == Pipeline: m = m.steps[-1][1]
+    ax.set_title(f"{type(m).__name__} {cvs.mean():.3f}")
+    model.fit(train[features], train[target])
+    PartialDependenceDisplay.from_estimator(model, train[features],
+                                            [tuple(features)],
+                                            method='brute',
+                                            percentiles=(0.0, 1.0),
+                                            grid_resolution=100,
+                                            contour_kw={'cmap': 'cool'},
+                                            ax=ax)
+plt.tight_layout()
+plt.show()
+</code></pre>

@@ -1,0 +1,56 @@
+<p>First of all, let me thank the organizers of the competition and all the participants for interesting discussions!</p>
+<p>In this competition, my solution was based on consecutive building of a multiplicative model, its fine-tuning and cross-validation. I was lucky to get the 1st LB position very soon, and my efforts were focused on how to prevent overfitting.</p>
+<p><strong><a href="https://www.kaggle.com/code/kdmitrie/pgs501-3rd-place-solution" target="_blank">You can check my final solution here</a></strong></p>
+<h1>1. The basic model</h1>
+<p>I have <strong><a href="https://www.kaggle.com/code/kdmitrie/pgs501-model-2-additional-country-doy-factor" target="_blank">made the basic model public</a></strong>, and it reached the public score of about 0.05, that outperformed most of public notebooks without ensembling. The model is fully described in the notebook. In short, it incorporates the following factors:</p>
+<ul>
+<li>GDP per capita;</li>
+<li>Store ratio;</li>
+<li>Country ratio;</li>
+<li>Periodic product factor;</li>
+<li>Day-of-week factor;</li>
+<li>Periodic day of year factor;</li>
+<li>Periodic date factor;</li>
+<li>Country-dependent day-of-year factor.</li>
+</ul>
+<h1>2. Holidays</h1>
+<p>The basic model takes the holidays into account by averaging the sales across the years. This is not correct since the exact date of many holidays may differ year to year.</p>
+<p>To overcome this difficulty, <code>holidays</code> library was used. However, although this library is cool, it is not perfect. It doesn’t include several holidays in Kenya (Festival of breaking the fast, Moi Day, Feast of the Sacrifice); uses different names for the same holiday (Kenyatta Day and Mashujaa Day); and needs a care when two holidays are in the same day. Moreover, it outputs ‘normal’ as well as ‘observed’ holidays. My experiments showed that it is better to consider these two types of holidays as separate holidays. As a result of using this library, each holiday in each country is represented a separate column in the dataframe, where ones are put in the holiday dates and zeros are put elsewhere.</p>
+<p>It <a href="https://www.kaggle.com/competitions/playground-series-s5e1/discussion/559828" target="_blank">was noticed</a>, that the ‘holiday effect’ takes place a few days later than the actual holiday. My experiments showed, that it could be described with a simple Gaussian curve: <br>
+$$H(t) = \exp\left(- \dfrac{(d-d_h-d_0)^2}{2\sigma_0^2} \right),$$<br>
+where \(d\) is the current date; \(d_h\) is the date of the holiday; \(d_0=4.5\) is a response shift, and \(\sigma_0=2\) is the width of the Gaussian curve. The whole response is calculated as a convolution of \(H(t)\) with the data from the corresponding holiday column and its multiplication by amplitude factor, that needs to be determined.</p>
+<h1>3. Strange 1.06 multiplicator</h1>
+<p>The submission score gets sufficiently better being multiplied by a factor of about 1.06, credit to <a href="https://www.kaggle.com/cabaxiom" target="_blank">@cabaxiom</a> for discovering this. It could be improved even further if the predictions for Kenya are also multiplied by about 1.03. This was very strange for me since it was hard to describe this factor, and using it sufficiently decreased the score during CV. I think this factor and its understanding is the key to the competition. </p>
+<p>Finally, after accounting for all the factors I discovered that the sales depend on time in a complex way, and we need to make a prediction (see the figure below). My efforts to explain it by some kind of economic indicators or by features already existent in the dataset failed. The pattern is uncertain, because it is not linear due to a wave in 2010-2012. Although the linear continuation over 2017 explains the 1.06 and 1.03 factors quite precise, we can’t be sure that this linear growth exists in 2018-2019. So, I decided to make my first final submission under the hypothesis of linear trend, while the second assumes it to be constant after 2018-01-01.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F4308868%2F04bdd76209c6db4a5d94e6679101c685%2Fpgs501.png?generation=1738369143187036&amp;alt=media" alt=""></p>
+<p><strong>Looking at the private score, it was a good decision: the second submission achieves much better score!</strong></p>
+<ul>
+<li>To describe the mentioned trend, I used a ReLU function: \( \text{trend}(d) = 1 + s \cdot\text{ReLU}(d-d_1)\), where \(s\) and \(d_1\) are the slope and shift parameters, correspondingly.</li>
+<li>To deal with the differences between Kenya and other countries, I trained an additional model on the Kenya’s data only.</li>
+</ul>
+<h1>4. Parameters optimization</h1>
+<p>In the basic model, the parameters were optimized using sequential regressions. This seems to be not optimal, and it is better to optimize them simultaneously. Moreover, the MAPE metric used in the competition differs from the MSE.</p>
+<p>So, instead of this, I’ve built a <code>predict</code> function:<br>
+$$<br>
+\text{predict}(\hat X, \vec\alpha) = \alpha_0\prod\limits_{n=1}^N(\hat 1 + \hat X_n \vec\alpha_n),<br>
+$$<br>
+where the whole dataframe \(\hat X\) is divided into \(N\) sets of columns \(\hat X_n\): \(\hat X = [\hat X_1, \hat X_2, \dots, \hat X_N ]\), and \(\hat 1\) is a column-vector of ones.</p>
+<p>At the beginning, all the parameters are initialized with zeros or something reasonable. Then the training is performed using one or another set of columns. Finally, the training is performed using all columns. This is done for all countries and for Kenya only.</p>
+<p>I used simple but powerful <code>minimize</code> from <code>scipy.optimize</code> to perform the optimization. This allowed me to quickly experiment with many factors and functional dependencies without the need to create the entire infrastructure necessary for DL frameworks.</p>
+<p>The 6-fold CV was performed on the per-year basis, and the final model was trained on the whole data.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F4308868%2Ff7879d903dd374ca8e03e9e9ae4bb1c7%2Fcv.png?generation=1738369156022711&amp;alt=media" alt=""></p>
+<h1>5. Drop the data</h1>
+<p>I have discovered that if we drop the 2010-2012 data for Kenya, both local CV and public LB score improve significantly. So I did this in my final model. </p>
+<p>Unfortunately, <strong>it was a good idea for improving public score, but it was bad for the private score</strong>. <a href="https://www.kaggle.com/code/kdmitrie/pgs501-separate-countries-without-data-drop" target="_blank">The notebook without data drop</a> achieves the private score of 0.04369, that corresponds to the 1st place.</p>
+<h1>6. What didn’t work for me in this competition</h1>
+<ul>
+<li>AutoML;</li>
+<li>DL (I can’t wait to see Chris’ solution!);</li>
+<li>More complex holiday response functions as well as efforts to change the \(d_0\) and \(\sigma_0\);</li>
+<li>Additional economic factors except for GDP per capita;</li>
+<li>ARIMA-like models.</li>
+</ul>
+<h1>7. Human or AI?</h1>
+<p>Currently, I don't know, what did <a href="https://www.kaggle.com/georgekoussa" target="_blank">@georgekoussa</a> used in the competition. </p>
+<p>However, <a href="https://www.kaggle.com/cdeotte" target="_blank">@cdeotte</a> was so kind to share his DL notebooks. For me, it was particularly interesting, which solution would be better in the competition of such a type, that a human can perform the feature extraction 'by hand'. Okay, we can conclude, that both solutions are approximately at the same level. However, I believe, DL approach would be much better in more complicated tasks.</p>
+<p><strong><a href="https://www.kaggle.com/code/kdmitrie/pgs501-3rd-place-solution" target="_blank">You can check my final solution here</a></strong> </p>

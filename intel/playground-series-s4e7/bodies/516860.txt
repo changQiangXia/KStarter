@@ -1,0 +1,133 @@
+# https://www.kaggle.com/competitions/playground-series-s4e7/discussion/516860
+
+Topic #516860: [LB 0.89375] 3rd place solution - "LightAutoML testers" team
+  Author: Alexander Ryzhkov
+  Posted: 2024-07-03 20:42:03.239000
+  Votes: 43  Comments: 16
+
+Hello colleagues,
+
+Let me share with you 3rd place solution, the “LightAutoML testers” team solution for the 3rd phase of AutoML Grand Prix - it was 24 hours of fun with the amazing 11.5 mln rows dataset.
+
+Useful Links
+
+
+
+Inference kernel with our final score 0.89375
+
+Dataset with pretrained models and OOFs (contains more models than used in final sub)
+
+GitHub repo with training notebooks to reproduce the necessary models for the final sub
+
+
+
+
+Full solution scheme
+
+
+
+Solution description
+
+As a starting point, we have trained a straightforward TabularAutoML model on the full train dataset to figure out all the important points of the task. Below you can see both variants of the feature importances calculation (fast - based on the number of splits by each feature, permutation - permutation importances on holdout):
+
+
+
+As we can see, the best 2 features in both variants are the same (Previously_Insured and Vehicle_Damage) and both of these features are binary. So we have tested training separate models for each variant below using LightAutoML:
+
+
+
+1 LGBM model for the whole train dataset
+
+2 LGBM models for the 0 and 1 subsets based on Previously_Insured feature
+
+2 LGBM models for the Yes  and No subsets based on Vehicle_Damage feature
+
+4 LGBM models for the train dataset subsets based on the unique combinations of Previously_Insured and Vehicle_Damage
+
+
+This 9 LGBMs were used to create so called LGBM_composition_1 - the first weighted blend.
+
+After that we have trained 7 tabular NNs using LightAutoML based on 4 different NN architectures:
+
+
+
+3 DenseLight nets
+
+2 ResNet nets
+
+1 AutoInt net
+
+1 FT-Transformer 
+
+
+We have tuned all the hyperparams for these nets including activation functions, hidden and embedding sizes, SWA (stochastic weighted averaging) and early stopping params etc - this helps us to receive pretty high-performance NNs (for example we received 0.89232 AUC using single DenseLight model - the proof-kernel is here). 
+
+Out-of-Fold predictions (OOFs) from 4 of these NNs (2 DenseLight, 1 ResNet and  1 FT-Transformer) were used as new features to train another 9 LightAutoML LGBM models (in the same manner as previously using full train dataset and separated segments). These stacking models were used to create LGBM_composition_2 - the second weighted blend.
+
+The final submission was created using both LGBM weighted blend and 4 best tabular NNs - this helps us to receive 0.89375 AUC and secure the 3rd place.
+
+That's all!
+
+
+
+Once again, it was amazing 24 hours run and I would like to congratulate organisers and other contestants for that.
+
+All the best,
+"LightAutoML testers" team
+
+Comments:
+├─ Thomas Meißner (2024-07-04 06:11:03.853000) [+6]
+│  Congratulations!
+│  
+│  A crazy solution for 24 hours!
+│  
+│  Generally this 24 h competition has been fascinating as we got many different solutions this time.
+├─ Ravi Ramakrishnan (2024-07-03 21:50:24.643000) [+6]
+│  What kind of hardware did you use to train these models?
+│  This seems like a whole month's work compressed in 24 hours @alexryzhkov
+  ├─ Alexander Ryzhkov (2024-07-03 21:59:00.707000) [+7]
+  │  @ravi20076 yep, looks like so but we use LightAutoML so it was a little bit faster (about 30x faster) :)))
+  │  
+  │  As for the hardware, we have used 2 V100 gpus and the CPU server with 32 cores
+    ├─ Ravi Ramakrishnan (2024-07-03 22:02:55.420000) [+7]
+    │  Hearty congratulations for the result @alexryzhkov
+    ├─ Thomas Meißner (2024-07-04 06:12:39.550000) [+4]
+    │  The 2 V100s are nice. Do you have an estimation of how much faster they are compared to an Rtx 4090? 
+    │  
+    │  I have a 3090 and that feels quite potent already 😁
+    ├─ Alexander Ryzhkov (2024-07-04 07:44:58.113000) [+4]
+    │  @thomasmeiner For this kind of networks which don’t utilize the full GPU power almost all GPUs should be pretty comparable to each other
+    ├─ Thomas Meißner (2024-07-04 07:59:06.387000) [+3]
+    │  In my case I used Xgboost only and it was fully utilized
+  ├─ [deleted] (2024-07-03 23:12:03.750000) [+3]
+  │  @ravi20076
+  │  
+  │  
+  │  What does your day consist of on a daily basis?
+    ├─ Ravi Ramakrishnan (2024-07-04 05:18:03.460000) [+10]
+    │  Office work, kaggle and workouts @arabidopsisthalian
+    ├─ Samvel Kocharyan (2024-07-04 08:12:02.597000) [+5]
+    │  Let us all know when the break happens @ravi20076. I guess - 1000 days is a goal. Well done!
+    ├─ Ravi Ramakrishnan (2024-07-04 10:46:54.393000) [+5]
+    │  That is a target for me @samvelkoch
+├─ Optimistix (2024-07-04 05:39:45.750000) [+4]
+│  Congratulations, and thanks for sharing all the resources. I'm both impressed by this sophisticated model/approach as well as by the fact a single highly tuned CatBoost outscored it (will also be i...
+├─ [deleted] (2024-07-03 23:03:58.440000) [+1]
+│  Is it accurate to say that bland  0.7 * Test + 03 * Test  has oof  0.7 * OOF  + 0.3 * OOF ? 
+│  
+│  
+│  Can OOF be calculated after generalization**? :
+│  
+│  
+│  sub_list=[sub_ext1,sub_ext2, sub_ext3,sub_ext4,sub_e...
+  ├─ Alexander Ryzhkov (2024-07-04 00:11:53.173000) [+4]
+  │  @arabidopsisthalian please check the last cells of the LGBM kernels in github repo
+├─ [deleted] (2024-07-03 21:49:30.263000) [+1]
+│  What is the OOF score after each step? (Train data/9 LAMA LGBMs/7 LAMA Tabular NNs/Train data with 4 NNs OOF preds/9 LAMA LGBMs/LGBM_composition_1/LGBM_composition_2/Final composition)
+│  
+│  
+│  How to tra...
+  ├─ Alexander Ryzhkov (2024-07-03 22:09:00.793000) [+3]
+  │  @arabidopsisthalian 
+  │  1) The OOF scores for each Tabular NN are in the cell after the training cell (you can check any notebook - they are all created by me, so I’m pretty sure they are there)
+  │  2) Th...

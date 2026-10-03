@@ -1,0 +1,23 @@
+<p>My solution is based on the following observations:</p>
+<ol>
+<li>Only a subset of the features is useful, although it's not completely clear which features belong to the subset. Being in doubt which subset is the right one, we can make models for different feature subsets and blend them.</li>
+<li>After feature selection, there are lots of duplicates in the training data. We can reduce training time by grouping these duplicates. Training with 3000 groups rather than 360'000 samples speeds up the development cycle massively.</li>
+<li>If we add the original data to the training dataset, the score improves.</li>
+<li><code>store_sqft</code>, which has only twenty unique values, looks like a numerical feature, but it is categorical.</li>
+<li>As most regression algorithms in the library have been developed to optimize rmse, we should make all models predict the transformed target <code>log1p(cost)</code> and submit <code>expm1(pred)</code>.</li>
+<li>A "zoo of models", i.e. a diverse ensemble, averages out the prediction errors of the models.</li>
+<li>Training and test data adhere to the same distribution so that we may trust the cv scores completely.</li>
+</ol>
+<p>Point 4 is illustrated by the following diagram. The partial dependency plot for <code>store_sqft</code> doesn't look like a typical regression curve - it looks like a categorical feature which has been mistaken for a continuous one. This observation suggests that we might one-hot encode or target-encode the feature.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F7917824%2Fcb97fc9082b46cbd53b086b098a227d1%2Fdependence.png?generation=1680567000507464&amp;alt=media" alt="dependence"></p>
+<p>The diversity of the model zoo can be analyzed with a dendrogram. The dendrogram represents a hierachical clustering of the models where similar models end up in the same cluster. We can easily identify four clusters:</p>
+<ol>
+<li>four models which were trained with the additional <code>unit_sales</code> or <code>store_sales</code> feature</li>
+<li>all random forests and extra-trees models</li>
+<li>the neural network</li>
+<li>all gradient-boosting models</li>
+</ol>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F7917824%2Fbd6a365e57ff21e97766c3b249bc8708%2Fdendrogram.png?generation=1680567017882352&amp;alt=media" alt="dendrogram"></p>
+<p>The bar chart shows the cv scores and training times of all models and ensembles. The final submission is a weighted blend of all 18 models with the weights determined by ridge regression.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F7917824%2Fb4b4c72b7de4caef6986ad1c36bc9ee6%2Fbar-chart.png?generation=1680567049799004&amp;alt=media" alt="bar chart"></p>
+<p>More details can be found in the <a href="https://www.kaggle.com/code/ambrosm/pss3e11-zoo-of-models" target="_blank">source code</a>.</p>

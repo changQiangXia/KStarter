@@ -1,0 +1,99 @@
+<p>Hey Kagglers! I used to be pretty active in these playground competitions, but after the December 2023 competition I took a break from Kaggle. On a whim I decided to start working on this one about 10 days ago, and it's been as much of a thrill as it ever was. Getting 1st place was a surprise, to be sure, but a welcome one!</p>
+<p><strong>Cross-Validation</strong><br>
+I'm sure you've heard this before, but setting up a robust cross-validation scheme for evaluating the performance of your predictions is <strong>VERY</strong> important to doing well in these competitions. I see lots of questions from folks on what kind of feature engineering to do, or how to best ensemble models, impute data, engineer features, etc. For a vast majority of these questions, there's no single answer that is universally true for any dataset. The only way to find out what works for a particular dataset is to try various options and see what performs the best, and that's where cross-validation comes in. In these playground competitions, the data is usually split 60-40 between train and test set, and 20% of the test set is used for the public leaderboard. That means that a CV score measures your performance on <strong>60%</strong> of the entire dataset, whereas the public leaderboard measures your performance on only <strong>8%</strong>, making cross-validation performance a much more reliable indicator of progress than public leaderboard performance. All of the decisions made below were based on optimizing my cross-validation performance.</p>
+<p><strong>Data Preprocessing</strong><br>
+Shoutout to various member of the community for the tip to treat the numerical features as categorical. What I found most effective was to maintain both the numeric feature and a categorical copy of it. I didn't do any other feature engineering, as my experience from past playground competitions has usually been that feature engineering is of little use. I did include the original dataset.</p>
+<p><strong>Modelling</strong></p>
+<p>My general approach here is the same as the one I used last competition. For each of XGBoost, LightGBM, and CatBoost, I used Optuna to find 10 different sets of 'optimal hyperparameters' and averaged their predictions to get an overall prediction for each. Shoutout to <a href="https://www.kaggle.com/omidbaghchehsaraei" target="_blank">@omidbaghchehsaraei</a>'s post <a href="https://www.kaggle.com/competitions/playground-series-s4e10/discussion/539963" target="_blank">here</a> for the tip to use large max_bin values. I also added a Neural Network that was heavily inspired from <a href="https://www.kaggle.com/paddykb" target="_blank">@paddykb</a>'s notebook <a href="https://www.kaggle.com/code/paddykb/ps-s4e10-no-keras-no-loan-cv-0-963" target="_blank">here</a>. The performance of each of these models is as follows:</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>CV Score</th>
+<th>Public LB</th>
+<th>Private LB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LightGBM</td>
+<td>.96811</td>
+<td>.97005</td>
+<td>.96637</td>
+</tr>
+<tr>
+<td>XGBoost</td>
+<td>.96767</td>
+<td>.96989</td>
+<td>.96540</td>
+</tr>
+<tr>
+<td>CatBoost</td>
+<td>.96972</td>
+<td>.97299</td>
+<td>.96865</td>
+</tr>
+<tr>
+<td>NN</td>
+<td>.96678</td>
+<td>.97088</td>
+<td>.96577</td>
+</tr>
+</tbody>
+</table>
+<p><br><br>
+What I think might have been my secret sauce was that for each of these model predictions, I trained a CatBoost model using the initial model predictions as a baseline. An example of how to do this can be found <a href="https://catboost.ai/en/docs/concepts/python-usages-examples#baseline" target="_blank">here</a>. I'm not sure exactly what inspired me to do this, perhaps it was from seeing how amazingly well CatBoost performed on this data, but to my surprise CatBoost was able to significantly improve the performance of each of these model predictions, even the ones that were originally generated using CatBoost. The performance of these CatBoost-improved models are as follows:</p>
+<table>
+<thead>
+<tr>
+<th>Initial Model</th>
+<th>CV Score</th>
+<th>Public LB</th>
+<th>Private LB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LightGBM</td>
+<td>.96856</td>
+<td>.97048</td>
+<td>.96713</td>
+</tr>
+<tr>
+<td>XGBoost</td>
+<td>.96815</td>
+<td>.97024</td>
+<td>.96611</td>
+</tr>
+<tr>
+<td>CatBoost</td>
+<td>.96997</td>
+<td>.97334</td>
+<td>.96903</td>
+</tr>
+<tr>
+<td>NN</td>
+<td>.96732</td>
+<td>.97117</td>
+<td>.96667</td>
+</tr>
+</tbody>
+</table>
+<p><br><br>
+I find it impressive that the CatBoost model that used CatBoost predictions as a baseline would have been enough for 3rd place. CatBoost was the king for this comp! The final step was a Neural Network to stack these 4 predictions together. This squeezed out the extra last bit of performance needed to bring the solution to the top. </p>
+<table>
+<thead>
+<tr>
+<th>CV Score</th>
+<th>Public LB</th>
+<th>Private LB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>.97059</td>
+<td>.97344</td>
+<td>.96938</td>
+</tr>
+</tbody>
+</table>

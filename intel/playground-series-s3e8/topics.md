@@ -1,0 +1,51 @@
+# playground-series-s3e8 讨论区（按票数排序，共 49 条）
+
+- [Selected features suggested by ChatGPT](https://www.kaggle.com/competitions/playground-series-s3e8/discussion/389472) — 57 票 / 28 评论 / 2023-02-21 
+- [Gemstone Length, Width, Height | Feature Engineering](https://www.kaggle.com/competitions/playground-series-s3e8/discussion/389207) — 38 票 / 10 评论 / 2023-02-21 
+- [When 4Cs Concept becomes an Art](https://www.kaggle.com/competitions/playground-series-s3e8/discussion/389465) — 28 票 / 5 评论 / 2023-02-21 
+- [2nd Place Solution](https://www.kaggle.com/competitions/playground-series-s3e8/discussion/392828) — 27 票 / 10 评论 / 2023-03-07 **write-up?**
+- [8th place solution (Flying Over the 1st place again)](https://www.kaggle.com/competitions/playground-series-s3e8/discussion/392860) — 26 票 / 7 评论 / 2023-03-07 **write-up?**
+- [3rd Place Solution](https://www.kaggle.com/competitions/playground-series-s3e8/discussion/392824) — 26 票 / 11 评论 / 2023-03-07 **write-up?**
+- [Collection of helpful ideas - S3E8](https://www.kaggle.com/competitions/playground-series-s3e8/discussion/390882) — 26 票 / 8 评论 / 2023-02-27 
+- [Feature Descriptions to help you engineer better features.](https://www.kaggle.com/competitions/playground-series-s3e8/discussion/389213) — 22 票 / 10 评论 / 2023-02-21 
+- [Evaluation Metric: RMSE Calculation Quick Tip](https://www.kaggle.com/competitions/playground-series-s3e8/discussion/390025) — 19 票 / 5 评论 / 2023-02-23 
+- [6th place solution in 3 days - AutoGluon + AutoXGB](https://www.kaggle.com/competitions/playground-series-s3e8/discussion/392820) — 18 票 / 3 评论 / 2023-03-07 **write-up?**
+- [Feature Engineering: Cut, Clarity, Color as Ordered Numerics](https://www.kaggle.com/competitions/playground-series-s3e8/discussion/389174) — 18 票 / 2 评论 / 2023-02-21 
+- [Diamond anatomy and relationship between depth, x, y, and z features](https://www.kaggle.com/competitions/playground-series-s3e8/discussion/389266) — 16 票 / 3 评论 / 2023-02-21 
+- [1st place solution](https://www.kaggle.com/competitions/playground-series-s3e8/discussion/392926) — 15 票 / 2 评论 / 2023-03-07 **write-up?**
+- [SHAP feature importances](https://www.kaggle.com/competitions/playground-series-s3e8/discussion/392253) — 14 票 / 3 评论 / 2023-03-04 
+- [Deja vu... data leakage again? ](https://www.kaggle.com/competitions/playground-series-s3e8/discussion/389148) — 13 票 / 8 评论 / 2023-02-21 
+- [Diamond or Cubic Zirconia. What kind of code you're going to deliver (in your professional life)? ](https://www.kaggle.com/competitions/playground-series-s3e8/discussion/389466) — 13 票 / 2 评论 / 2023-02-21 
+- [Understanding the Color attribute](https://www.kaggle.com/competitions/playground-series-s3e8/discussion/389589) — 13 票 / 1 评论 / 2023-02-22 
+- [[PLOT-TIP]Drawing a histogram and a boxplot on top of it ! 📊](https://www.kaggle.com/competitions/playground-series-s3e8/discussion/391832) — 11 票 / 2 评论 / 2023-03-02 
+- [[7th Place] Reversing the Polarity of the Information Flow](https://www.kaggle.com/competitions/playground-series-s3e8/discussion/392937) — 11 票 / 2 评论 / 2023-03-07 **write-up?**
+- [Missing Price Points 1455-1545](https://www.kaggle.com/competitions/playground-series-s3e8/discussion/390436) — 11 票 / 2 评论 / 2023-02-25 
+- [How to improve XGBoost ?](https://www.kaggle.com/competitions/playground-series-s3e8/discussion/390668) — 10 票 / 4 评论 / 2023-02-26 
+- [Some features to value "beauty/shininess". | Feature Engineering](https://www.kaggle.com/competitions/playground-series-s3e8/discussion/391242) — 8 票 / 5 评论 / 2023-02-28 
+- [Null values in column['x', 'y', 'z']](https://www.kaggle.com/competitions/playground-series-s3e8/discussion/389240) — 8 票 / 1 评论 / 2023-02-21 
+- [Original vs train data](https://www.kaggle.com/competitions/playground-series-s3e8/discussion/389467) — 8 票 / 0 评论 / 2023-02-21 
+- [The 4Cs of Diamonds and how to encode them](https://www.kaggle.com/competitions/playground-series-s3e8/discussion/389219) — 8 票 / 1 评论 / 2023-02-21 
+- [Finding measurement error in x, y, z, depth and imputation strategy](https://www.kaggle.com/competitions/playground-series-s3e8/discussion/389723) — 7 票 / 2 评论 / 2023-02-22 
+- [My results.](https://www.kaggle.com/competitions/playground-series-s3e8/discussion/389544) — 6 票 / 0 评论 / 2023-02-22 
+- [Optical features that improved my LB score, with the help of ChatGPT](https://www.kaggle.com/competitions/playground-series-s3e8/discussion/392582) — 4 票 / 0 评论 / 2023-03-06 
+- [Question for experts on interactions](https://www.kaggle.com/competitions/playground-series-s3e8/discussion/390191) — 4 票 / 5 评论 / 2023-02-24 
+- [3 model in R with very good performace (Best - 585.78664 with LightGBM)](https://www.kaggle.com/competitions/playground-series-s3e8/discussion/389297) — 4 票 / 3 评论 / 2023-02-21 
+- [My approach using ChatGPT (hint from https://www.kaggle.com/competitions/playground-series-s3e8/discussion/389472)](https://www.kaggle.com/competitions/playground-series-s3e8/discussion/390663) — 3 票 / 0 评论 / 2023-02-26 
+- [duplicated data with different labels!](https://www.kaggle.com/competitions/playground-series-s3e8/discussion/389311) — 3 票 / 3 评论 / 2023-02-21 
+- [Semi-Supervised Learning](https://www.kaggle.com/competitions/playground-series-s3e8/discussion/389405) — 3 票 / 0 评论 / 2023-02-21 
+- [Duplicate records with different price](https://www.kaggle.com/competitions/playground-series-s3e8/discussion/391157) — 2 票 / 2 评论 / 2023-02-28 
+- [New to Machine Learning or Kaggle?](https://www.kaggle.com/competitions/playground-series-s3e8/discussion/380701) — 2 票 / 1 评论 / 2023-01-23 
+- [S03E08 - Day 2 notes 💡](https://www.kaggle.com/competitions/playground-series-s3e8/discussion/389951) — 2 票 / 0 评论 / 2023-02-23 
+- [Girdle feature and possible mistake in the documentation?](https://www.kaggle.com/competitions/playground-series-s3e8/discussion/389743) — 2 票 / 0 评论 / 2023-02-22 
+- [ Late Submissions Disabled](https://www.kaggle.com/competitions/playground-series-s3e8/discussion/454617) — 1 票 / 2 评论 / 2023-11-10 
+- [This is currently the highest scoring public notebook.](https://www.kaggle.com/competitions/playground-series-s3e8/discussion/392892) — 1 票 / 1 评论 / 2023-03-07 
+- [Feature Descriptions | Expanded Version](https://www.kaggle.com/competitions/playground-series-s3e8/discussion/392409) — 1 票 / 2 评论 / 2023-03-05 
+- [What is original data?](https://www.kaggle.com/competitions/playground-series-s3e8/discussion/392052) — 1 票 / 2 评论 / 2023-03-03 
+- [How to evaluate the residual error?](https://www.kaggle.com/competitions/playground-series-s3e8/discussion/390465) — 1 票 / 1 评论 / 2023-02-25 
+- [There are missing values in the original dataset](https://www.kaggle.com/competitions/playground-series-s3e8/discussion/389226) — 1 票 / 1 评论 / 2023-02-21 
+- [how to make excel file into dataframe](https://www.kaggle.com/competitions/playground-series-s3e8/discussion/389331) — 1 票 / 0 评论 / 2023-02-21 
+- [Hyper-Tuning is going to win you this! For Suggestions , See below!](https://www.kaggle.com/competitions/playground-series-s3e8/discussion/391569) — 0 票 / 5 评论 / 2023-03-01 
+- [Looking for one or two team member ](https://www.kaggle.com/competitions/playground-series-s3e8/discussion/392608) — 0 票 / 0 评论 / 2023-03-06 
+- [Does size matter? 💎](https://www.kaggle.com/competitions/playground-series-s3e8/discussion/392274) — 0 票 / 0 评论 / 2023-03-04 
+- [My score is 640. But well,  late submission . Anyway here is my notebook](https://www.kaggle.com/competitions/playground-series-s3e8/discussion/407441) — 0 票 / 2 评论 / 2023-05-06 
+- [series of playground competition](https://www.kaggle.com/competitions/playground-series-s3e8/discussion/390863) — 0 票 / 1 评论 / 2023-02-27 

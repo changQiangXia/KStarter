@@ -1,0 +1,251 @@
+# https://www.kaggle.com/competitions/playground-series-s4e7/discussion/523489
+
+Topic #523489: 2nd Place Solution (One model is all you need) - Team Ujjwal Pandey
+  Author: Ujjwal Pandey
+  Posted: 2024-08-01 08:05:07.676000
+  Votes: 45  Comments: 15
+
+Hi everyone,
+I would like to extend my gratitude to the Kaggle community and fellow participants for an incredible Playground Series episode. This was a resource-intensive and time-consuming challenge, demanding a great deal of patience to achieve victory. The frequent movement on the public leaderboard, especially in the last 2-3 days, reflected the intense competition.
+Here's my journey broken into iterations.
+
+Iteration 1
+
+In my initial attempt, I trained a quick, lightly tuned set of models (XGB, LGBM, and SnapML) on my local PC equipped with an RTX 4070.
+
+
+
+The XGB submission was smooth, achieving a Public LB score of 0.88448 with a CV score of 0.8833.
+
+I faced a problem with LightGBM CUDA flavor because of this bug  [CUDA] illegal memory access. Consequently, I had to drop LightGBM from the first iteration.
+
+I did not pursue Random Forest or any sklearn libraries, as public discussions and notebooks indicated they were not worth the computational effort
+
+SnapML usually takes a lot of time on even light datasets but I tried it anyway as it has GPU support but it also achieved an LB score close to 0.8880.
+
+At the end of this iteration, my score was around 0.88. To breach the 0.89 mark, I needed further improvements. I had not yet explored CatBoost, as public forums suggested its default settings could yield scores exceeding 0.895.
+
+
+Iteration 2
+
+A determined effort to tune XGB, LGBM, and SnapML to match CatBoost's performance:
+
+
+
+I aggressively tuned XGB and SnapML using distributed Optuna on four machines (2 x Kaggle GPU P100, 1 x L4 from Colab, 1 x RTX 4070 from my local setup). To avoid OOM errors during HPO, I didn't load the test set into memory.
+
+In this stage I also merged the original dataset and created these four additional interaction features from public notebooks.
+
+
+train_df[]=  train_df[].astype() +  train_df[].astype()
+train_df[] =  train_df[].astype() +  train_df[].astype(
+train_df[] =  train_df[].astype() +  train_df[].astype()
+train_df[] =  train_df[].astype() +  train_df[].astype()
+train_df[] =  train_df[].astype() +  train_df[].astype()
+)
+
+
+
+
+The tuned XGBoost achieved a public LB score of 0.89387 with a CV score of 0.89113.
+
+I tuned LightGBM on CPU using three machines (1 x TPU on Kaggle and 2 x TPUs on Colab). This model achieved a public LB score of 0.89344 with a CV score of 0.89302. A challenge with using TPU on Kaggle is the automatic shutdown after 3 hours when TPU is not consumed, but distributed tuning allowed me to quickly resume training
+
+Next was SnapML though sadly this model couldn't even breach the 0.890 on my CV and hence I filtered this out after this iteration ☹️.
+
+After seeing the performance of neural nets from public discussions and notebooks I gave it a try. There's an awesome library pytorch-tabular which I used to train TABNET and GANDALF  and they also achieved CV score of ~0.8910 but they are very expensive to train and didn't offered better performance compared to GBDT.
+
+At the end of this stage I had LB score of ~0.8930 so my next stage was to close this gap by trying some different techniques.
+
+
+Iteration 3
+
+
+
+I attempted to use neural embeddings from pytorch-tabular CategoryEmbedding model to boost the scores of LightGBM and XGBoost. This was a mistake, as the embeddings turned out to be close to 300 dimensions, requiring high RAM. An initial spike in my CV score to 0.895 was due to a bug caused by a seed mismatch, which I discovered too late after exhausting my Colab credits ☹️.
+
+I tried target encoding to some extent but even that wouldn't push the score of XGB or LGBM ☹️ .
+
+At this point, I considered skipping the episode, having exhausted nearly all my compute resources and time with no guarantee of success. With around 30 submissions, I decided to give CatBoost one final attempt.
+
+
+Final Iteration
+
+At this stage, I tuned just one catboost model (just one) using again the same strategy distributed optuna on 3 x machines close to 50 HPO rounds, took about 10 hours because unfortunately, catboost GPU doesn't support pruner as compared to XGB and LightGBM. These were my parameters after HPO tuning.
+
+'learning_rate' 
+'reg_lambda' 
+'max_depth' 
+'subsample'   # I changed this to  when training full model.
+'leaf_estimation_iterations' 
+'log_max_bin' 
+
+
+These were my fixed params for HPO
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ True
+
+
+
+The above parameters when trained to 5000 iterations  with some tweak would achieve a public LB of 0.89666 but it isn't enough to win it. 
+Through my small experiments on Kaggle notebooks I observed two important things.
+
+
+
+
+I can manually reduce the learning rate to 0.085 and increase the iterations to 10000.
+
+Newton-based score_function is superior to Gradient-based. I guess this is what most of the public notebooks missed. As soon as I switched to NewtonCosine or NewtonL2 and used 12 leaf_estimation_iterations my CV itself was close to 0.8960.
+Additionally, I removed contrasting duplicates first from the original and then from both train and original after combining as discussed in this discussion: [https://www.kaggle.com/competitions/playground-series-s4e7/discussion/520253](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/. I also Binned Aged and Premium features as I found it slightly increases my validation scores.
+After experimenting with everything I divided the dataset into 4 folds. I wasn't able to train all the folds together and even training a single fold was not possible on Kaggle as catboost required close to (48 gigs) of RAM post-training.
+I trained the first 3 fold on colab with my remaining computes and the submission this time achieved an LB score of 0.89720 putting me in top 10 but after doing the trick as mentioned by @paddykb it got boosted to 0.89780 .
+To finally settle the score I trained small-small versions of catboost with same parameter and reduced iterations on Kaggle with different CV-spilt and random states and did average solely based on validation scores (as at this point I didn't had OOF folds to properly blend with) which settled my final score without trick to 0.89728 and with the trick to 0.89788 which was the winning solution with private LB score of 0.89753.
+These were my final CV-LB scores of the fold without any trick.
+
+
+
+
+
+Fold
+CV score
+LB Score
+
+
+
+
+
+Fold-0
+0.8960367441
+0.89625
+
+
+
+Fold-1
+0.8962229192
+0.89629
+
+
+
+Fold-2
+0.8962465823
+0.89632
+
+
+
+Fold-3
+0.8959594369
+0.89620
+
+
+
+**Fold-4
+0.8958430433
+- 
+
+
+
+**Fold-4 is average of all my small models.
+
+
+
+
+
+
+
+
+
+
+
+
+Summary
+
+
+
+
+
+
+
+Key Takeaways
+
+
+
+Monitor discussions and public notebooks to save experimentation and compute time, allowing calculated decisions with fewer submissions.
+
+Be patient with large datasets and try different training strategies. Mistakes are learning opportunities.
+
+Distributed optimization is faster, more affordable, and has better error tolerance, especially in competitions like this.
+
+Be wary of leakage, even with changing random states, especially in neural embeddings.
+
+
+What Didn’t Work
+
+
+
+Target encoding with XGB and LGBM.
+
+Neural embeddings didn't boost performance enough compared to the compute required.
+
+Changing the default max_ctr_complexity of CatBoost overfit in my case.
+
+
+What I Could Have Done
+
+
+
+Saving OOF folds and combining would have boosted my score though I couldn't due to their large size.
+
+Exploring neural networks more.
+
+Trying different CatBoost flavors (maybe lossguide).
+
+
+#
+
+Special thanks to @ravi20076, @arunklenin, @tilii7, and @optimistix for the healthy competition, and @paddykb, @ivanmitriakhin, @rzatemizel for the trick.
+
+Comments:
+├─ Optimistix (2024-08-02 03:04:55.143000) [+1]
+│  Congratulations! Wonderful solution, and a timely reminder to look into all the hyperparameters in great detail.
+├─ ayushokaay (2024-08-01 10:41:11.470000) [+1]
+│  Nice solution. congrats for rank 2 @uryednap
+├─ Harshit Sharma (2024-08-06 14:09:38.030000) [+2]
+│  Congratulations on your impressive 2nd place finish, @uryednap ! Your strategic approach, particularly the use of distributed Optuna for tuning and insights from the Kaggle community, are truly com...
+├─ Ravi Ramakrishnan (2024-08-01 09:35:32.873000) [+2]
+│  I appreciate your strategy and your overall approach to the problem. This is a fantastic learning experience for me @uryednap
+├─ Xuan Truong Bui (2024-12-27 11:30:59.473000) [+0]
+│  Thanks so much for sharing your thought process! Could I ask why you needed to create the four additional interaction features? I'm new to this
+├─ Taras Pedchenko (2024-12-17 18:16:23.567000) [+0]
+│  Congratulations! Nice approach
+├─ MariFel (2024-08-20 00:06:03.880000) [+0]
+│  @uryednap could be shar your notebook?
+├─ AbdalRhamn Hebishy (2024-08-04 09:33:44.873000) [+0]
+│  Great Work .
+│  Congratulations,wonderful solution
+├─ Bhargav Borah (2024-08-02 10:43:14.933000) [+0]
+│  Congratulations! Got to know about lots of new stuff!
+├─ Oumar KEITA (2024-08-02 04:41:54.927000) [+0]
+│  Amazing job !
+│  Congratulations.
+│  I have learnt a lot of things from this solution.
+├─ Tilii (2024-08-01 22:15:19.830000) [+0]
+│  That was some industrious work - congratulations! You could have dusted off all of us big time by combining multiple models, though I understand that resources played a part in making that difficult.
+├─ Minato Namikaze (2024-08-01 17:17:48.540000) [+0]
+│  Congratulations! @uryednap amazing work and thank you for sharing the solution write-up.
+├─ Oscar Aguilar (2024-08-01 16:14:46.190000) [+0]
+│  Thanks for sharing your approach, @uryednap. I really like how your approach started improving step by step; this is the data science journey!
+├─ Chirag Malhan (2024-08-01 08:48:17.397000) [+0]
+│  Hey,
+│  
+│  Thanks for being so honest about your process of taking inspiration from public notebooks. This was my first-ever competition, and I was experiencing massive imposter syndrome because I was m...
+  ├─ Ujjwal Pandey (2024-08-01 08:54:58.207000) [+1]
+  │  Taking inspiration from public notebooks and especially discussions is an excellent way to minimize experimentation time. My approach involves looking at their CV scores and comparing them with my ...

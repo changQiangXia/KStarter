@@ -1,0 +1,82 @@
+# playground-series-s4e1 讨论区（按票数排序，共 80 条）
+
+- [3rd Place Solution: CatBoost Encoding Galore](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/472413) — 99 票 / 53 评论 / 2024-02-01 **write-up?**
+- [2nd place solution](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/472496) — 82 票 / 42 评论 / 2024-02-01 **write-up?**
+- [Brief Description of the Features ](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/465045) — 71 票 / 33 评论 / 2024-01-02 
+- [Tips to brush up your notebooks](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/467353) — 63 票 / 28 评论 / 2024-01-12 
+- [Onboarding materials and references ](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/464866) — 55 票 / 20 评论 / 2024-01-02 
+- [1st Place Solution](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/472502) — 43 票 / 35 评论 / 2024-02-01 **write-up?**
+- [Feature engineering for improving performance](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/465192) — 41 票 / 23 评论 / 2024-01-03 
+- [New to Machine Learning or Kaggle?](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/459901) — 36 票 / 46 评论 / 2023-12-07 
+- [Visualizing the leaderboard churn](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/472397) — 34 票 / 2 评论 / 2024-02-01 
+- [Feeling lucky? Add ~ 0.002 to your LB score.](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/469859) — 32 票 / 24 评论 / 2024-01-22 
+- [Kaggle Hindsights approaching Churn.  TN/TP/FN/FP. Churn Metrics. Codes & The 1st Kaggle Churn Comp.](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/465089) — 32 票 / 11 评论 / 2024-01-02 
+- [Sharing first learnings from various experiments](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/465992) — 26 票 / 7 评论 / 2024-01-06 
+- [How to achieve maximum score in this competition.](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/469782) — 24 票 / 8 评论 / 2024-01-22 
+- [Congratulations- we have the maximum participation in Playground history in this episode](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/470362) — 22 票 / 13 评论 / 2024-01-23 
+- [How to get more upvotes on notebooks?](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/465493) — 20 票 / 32 评论 / 2024-01-04 
+- [Surname Nationality Classification Dataset](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/465517) — 20 票 / 14 评论 / 2024-01-04 
+- [What is your plan for the last 7 days of this competition?](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/470610) — 20 票 / 39 评论 / 2024-01-24 
+- [Potential in survival analysis?](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/466258) — 20 票 / 12 评论 / 2024-01-07 
+- [🚀 Exciting News: Top 9% in Playground Series! 🎉](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/472558) — 16 票 / 6 评论 / 2024-02-01 
+- [Some business insights about churn modelling](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/464925) — 16 票 / 4 评论 / 2024-01-02 
+- [Would the CustomerID and surname have an impact on the target variable? ](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/464870) — 15 票 / 19 评论 / 2024-01-02 
+- [Data-Centric Approach - Cleanset with data issues in Train](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/470363) — 15 票 / 9 评论 / 2024-01-23 
+- [Accounts with No Balance](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/465036) — 14 票 / 4 评论 / 2024-01-02 
+- [Collection of helpful ideas - S4E1](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/468367) — 13 票 / 4 评论 / 2024-01-16 
+- [Opinion on Imbalanced Dataset solutions like SMOTE, SMOTEENN, ADASYN etc.?](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/467034) — 12 票 / 16 评论 / 2024-01-10 **write-up?**
+- [Original Dataset Extended](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/470361) — 12 票 / 15 评论 / 2024-01-23 
+- [Which are the Most important Features 🤕🤕 ](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/470991) — 12 票 / 9 评论 / 2024-01-26 
+- [Combining Geography and Gender](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/468095) — 11 票 / 15 评论 / 2024-01-15 
+- [17th Place Solution| AutoML + Unicorn's pollen + Lack of sleep](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/472636) — 11 票 / 5 评论 / 2024-02-02 **write-up?**
+- [CatBoost Model - 0.8982 CV | 0.89347 LB](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/469741) — 11 票 / 8 评论 / 2024-01-21 
+- [CV and LB scores comparison](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/466947) — 11 票 / 4 评论 / 2024-01-10 
+- [Feature engineering on the dataset](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/467999) — 10 票 / 8 评论 / 2024-01-15 
+- [LGBM vs XGB](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/468842) — 10 票 / 14 评论 / 2024-01-18 
+- [Dangerous measure that is ROC-AUC](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/467873) — 10 票 / 4 评论 / 2024-01-14 
+- [Preprocessing that did not improve the result](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/466183) — 10 票 / 16 评论 / 2024-01-07 
+- [☁️ Live Web Application for this Bank Churn Challenge 🚦](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/472781) — 10 票 / 4 评论 / 2024-02-02 
+- [Question : Effect of Scaling on Tree Models?](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/465573) — 10 票 / 7 评论 / 2024-01-04 
+- [Is a shakeup coming?](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/471700) — 10 票 / 14 评论 / 2024-01-29 
+- [Public Scores: Correlation | Dataset | Ensembling  Scripts (MLWave)](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/471164) — 9 票 / 2 评论 / 2024-01-27 
+- [Two lines of code for improving score](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/466164) — 9 票 / 13 评论 / 2024-01-07 
+- [What type of encoding to use?](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/468814) — 9 票 / 11 评论 / 2024-01-18 
+- [5th place solution: one xgboost model, not use data leakage](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/472497) — 9 票 / 1 评论 / 2024-02-01 **write-up?**
+- [What About Surnames 🤨](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/465753) — 8 票 / 7 评论 / 2024-01-05 
+- [Implications of Overlapping Data in Test and Churn Modelling Datasets](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/464886) — 8 票 / 3 评论 / 2024-01-02 
+- [My two cents on Surname and CustomerID ](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/467900) — 8 票 / 9 评论 / 2024-01-14 
+- [Can any one suggest how to improve accuracy of model greater than 80percent ?](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/470440) — 8 票 / 12 评论 / 2024-01-24 
+- [Generation of new feautures using GPT4](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/471969) — 8 票 / 9 评论 / 2024-01-30 
+- [For beginner in machine learning use model.predict_proba instead of model.predict](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/470686) — 8 票 / 3 评论 / 2024-01-25 
+- [Is it possible to get a high ranking without an ensemble model?](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/466518) — 7 票 / 14 评论 / 2024-01-09 
+- [Question Marks in Surname Column](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/465243) — 7 票 / 4 评论 / 2024-01-03 
+- [I have reached a roadblock](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/468523) — 7 票 / 15 评论 / 2024-01-17 
+- [Dealing with Duplicate CustomerIDs - same name , same Balance , different Gender ! ](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/467284) — 7 票 / 4 评论 / 2024-01-11 
+- [A feature engineering effort that is worth nothing](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/472116) — 7 票 / 12 评论 / 2024-01-30 
+- [messing around with the surname to make some features](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/466554) — 7 票 / 3 评论 / 2024-01-09 
+- [Meme Thread is Here](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/471940) — 7 票 / 6 评论 / 2024-01-30 
+- [How is Optuna better than typical GridSearchCV or RandomizedSearchCV?](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/468593) — 6 票 / 4 评论 / 2024-01-17 
+- [Balance Complications](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/465253) — 6 票 / 3 评论 / 2024-01-03 
+- [Would using Voting Classifier help increase ROC/AUC score?](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/469045) — 6 票 / 3 评论 / 2024-01-18 
+- [Model Explainability](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/465124) — 6 票 / 6 评论 / 2024-01-03 
+- [Good result with automl](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/472445) — 6 票 / 2 评论 / 2024-02-01 
+- [Improved CatBoost notebook including ideas from post competition discussions - 0.9055 score (Late sub)](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/473257) — 6 票 / 1 评论 / 2024-02-04 
+- [What to do about data drift?](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/470131) — 6 票 / 3 评论 / 2024-01-23 
+- [Would you like to share what you learned from this competition?](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/472357) — 6 票 / 7 评论 / 2024-01-31 
+- [I used 'minimize' instead of 'maximize' for Optuna but only the RandomForest came with 0.5. Any idea why?](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/468311) — 6 票 / 10 评论 / 2024-01-16 
+- [How is different people on different country has the same CustomerId ??](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/468228) — 6 票 / 5 评论 / 2024-01-15 
+- [Some thoughts on CustomerId & Surname paradox of this dataset](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/470050) — 6 票 / 5 评论 / 2024-01-23 
+- [Multiple Transformation on Single Column.](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/467961) — 6 票 / 7 评论 / 2024-01-14 
+- [How to hadle CustomerId?](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/469924) — 6 票 / 8 评论 / 2024-01-22 
+- [When this scenario in our feature column then apply Label encoding](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/470438) — 6 票 / 10 评论 / 2024-01-24 
+- [## Study Materials/Platforms.](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/471119) — 6 票 / 4 评论 / 2024-01-26 
+- [Query regarding Optuna](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/470895) — 6 票 / 5 评论 / 2024-01-26 
+- [Why does the score improve with TF-IDF vectorization?](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/470284) — 6 票 / 5 评论 / 2024-01-23 
+- [Label Encoding](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/467712) — 6 票 / 2 评论 / 2024-01-13 
+- [What should be plan to improve score on lasts  3Day ?](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/471721) — 6 票 / 8 评论 / 2024-01-29 
+- [Has anyone looked at Churn partly as a Time Series?](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/471343) — 6 票 / 3 评论 / 2024-01-28 
+- [Feature Engineering Question](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/466157) — 6 票 / 4 评论 / 2024-01-07 
+- [Hyper-Parameter Tuning](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/468401) — 5 票 / 2 评论 / 2024-01-16 
+- [CustomerId not unique as said in the Data presentation. What can we get from that?](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/464874) — 5 票 / 5 评论 / 2024-01-02 
+- [i get on my notebook +0.91 accuracy but on submission i get 0.88](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/468696) — 5 票 / 5 评论 / 2024-01-17 
+- [About Encoding](https://www.kaggle.com/competitions/playground-series-s4e1/discussion/468412) — 5 票 / 6 评论 / 2024-01-16 

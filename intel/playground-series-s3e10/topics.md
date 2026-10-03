@@ -1,0 +1,63 @@
+# playground-series-s3e10 讨论区（按票数排序，共 61 条）
+
+- [Don't use the wrong boilerplate code](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/393073) — 49 票 / 14 评论 / 2023-03-07 
+- [About Pulsars, Neutrons Stars, Quasars, Supernovas and Magnetars.](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/392834) — 35 票 / 12 评论 / 2023-03-07 
+- [Moving to a fortnightly cadence](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/392814) — 32 票 / 10 评论 / 2023-03-07 
+- [A compilation of winning solutions from the first 10 episodes](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/394981) — 32 票 / 6 评论 / 2023-03-15 **write-up?**
+- [To actually understand what we are doing:](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/394919) — 30 票 / 6 评论 / 2023-03-15 
+- [Probability Calibration](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/393861) — 28 票 / 5 评论 / 2023-03-11 
+- [#7: A diverse ensemble](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/396261) — 23 票 / 10 评论 / 2023-03-21 
+- [Domain Knowledge: Uncovering Pulsar, Integrated Profile, and DM-SNR curve](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/393007) — 23 票 / 18 评论 / 2023-03-07 
+- [A structured review of winning solutions from the first 10 episodes](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/395484) — 23 票 / 9 评论 / 2023-03-17 **write-up?**
+- [1st place solution](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/396345) — 22 票 / 13 评论 / 2023-03-21 **write-up?**
+- [Skewness and kurtosis got swapped?](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/393588) — 22 票 / 1 评论 / 2023-03-10 
+- [Try to remove the anomalies](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/393093) — 22 票 / 21 评论 / 2023-03-08 
+- [Skewness and Kurtosis](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/392868) — 21 票 / 9 评论 / 2023-03-07 
+- [#3 : GAM & GBM ](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/396346) — 18 票 / 4 评论 / 2023-03-21 
+- [#13 approach- simple ensemble with tuning](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/396319) — 17 票 / 3 评论 / 2023-03-21 
+- [Onboarding materials and adjutant resources](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/392819) — 16 票 / 2 评论 / 2023-03-07 
+- [Collection of helpful ideas - S3E10](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/394287) — 16 票 / 8 评论 / 2023-03-12 
+- [19th Place Solution -- All about features](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/396259) — 13 票 / 9 评论 / 2023-03-21 **write-up?**
+- [8th Place Solution: Regression models for binary classification](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/396425) — 13 票 / 1 评论 / 2023-03-21 **write-up?**
+- [Quick Context & Feature Ideas](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/392830) — 12 票 / 5 评论 / 2023-03-07 
+- [Simulation Idea & Feature Engineering Follow-Up](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/393328) — 12 票 / 6 评论 / 2023-03-08 
+- [An attempt to understand this dataset](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/392913) — 11 票 / 0 评论 / 2023-03-07 
+- [Top 10 Solution](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/396263) — 11 票 / 4 评论 / 2023-03-21 **write-up?**
+- [[9th Place] Model Predictions as Features](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/396374) — 11 票 / 7 评论 / 2023-03-21 **write-up?**
+- [19th Place : Solution Approach and how we got a huge boost in score!](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/396471) — 11 票 / 7 评论 / 2023-03-22 **write-up?**
+- [Integrated profile data for the HTRU2 dataset](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/395108) — 10 票 / 0 评论 / 2023-03-15 
+- [Ideas for FEATURE ENGINEERING along with FORMULAS!](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/393036) — 10 票 / 10 评论 / 2023-03-07 
+- [Ensembling Via Averaging](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/393331) — 10 票 / 0 评论 / 2023-03-08 
+- [Plots say it all..](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/392844) — 8 票 / 4 评论 / 2023-03-07 
+- [LogLoss competition vs SMOTE](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/395246) — 7 票 / 3 评论 / 2023-03-16 
+- [Pulsar Detection: The Literature](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/394574) — 7 票 / 8 评论 / 2023-03-14 
+- [What does your predictions look like ?](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/395877) — 7 票 / 4 评论 / 2023-03-19 
+- [Piggybacked to #6](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/396268) — 7 票 / 3 评论 / 2023-03-21 
+- [💥 Feature Engineering: selecting from 195 combinations](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/394564) — 7 票 / 3 评论 / 2023-03-14 
+- [3 model in R with very good performace (🔥 Best - 0.03251 with CatBoost)](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/393004) — 7 票 / 3 评论 / 2023-03-07 
+- [Post-processing ideas](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/392853) — 7 票 / 2 评论 / 2023-03-07 
+- [A side note over pandas.DataFrame.assign method](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/394220) — 6 票 / 7 评论 / 2023-03-12 
+- [Don't use models that return INTEGER OUTPUT](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/394724) — 6 票 / 2 评论 / 2023-03-14 
+- [Some Findings on the Training Data](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/392843) — 6 票 / 2 评论 / 2023-03-07 
+- [Have you tried ensembling calibrated predictions over folds?](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/395654) — 4 票 / 5 评论 / 2023-03-18 
+- [[First competition -> top 12%] Takeaways from a new Kaggle-er (who is now addicted)](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/396427) — 4 票 / 2 评论 / 2023-03-21 
+- [Not everything is so obvious](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/393297) — 4 票 / 1 评论 / 2023-03-08 
+- [New to Machine Learning or Kaggle?](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/388113) — 4 票 / 1 评论 / 2023-02-16 
+- [Late Submissions Disabled](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/454618) — 3 票 / 1 评论 / 2023-11-10 
+- [Expected leaderboard churn](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/394773) — 3 票 / 11 评论 / 2023-03-14 
+- [utilising ratios as features might help!](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/395043) — 3 票 / 2 评论 / 2023-03-15 
+- [TSNE & UMAP](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/394501) — 3 票 / 2 评论 / 2023-03-13 
+- [Overview(Japanese translation)](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/392895) — 3 票 / 1 评论 / 2023-03-07 
+- [How much overfitting is acceptable?](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/395736) — 2 票 / 4 评论 / 2023-03-18 
+- [Need guidance](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/395061) — 2 票 / 5 评论 / 2023-03-15 
+- [AutoML 0.032](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/394042) — 2 票 / 2 评论 / 2023-03-11 
+- [Stacking failure](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/393830) — 2 票 / 2 评论 / 2023-03-10 
+- [Prediction function matters?](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/393404) — 2 票 / 2 评论 / 2023-03-09 
+- [My results s3 e10](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/393291) — 2 票 / 1 评论 / 2023-03-08 
+- [Tricks for Reproducibility.](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/393222) — 2 票 / 1 评论 / 2023-03-08 
+- [Link to solution in leaderboard](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/396354) — 1 票 / 3 评论 / 2023-03-21 **write-up?**
+- [Models' Performance](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/394029) — 1 票 / 2 评论 / 2023-03-11 
+- [General query | Separate models vs Single model](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/393295) — 1 票 / 2 评论 / 2023-03-08 
+- [Folks, feature Engineering ideas?](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/393217) — 1 票 / 2 评论 / 2023-03-08 
+- [What am I doing wrong?](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/402266) — 0 票 / 3 评论 / 2023-04-17 
+- [helllo hhhhhh](https://www.kaggle.com/competitions/playground-series-s3e10/discussion/395916) — -3 票 / 1 评论 / 2023-03-19 

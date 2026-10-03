@@ -1,0 +1,128 @@
+# https://www.kaggle.com/competitions/playground-series-s3e26/discussion/464887
+
+Topic #464887: 2nd Place: with help from NNs.
+  Author: Hardy Xu
+  Posted: 2024-01-02 03:30:26.378000
+  Votes: 71  Comments: 39
+
+With this competition I set out to improve my knowledge of neural networks. I had trouble getting good results with them in past competitions, often finding they performed worse in the private leaderboard, even when added to ensembles of GBDTs. However, this time I think they were the secret sauce that helped me get 2nd place.
+
+My solution is pretty straightforward. Just a combination of XGBoost, LightGBM, and neural network predictions, with another neural network used to stack them together. The XGBoost and LightGBM predictions were nothing special, just an average of predictions from 10 different sets of hyperparameters found by Optuna.
+
+For the initial neural network predictions, after reading through a bunch of papers and iterating on the techniques described within, I found that the piecewise linear encoding (PLE) technique described in this paper greatly improved my score. 
+
+I applied PLE to each continuous feature, an embedding layer for the edema and stage features, and fed in the remaining binary features as is (after converting to 0/1). The structure looks sort of like this:
+
+The actual network included some additional layers after each PLE input, before they were concatenated together, but to keep the diagram simple I did not include them. With this neural network alone I was able to get a score around .401 on the private LB, good enough for top 10%. Despite its solid individual performance, its addition to the stack only added around a .001 boost to the score, but I'm just glad it improved the stack at all.
+
+For the stacking neural network, I started with the idea of getting the network to learn a weighted average of input predictions, which looked something like this:
+
+
+Through some more experimentation, I found that the network achieved better scores by
+
+
+
+Giving each class probability within a prediction its own weight, rather than computing a single weight and applying it to each class probability, and
+
+Calculating each prediction's weights using all 3 predictions, rather than only itself.
+With these changes the network looked more like this:
+
+Again, for the sake of simplicity, there are some additional layers not included here. This stacking architecture gave a boost of .004 compared to taking a simple average.
+
+
+Overall, I had a lot of fun working on this competition. The 2nd place was a nice bonus, but I'm more grateful from the knowledge acquired in the process of researching and trying out neural networks. For anyone else interested in recent tabular neural network innovations, I would recommend taking a look at https://sebastianraschka.com/blog/2022/deep-learning-for-tabular-data.html. There are plenty of ideas using neural networks that I either wasn't able to try or wasn't able to get working for this competition, but definitely look forward to trying these ideas and more in future competitions.
+
+Happy new year!
+
+Comments:
+├─ Benz Nguyen (2024-01-02 03:48:04.063000) [+9]
+│  Thanks for sharing, that's helpful knowledge! I have a question, why did you only use XGBoost and LightGBM as input for NNs?
+  ├─ Hardy Xu (2024-01-02 03:52:35.010000) [+8]
+  │  If you're talking about the stacking neural network, that used XGBoost, LightGBM, and Neural Network predictions. If you're asking why I didn't use the data features or predictions from other model...
+    ├─ Benz Nguyen (2024-01-02 04:00:18.457000) [+4]
+    │  I got it, thank you so much :)
+├─ lazy_panda (2024-01-02 06:07:09.383000) [+5]
+│  Very impressive solution! I haven't tried NN in this competition but good to see it works. Any chance you can share a notebook to your solution? Congratulations and Thank you 🎉
+  ├─ Hardy Xu (2024-01-02 12:08:00.617000) [+0]
+  │  Thank you! No notebook unfortunately, all my work was done locally.
+  ├─ [deleted] (2024-01-09 08:49:06.430000) [+0]
+  │  [deleted]
+├─ MrSimple (2024-01-02 21:50:22.207000) [+3]
+│  Congratulations! I really like the solution! Good job!
+├─ ML_Magic (2024-01-02 04:48:09.027000) [+3]
+│  Congratulations.. wish you a happy new year
+├─ Jonathan Kao (2024-01-02 04:21:55.053000) [+3]
+│  Thank you for the interesting solution overview and the links! The diagrams and explanations combined with the log-loss improvement numbers were very helpful in understanding your approach.
+  ├─ Hardy Xu (2024-01-02 04:25:01.767000) [+2]
+  │  Thank you, I'm glad you found them helpful!
+    ├─ Jonathan Kao (2024-01-02 05:37:32.040000) [+2]
+    │  Actually I did have one question if you don't mind, how much feature engineering did you use in your solution and how helpful was it to your score if you did use it?
+    ├─ Hardy Xu (2024-01-02 12:06:52.337000) [+1]
+    │  For the gbt models I rounded the values of some features, which seemed to help a small amount. Nothing else I tried for feature engineering seemed to help.
+├─ cattie (2024-01-02 04:28:24.780000) [+4]
+│  Congratulations, @hardyxu52! I was really impressed by your work. I have one question though: I'm struggling to understand the first Neural Network Architecture. How can the input shape be 302, 288...
+  ├─ Hardy Xu (2024-01-02 04:43:41.977000) [+3]
+  │  Thank you! Each of those inputs are from PLE applied to one continuous feature. In the paper the authors kept the number of bins for the PLE constant but for this competition, I found it more effec...
+├─ Shum14 (2024-01-04 10:26:37.717000) [+1]
+│  Congratulations! Thank you for your sharing the knowledge and helpful explanation.
+├─ Malabh Bakshi (2024-01-03 08:56:02.267000) [+1]
+│  Good Solution!!! @hardyxu52
+├─ Shahbaz Khan (2024-01-03 07:58:14.307000) [+1]
+│  Congratulations, @hardyxu52! Quite impressive, I got to learn about On Embeddings through your post! Thanks for sharing the paper link, seems like an interesting read.
+├─ tcashion (2024-01-03 04:40:56.063000) [+1]
+│  Very cool! Thanks for sharing your solution including the diagrams to see how it all fits together.
+│  
+│  Congratulations on the 🥈
+├─ H.JIMBEAN (2024-01-02 15:54:09.543000) [+1]
+│  Brilliant! Congrats! Thank for sharing.
+│  I want to know if there is anything wrong with my understanding.
+│  
+│  
+│  
+│  You use two neural networks, the first one predicts the task, and the second one stacking...
+├─ Luficer G (2024-01-02 14:56:17.657000) [+2]
+│  bro I just missed to use NN , but instead used CatBoost in my final model, great to see so similar yet far, Great work @hardyxu52 , btw which Kaggle merchandize  , u want now 😜😜
+├─ AaryanSingh729 (2024-01-02 13:29:31.757000) [+2]
+│  Congratulations on the placement!! I have a very basic understanding on neural networks and ensemble models with them, I could understand the diagrams you shared slightly. Could you recommend me so...
+├─ Yan Teixeira (2024-01-02 12:03:34.873000) [+2]
+│  Very nice wrap up. Congrats! May I ask asking what program you used to build these diagrams?
+  ├─ Hardy Xu (2024-01-02 12:29:17.290000) [+2]
+  │  Thanks! The diagrams are made using keras's plot_model
+├─ Terolig (2024-01-02 09:58:59.717000) [+2]
+│  Awesome work, thanks for sharing! And thanks for the link to Sebastian Raschka's blog post!
+├─ Hriday (2024-01-02 03:35:48.357000) [+2]
+│  Thanks for the solution. It was really interesting to read, and more importantly- Congratulations!
+├─ neolivion (2024-01-30 11:15:37.643000) [+0]
+│  Congratulations , great code!
+├─ Lukman Aliyu (2024-01-25 23:50:55.237000) [+0]
+│  Awesome. Thank you for sharing. Really helpful.
+├─ Jianwei Gao (2024-01-23 01:47:51.610000) [+0]
+│  Congratulations! Can you provide a more detailed description of “an embedding layer for the edema and stage features”，what are the specific results after “embedding” and “flatten”？Thank you very much。
+├─ Amadou Djoulde Barry (2024-01-22 14:36:34.660000) [+0]
+│  I know it's seems easy here for some, but is it possible to see the code implementations ?
+├─ AnubhavMaverick (2024-01-11 15:53:31.603000) [+0]
+│  Wow, thanks for sharing this architecture
+├─ xxxZayH (2024-01-09 09:12:08.413000) [+0]
+│  `class StackingModel(nn.Module):
+│      def init(self, input_size, output_size):
+│          super(StackingModel, self).init()
+│          self.input_size = input_size
+│          self.output_size = output_size
+│  
+│  ...
+├─ Kamal Budhathoki (2024-01-09 03:55:45.730000) [+0]
+│  Congrats!!!
+├─ Kari (2024-01-06 08:58:59.473000) [+0]
+│  Congrats on the second place! Learned a lot from your solution. I'll definitely have to try PLE in the future.
+├─ [deleted] (2024-01-22 13:54:56.500000) [+0]
+│  [deleted]
+├─ [deleted] (2024-01-03 13:52:52.307000) [+0]
+│  [deleted]
+├─ [deleted] (2024-01-02 10:11:11.760000) [+2]
+│  Brilliant solution! I will surely try to implement what you've done and try to achieve a better score by late submission. As you've said, this competition increased my knowledge for this subject a ...
+  ├─ Hardy Xu (2024-01-02 12:24:22.343000) [+1]
+  │  Thanks! No notebook to share unfortunately, but glad the post was helpful! And yes, there's always so much to learn haha
+├─ Tushar Narkhede (2024-01-04 15:29:46.653000) [+1]
+│  Thanks for sharing this. Great Solution
+├─ Suryansh Sharma (2024-01-02 18:23:53.017000) [+2]
+│  Great Solution, Thanks for sharing

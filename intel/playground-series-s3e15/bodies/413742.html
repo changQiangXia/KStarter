@@ -1,0 +1,30 @@
+<p>Well… the shakeup is bigger than I thought, and I certainly didn't expect that my gamble has paid off… or sort. Also I've finally reached top 5 after all this time joining Playground Series!</p>
+<p>So if you read the title at first, you might be thinking that it's impossible. However, that's exactly what I did: <strong>I wrote my own code to impute all features except <code>x_e_out [-]</code></strong>.</p>
+<h1>Imputation</h1>
+<p>A few days ago <a href="https://www.kaggle.com/shalfey" target="_blank">@shalfey</a> posted an interesting stuff about the characteristics of original dataset, such as how each <code>author</code> strictly only has one <code>geometry</code>. The thing is, I found the exact same thing <strong>one week earlier</strong>, with only Pandas Dataframe's <code>groupby</code> method. Here are most of the characteristics that I've found:</p>
+<ol>
+<li>Each author has their own unique geometry</li>
+<li>For some authors, there is only one unique <code>pressure [MPa]</code></li>
+<li>For some authors, there is only one unique pair of <code>D_e [mm]</code> and <code>D_h [mm]</code></li>
+<li>For some authors, there is only one unique <code>length [mm]</code></li>
+<li>For each pair of <code>chf_exp [MW/m2]</code> and <code>length [mm]</code>, there is only one unique <code>geometry</code></li>
+<li>Each <code>D_h [mm]</code> has exactly one unique <code>geometry</code></li>
+<li>Each <code>D_h [mm]</code> has exactly one unique <code>D_e [mm]</code></li>
+</ol>
+<p>My imputation is basically finding the missing value based on the value of other features in original dataset. For example, in order to impute <code>D_e [mm]</code>, I have to use available <code>D_h [mm]</code> value on the competition dataset and use it to search <code>D_e [mm]</code> on the original dataset. </p>
+<p>Now, some of you have probably known that since we're using synthesized dataset, making some relationship between features get messed up and creating noises in the dataset. Obviously this will make competition dataset different from original dataset. However, this isn't a problem. If you can't find the value in the original dataset, <strong>I just need to find the closest value to it</strong>. This is also how I impute features that need more than one other features, such as relationship 5. For example, if I want to impute <code>geometry</code> based on <code>chf_exp [MW/m2]</code> and <code>length [mm]</code>, I have to find all unique values of <code>length [mm]</code> in original dataset that is related to the value of <code>chf_exp [MW/m2]</code> on the competition dataset, then find the closest unique values to <code>length [mm]</code> on the competition dataset. Only after that, I try to find <code>geometry</code> based on the <code>chf_exp [MW/m2]</code> and <code>length [mm]</code> unique values that we've found.</p>
+<p>These are a lot. However, it's only enough to almost fully impute both <code>geometry</code> and <code>D_e [mm]</code>. In order to impute the rest, I have to do some <strong>improvisation</strong>, such as imputing <code>D_h [mm]</code> based on <code>D_e [mm]</code>, imputing <code>author</code> based on <code>length [mm]</code>, imputing geometry based on <code>chf_exp [MW/m2]</code> and <code>length [mm]</code>, etc.  I also have to repeat some imputations to get rid of the missing values. These aren't fully accurate to the original dataset of course, but our competition dataset has messed up relationship with noises anyway, so it doesn't matter.</p>
+<p>The full code and almost fully imputed dataset is available <a href="https://www.kaggle.com/code/iqbalsyahakbar/ps3e15-major-imputation" target="_blank">here</a> if you want to read it.</p>
+<h1>Feature Engineering</h1>
+<p>Some of my feature engineering ideas are based on cylinder. I was inspired to do this based on the existence of length and diameter features. My ideas are as follows:</p>
+<ol>
+<li>Difference between heated and hydraulic diameter</li>
+<li>Cylinder surface area and its difference between heated and hydraulic version</li>
+<li>Cylinder volume and its difference between heated and hydraulic version</li>
+</ol>
+<p>There is also one other idea. It's based on how <code>x_e_out [-]</code> doesn't have any metric, as you can see from its feature name. The idea is to do some simple math operations on <code>pressure [MPa]</code>, <code>mass_flux [kg/m2-s]</code>, and <code>chf_exp [MW/m2]</code> in order to get rid of their metrics.</p>
+<p>The effect of those ideas are… mixed to be honest. Some models got improvement, some got worse. However, it didn't matter as I use different subset of feature engineering ideas to build my ensemble anyway.</p>
+<h1>Models and Ensemble</h1>
+<p>This is nothing special to be honest, and it's probably the cause of me failing to get higher position. I use different subset of feature engineering ideas to creat different models, use different estimators on some of them. In order to find the optimal weight, I use Ridge regression, allowing both interceptor and negative coefficient to be fitted. I also use original dataset to train my models (I don't include it on my validation of course). Finally, in order to tune my models, I use Optuna for Gradient Boosting such as XGBoost and LightGBM, and use manual tuning for everything else. That's it, there is not much else to explain here.</p>
+<p>The full code of my model building and EDA is available <a href="https://www.kaggle.com/code/iqbalsyahakbar/5-part-2-model-building?scriptVersionId=131500687" target="_blank">here</a>. You can also see comparison between my imputed dataset and the competition dataset here.</p>
+<p>Thank you for reading, and I hope this will be useful to you!</p>

@@ -1,0 +1,152 @@
+# https://www.kaggle.com/competitions/playground-series-s4e9/discussion/533961
+
+Topic #533961: Which Features Interact? and How To Leak Free Target Encode with RAPIDS!
+  Author: Chris Deotte
+  Posted: 2024-09-14 01:23:14.170000
+  Votes: 63  Comments: 39
+
+Interaction Starter Notebook
+
+We can engineer new categorical interaction features by combining columns with code: train["brand-milage"] = train["brand"] + "-" + train["milage"].astype("str"). (This is after we bin milage as categorical with code train["milage"] = (train["milage"]//1000)*1000 ). This example combines brand and milage. I call this a bi-gram. Afterward it is categorical, so we then need to encode it with techniques such as target encoding. I trained a Lasso linear model with all bi-grams and tri-grams here
+
+Strong Interaction Features
+
+Once we train a model with all bi-grams and tri-grams, we can observe the feature importance of different combinations of features.
+
+For example, less milage increases price. But this relationship is different for different brands. For example with electric cars, we observe that milage does not affect price as much. Therefore the interaction of brand and milage is important. In the below feature importance plot, we see that this interaction ranks 3rd out of 231 combinations!
+
+We also see that 4th most important is model combined with int_col. This means that people prefer different interior colors for different brands.
+
+We also see a strong interaction between accident and model_year. A new car (recent model_year) that has an accident reduces the price much more than an older car with an accident. This is because older cars are expected to have problems whereas newer cars are not.
+
+When viewing feature importance for Lasso, the top of the list of important and the bottom of the list are important. The top indicate strong positive correlation whereas the bottom indicate strong negative correlation. The middle indicate no correlation.
+
+In the bottom of the list below, we see that model and model_year combine to make a strong negative correlation with price. In other words, people prefer to buy certain models from certain model_years.
+
+Lasso Model Interaction Feature Importances
+
+The below plot is from notebook here. Note that both top and bottom of list have strong importance. A large positive bar represents strong positive correlation whereas a large negative bar represents strong negative correlation. Bars near length zero (in the y axis middle), are weak features with weak correlation. And any bi-grams and tri-grams that are not displayed in the plot below indicate they have exactly 0 feature importance (and therefore are removed from plot). The Lasso model naturally removes unimportant features.
+
+
+
+Leak Free Target Encoding
+
+One way to encode categorical columns is to use Target Encoding. TE is a powerful technique explained in blog here (by fellow KGMON Jiwei) and in previous playground Kaggle notebook here (by fellow KGMON Theo). There is also a KGMON tutorial here.
+
+Target Encoding uses targets, so we need to be careful to prevent leaks. When we use 5 Kfolds, we need to compute TE 5 times. During each Kfold iteration, we need to fit_transform TE on the train data, and then transform the valid data and test data. (i.e. we cannot simply compute TE once for all train.csv data before our 5 Kfold for-loop).
+
+Also the process of TE fit_transform uses 5 new folds itself. So inside each of the 5 folds of our original K-Fold, TE creates another 5 folds to fit TE. The diagram below shows this and the code of my starter notebook here shows how to do this. 
+
+Preventing leaks is important for maximizing LB score and creating leak free OOF especially if we plan to create meta model ensembles that train on OOF! Being leak-free is also important to computing our correct CV score which we use to make decisions like feature selection, model selection, etc.
+
+Comments:
+├─ Mart Preusse (2024-09-18 13:57:44.867000) [+7]
+│  Great that you answer all the questions in detail. I have one too. I did not really have success with the interaction features in GBMs. Is this because GBMs already do interactions internally? So a...
+  ├─ Chris Deotte (2024-09-18 14:18:05.653000) [+9]
+  │  I think interaction features are most beneficial for linear models and least beneficial for NNs. I feel like GBDTs are in the middle. Interactions features help but we must try many to find a few t...
+├─ Backpacker (2024-09-14 09:26:35.287000) [+4]
+│  Could you discuss the best practices for deciding whether newly created features are important?
+  ├─ Chris Deotte (2024-09-14 10:16:37.540000) [+14]
+  │  The best way to evaluate new features is to use our local CV score. If CV score improves when we add the new feature(s) then new feature(s) are helpful, otherwise new feature(s) are not helpful. Si...
+    ├─ Backpacker (2024-09-14 10:27:53.947000) [+1]
+    │  Thanks a lot! Very comprehensive.
+    ├─ SCRIPTCHEF (2024-09-20 04:46:40.840000) [+4]
+    │  Hi Chris, to make the threshold more robust we could even consider generating a base set of cv scores using a baseline model/set of features (varying model random state) and then doing the same wit...
+├─ Jay Shrivastava (2024-09-28 05:21:10.450000) [+1]
+│  This is a plot depicting the feature importance (LGBM) of many different combinations of features. 
+│  For example, the most important one is vehicle_age multiplied by mileage per cylinder
+│  second one ...
+├─ Gökhan Ergül (2024-09-24 21:27:56.323000) [+2]
+│  Hi, I am getting an error of 11,000 on the training dataset, but it is 75,000 on the test dataset. How can I resolve this
+  ├─ Chris Deotte (2024-09-24 21:29:31.983000) [+1]
+  │  That sounds like a leak. I think that somehow your model is seeing the answers when you train/validate locally.
+    ├─ Gökhan Ergül (2024-09-25 00:35:17.097000) [+0]
+    │  I checked, but I couldn’t find anything. Do you think this could be such a large overfitting? 
+    │  I want to also ask that, If you were to give advice to someone who is just starting out, what would I ...
+  ├─ Optimistix (2024-09-24 23:05:48.587000) [+2]
+  │  Did you remember to drop/delete price from you CV/validation data?
+    ├─ Gökhan Ergül (2024-09-25 00:26:50.017000) [+1]
+    │  Yes, I separated everything and worked hard to do everything, even considering values in the 'transmission' feature that represent the same thing. I even went so far as to look up missing values on...
+    ├─ Optimistix (2024-09-25 02:50:59.900000) [+2]
+    │  An RMSE of 11,000 with this dataset doesn't make any sense without leakage (or a small, lucky sample, etc.). But short of seeing your notebook, there's no way of knowing how that might have come ab...
+  ├─ SCRIPTCHEF (2024-09-25 05:30:55.657000) [+1]
+  │  Are you removing outliers by any chance? The only time I've seen that large discrepancy was when I removed outliers - your error on CV performed on train set becomes low as outliers contribute a la...
+    ├─ Gökhan Ergül (2024-09-25 11:36:53.067000) [+1]
+    │  Yes, before i remove outliers, iddia got 75k error, when i remove i got 11k, what should i do?
+    ├─ Chris Deotte (2024-09-25 12:17:22.283000) [+1]
+    │  We should compute local CV score with outliers included because the LB test data includes outliers too.
+    ├─ SCRIPTCHEF (2024-09-25 12:21:48.373000) [+2]
+    │  Whatever processes you are doing to the target should only be performed on the train set/train fold. What I mean by this is: because your LB score and final score solution is scored based on the "p...
+├─ Amit Kulkarni (2024-09-18 06:39:09.167000) [+2]
+│  How do you decide which features to combine for bi-grams and tri-grams? Are there any guidelines or heuristics for selecting pairs or triplets that might yield strong interactions?
+  ├─ Chris Deotte (2024-09-18 12:54:52.803000) [+3]
+  │  For real datasets, we can use our intuition and use combinations that we think are helpful. Then add them and check if CV score improves or not. However another approach, is to just use for-loops a...
+├─ Backpacker (2024-09-14 09:22:10.293000) [+2]
+│  Very informative notebook, thank you! I would like to know, based on your experience, whether the important features identified by Lasso (a linear model) are also likely to be more important in non...
+  ├─ Chris Deotte (2024-09-14 10:28:26.677000) [+8]
+  │  I think linear and non-linear models will identify different features as important. Because a feature may have no correlation with target by itself (not helpful in linear model) but that same featu...
+    ├─ Andrei Zamfir (2024-09-15 00:33:29.977000) [+1]
+    │  Based on this feature importance diagram, how would you choose features? Would you base it on a certain number of features or based on an abs value of importance?
+    │  
+    │  I am very curious as at the momen...
+    ├─ [deleted] (2024-09-17 02:58:43.427000) [+1]
+    │  [deleted]
+    ├─ CJ ROCKBALL (2024-09-19 12:05:53.043000) [+1]
+    │  Great answer. Thanks
+    │  
+    │  Whereas the Feature Importance by Weight will generally show which features are helpful as interactive features and are employed to make decisions about the other features.
+    │  
+    │  C...
+    ├─ Chris Deotte (2024-09-19 12:16:43.240000) [+2]
+    │  For large datasets, it is important to make our experimentation pipeline as fast as possible. In RecSys 2020, Team Nvidia built a pipeline using GPUs that could read 100s of millions of rows of dat...
+    ├─ Chris Deotte (2024-09-19 12:18:52.270000) [+2]
+    │  Could you expand a bit on this? Features that score high on weight should be combined with each other?
+    │  
+    │  
+    │  Note necessary, since they show up in feature importance, that means that GBDT is already cr...
+    ├─ CJ ROCKBALL (2024-09-25 07:53:52.477000) [+0]
+    │  Thank you for your extensive answers. 
+    │  
+    │  I've been trying to find more about how to use differences between Gain and Weight to modify my models but I can't, neither in books or online. Do you have s...
+    ├─ CJ ROCKBALL (2024-09-30 05:26:08.897000) [+0]
+    │  Would you recommend any data correlation tool like Pearson, Spearman, PhiK, mutual information to check data independently of model or is running a specific models and selecting features "better"?
+├─ CJ ROCKBALL (2024-09-16 02:20:15.863000) [+1]
+│  Great notebook. Some quick questions,
+│  
+│  
+│  
+│  
+│  Milage has a limited number of values, why do you bucketize it?
+│  
+│  
+│  Would you use square and cubes of the individual features?
+│  
+│  
+│  Do you always do TE on categ...
+  ├─ Chris Deotte (2024-09-16 12:37:05.883000) [+7]
+  │  Hi, thanks
+  │  
+  │  
+  │  
+  │  
+  │  This notebook works without bucketize. I tried different bucket sizes and using buckets of size 1000 achieved the best CV score. Buckets help because we are using milage as categoric...
+    ├─ CJ ROCKBALL (2024-09-17 01:00:23.063000) [+1]
+    │  Great answers. Thanks
+├─ epiktetos (2026-01-27 23:22:34.730000) [+0]
+│  Subject: Seeking your intuition: Priority of Interaction Engineering tools?
+│  
+│  Hi Chris (@cdeotte), thank you so much for your continuous contributions and insights on interaction features. Your EDA ...
+├─ prayas kumar (2024-09-25 10:08:05.113000) [+0]
+│  Nice insights to test
+├─ mwrites (2024-09-16 12:49:53.597000) [+1]
+│  Thanks for sharing!
+├─ DraganPinsent98 (2024-09-14 20:05:52.217000) [+1]
+│  Thanks mate very useful.
+├─ JMAscacibar (2024-09-14 10:28:25.240000) [+2]
+│  This is gold, Thank you!
+├─ Khushi Yadav (2026-01-28 05:26:52.283000) [+0]
+│  Thanks for this
+├─ kosuke kakimi (2024-09-28 06:03:43.900000) [+0]
+│  thanks for sharing👏
+├─ [deleted] (2024-09-15 03:53:01.433000) [+1]
+│  [deleted]

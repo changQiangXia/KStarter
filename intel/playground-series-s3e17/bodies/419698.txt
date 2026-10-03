@@ -1,0 +1,121 @@
+# https://www.kaggle.com/competitions/playground-series-s3e17/discussion/419698
+
+Topic #419698: 4th place solution | target encoding rows
+  Author: Wim Govers
+  Posted: 2023-06-27 07:19:47.506000
+  Votes: 5  Comments: 10
+
+Baseline
+
+A bit cheeky, but I started with a ranking blend baseline of these public notebooks:
+
+
+
+ps3e17-eda-ensemble-ml-pipeline-shap (I added some more seeds for repeated cross-validation)
+
+ps3e17-gaussiannb
+
+is-simple-the-best-lb-0-9773-catboost (I increased the iterations to 510)
+
+ps3-17-machine-failure-catboost-top-21 (I probably shouldn't have used this one; it overlaps with the other CatBoost model…)
+
+
+Target encoding of rows
+
+Just blending alone will probably put you in the top 30, but I had another trick up my sleeve. There are some rows in the train set with the same feature values, even some overlap within the train and test sets. However, these rows do not always have the same labels. So I added two new features: the target encoding (on the train set) and the count of times the row appeared in the train set. For the training, you need to make sure to make your target encoding out of sample, as in this example:
+
+
+
+
+id
+feature1
+feature2
+target
+target_encoding
+count
+
+
+
+
+0
+A
+7
+1
+0.5
+2
+
+
+1
+A
+7
+1
+0.5
+2
+
+
+2
+A
+7
+0
+1
+2
+
+
+
+
+I used CatBoost and ps3e17-eda-ensemble-ml-pipeline-shap for this and applied it only to rows in the test set that have a matching row in the train set.
+
+Comments:
+├─ Bhargav6031 (2023-07-09 04:59:15.243000) [+1]
+│  Can you share the code if possible? I think I'm missing something to understand it correctly …
+  ├─ Wim Govers (2023-07-11 18:39:34.920000) [+0]
+  │  I'm not sure that it is going to help, since my code it confusing: I first calculate it wrongly and then adjust it.
+  │  But nevertheless, here is my code: https://www.kaggle.com/code/wimgovers/s3e17-ta...
+├─ Geremie Yeo (2023-06-27 09:46:36.417000) [+1]
+│  Congrats for getting the 4th place and surviving shakeups 💯
+│  
+│  I have a query regarding the approach
+│  
+│  ==========================================
+│  Lets say, we have these datapoints
+│  
+│  Train
+│  
+│  (Predictors...
+  ├─ Wim Govers (2023-06-27 10:03:27.353000) [+1]
+  │  No, in you example, we edit the train set:
+  │  
+  │  (Predictors) -&gt; (New predictors) -&gt;Target
+  │  (640, 300) -&gt; (640, 300, 0.5, 4) -&gt; 1
+  │  (640, 300) -&gt; (640, 300, 0.5, 4) -&gt; 1
+  │  (640, 300) -&gt; ...
+    ├─ Geremie Yeo (2023-06-27 12:06:53.907000) [+0]
+    │  Oh, so that means the target encodings of all 5 records should sum up to 3 and you distribute it evenly across the instances with same target value ?
+    │  
+    │  total: 3 
+    │  
+    │  
+    │  
+    │  1.5 goes to 0 (1.5/3 = 0.5 for ea...
+    ├─ Wim Govers (2023-06-27 17:53:56.017000) [+0]
+    │  No, let's give your datapoints an ID:
+    │  
+    │  id: (Predictors) -&gt; Target
+    │  0: (640, 300) -&gt; 1
+    │  1: (640, 300) -&gt; 1
+    │  2: (640, 300) -&gt; 1
+    │  3: (640, 300) -&gt; 0
+    │  4: (640, 300) -&gt; 0
+    │  
+    │  We don't use the ...
+├─ Swapnil Chowdhury (2023-06-27 08:45:09.583000) [+1]
+│  congratulations @wimgovers for coming 4th . Your approach was really innovative and interesting 👍
+├─ Thariq Nugrohotomo (2023-06-27 08:39:48.593000) [+1]
+│  That sounds like a cool trick, but what should be done during inference on the test-set?
+│  I'm guessing that target_encoding and count for test-set will be populated with the value calculated from th...
+  ├─ Wim Govers (2023-06-27 08:45:58.643000) [+1]
+  │  Exactly like you said, for the test set you use the whole train set
+├─ Iqbal Syah Akbar (2023-06-27 07:58:51.767000) [+1]
+│  That's a nice trick, probably the main reason how you (and maybe some other people) surpassed 0.98 on public LB 😂
+│  
+│  I'll keep that in mind for other competitions. Thanks!

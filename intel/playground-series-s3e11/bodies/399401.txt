@@ -1,0 +1,124 @@
+# https://www.kaggle.com/competitions/playground-series-s3e11/discussion/399401
+
+Topic #399401: #1: A Zoo of Models
+  Author: AmbrosM
+  Posted: 2023-04-04 00:27:28.948000
+  Votes: 90  Comments: 30
+
+My solution is based on the following observations:
+
+
+
+Only a subset of the features is useful, although it's not completely clear which features belong to the subset. Being in doubt which subset is the right one, we can make models for different feature subsets and blend them.
+
+After feature selection, there are lots of duplicates in the training data. We can reduce training time by grouping these duplicates. Training with 3000 groups rather than 360'000 samples speeds up the development cycle massively.
+
+If we add the original data to the training dataset, the score improves.
+
+store_sqft, which has only twenty unique values, looks like a numerical feature, but it is categorical.
+
+As most regression algorithms in the library have been developed to optimize rmse, we should make all models predict the transformed target log1p(cost) and submit expm1(pred).
+
+A "zoo of models", i.e. a diverse ensemble, averages out the prediction errors of the models.
+
+Training and test data adhere to the same distribution so that we may trust the cv scores completely.
+
+
+Point 4 is illustrated by the following diagram. The partial dependency plot for store_sqft doesn't look like a typical regression curve - it looks like a categorical feature which has been mistaken for a continuous one. This observation suggests that we might one-hot encode or target-encode the feature.
+
+
+
+The diversity of the model zoo can be analyzed with a dendrogram. The dendrogram represents a hierachical clustering of the models where similar models end up in the same cluster. We can easily identify four clusters:
+
+
+
+four models which were trained with the additional unit_sales or store_sales feature
+
+all random forests and extra-trees models
+
+the neural network
+
+all gradient-boosting models
+
+
+
+
+The bar chart shows the cv scores and training times of all models and ensembles. The final submission is a weighted blend of all 18 models with the weights determined by ridge regression.
+
+
+
+More details can be found in the source code.
+
+Comments:
+├─ SSS (2023-04-04 00:39:51.317000) [+3]
+│  @ambrosm well done, at very end I was convinced you used ET, so I did, though I again screwed the final pick up. Warm_start ET was given the boost:
+  ├─ JEANMPIA (2023-04-04 00:51:58.990000) [+1]
+  │  hey @sergiosaharovskiy, you beat us again !
+  │  you mind explaining briefly what ET is ?
+    ├─ SSS (2023-04-04 00:54:38.590000) [+1]
+    │  @janmpia I beat myself again, answering your question ExtraTreesRegressor
+  ├─ AmbrosM (2023-04-04 01:04:41.933000) [+3]
+  │  @sergiosaharovskiy Yes, I know that feeling after having selected the wrong submissions. Your record submission count of 71 in 14 days suggests that the public leaderboard might have distracted you...
+    ├─ SSS (2023-04-04 01:08:28.110000) [+2]
+    │  @ambrosm that’s true, I contaminated the overall thing. My cv was really good and approach was really solid, we are talking about .00002 in the end of the day ;)
+    ├─ Lucy (2023-04-04 01:24:33.477000) [+1]
+    │  Good job, @sergiosaharovskiy! The competition was very intense indeed! we are talking about .00002 in the end of the day ;) 😃
+    ├─ ‎ Srihari (2023-04-04 05:44:16.997000) [+0]
+    │  Does such small difference really matter?
+    ├─ A Legacy Grandmaster! (2023-04-04 06:51:39.873000) [+2]
+    │  Does such small difference really matter?
+    │  
+    │  
+    │  Here on kaggle yes! 0.00002 could be the difference between winning a prize money or not; gold or silver; silver or bronze; medal or not.
+    ├─ Lucy (2023-04-04 12:02:58.993000) [+0]
+    │  Or to put in a positive tone, it motivates us to find a best/better way to solve the problem. It really makes people want to learn a lot of things in 14 days.  That is a good thing. Plus, it is so ...
+├─ Matthijs Hogervorst (2023-04-05 08:48:48.327000) [+1]
+│  Did you average over the predicted log1p(cost) of the different models, or over the exponentiated values?
+  ├─ AmbrosM (2023-04-05 21:23:28.207000) [+2]
+  │  @mhogervo I averaged over the logs and exponentiated afterwards. See these lines at the end of https://www.kaggle.com/code/ambrosm/pss3e11-zoo-of-models :
+  │  
+  │  def submit(test_preds, path):
+  │      ...
+  │     ...
+├─ ML_wishforall (2023-04-05 04:17:18.423000) [+1]
+│  That's a surprising piece of data. Thank you for comparing various combinations of ensemble. .. and Congratulation on winning #1
+├─ Tucker Lovell (2023-04-04 19:08:36.823000) [+1]
+│  Thanks for sharing, congrats on your win!
+├─ Marília Prata (2023-04-04 11:21:04.157000) [+1]
+│  That's a position (1st) that makes sense for you AmbrosM.
+│  Now, I'm updated with yours Zoo code.  
+│  Congratulations for your first place!
+├─ Bob Yelram (2023-04-04 08:33:46.500000) [+1]
+│  Thank you for sharing this clean model comparison and clustering ! 🙏
+├─ shoab ahamed (2023-04-04 06:48:30.243000) [+1]
+│  Thanks for sharing I learned a lot of new things. Congratulation on winning
+├─ Jose Cáliz (2023-04-04 02:17:06.810000) [+1]
+│  Excellent post @ambrosm, thanks for all your inputs and congratulations on excelling another competition.
+├─ Jeshua Céspedes (2023-04-04 01:20:41.060000) [+1]
+│  Thank you for sharing! This competition was enjoyable. I got to learn a lot!! Congrats! and keep up the good work!
+├─ Lucy (2023-04-04 01:03:58.313000) [+1]
+│  @ambrosm Bravo! Wow, it is a very thorough work! Well deserved as always!  I used the TargetEncode in the end which helped improve the model a bit. Thank you for your mentorship! Congratulations ag...
+├─ Chase Rendall (2023-04-04 00:57:34.917000) [+1]
+│  Thanks for sharing! Congratulations on a well-deserved win.
+├─ Abdenour Madani (2023-04-04 00:40:56.597000) [+1]
+│  Thank you very much for sharing your knowledge and solution!
+├─ JEANMPIA (2023-04-04 00:31:34.900000) [+1]
+│  Always very interesting to know what you did ! 
+│  I was sure you used many models again, and you were able to do it thx to the duplicates removal, thats impressive.
+│  Learned something new again here !
+├─ Ericka42 (2023-04-08 22:24:38.783000) [+0]
+│  Thanks for sharing I learned a lot of new things. Congratulation on winning!
+├─ Tanvir Ahmed (2023-04-06 18:20:14.500000) [+0]
+│  nice work!
+├─ Jagger Stephens (2023-04-05 21:46:08.403000) [+0]
+│  Thank you for this awesome write-up, and congrats on the win!!!
+├─ [deleted] (2023-04-06 16:32:07.913000) [+0]
+│  [deleted]
+├─ haisei (2023-04-05 06:38:35.310000) [+1]
+│  Thanks for sharing 😄
+├─ Arif Hossain (2023-04-08 13:17:43.547000) [+0]
+│  Thanks for the sharing ….
+├─ Pragyanand Sahoo (2023-04-08 08:50:29.113000) [+0]
+│  Thanks for the sharing ….
+├─ tyro logist (2023-04-07 22:27:22.657000) [+0]
+│  Thank you for sharing.

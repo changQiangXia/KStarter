@@ -1,0 +1,108 @@
+# https://www.kaggle.com/competitions/playground-series-s3e2/discussion/378795
+
+Topic #378795: 1st Place Solution Details
+  Author: KirkDCO
+  Posted: 2023-01-17 03:43:51.910000
+  Votes: 35  Comments: 14
+
+Thanks to everyone for the great competition, great discussions, ideas, code, and helping me achieve my first first place!  None of it would have happened without all the discussion and sharing of thoughts and ideas.  Also thanks to the Kaggle team for organizing this and so many other fun and exciting competitions, tutorials, and experiences.
+
+The notebook can be found here:  XGBoost PlayS03E02 First Place
+
+Data and Feature Engineering
+
+In addition to the synthetic data, I added stroke observations from the original dataset  to help improve upon the imbalanced dataset.  I consistently saw improvements in my CVs and performances on the Public LB when I did this regardless of model type.  I did 10-fold CV using StratifiedKFold. [1]
+
+The trick, however, is that all of my CV calculations used only the synthetic dataset.  I included the original stroke observations in each CV fold, but did not use them to calculate CVs.  Given the differences in distributions of some features and some inter-feature correlations, I believe monitoring only the synthetic set avoided over-training to the original dataset.  [5]
+
+One-hot encoding
+
+Categorical features were one-hot encoded.  [2]  I opted for sparse or k-1 class encoding to reduce the total number of features and to prevent perfect correlations between features.
+
+Impute BMI
+
+Some observations from the original dataset did not have BMI values.  KNeighborsRegressor was used to impute BMI for those observations.  [6]
+
+Total risk factors
+
+I though computing clinical risk factors [4] was a great idea and included this in my feature engineering. Compared to my baseline model (simple logistic regression), including risk factors gave me an improvement of only 0.0008.  I did not compare to a baseline for other model types, however.
+
+Center and scale
+
+Continuous features were centered and scaled.
+
+Modeling
+
+Model Tuning
+
+The first place model was a simple XGBoost model.  I tuned hyper-parameters using  a randomized search over a hand-coded set of ranges.  I performed 500 iterations of random hyper-parameter samples, and did 10-fold CV for each iteration.  Predictions were made for the test set in each CV fold for each model.
+
+Ensemble
+
+The final ensemble was developed by simply averaging all the test set predictions for the 5 best models (ranked by average CV AUC) for a total of 50 predictions in the ensemble.
+
+Other things I tried
+
+
+
+I performed this exact same process of tuning and ensembling using LogisticRegression (0.89209 on Private LB), CatBoost (0.89799), and a simple NN (0.89423).  All of them did quite well with very small separation in scores.  Obviously the non-linear approaches performed best.
+
+I also tried blending all the approaches mentioned above, using either the best model or the best 5 models for each model type - this included the XGBoost predictions in the winning submission.  Using the best single model (10-fold cv predictions for each, so 40 predictions), gave a Private LB score of 0.89975, and using the best 5 models for each (200 total predictions!) gave a Private LB score of 0.89879.  Both would still have been in the top 10.
+
+I tried ranking my scores [3] but I did not see any improvement in my CVs nor LB standings.
+
+I ran TPOT to do some exploratory modeling early on.  Even running it multiple times with multiple settings, XGBoost was always the best model found.
+
+
+References
+
+[1]  StratifiedKFold inspired by @tilii7 who used RepeatedKFold - https://www.kaggle.com/code/tilii7/modeling-stroke-dataset-with-lasso-regression
+
+[2]  One-hot-encoding code from @craigmthomas, with modifications - https://www.kaggle.com/code/craigmthomas/play-s3e2-eda-models#4.7---One-Hot-Encoding
+
+[3]  Average ranking of predictions rather than average probabilities from @jcaliz - https://www.kaggle.com/competitions/playground-series-s3e2/discussion/377732 (Ulimately not used.)
+
+[4]  Risk factor calculation from @craigmthomas - https://www.kaggle.com/code/craigmthomas/play-s3e2-eda-models#4.8---Number-of-Risk-Factors
+
+[5]  Add stroke cases from original - I also had this idea and was pleased to see I wasn't the only one. Code from @hikmatullahmohammadi https://www.kaggle.com/competitions/playground-series-s3e2/discussion/377875 Also demonstrated by @dmitryuarov here: https://www.kaggle.com/code/dmitryuarov/ps-s3e2-catboost-lasso-nn-above-0-891/notebook
+
+[6]  NN imputation of BMI by @dmitryuarov, with modifications from https://www.kaggle.com/code/dmitryuarov/ps-s3e2-catboost-lasso-nn-above-0-891/notebook
+
+Comments:
+├─ Dishti Soni (2023-01-19 22:15:36.663000) [+1]
+│  Wow first place. Good job
+├─ The Devastator (2023-01-19 01:36:59.887000) [+1]
+│  Congratulations on the strong finish!
+│  
+│  The Devastator.
+├─ Kevin Morgado (2023-01-18 12:01:14.197000) [+1]
+│  Great approach @kirkdco. I liked the way you used different models and approaches to get to the best result. Congratulations!
+├─ Suman Sarkar (2023-01-17 16:13:36.740000) [+1]
+│  Congratulation Robert . Done a great job .
+├─ Pablo Prieri (2023-01-17 12:20:06.530000) [+1]
+│  Congratulation Robert, and thank you for the write up ! 
+│  I also thought about the "trick" of adding the 'original data' but not using it for CV. In my case though, I did a Stratified but not based ...
+  ├─ KirkDCO (2023-01-17 15:01:18.127000) [+1]
+  │  I hadn't thought about Age stratification, but I could image Age and Stroke Event matching would be a good option.  Age was certainly the strongest individual predictor and I wonder if double strat...
+    ├─ Pablo Prieri (2023-01-17 15:56:43.893000) [+1]
+    │  Actually, I did try double stratification but I didn't see a big difference.
+    │  Really thanks for detailing the hyperparameters search part, I need to be better on this bagging/ensembling of models.
+    │  
+    │  ...
+├─ Shibata (2023-01-17 12:04:45.967000) [+1]
+│  Thank you for your sharing.
+│  I have learned a lot from your notebook and comment.
+├─ Vladislav Viryasov (2023-01-17 10:57:45.827000) [+1]
+│  Thank you for your solution!
+│  Congratulations!
+├─ Hikmatullah Mohammadi (2023-01-17 05:57:44.403000) [+1]
+│  Congratulations!
+│  Wish you further success in your career.
+├─ Tilii (2023-01-17 03:48:46.123000) [+1]
+│  Well done! Clearly written and executed, with strong logic in all the steps.
+  ├─ KirkDCO (2023-01-17 03:50:27.410000) [+1]
+  │  Thank you!  I followed your lead, to be honest.  You were a good mentor.  💥
+├─ [deleted] (2023-01-18 07:48:35.847000) [+1]
+│  [deleted]
+├─ Cyril Bourgeois (2023-01-17 20:00:44.327000) [+1]
+│  Beautiful work, thanks for sharing ! 🙏

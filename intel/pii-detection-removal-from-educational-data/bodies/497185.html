@@ -1,0 +1,39 @@
+<p>Stage 1: Select candidates <br>
+Stage 2: Score them.</p>
+<p>--</p>
+<p><strong>Base Ensemble:</strong><br>
+v3-xsmall 256/512/1024/2048; v3-small 768; v3-base 1280; <br>
+mdeberta-v3-base 960</p>
+<p>nbroad &amp; mpware datasets, augmentations, START END and NEWLINE tags</p>
+<p>~0.964-0.972 3-fold CV</p>
+<p>--</p>
+<p><strong>Stage 1 RNN</strong><br>
+deberta-v3-xsmall (embeddings, 384)<br>
+ -&gt; RNN(384 -&gt; 64, bidirectional) -&gt; LayerNorm<br>
+ -&gt; interleave fwd/bkwd -&gt; Conv(128, 128, k = 13, groups of 64) -&gt; Tanh <br>
+        -&gt; (add to rnn output) -&gt; LayerNorm<br>
+-&gt; RNN(128 -&gt; 64, bidirectional) -&gt; LayerNorm -&gt; Linear(128, 13)</p>
+<p>very fast ~120k/s = ~2 mins</p>
+<p>~0.93 CV</p>
+<p>.</p>
+<p><strong>Stage 2 Mini-Attn-Rnn</strong><br>
+~3% of tokens, based on a 1e-3 cutoff and ~2-16 token proximity</p>
+<p>deberta-v3-xsmall embeddings<br>
+  -&gt; Attn(dim = 320, copied from v3-xs) <br>
+    -&gt; partial feed-forward, <br>
+  -&gt; GRU(384, 96, bidirectional) -&gt; [as above]<br>
+        -&gt; Conv, [as above]<br>
+  --&gt; GRU(192, 96), [as above]</p>
+<p>~15k/s - 25k/s, (&gt;500k/s effective speed) = &lt;1min</p>
+<p>~0.94 CV</p>
+<p>.</p>
+<p><strong>Stage 3: V3-XS</strong><br>
+ ~3% tokens, as above<br>
+deberta-v3-xsmall, 8 layers <br>
+~2k/s (&gt;60k/s effective speed) = 2-3mins</p>
+<p>~0.965 CV</p>
+<p>.</p>
+<p>All models were trained with distillation of base ensemble, annealing from softened logits to half-labels, half-logits.</p>
+<p>Out-of-fold 'filter probabilities' used to train the two filtered models.</p>
+<p>Seqlens of 256 for the RNN, 320 for the mini-attn, and 640 for the final model.</p>
+<p>Both stage 2 and stage 3 use SEP tags between token spans, and deberta-v2 was rebuilt with custom indexing to preserve the <em>original</em> positional indexes.</p>

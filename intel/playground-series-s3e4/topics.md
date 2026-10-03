@@ -1,0 +1,69 @@
+# playground-series-s3e4 讨论区（按票数排序，共 67 条）
+
+- [Correlation tells the story](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/381087) — 46 票 / 23 评论 / 2023-01-25 
+- [Use your Time wisely](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/380771) — 44 票 / 24 评论 / 2023-01-24 
+- [What I've learnt from the first four competitions this year](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/382377) — 37 票 / 17 评论 / 2023-01-30 
+- [duplicates in original dataset!](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/381455) — 31 票 / 18 评论 / 2023-01-26 
+- [Suspicious amounts](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/381032) — 30 票 / 13 评论 / 2023-01-24 
+- [30th Place Solution ](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/382447) — 28 票 / 5 评论 / 2023-01-31 **write-up?**
+- [This dataset is different from the original - and more difficult to classify](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/381305) — 28 票 / 30 评论 / 2023-01-26 
+- [Onboarding materials and references](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/380737) — 26 票 / 8 评论 / 2023-01-24 
+- [Using the Original Dataset - Adversarial Validation](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/381089) — 25 票 / 16 评论 / 2023-01-25 
+- [Before calling anything EDA read NIST explanation. Playground Season 3 Ep. 4 is ON!](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/380756) — 24 票 / 14 评论 / 2023-01-24 
+- [Plot your model's predictions on logarithmic scale](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/380984) — 23 票 / 2 评论 / 2023-01-24 
+- [7th place Solution: Ensembling the Flow.](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/382589) — 22 票 / 9 评论 / 2023-01-31 **write-up?**
+- [I Found The Perfect Cross Validation 📢](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/381415) — 21 票 / 34 评论 / 2023-01-26 
+- [10th place solution](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/382539) — 17 票 / 5 评论 / 2023-01-31 **write-up?**
+- [Collection of helpful ideas - S3E4](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/381045) — 17 票 / 9 评论 / 2023-01-24 
+- [Don't underestimate solo models - 54th place](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/382443) — 16 票 / 6 评论 / 2023-01-31 **write-up?**
+- [Nice work everyone!](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/382416) — 14 票 / 1 评论 / 2023-01-31 
+- [There are MANY, MANY duplicates in all datasets](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/381483) — 14 票 / 2 评论 / 2023-01-26 
+- [🧐 Can we guess the credit card transaction time? 🧐](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/381179) — 14 票 / 6 评论 / 2023-01-25 
+- [How to avoid falling ?](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/382527) — 13 票 / 10 评论 / 2023-01-31 
+- [Reframing this Competition as Outlier Detection](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/380746) — 11 票 / 5 评论 / 2023-01-24 
+- [Comparison of classification algo (for beginners)](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/380889) — 11 票 / 6 评论 / 2023-01-24 
+- [Tips by Kaggle Top "Fraud Auditors". Previous insights. V columns? Finding true users..' etc. etc. 😆 😆](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/381034) — 10 票 / 2 评论 / 2023-01-24 
+- [76th (private) 268th (public)... simple XGBoost solution🤷🏻‍♂️](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/382431) — 10 票 / 1 评论 / 2023-01-31 **write-up?**
+- [36th place solution](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/382493) — 9 票 / 9 评论 / 2023-01-31 **write-up?**
+- [Reducing the chance of a shakeup?](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/380751) — 9 票 / 9 评论 / 2023-01-24 
+- [Poor Performance with Imbalanced Learning Methods](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/381967) — 9 票 / 8 评论 / 2023-01-28 
+- [Extra information about the features](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/380739) — 9 票 / 5 评论 / 2023-01-24 
+- [62nd Place Solution](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/382462) — 8 票 / 6 评论 / 2023-01-31 **write-up?**
+- [V1-V28 features. PCA or not?](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/380848) — 8 票 / 4 评论 / 2023-01-24 
+- [Is it time for deep learning?](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/380835) — 8 票 / 8 评论 / 2023-01-24 
+- [Research Papers On Credit Card Fraud Detection](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/380975) — 7 票 / 1 评论 / 2023-01-24 
+- [ROC Curve and AUC](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/381872) — 7 票 / 9 评论 / 2023-01-28 
+- [Trusting your cross validation](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/382428) — 7 票 / 4 评论 / 2023-01-31 
+- [Beware of early stopping](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/381622) — 7 票 / 14 评论 / 2023-01-27 
+- [AUROC...can we be friends?](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/381050) — 7 票 / 6 评论 / 2023-01-24 
+- [Slow Training](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/381213) — 6 票 / 5 评论 / 2023-01-25 
+- [Create aggregate features to boost your scores !!](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/381839) — 6 票 / 7 评论 / 2023-01-28 
+- [From public 236 to 98 private (Ensemble 6 models)](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/382519) — 6 票 / 2 评论 / 2023-01-31 
+- [How to improve it ?](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/382200) — 5 票 / 0 评论 / 2023-01-30 
+- [EDA | Initial Insights](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/380753) — 5 票 / 5 评论 / 2023-01-24 
+- [Suggestions for a new entry](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/381844) — 4 票 / 4 评论 / 2023-01-28 
+- [Lets clear some doubts !!](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/381779) — 4 票 / 4 评论 / 2023-01-28 
+- [Lessons from previous financial competitions](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/381376) — 4 票 / 2 评论 / 2023-01-26 
+- [What is Time column  ](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/380788) — 3 票 / 2 评论 / 2023-01-24 
+- [Principal component analysis already performed on data.](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/380773) — 3 票 / 6 评论 / 2023-01-24 
+- [My conclusions (~0.82 score)](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/382046) — 3 票 / 4 评论 / 2023-01-29 
+- [SMOTE really helps, but ANNs and Boost fails on the real test set. ](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/381524) — 3 票 / 8 评论 / 2023-01-27 
+- [What is this shape? It is reoccurring for nearly all features.](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/380747) — 3 票 / 2 评论 / 2023-01-24 
+- [questions about markdown](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/380941) — 3 票 / 4 评论 / 2023-01-24 
+- [Occurrences of frauds by the minute of the hour](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/380938) — 3 票 / 0 评论 / 2023-01-24 
+- [[SOLVED] Why my validation score is so high (perfect score)? Is something wrong with my code?](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/380876) — 2 票 / 5 评论 / 2023-01-24 
+- [5 model in R with very good performace (Best - 0.83054 with Keras) ](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/380892) — 2 票 / 9 评论 / 2023-01-24 
+- [Guess your final score](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/381006) — 2 票 / 5 评论 / 2023-01-24 
+- [Keep or Drop the outliers ? ](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/381632) — 2 票 / 1 评论 / 2023-01-27 
+- [How to deal with models having different feature importances?](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/381831) — 2 票 / 3 评论 / 2023-01-28 
+- [Get those submissions in!](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/382151) — 2 票 / 4 评论 / 2023-01-29 
+- [13th Place Solution - Feature Engineering Rules!!](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/383307) — 2 票 / 4 评论 / 2023-02-03 **write-up?**
+- [Late Submissions Disabled](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/454615) — 1 票 / 0 评论 / 2023-11-10 
+- [How to approach these types of datasets?](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/381436) — 1 票 / 8 评论 / 2023-01-26 
+- [Adversarial Validation. High band between train and test!](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/381986) — 1 票 / 2 评论 / 2023-01-29 
+- [Progressive leaderboard](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/381046) — 1 票 / 5 评论 / 2023-01-24 
+- [Pearson doesn't find any correlation in the data ??](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/382394) — 1 票 / 0 评论 / 2023-01-30 
+- [Submission Range](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/381180) — 1 票 / 5 评论 / 2023-01-25 
+- [Occurrences of frauds across the train and original data](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/380931) — 1 票 / 0 评论 / 2023-01-24 
+- [How to optimise CV runtime 😑](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/381785) — 0 票 / 4 评论 / 2023-01-28 
+- [ID most important feature?](https://www.kaggle.com/competitions/playground-series-s3e4/discussion/382353) — 0 票 / 2 评论 / 2023-01-30 

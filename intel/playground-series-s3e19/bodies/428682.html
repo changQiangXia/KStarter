@@ -1,0 +1,99 @@
+<p>I'm very happy to get 3rd place on my first kaggle competition. Maybe I will write a notebook later, but it depends. I want to read other solutions first. Thanks <a href="https://www.kaggle.com/paddykb" target="_blank">@paddykb</a>, <a href="https://www.kaggle.com/kdmitrie" target="_blank">@kdmitrie</a> and all other people who contributed ideas.</p>
+<h1>EDA and data processing</h1>
+<p>I think EDA is the most important part for this competition, and probably for most such competitions. </p>
+<h2>Correcting the trend</h2>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F11321862%2F3b4e47d98667d2c6ebd717f8b429e75b%2F1.png?generation=1690945588159602&amp;alt=media" alt=""><br>
+Based on the plot of daily total sales, it's obvious that trend in 2020 is abnormal. <br>
+My method to correct the trend:</p>
+<ol>
+<li>Calculate daily fraction of each of the 75 categories.</li>
+<li>Use STL decomposition to extract the trend from daily total sales series.</li>
+<li>Replace the trend from 2020-02-15 to 2020-11-15 with the average trend of the other years.</li>
+<li>Restore the daily total sales series.</li>
+<li>Restore the series of each category based on its fraction.</li>
+</ol>
+<h2>Modelling the baselines</h2>
+<p>Baseline for total daily sales seems to be discrete on each year. The baseline of each category can be modeled as:<br>
+$$B_{y, p, c, s} = B_y F_{y, p} F_{y, c} F_{y, s}$$<br>
+where <em>B</em> is baseline level, <em>F</em> is fraction, <em>y</em> is year, <em>p</em> is product, <em>c</em> is country, <em>s</em> is store. The subscript denotes the corresponding combined categories. So to find baselines of 2022 one needs to find all these values with <em>y=2022</em>.</p>
+<h3>Fraction of country by year</h3>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F11321862%2Fa337d04f327e19e76c1db52b24c31219%2F1.png?generation=1690947455787073&amp;alt=media" alt=""><br>
+Country fractions fluctuate with time. It turned out that these fractions are correlated with GDP per capita.  However for unknown reason all countries in 2022 have the same fraction, i.e., 0.2. Probably due to data construction error.<br>
+$$F_{y, c} = f_{y, c}; F_{2022, c} = 0.2$$<br>
+where <em>f</em> denotes empirical fraction and <em>y = 2017, 2018 … 2021</em>.</p>
+<h3>Fraction of product by year</h3>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F11321862%2Ff23247bcc94a864e4e4381e818c1fca3%2F2.png?generation=1690947785365470&amp;alt=media" alt=""><br>
+Product fractions are roughly constant through years. There seems to be some seasonality of two-year period. But I'd rather capture that by temporal embedding. Here I set them constant as weighted average:<br>
+$$F_{2022, p} = F_{y, p} = (2(f_{2017, p} + f_{2019, p} + f_{2021, p}) + 3(f_{2018, p} + f_{2020, p}))/12$$</p>
+<h3>Fraction of store by year</h3>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F11321862%2F98dab780e79a04946d954578ae68f8c2%2F3.png?generation=1690949265125593&amp;alt=media" alt=""><br>
+Store fractions seems to be constant through years. The fluctuation is negligible.<br>
+$$F_{2022, s} = F_{y, s} = f_{s}$$</p>
+<h3>Baseline of total daily sales.</h3>
+<p>I used median as baseline. For 2022 I left it unknown and determined it by LB probing at the end.<br>
+$$B_y = median_y; B_{2022} \approx 18900$$</p>
+<h2>EDA by category</h2>
+<h3>Standardization</h3>
+<p>With the baseline model, standardization can be done directly:<br>
+$$S_{y, p, c, s, d} =  N_{y, p, c, s, d} /  F_{y, p}  /  F_{y, c} / F_{y, s} / B_y - 1$$<br>
+where <em>N</em>  is num of sold, <em>S</em> is standardized num of sold, <em>d</em> is date.</p>
+<h3>Subplots of daily means (after standardization) by category</h3>
+<h4>By country</h4>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F11321862%2Ffd9648ae8bc7432094177fe2ac460877%2F4.png?generation=1690955250806037&amp;alt=media" alt=""><br>
+Holidays behave differently among countries, especially for Japan. </p>
+<h4>By product</h4>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F11321862%2F58b57d2ad665d141b872387d5077302f%2F5.png?generation=1690955363571149&amp;alt=media" alt=""><br>
+Seasonalities are different among products. Note that, though weak, some products have seasonalities of two years instead of one year.</p>
+<h4>By store</h4>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F11321862%2F65b5802a32ee637a41acdc38f1ab10f8%2F6.png?generation=1690955612122492&amp;alt=media" alt=""><br>
+All stores seem to behave the same.</p>
+<h2>Sum the store sales</h2>
+<p>Reason to sum the store sales:</p>
+<ol>
+<li>Based on the analysis above, store fractions seem to be constant. And there is no difference of seasonality and holiday effect among stores.</li>
+<li>For some categories, e.g. Using LLMs to Win Friends and Influence People - Argentina - Kaggle Learn,  the num of sold is too small and it oscillates between several integers. Such series may affect model training.<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F11321862%2Ffcd5e08c867e96c711d3b2a54b0fac3d%2FFigure%202023-08-02%20142729.png?generation=1690957681313137&amp;alt=media" alt=""></li>
+</ol>
+<p>So I used the sum of daily sales by product and country for training and validation. Similar standardization applied:<br>
+$$S_{y, p, c, d} =  N_{y, p, c, d} /  F_{y, p}  /  F_{y, c} / B_y - 1$$<br>
+For prediction, convert this intermediate value back to num of sold: <br>
+$$N_{y, p, c, s, d} =  (S_{y, p, c, d} + 1) B_y F_{y, p} F_{y, c} F_{y, s} $$<br>
+I put all model parameters to an excel table. See attachment.</p>
+<h1>Training and prediction</h1>
+<h2>Pipeline</h2>
+<p>Since seasonalities are different among products, I trained each product separately. So there are 5 models. <br>
+Training data is split by year to 5 folds, followed by cross validation.</p>
+<h2>Feature engineering</h2>
+<p>Since private score is based on the last 75% of 2022,  lag features are not needed.</p>
+<h3>Temporal embedding</h3>
+<ul>
+<li>For week seasonality, I used Fourier terms up to order 3 .</li>
+<li>For two-year seasonality, I used Fourier terms up to order 5 .</li>
+</ul>
+<h3>Holiday and date related features</h3>
+<p>I generated two categorical features:</p>
+<ul>
+<li>c_holiday: country + corresponding holidays</li>
+<li>c_year_date: country + 365 dates of a year</li>
+</ul>
+<p>These categorical features are then converted to numeric levels by target encoding. I used linear mixed model with <em>S ~ temporal variables</em> grouped by the categorical variable. Of course, encoding is done separately for each product. To avoid overfitting, encoding is done with 4~5 fold OOS predictions.<br>
+See:<br>
+<a href="https://www.statsmodels.org/stable/mixed_linear.html" target="_blank">https://www.statsmodels.org/stable/mixed_linear.html</a><br>
+<a href="https://arxiv.org/pdf/2104.00629.pdf" target="_blank">https://arxiv.org/pdf/2104.00629.pdf</a><br>
+I didn't do feature selection</p>
+<h2>Modeling</h2>
+<p>I used lightbm with linear tree and dart. I didn't do much hyper-parameter tuning except I set <code>num_leaves</code> to a small value (~5). The optimal <code>num_iterations</code> is determined by the cross-validation RMSE. The final model is trained on the whole training set with optimal <code>num_iterations</code>.<br>
+I didn't do any ensmeble.</p>
+<h2>Result</h2>
+<p>The validation SMAPE is 4.87.<br>
+Feature importance:<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F11321862%2Ffdbc5fb658c33bb49f2aa2d2df6995af%2FFigure%202023-08-02%20183337.png?generation=1690972428919431&amp;alt=media" alt=""><br>
+As mentioned above, baseline of total daily sales of 2022 is determined by LB probing. This is simply done by:</p>
+<ol>
+<li>Randomly guess a few values and get the scores</li>
+<li>Use a parabola to fit.</li>
+<li>Try the minimum point.</li>
+<li>Add the result and fit again. </li>
+<li>Repeat 3-4 one or two times.</li>
+</ol>
+<p><strong>That's it. Hope it helps.</strong></p>

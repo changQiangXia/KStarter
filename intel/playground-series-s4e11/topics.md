@@ -1,0 +1,82 @@
+# playground-series-s4e11 讨论区（按票数排序，共 80 条）
+
+- [1st place solution](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/549160) — 106 票 / 91 评论 / 2024-12-01 **write-up?**
+- [Chiming some thoughts on the public leaderboard with hard label metrics](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/543929) — 45 票 / 36 评论 / 2024-11-02 
+- [Fast GPU Hill Climbing using AUC and Log Odds](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/546910) — 41 票 / 9 评论 / 2024-11-18 
+- [25th Place - GBDT plus NN - Trust CV](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/549194) — 37 票 / 21 评论 / 2024-12-01 **write-up?**
+- [One-hot encoded logistic regression beats a default GBDT model](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/543746) — 36 票 / 9 评论 / 2024-11-01 
+- [The influence of CGPA on Mental Health. The 12th grade on top of the interviewed.](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/543719) — 28 票 / 11 评论 / 2024-11-01 
+- [4th place solution - preprocess + automl🚀](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/549197) — 27 票 / 8 评论 / 2024-12-01 **write-up?**
+- [Consider using a proxy metric for early stopping](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/543685) — 24 票 / 3 评论 / 2024-11-01 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/543668) — 23 票 / 12 评论 / 2024-11-01 
+- [A note on blind blending](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/545755) — 23 票 / 7 评论 / 2024-11-12 
+- [How to select diverse models for ensembling](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/546955) — 23 票 / 10 评论 / 2024-11-19 
+- [For Beginners: How to get the original data](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/543683) — 22 票 / 11 评论 / 2024-11-01 
+- [This dataset has quite some overfitting potential](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/543759) — 21 票 / 13 评论 / 2024-11-01 
+- [References and starter materials ](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/543670) — 20 票 / 5 评论 / 2024-11-01 
+- [Recent tabular NN progress](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/548705) — 19 票 / 10 评论 / 2024-11-28 
+- [24th place solution (up 662 places)](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/549147) — 19 票 / 10 评论 / 2024-12-01 **write-up?**
+- [13th place solution: 10 times the work to finish 13th instead of 4th](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/549155) — 18 票 / 14 评论 / 2024-12-01 **write-up?**
+- [How to use the 2nd half of the competition) month](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/546498) — 17 票 / 7 评论 / 2024-11-16 
+- [Results of some oversampling tests](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/544982) — 16 票 / 12 评论 / 2024-11-07 
+- [Data cleaning: How to fix randomly swapped entries + sleep duration](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/543849) — 15 票 / 5 评论 / 2024-11-01 
+- [Threshold tuning vs. probability calibration](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/545414) — 13 票 / 7 评论 / 2024-11-10 
+- [Guesstimating the final scores](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/545997) — 13 票 / 24 评论 / 2024-11-13 
+- [Beware of some oblong values across text columns](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/543722) — 13 票 / 2 评论 / 2024-11-01 
+- [Public -> 254 rank, Private -> 42 rank, and Potential Top 15 solution](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/549153) — 13 票 / 7 评论 / 2024-12-01 **write-up?**
+- [How to use the original data (and how many times)?](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/544672) — 13 票 / 17 评论 / 2024-11-06 
+- [Many congratulations to Mahdi Ravaghi, and all who finished on the right side of the shake up](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/549142) — 13 票 / 25 评论 / 2024-12-01 
+- [Class 12 Tragedy! ](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/544515) — 12 票 / 11 评论 / 2024-11-05 
+- [Visualizing the churn](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/549148) — 12 票 / 0 评论 / 2024-12-01 
+- [Please carefully review the competition rules, especially regarding multiple accounts](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/544155) — 12 票 / 6 评论 / 2024-11-03 
+- [Separate model for working professional and students. ](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/545780) — 12 票 / 15 评论 / 2024-11-12 
+- [From #741 to #263 - The approach](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/546744) — 12 票 / 9 评论 / 2024-11-17 
+- [Get started here!](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/533164) — 11 票 / 18 评论 / 2024-09-09 
+- [Focal Loss is availabe in CatBoost](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/545608) — 11 票 / 2 评论 / 2024-11-11 
+- [500th -> 7th (Quick overview on my first Kaggle Competition)](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/549188) — 11 票 / 4 评论 / 2024-12-01 
+- [Surprised: Names seem to contain some information](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/544205) — 11 票 / 9 评论 / 2024-11-03 
+- [Isotonic Regression for probability calibration boosted me 90 places(12th)](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/549154) — 10 票 / 5 评论 / 2024-12-01 
+- [CV-LB thread](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/543889) — 10 票 / 12 评论 / 2024-11-02 
+- [My First Playground!](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/548647) — 9 票 / 7 评论 / 2024-11-28 
+- [Dear community members, please tell me](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/545913) — 9 票 / 7 评论 / 2024-11-12 
+- [Language model MASK predictions not useful, I guess?](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/546986) — 9 票 / 1 评论 / 2024-11-19 
+- [How to tackle the NaN values ?](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/543732) — 8 票 / 17 评论 / 2024-11-01 
+- [Surrogate metrics (or loss functions) for accuracy](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/545490) — 8 票 / 5 评论 / 2024-11-10 
+- [On feature importances](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/543843) — 8 票 / 6 评论 / 2024-11-01 
+- [NA is not always NA](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/544185) — 8 票 / 3 评论 / 2024-11-03 
+- [LLM solution reaches 0.941 public LB without hyperparameter tuning](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/544102) — 8 票 / 3 评论 / 2024-11-03 **write-up?**
+- [8th place (simple) solution](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/549227) — 8 票 / 3 评论 / 2024-12-01 **write-up?**
+- [7th Place Solution (Single Catboost Model)](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/549359) — 8 票 / 4 评论 / 2024-12-02 **write-up?**
+- [My best unselected submission - potential 13th rank](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/549202) — 7 票 / 1 评论 / 2024-12-01 
+- [Some feature engineering suggestions](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/544349) — 6 票 / 5 评论 / 2024-11-04 
+- [My results with and without original dataset ](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/543898) — 6 票 / 7 评论 / 2024-11-02 
+- [Don't drop any column, including the Name column 🙅‍♂️](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/548470) — 6 票 / 6 评论 / 2024-11-27 
+- [Averaging OOF Predictions vs. Picking one that scores high](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/546520) — 6 票 / 15 评论 / 2024-11-16 
+- [How to not overfit?](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/544560) — 6 票 / 7 评论 / 2024-11-05 
+- [Is this the last playground for this year?](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/548924) — 6 票 / 1 评论 / 2024-11-29 
+- [Top 5% solution cause why not!?](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/549171) — 6 票 / 0 评论 / 2024-12-01 **write-up?**
+- [Reflections on My First Kaggle Competition [890/2685: Top 34%]](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/549165) — 6 票 / 3 评论 / 2024-12-01 
+- [Another approach for this challenge](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/546036) — 5 票 / 15 评论 / 2024-11-13 
+- [Replacing V/S Deletion??](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/547771) — 5 票 / 12 评论 / 2024-11-23 
+- [Encode unseen categories (at test time) as infrequent via OrdinalEncoder](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/548006) — 5 票 / 7 评论 / 2024-11-24 
+- [Training-Test Adversial Validation](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/546458) — 5 票 / 8 评论 / 2024-11-15 
+- [My First Playground Series - Kaggle’s Season 4, Episode 11: Exploring Mental Health Data](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/549088) — 5 票 / 2 评论 / 2024-11-30 
+- [Data Cleaning](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/543933) — 5 票 / 6 评论 / 2024-11-02 
+- [Catboost encoder v/s Target encoder](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/548720) — 5 票 / 6 评论 / 2024-11-28 
+- [Beginner's Game Plan for ML Model Success - Feedback Appreciated!](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/545136) — 5 票 / 4 评论 / 2024-11-08 
+- [Various strategies and models I tried.](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/546156) — 5 票 / 3 评论 / 2024-11-14 
+- [3rd place solution](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/549539) — 5 票 / 2 评论 / 2024-12-02 **write-up?**
+- [How to best pick a threshold for predictions?](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/545170) — 5 票 / 9 评论 / 2024-11-08 
+- [79th place wrangling Autogluon](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/549545) — 5 票 / 3 评论 / 2024-12-02 **write-up?**
+- [Indian Cities ?](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/544184) — 4 票 / 11 评论 / 2024-11-03 
+- [Exploring Mental Health Data – Let's Collaborate!](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/543982) — 4 票 / 3 评论 / 2024-11-02 
+- [AI Podcast based on this data ](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/544153) — 4 票 / 2 评论 / 2024-11-03 
+- [How to Import Notebook?](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/543848) — 4 票 / 2 评论 / 2024-11-01 
+- [An LLM (without API) would have let you finished top 260](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/549192) — 4 票 / 0 评论 / 2024-12-01 
+- [Unexpected Results](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/545192) — 4 票 / 8 评论 / 2024-11-08 
+- [Advice : One Hot or Encoding for string like values](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/545393) — 4 票 / 4 评论 / 2024-11-09 
+- [Handling Missing values](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/545866) — 3 票 / 2 评论 / 2024-11-12 
+- [How to do characteristic engineering for City and Profession？](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/545595) — 3 票 / 1 评论 / 2024-11-11 
+- [Can I add other columns to the training and testing dataset ](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/545164) — 3 票 / 5 评论 / 2024-11-08 
+- [From 1131-th to 438-th (693 place up)](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/549436) — 3 票 / 0 评论 / 2024-12-02 
+- [Correlation Matrix Observations 🤞](https://www.kaggle.com/competitions/playground-series-s4e11/discussion/546209) — 3 票 / 4 评论 / 2024-11-14 

@@ -1,0 +1,82 @@
+# playground-series-s3e12 讨论区（按票数排序，共 80 条）
+
+- [Why you mustn't use train_test_split](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/401113) — 78 票 / 51 评论 / 2023-04-11 
+- [Two features are enough and contour plots show the truth](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/400152) — 77 票 / 31 评论 / 2023-04-07 
+- [Metric and CV Tips for Beginners](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/399412) — 53 票 / 11 评论 / 2023-04-04 
+- [Ten folds are not enough, but how many do we need?](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/399869) — 47 票 / 15 评论 / 2023-04-05 
+- [Don't forget about GAMs](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/400005) — 43 票 / 15 评论 / 2023-04-06 
+- [You won't guess my best single model...](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/401344) — 38 票 / 40 评论 / 2023-04-12 
+- [#5 | Beginner's luck](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/402403) — 37 票 / 10 评论 / 2023-04-18 
+- [Tips and Tricks to help you improve your score.](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/401188) — 37 票 / 22 评论 / 2023-04-12 
+- [Non-tabular competition soon?](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/399626) — 36 票 / 20 评论 / 2023-04-04 
+- [Blending models with different feature subsets](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/400837) — 28 票 / 17 评论 / 2023-04-10 
+- [Test has only 276 records, how can we avoid cheating?](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/399408) — 24 票 / 14 评论 / 2023-04-04 
+- [Feature engineering ideas](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/399441) — 22 票 / 11 评论 / 2023-04-04 
+- [Collection of helpful ideas - S3E12](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/400716) — 20 票 / 14 评论 / 2023-04-09 
+- [How to stop the fall in the private LB ? Features simplification, models](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/402385) — 19 票 / 11 评论 / 2023-04-18 
+- [How to overfit](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/401926) — 19 票 / 32 评论 / 2023-04-15 
+- [Don't overlook traditional/old models](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/401315) — 18 票 / 7 评论 / 2023-04-12 
+- [Original data and column explaination](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/399399) — 16 票 / 11 评论 / 2023-04-04 
+- [Domain elements and resources](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/399409) — 16 票 / 2 评论 / 2023-04-04 
+- [Will a "random guy" win this competition?](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/399930) — 16 票 / 6 评论 / 2023-04-06 
+- [ChatGPT - Feature Engineering Ideas](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/399606) — 15 票 / 7 评论 / 2023-04-04 
+- [Master your Metrics. ROC Curves and Precision-Recall.](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/399760) — 15 票 / 2 评论 / 2023-04-05 
+- [Can a high number of repetitions in CV cause overfitting?](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/401017) — 15 票 / 4 评论 / 2023-04-11 
+- [New to Machine Learning or Kaggle?](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/393077) — 14 票 / 37 评论 / 2023-03-07 
+- [Some Facts & Kidney Disease Statistics](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/399473) — 14 票 / 5 评论 / 2023-04-04 
+- [Will Logistic Regression Shine?](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/399717) — 13 票 / 6 评论 / 2023-04-05 
+- [Logistic Regression Scores](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/400342) — 13 票 / 9 评论 / 2023-04-07 
+- [Powerfull of random state in small data](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/399915) — 12 票 / 4 评论 / 2023-04-06 
+- [Why it wasn't the best COMPETITION --- but still fun](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/402401) — 12 票 / 1 评论 / 2023-04-18 
+- [target = calc](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/399533) — 11 票 / 4 评论 / 2023-04-04 
+- [Pertinent starter notebooks](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/399411) — 11 票 / 2 评论 / 2023-04-04 
+- [#184 | I've Learned A Lot Despite Everything](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/402357) — 11 票 / 0 评论 / 2023-04-18 
+- [#8 Solution ](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/402416) — 11 票 / 3 评论 / 2023-04-18 **write-up?**
+- [Understanding sklearn's make_pipeline and FunctionTransformer ](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/401589) — 9 票 / 6 评论 / 2023-04-14 
+- [4 Types of Kidney Stones](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/399635) — 9 票 / 6 评论 / 2023-04-04 
+- [Single predictor [Calc] residue analysis](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/401968) — 8 票 / 3 评论 / 2023-04-16 
+- [Target Encoding helps!](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/401379) — 8 票 / 7 评论 / 2023-04-13 
+- [CV Doesn't Have Correlation with Private LB?](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/402334) — 8 票 / 14 评论 / 2023-04-18 
+- [#24 solution – Xdata + XGB + LGBM + CAT + Opt roc curve](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/402398) — 7 票 / 0 评论 / 2023-04-18 **write-up?**
+- [Tune the hyperparameters manually!](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/400192) — 7 票 / 12 评论 / 2023-04-07 
+- [Feature Explanation (Understanding what each feature means)](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/399542) — 6 票 / 1 评论 / 2023-04-04 
+- [Results as far.](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/401871) — 6 票 / 9 评论 / 2023-04-15 
+- [How about to fill some values in calc feature by NaN?](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/400308) — 6 票 / 7 评论 / 2023-04-07 
+- [Beware of overfitting – a novice's worst enemy](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/401707) — 6 票 / 5 评论 / 2023-04-14 
+- [Procedure to choose a set of hyperparameters for any algorithm](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/399493) — 5 票 / 6 评论 / 2023-04-04 
+- [Deciding on the weights of Ensemble](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/399556) — 5 票 / 10 评论 / 2023-04-04 
+- [🩺 Clinical Interpretation of Urinary Features and Translation to the Kaggle Competition 💡](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/399877) — 5 票 / 0 评论 / 2023-04-05 
+- [Lets Understand importance of feature behind every prediction with EBM's i.e. Explainable Boosting Machines.](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/399842) — 5 票 / 2 评论 / 2023-04-05 
+- [Final Score Calculation Mechanism](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/402369) — 5 票 / 6 评论 / 2023-04-18 
+- [Custom StackingClassifier CV for PyGAM](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/402014) — 4 票 / 2 评论 / 2023-04-16 
+- [Improve your CV by removing sample n°55 from training : leverage](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/402047) — 4 票 / 9 评论 / 2023-04-16 
+- [# 28 Solution | Problem with private LB score](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/402347) — 4 票 / 2 评论 / 2023-04-18 **write-up?**
+- [Overcoming Challenges and Learning Along the Way](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/402509) — 4 票 / 4 评论 / 2023-04-18 
+- [Generate features with aggregation functions?](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/401590) — 4 票 / 7 评论 / 2023-04-14 
+- [Does my cross validation function is correct](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/400514) — 4 票 / 8 评论 / 2023-04-08 
+- [Some duplicates with wrong target in train and original train](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/399966) — 4 票 / 8 评论 / 2023-04-06 
+- [Mutual Information (MI) for the original and Kaggle datasets](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/400058) — 4 票 / 2 评论 / 2023-04-06 
+- [Best Classification Algorithm ](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/399538) — 4 票 / 0 评论 / 2023-04-04 
+- [Y'all 21 hours to go ](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/402133) — 3 票 / 7 评论 / 2023-04-17 
+- [#14th Place Solution](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/402467) — 3 票 / 0 评论 / 2023-04-18 **write-up?**
+- [Query Related To Ranking On LB](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/399426) — 3 票 / 3 评论 / 2023-04-04 
+- [#17 place solution: NaN filling](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/402437) — 3 票 / 0 评论 / 2023-04-18 **write-up?**
+- [ Capure linear dependency and other kind of dependency between features](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/400674) — 3 票 / 2 评论 / 2023-04-09 
+- [Late Submissions Disabled](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/454619) — 2 票 / 0 评论 / 2023-11-10 
+- [🔥 **Beginner plan from understanding to submission** 💯 + ChatGPT-4 plan 🤖](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/399650) — 2 票 / 6 评论 / 2023-04-05 
+- [Is this competition worth participating ?](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/399540) — 2 票 / 5 评论 / 2023-04-04 
+- [Data Meaning](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/400018) — 2 票 / 1 评论 / 2023-04-06 
+- [A Basic Outline](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/400390) — 2 票 / 1 评论 / 2023-04-08 
+- [t-SNE says there is at least one target cluster here](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/400476) — 2 票 / 2 评论 / 2023-04-08 
+- [🩺 Pathophysiology in the context of the competition with EDA 📊🔎](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/400127) — 2 票 / 2 评论 / 2023-04-07 
+- [PCA is effective for logistic regression.　0.78->0.79](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/401455) — 2 票 / 1 评论 / 2023-04-13 
+- [Exploring feature importance beyond calc](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/402275) — 2 票 / 0 评论 / 2023-04-17 
+- [# 40th Solution that could have been 30th](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/402409) — 2 票 / 0 评论 / 2023-04-18 **write-up?**
+- [Newbie’s Journey: From Complex to Simple Machine Learning Models](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/402092) — 2 票 / 7 评论 / 2023-04-16 
+- [Data Preprocessing](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/400536) — 1 票 / 2 评论 / 2023-04-08 
+- [Strong correlation of some features](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/400472) — 1 票 / 1 评论 / 2023-04-08 
+- [[Help] Pyspark model overfitting.](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/400240) — 1 票 / 5 评论 / 2023-04-07 
+- [Feature Engineering Ideas using ChatGPT](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/400872) — 1 票 / 2 评论 / 2023-04-10 
+- [Ensemble of different feature subsets and models to the rescue!](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/401673) — 1 票 / 0 评论 / 2023-04-14 
+- [Please share your models](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/402313) — 1 票 / 1 评论 / 2023-04-17 
+- [Is there a good explanation for such position changes from public to private leaderboard?](https://www.kaggle.com/competitions/playground-series-s3e12/discussion/402517) — 1 票 / 7 评论 / 2023-04-18 

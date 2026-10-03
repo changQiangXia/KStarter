@@ -1,0 +1,82 @@
+# playground-series-s4e5 讨论区（按票数排序，共 80 条）
+
+- [The first really useful feature](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/499274) — 116 票 / 38 评论 / 2024-05-01 
+- [#1st place solution](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/509043) — 106 票 / 58 评论 / 2024-06-01 **write-up?**
+- [0.844 with a one-liner](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/499263) — 60 票 / 17 评论 / 2024-05-01 
+- [Sorting along the feature axis as "feature engineering"](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/499579) — 47 票 / 15 评论 / 2024-05-02 
+- [[AutoML Grand Prix]  7th place solution writeup](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/499507) — 38 票 / 9 评论 / 2024-05-02 **write-up?**
+- [[AutoML 2nd Place] Team Oxygen - H2O DriverlessAI](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/500549) — 36 票 / 18 评论 / 2024-05-06 **write-up?**
+- [[AutoML Grand Prix] 1st place solution write-up](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/500700) — 35 票 / 8 评论 / 2024-05-06 **write-up?**
+- [Funny thing about feature engineering](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/499501) — 32 票 / 4 评论 / 2024-05-02 
+- [[AutoML Grand Prix] Team SAS, FLAML 3h & custom  models](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/499494) — 31 票 / 20 评论 / 2024-05-02 
+- [A couple of myths about blending weights](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/506793) — 31 票 / 9 评论 / 2024-05-23 
+- [Predictor variables come from Poisson(lambda=5) distribution](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/499244) — 31 票 / 2 评论 / 2024-05-01 
+- [Grand Prix 2024: 17 AutoML tools. AutoML on Kaggle.](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/499173) — 30 票 / 5 评论 / 2024-05-01 
+- [Hyperparameter optimization](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/503203) — 30 票 / 23 评论 / 2024-05-16 
+- [The AutoML Grand Prix portion of this competition is now over.](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/499482) — 29 票 / 22 评论 / 2024-05-02 
+- [What you need to know about the data](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/499256) — 27 票 / 13 评论 / 2024-05-01 
+- [#2nd Place Solution(Team Peaky Blenders): Blends Of Blends.](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/509410) — 27 票 / 3 评论 / 2024-06-02 **write-up?**
+- [#3 solution - A blend of 57 models](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/509042) — 26 票 / 28 评论 / 2024-06-01 **write-up?**
+- [[AutoML 3rd place]: I am a leaf on the wind: soaring to 3rd place](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/499725) — 25 票 / 7 评论 / 2024-05-02 **write-up?**
+- [Usage of Statistical Features](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/502621) — 25 票 / 29 评论 / 2024-05-14 
+- [AutoML code references and onboarding materials ](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/499171) — 24 票 / 0 评论 / 2024-05-01 
+- [An abstract (art) representation of model's quality](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/505961) — 24 票 / 6 评论 / 2024-05-19 
+- [This competition is eligible for the AutoML Grand Prix!](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/497481) — 23 票 / 34 评论 / 2024-04-24 
+- [DecisionTreeRegressor performing on par with the big 3 GBDT models](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/499941) — 23 票 / 11 评论 / 2024-05-03 
+- [Who else feels like this might be the worst playground competition so far?](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/500500) — 23 票 / 22 评论 / 2024-05-05 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/499429) — 22 票 / 4 评论 / 2024-05-01 
+- [4th Place Solution: Hill climbing through the noise](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/509044) — 22 票 / 7 评论 / 2024-06-01 **write-up?**
+- [Strange events at the top of the leaderboard](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/507585) — 21 票 / 17 评论 / 2024-05-26 
+- [Flood data is fake, we are predicting noise!](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/500381) — 19 票 / 0 评论 / 2024-05-05 
+- [[AutoFE] Automatic Feature Engineering](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/499540) — 19 票 / 0 评论 / 2024-05-02 
+- [Working with a custom eval metric with XgBoost and LightGBM](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/499180) — 19 票 / 0 评论 / 2024-05-01 
+- [Default learning rates for CatBoost](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/505705) — 18 票 / 5 评论 / 2024-05-18 
+- [Disable discussion and code sharing for first day ?](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/499554) — 18 票 / 16 评论 / 2024-05-02 
+- [Inferring the churn ](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/509045) — 18 票 / 1 评论 / 2024-06-01 
+- [An appeal for Kaggle to introduce some minimal quality checks for datasets used in The Playground Series](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/500554) — 18 票 / 3 评论 / 2024-05-06 
+- [Get started here!](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/487134) — 16 票 / 23 评论 / 2024-03-27 
+- [About rapid account creation and submissions with good score](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/508928) — 16 票 / 5 评论 / 2024-05-31 
+- [Custom Tabular Data Competition](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/501580) — 16 票 / 3 评论 / 2024-05-09 
+- [How far can you go with just DecisionTreeRegressor?](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/501331) — 16 票 / 2 评论 / 2024-05-08 
+- [RandomForest training with GPU and XGBoost](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/506440) — 15 票 / 12 评论 / 2024-05-21 
+- [Determining Weights for Prediction Blends](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/506761) — 15 票 / 48 评论 / 2024-05-23 
+- [Base margining may boost your score in a GBDT model](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/502823) — 15 票 / 2 评论 / 2024-05-15 
+- [State of AutoML in 2024. Tools to try in AutoML Gran Prix. ](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/499212) — 15 票 / 4 评论 / 2024-05-01 
+- [Anecdotes from my first time trying AutoGluon.](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/499495) — 14 票 / 12 评论 / 2024-05-02 
+- [Collection of helpful ideas - S4E5](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/502064) — 14 票 / 5 评论 / 2024-05-11 
+- [[AutoML Grand Prix] 4th Place Solution with H2O DriverlessAI (DAI)](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/501123) — 14 票 / 3 评论 / 2024-05-08 **write-up?**
+- [AutoML Grand Prix 5th place write up | James King](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/500453) — 14 票 / 3 评论 / 2024-05-05 **write-up?**
+- [AutoML perfect run time](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/501427) — 13 票 / 2 评论 / 2024-05-09 
+- [[AutoML Grand Prix] 6th place solution writeup](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/499602) — 13 票 / 4 评论 / 2024-05-02 **write-up?**
+- [Just Result Blending Notebooks are not good!!](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/499826) — 12 票 / 9 评论 / 2024-05-03 
+- [Testing KAN](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/500087) — 12 票 / 5 评论 / 2024-05-04 
+- [Rounding predictions is not beneficial](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/500211) — 12 票 / 5 评论 / 2024-05-04 
+- [CV/LB Correlation Thread](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/500887) — 12 票 / 8 评论 / 2024-05-07 
+- [There was a feature ...](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/509050) — 12 票 / 1 评论 / 2024-06-01 
+- [Meta features seem to be the way to go](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/499484) — 11 票 / 4 评论 / 2024-05-02 
+- [Performance by cross validation](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/501687) — 10 票 / 6 评论 / 2024-05-10 
+- [Relationships from the original dataset are somewhat distorted in the training data](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/500767) — 10 票 / 8 评论 / 2024-05-06 
+- [A new feature for linear models ](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/502929) — 9 票 / 0 评论 / 2024-05-15 
+- [ are learning rate and iterations the most important hyperparameters?](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/502739) — 9 票 / 5 评论 / 2024-05-14 
+- [MLJAR Studio - new way for creating Python notebooks, solution with MLJAR AutoML (LB:0.86696)](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/501146) — 9 票 / 0 评论 / 2024-05-08 **write-up?**
+- [FLAML+Ensemble using LAD Regression Vs LGBM vs CatBoost](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/502072) — 9 票 / 2 评论 / 2024-05-11 
+- [[Team AutoML Grandmasters, 9th Place] First AutoML Grand Prix Competition Write-Up](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/500783) — 9 票 / 3 评论 / 2024-05-06 **write-up?**
+- [When and what are the ways to treat outliers in the data?](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/500109) — 9 票 / 4 评论 / 2024-05-04 
+- [PS-S4S5 AutoML Grand Prix 10th place solution write-up](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/499550) — 9 票 / 6 评论 / 2024-05-02 **write-up?**
+- [Why is it not a classification task?](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/501078) — 9 票 / 13 评论 / 2024-05-08 
+- [Quick start with top automatic EDA library and tool (2024)](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/499309) — 9 票 / 0 评论 / 2024-05-01 
+- [Flood probability in original dataset can be calculated from predictor columns (R^2=1)  ](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/499591) — 8 票 / 0 评论 / 2024-05-02 
+- [16º Place Solutuion](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/509047) — 7 票 / 1 评论 / 2024-06-01 
+- [StackingRegressor or VotingRegressor](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/500817) — 6 票 / 10 评论 / 2024-05-07 
+- [Score = 0.870 on partial dataset with Boosting](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/500730) — 5 票 / 6 评论 / 2024-05-06 
+- [Brazil is dealing with flooding right now!](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/501813) — 5 票 / 0 评论 / 2024-05-10 
+- [Deep learning versus shallow learning ?](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/509153) — 5 票 / 11 评论 / 2024-06-01 
+- [I ran openfe on 10% of dataset. These are feature list.](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/502337) — 5 票 / 5 评论 / 2024-05-13 
+- [StratifiedShuffleSplit vs train_test_split ](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/499343) — 4 票 / 5 评论 / 2024-05-01 
+- [Beware of public leaderboard anchoring bias](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/499749) — 4 票 / 2 评论 / 2024-05-02 
+- [Flood Prediction and Detection](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/500514) — 4 票 / 2 评论 / 2024-05-06 
+- [Leaderboard does not match cv at all](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/507180) — 4 票 / 5 评论 / 2024-05-24 
+- [Are there any metrics to check the confidence of R2 Score?](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/500188) — 4 票 / 4 评论 / 2024-05-04 
+- [As a second competitor, I got lost in this data](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/501743) — 3 票 / 2 评论 / 2024-05-10 
+- [AutoML in R](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/500239) — 3 票 / 2 评论 / 2024-05-04 
+- [how can I load a pretrained model with internet off](https://www.kaggle.com/competitions/playground-series-s4e5/discussion/505827) — 3 票 / 2 评论 / 2024-05-19 

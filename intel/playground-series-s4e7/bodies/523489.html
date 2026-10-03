@@ -1,0 +1,154 @@
+<p>Hi everyone,<br>
+I would like to extend my gratitude to the Kaggle community and fellow participants for an incredible Playground Series episode. This was a resource-intensive and time-consuming challenge, demanding a great deal of patience to achieve victory. The frequent movement on the public leaderboard, especially in the last 2-3 days, reflected the intense competition.<br>
+Here's my journey broken into iterations.</p>
+<h3>Iteration 1</h3>
+<p>In my initial attempt, I trained a quick, lightly tuned set of models (XGB, LGBM, and <a href="https://ibm.github.io/ai-on-z-101/snapml/" target="_blank">SnapML</a>) on my local PC equipped with an RTX 4070.</p>
+<ul>
+<li>The XGB submission was smooth, achieving a Public LB score of <code>0.88448</code> with a CV score of <code>0.8833</code>.</li>
+<li>I faced a problem with LightGBM CUDA flavor because of this bug  <a href="https://github.com/microsoft/LightGBM/issues/6512" target="_blank">[CUDA] illegal memory access</a>. Consequently, I had to drop LightGBM from the first iteration.</li>
+<li>I did not pursue Random Forest or any sklearn libraries, as public discussions and notebooks indicated they were not worth the computational effort</li>
+<li>SnapML usually takes a lot of time on even light datasets but I tried it anyway as it has GPU support but it also achieved an LB score close to <code>0.8880</code>.<br>
+<br><br>
+At the end of this iteration, my score was around <code>0.88</code>. To breach the <code>0.89</code> mark, I needed further improvements. I had not yet explored CatBoost, as public forums suggested its default settings could yield scores exceeding <code>0.895</code>.</li>
+</ul>
+<h3>Iteration 2</h3>
+<p>A determined effort to tune XGB, LGBM, and SnapML to match CatBoost's performance:</p>
+<ul>
+<li>I aggressively tuned XGB and SnapML using distributed <strong>Optuna</strong> on four machines (2 x Kaggle GPU P100, 1 x L4 from Colab, 1 x RTX 4070 from my local setup). To avoid OOM errors during HPO, I didn't load the test set into memory.</li>
+<li>In this stage I also merged the original dataset and created these four additional interaction features from public notebooks.</li>
+</ul>
+<pre><code>train_df[]=  train_df[].astype() +  train_df[].astype()
+train_df[] =  train_df[].astype() +  train_df[].astype(
+train_df[] =  train_df[].astype() +  train_df[].astype()
+train_df[] =  train_df[].astype() +  train_df[].astype()
+train_df[] =  train_df[].astype() +  train_df[].astype()
+)
+</code></pre>
+<ul>
+<li>The tuned XGBoost achieved a public LB score of <code>0.89387</code> with a CV score of <code>0.89113</code>.</li>
+<li>I tuned LightGBM on CPU using three machines (1 x TPU on Kaggle and 2 x TPUs on Colab). This model achieved a public LB score of <code>0.89344</code> with a CV score of <code>0.89302</code>. A challenge with using TPU on Kaggle is the automatic shutdown after 3 hours when TPU is not consumed, but distributed tuning allowed me to quickly resume training</li>
+<li>Next was SnapML though sadly this model couldn't even breach the <code>0.890</code> on my CV and hence I filtered this out after this iteration ☹️.</li>
+<li>After seeing the performance of neural nets from public discussions and notebooks I gave it a try. There's an awesome library <a href="https://pytorch-tabular.readthedocs.io/en/latest/tutorials/01-Approaching%20Any%20Tabular%20Problem%20with%20PyTorch%20Tabular/" target="_blank">pytorch-tabular</a> which I used to train <code>TABNET</code> and <code>GANDALF</code>  and they also achieved CV score of <code>~0.8910</code> but they are very expensive to train and didn't offered better performance compared to GBDT.<br>
+<br><br>
+At the end of this stage I had LB score of <code>~0.8930</code> so my next stage was to close this gap by trying some different techniques.</li>
+</ul>
+<h3>Iteration 3</h3>
+<ul>
+<li>I attempted to use neural embeddings from <a href="https://pytorch-tabular.readthedocs.io/en/latest/" target="_blank">pytorch-tabular</a> <code>CategoryEmbedding</code> model to boost the scores of LightGBM and XGBoost. This was a mistake, as the embeddings turned out to be close to 300 dimensions, requiring high RAM. An initial spike in my CV score to 0.895 was due to a bug caused by a seed mismatch, which I discovered too late after exhausting my Colab credits ☹️.</li>
+<li>I tried target encoding to some extent but even that wouldn't push the score of XGB or LGBM ☹️ .<br>
+<br><br>
+At this point, I considered skipping the episode, having exhausted nearly all my compute resources and time with no guarantee of success. With around 30 submissions, I decided to give CatBoost one final attempt.</li>
+</ul>
+<h3>Final Iteration</h3>
+<p>At this stage, I tuned just one catboost model (just one) using again the same strategy distributed optuna on 3 x machines close to 50 HPO rounds, took about 10 hours because unfortunately, catboost GPU doesn't support pruner as compared to XGB and LightGBM. These were my parameters after HPO tuning.</p>
+<pre><code>'learning_rate' 
+'reg_lambda' 
+'max_depth' 
+'subsample'   # I changed this to  when training full model.
+'leaf_estimation_iterations' 
+'log_max_bin' 
+</code></pre>
+<p>These were my fixed params for HPO</p>
+<pre><code> 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ True
+</code></pre>
+<p><br><br>
+The above parameters when trained to 5000 iterations  with some tweak would achieve a public LB of <code>0.89666</code> but it isn't enough to win it. <br>
+Through my small experiments on Kaggle notebooks I observed two important things.</p>
+<p></p><ol><br>
+<li>I can manually reduce the learning rate to <code>0.085</code> and increase the iterations to <code>10000</code>.</li><br>
+<li>Newton-based <code>score_function</code> is superior to Gradient-based. I guess this is what most of the public notebooks missed. As soon as I switched to <code>NewtonCosine</code> or <code>NewtonL2</code> and used 12 <code>leaf_estimation_iterations</code> my CV itself was close to <code>0.8960</code>.<br><br>
+Additionally, I removed contrasting duplicates first from the original and then from both train and original after combining as discussed in this discussion: [<a href="https://www.kaggle.com/competitions/playground-series-s4e7/discussion/520253](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/" target="_blank">https://www.kaggle.com/competitions/playground-series-s4e7/discussion/520253](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/</a>. I also Binned Aged and Premium features as I found it slightly increases my validation scores.<br><br>
+After experimenting with everything I divided the dataset into 4 folds. I wasn't able to train all the folds together and even training a single fold was not possible on Kaggle as catboost required close to (48 gigs) of RAM post-training.<br><br>
+I trained the first 3 fold on colab with my remaining computes and the submission this time achieved an LB score of <code>0.89720</code> putting me in top 10 but after doing the trick as mentioned by <a href="https://www.kaggle.com/paddykb" target="_blank">@paddykb</a> it got boosted to <code>0.89780</code> .<br><br>
+To finally settle the score I trained small-small versions of catboost with same parameter and reduced iterations on Kaggle with different CV-spilt and random states and did average solely based on validation scores (as at this point I didn't had OOF folds to properly blend with) which settled my final score without trick to <code>0.89728</code> and with the trick to <code>0.89788</code> which was the winning solution with private LB score of <code>0.89753</code>.<br><br>
+These were my final CV-LB scores of the fold without any trick.<br><p></p>
+<table>
+<thead>
+<tr>
+<th>Fold</th>
+<th>CV score</th>
+<th>LB Score</th>
+<th><br></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fold-0</td>
+<td>0.8960367441</td>
+<td>0.89625<br></td>
+<td></td>
+</tr>
+<tr>
+<td>Fold-1</td>
+<td>0.8962229192</td>
+<td>0.89629<br></td>
+<td></td>
+</tr>
+<tr>
+<td>Fold-2</td>
+<td>0.8962465823</td>
+<td>0.89632<br></td>
+<td></td>
+</tr>
+<tr>
+<td>Fold-3</td>
+<td>0.8959594369</td>
+<td>0.89620<br></td>
+<td></td>
+</tr>
+<tr>
+<td>**Fold-4</td>
+<td>0.8958430433</td>
+<td>- <br></td>
+<td></td>
+</tr>
+<tr>
+<td>**<code>Fold-4</code> is average of all my small models.</td></tr></tbody></table></li>
+
+
+
+
+
+</ol>
+
+
+
+
+
+<h2>Summary</h2>
+
+
+
+
+
+
+<h3>Key Takeaways</h3>
+<ol>
+<li>Monitor discussions and public notebooks to save experimentation and compute time, allowing calculated decisions with fewer submissions.</li>
+<li>Be patient with large datasets and try different training strategies. Mistakes are learning opportunities.</li>
+<li>Distributed optimization is faster, more affordable, and has better error tolerance, especially in competitions like this.</li>
+<li>Be wary of leakage, even with changing random states, especially in neural embeddings.</li>
+</ol>
+<h3>What Didn’t Work</h3>
+<ol>
+<li>Target encoding with XGB and LGBM.</li>
+<li>Neural embeddings didn't boost performance enough compared to the compute required.</li>
+<li>Changing the default <code>max_ctr_complexity</code> of CatBoost overfit in my case.</li>
+</ol>
+<h3>What I Could Have Done</h3>
+<ol>
+<li>Saving OOF folds and combining would have boosted my score though I couldn't due to their large size.</li>
+<li>Exploring neural networks more.</li>
+<li>Trying different CatBoost flavors (maybe lossguide).</li>
+</ol>
+<h2>#</h2>
+<p>Special thanks to <a href="https://www.kaggle.com/ravi20076" target="_blank">@ravi20076</a>, <a href="https://www.kaggle.com/arunklenin" target="_blank">@arunklenin</a>, <a href="https://www.kaggle.com/tilii7" target="_blank">@tilii7</a>, and <a href="https://www.kaggle.com/optimistix" target="_blank">@optimistix</a> for the healthy competition, and <a href="https://www.kaggle.com/paddykb" target="_blank">@paddykb</a>, <a href="https://www.kaggle.com/ivanmitriakhin" target="_blank">@ivanmitriakhin</a>, <a href="https://www.kaggle.com/rzatemizel" target="_blank">@rzatemizel</a> for the trick.</p>

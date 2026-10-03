@@ -1,0 +1,91 @@
+<p>Heyho everyone!</p>
+<p>Another exciting 24 hours of automatically fitting machine learning models! Kudos to all the competitors, and a shoutout to Team AGA, who gave us a run for our money with an early <code>0.98533</code> score that we spent the next 12 hours trying to beat. In the end, the winner was decided by a difference in score so small that Kaggle’s leaderboard doesn’t even visualize it, so we consider ourselves pretty lucky to have eeked it out. We detail our approach to the fourth Grand Prix in the following. </p>
+<p>But first, we would like to highlight that <strong>the International Conference on Automated Machine Learning 2024 is is taking place in Paris from September 09. to 12.</strong> (see <a href="https://2024.automl.cc/)" target="_blank">https://2024.automl.cc/)</a>! We are going to be at the conference and would be happy to meet other (Auto)ML enthusiasts from Kaggle at the conference :) </p>
+<hr>
+<h2>Overview Figure</h2>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F8846216%2Fccf91bccc5305fed9c5732f1e780f5c8%2Fovervierw.jpg?generation=1722870770063924&amp;alt=media" alt="SolutionOverview"></p>
+<hr>
+<h2>Summary</h2>
+<p>We used <a href="https://auto.gluon.ai/" target="_blank">AutoGluon</a> as our AutoML system, installing via source on the latest mainline with tweaks to enable distributed computation (see below). With it, our approach to this competition can be summarized as follows:</p>
+<h4>Preprocessing</h4>
+<ol>
+<li>We replaced noisy observations in the data. Nothing else improved our offline cross-validation (CV) score. </li>
+</ol>
+<h4>Model Fitting</h4>
+<p>We ran a default version of AutoGluon for one hour and a custom version of AutoGluon for four hours. For the custom version, we used the following settings:</p>
+<ol>
+<li>We used log loss as an early stopping metric while optimizing/picking based on the target metric MCC. We are unsure if this helped, but it improved our offline CV score.</li>
+<li>We used 16-fold cross-validation and AutoGluon’s multi-layer <a href="https://auto.gluon.ai/dev/tutorials/tabular/how-it-works.html" target="_blank">stacking</a> implementation.</li>
+<li>We trained a customized portfolio of models, meta-learned from <a href="https://github.com/autogluon/tabrepo" target="_blank">TabRepo</a> (i.e., zero-shot HPO)</li>
+<li>We used 100 iterations (instead of the default 25) for <a href="https://arxiv.org/abs/2307.08364" target="_blank"><em>post hoc</em> ensembling</a>. </li>
+</ol>
+<h4>Kaggle Tricks</h4>
+<ol>
+<li>AutoGluon rounds to the first 6 decimals of the score when determining tiebreakers during the final weighted ensemble. It turns out that is too few for the deltas we were looking for, so we upped it to 8 at the very end to eke out an epsilon improvement.</li>
+<li>We manually created a <em>post hoc</em> ensembling logic for this competition in an effort to go from <code>0.98531</code> to <code>0.98533</code>. We cached all pred probas from all models on all experiments and then ran the <em>post hoc</em> ensembling for the final solution. This allowed us to just barely leapfrog Team AGA!</li>
+</ol>
+<h4>Compute</h4>
+<p>After the last competition, we felt the need to expand our computing power for these (very) large data competitions. Therefore, in addition to using an individual AWS compute instance, we put much effort into using AutoGluon distributed across compute nodes. </p>
+<ol>
+<li>We used a prototype of a distributed version of AutoGluon to parallelize AutoGluon across compute resources.</li>
+<li>We used an in-house SLURM cluster (from the University of Freiburg) together with <a href="https://docs.ray.io/en/latest/index.html" target="_blank">Ray</a> to distribute AutoGluon’s model training across 1000 CPUs. </li>
+</ol>
+<hr>
+<h2>Code</h2>
+<p>The supplementary code repository for this write-up can be found here: <a href="https://github.com/AutoML-Grandmasters/Fourth-AutoML-Grand-Prix/tree/main" target="_blank">https://github.com/AutoML-Grandmasters/Fourth-AutoML-Grand-Prix/tree/main</a></p>
+<p>Our copy-able settings for the custom run of AutoGluon can be found in this <a href="https://github.com/AutoML-Grandmasters/Fourth-AutoML-Grand-Prix/blob/main/main.py" target="_blank">file</a>.</p>
+<h3>Preprocessing</h3>
+<p>We used the following code to clean noisy observations that do not exist in the test predictions by setting them to nan. </p>
+<pre><code> numpy  np
+ pandas  pd
+
+train_data = pd.read_csv()
+test_data = pd.read_csv()
+
+weird_columns = [
+    ,
+    ,
+    ,
+    ,
+    ,
+    ,
+    ,
+    ,
+    ,
+    ,
+    ,
+    ,
+    ,
+    ,
+    ,
+    ,
+]
+
+ col  weird_columns:
+    allowed_vals = test_data[col].unique()
+    train_data.loc[~train_data[col].isin(allowed_vals), col] = np.nan
+    test_data.loc[~test_data[col].isin(allowed_vals), col] = np.nan
+</code></pre>
+<h3>Early Stopping Metric</h3>
+<p>To early stop on <code>log_loss</code>, pass the following to AutoGluon’s fit call: <code>ag_args_fit={"stopping_metric": "log_loss"}</code>. This can sometimes help as early stopping on threshold-based metrics such as MCC can be too early. </p>
+<h3>Distributed AutoGluon &amp; Compute</h3>
+<p>Here is the current version of distributed AutoGluon: <a href="https://github.com/LennartPurucker/autogluon/tree/distributed_autogluon" target="_blank">https://github.com/LennartPurucker/autogluon/tree/distributed_autogluon</a><br>
+An example script with more details on how to use it can be found here: <a href="https://github.com/AutoML-Grandmasters/Fourth-AutoML-Grand-Prix/blob/main/autogluon_distributed_example.py" target="_blank">https://github.com/AutoML-Grandmasters/Fourth-AutoML-Grand-Prix/blob/main/autogluon_distributed_example.py</a></p>
+<p>In our experience with it, it is mostly stable but has a few GPU-related problems that we hope to fix for the prototype. We plan to integrate a more mature version of this into mainline AutoGluon in the future (and are already working on it). </p>
+<p>We used 1000 CPUs spread across nodes with 20 or 32 Intel(R) Xeon(R) Gold 6242 CPUs @ 2.80GHz, each node with around 150 GB of RAM. The cluster is managed with <a href="https://slurm.schedmd.com/documentation.html" target="_blank">SLURM</a>, and we used <a href="https://docs.ray.io/en/latest/index.html" target="_blank">Ray</a> to create a sub-cluster that AutoGluon can (natively) use to fit models. To run AutoGluon distributed, only a Ray cluster is needed, which can be created on local compute, SLURM clusters, or cloud resources.  </p>
+<p>Additionally, we used an AWS m7i.48xlarge EC2 instance with 192 vCPUs to run default AutoGluon.</p>
+<h3>Customized Portfolio</h3>
+<p>To obtain a better portfolio than currently existing in AutoGluon, we re-ran the work of the <a href="https://arxiv.org/pdf/2311.02971" target="_blank">TabRepo paper</a> (to be presented at the AutoML conference), but use a portfolio of size 200 instead of the 100 size portfolio used by AutoGluon’s best_quality setting. We also included more model families: Linear models and KNN, although some of those models we ended up disabling those since they weren’t helping and, at times, took a long time to infer. </p>
+<p>We additionally added configurations with larger <code>max_bin</code> values for LightGBM, XGBoost, and CatBoost. Moreover, we removed a set of configurations that we found to take too long to predict for large datasets. You can find the final portfolio in this <a href="https://github.com/AutoML-Grandmasters/Fourth-AutoML-Grand-Prix/blob/main/tabrepo_2024_custom.py" target="_blank">file</a>. We filtered the portfolio to models that were working well (see <a href="https://github.com/AutoML-Grandmasters/Fourth-AutoML-Grand-Prix/blob/main/main.py#L69-L84" target="_blank">here</a>).</p>
+<h3>More Iterations for Post Hoc Ensembling</h3>
+<p>We wanted to find a better final post hoc ensemble by giving the <a href="https://dl.acm.org/doi/10.1145/1015330.1015432" target="_blank">greedy ensemble selection</a> in AutoGluon more iterations. Sadly, so far, there is no easy interface to increase this number. Thus, we simply monkey patched our local install of AutoGluon. To do so, one needs to set the value in <a href="https://github.com/autogluon/autogluon/blob/master/core/src/autogluon/core/models/greedy_ensemble/greedy_weighted_ensemble_model.py#L22" target="_blank">this line</a> to 100.</p>
+<h3>Kaggle Tricks</h3>
+<ul>
+<li>To adjust the number of decimals for rounding, set the <code>round_decimals</code> variable in<br>
+<code>autogluon.core.models.greedy_ensemble.ensemble_selection.EnsembleSelection</code> Line 112 to <code>8</code> (see <a href="https://github.com/autogluon/autogluon/blob/f5c7b7400596e1449fad2b4107fde55809a09bac/core/src/autogluon/core/models/greedy_ensemble/ensemble_selection.py#L112" target="_blank">here</a> on GitHub).</li>
+<li>Our manual post hoc ensembling logic can be found in this <a href="https://github.com/AutoML-Grandmasters/Fourth-AutoML-Grand-Prix/blob/main/ag_post_hoc_ensembler.py" target="_blank">file</a>. It assumes that you have a finished run of AutoGluon on disk (in our cases we used the default one-hour run for this) and the following artfiacts from another run of AutoGluon: a) the <a href="https://auto.gluon.ai/stable/api/autogluon.tabular.TabularPredictor.predict_proba.html" target="_blank">prediction probabilities</a> on test data, b) the <a href="https://auto.gluon.ai/stable/api/autogluon.tabular.TabularPredictor.predict_proba.html" target="_blank">out-of-fold prediction probabilities</a> on training data, and c) <a href="https://auto.gluon.ai/stable/api/autogluon.tabular.TabularPredictor.predict.html" target="_blank">predictions</a> on test data. </li>
+</ul>
+<hr>
+<p>Best regards,<br>
+Lennart, Nick (@innixma), and Arjun (@neonkraft), on behalf of the "AutoML Grandmasters"</p>
+<p>Prior Grand Prix Competition Write-ups: <a href="https://www.kaggle.com/competitions/playground-series-s4e5/discussion/500783" target="_blank">First AutoML Grand Prix Competition</a>, <a href="https://www.kaggle.com/competitions/playground-series-s4e6/discussion/509631" target="_blank">Second AutoML Grand Prix Competition</a>, <a href="https://www.kaggle.com/competitions/playground-series-s4e7/discussion/516265" target="_blank">Third AutoML Grand Prix Competition</a></p>

@@ -1,0 +1,36 @@
+<p>I have written several threads on the topic of ensembling, but the challenge seems to be different in this competition. When we predict continuous values or a single probability per data point, there are many ways to assess whether the two predictions are diverse: 1) correlation (there are several flavors of it); 2) cumulative distribution functions; 3) Kolmogorov-Smirnov statistics; 4) a scatter plot of predictions. None of those apply when we have to compare three columns of probabilities. Or maybe they do, but I don't know enough statistics to use a simple approach.</p>
+<p>So I went with a complicated approach, and it kind of works. First, I defined a confidence value for each 3-class prediction by using this formula:</p>
+<pre><code>df[] =  * df.(axis=) - df.sum(axis=) + df.(axis=)
+</code></pre>
+<p><code>Dropout, Enrolled, Graduate</code> contain predicted probabilities for the three classes. This formula gives a positive number in the 0-1 range. It will be zero if our prediction is a total guess [1/3, 1/3, 1/3] and it will be 1 if our predictions are absolutely certain (any of the [1, 0, 0], [0, 1, 0] or [0, 0, 1] cases).</p>
+<p>Now we look into our out-of-fold predictions: 1) if they are correct, our confidence values is unchanged; 2) for incorrect out-of-fold predictions we add a minus sign to confidence values. That means our confidence values could be high and correct (that's the case most of the time) or high and incorrect, and we will be able to distinguish between them. Here are several examples of 3-probability predictions and their confidence values:</p>
+<pre><code>.,.,.    .
+.,.,.    .
+.,.,.    .
+</code></pre>
+<p>Now that we have a single column of numbers for each data point, it is easy to apply the tests I mentioned above. Here are the numbers for two relatively similar models (small KS values mean similar distributions):</p>
+<pre><code> 's correlation score: .
+ 's correlation score: .
+ 's correlation score: .
+ -Smirnov test:    KS-stat = .
+</code></pre>
+<p>And for two diverse models:</p>
+<pre><code> 's correlation score: .
+ 's correlation score: .
+ 's correlation score: .
+ -Smirnov test:    KS-stat = .
+</code></pre>
+<p>I will go with scatter plots because they are colorful. Two GBM models have their data points mostly on the diagonal:</p>
+<p><img src="https://i.ibb.co/0BKFj4J/LGB-vs-Cat-Boost-confidence.png" alt="LGB vs CatBoost"></p>
+<p>The colorbar shows relative difference of data from the Y-axis compared to the X-axis, clipped at +/- 80%. Generally speaking, LightGBM predictions are better for data points below the diagonal and for CatBoost above the diagonal. This is a relatively diverse pairing of models, and oddly enough it is more diverse than the pairing of LightGBM vs the stacked AutoGluon model.</p>
+<p><img src="https://i.ibb.co/0f717Nh/LGB-vs-Auto-Gluon-confidence.png" alt="LGB vs AutoGluon"></p>
+<p>And now for something completely different:</p>
+<p><img src="https://i.ibb.co/D40pKjT/LGB-vs-SVC-confidence.png" alt="LGB vs SVC"></p>
+<p>As the plot shows, this would be LightGBM vs Support Vector Classifier (SVC). But really, any other model, including neural networks, would give a similar plot against SVC. SVMs have fallen out of style as they are too slow for large datasets, but I will make a case for this method on the grounds of significant diversity. Also, they are not terribly slow when used with a GPU and Nvidia's RAPIDS, and I just might demonstrate that one of these days.</p>
+<p>Let me do some annotation of the previous plot:</p>
+<p><img src="https://i.ibb.co/S65WwcG/LGB-vs-SVC-complex-confidence.png" alt="LGB vs SVC annotated"></p>
+<p>Green boxes show areas when one model is better than the other, but it makes no real difference. In the upper right corner LightGBM is better because its predictions are more confident than for SVC, but both are generally correct. Note that SVC confidence values top at <code>~abs(0.8)</code> which translates to a max probability of 0.87-0.9. That means that for this dataset SVC never assigns probability &gt; 0.9 for any data point. If our metric was log-loss, then averaging the two models in that region would give us a better score. Given that our metric is accuracy and both models are correct in that region of the plot, it makes no difference. Similarly, in the lower left corner green box both models are wrong, but SVC is "less wrong." An example data point for the upper-right green box would be <code>id: 40002</code> from the train data, which is predicted as <code>0.01299,0.010502,0.976508</code> by LightGBM and <code>0.096031,0.091103,0.812866</code> by SVC. The former is clearly "more right" but it makes no difference when evaluating accuracy.</p>
+<p>The upper-right red box is where SVC is considerably better than LightGBM, even though both of them make correct predictions because of positive confidence values. In the lower-left red box we have LightGBM making "less wrong" predictions than SVC, even though both models are wrong.</p>
+<p>Where we are going to make hay is blue boxes. In the upper-left blue box, especially its top half, SVC is both confident and correct in its predictions, while the LightGBM model is the opposite. The roles are reversed in the lower-right blue box. Averaging those values might bring some data points from incorrect into correct category. Specifically, the upper-right quadrant of the upper-left blue box holds the most promise to get things fixed by averaging, because that is where SVC is both highly confident and correct (relatively high and correct probabilities) while LightGBM is incorrect but not too confident (incorrect but relatively low probabilities). The same is true for the upper-right quadrant of the lower-right box, but there aren't as many points in that region.</p>
+<p>Please let me know if you have a different way (and likely better) to assess model diversity.</p>
+<p>For the end a public service announcement: ensembling is fundamental and go out there and find some diverse models!</p>

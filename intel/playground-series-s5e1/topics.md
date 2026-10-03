@@ -1,0 +1,82 @@
+# playground-series-s5e1 讨论区（按票数排序，共 80 条）
+
+- [2nd Place - Stacking Transformer and Linear Regression](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/560549) — 86 票 / 39 评论 / 2025-02-02 **write-up?**
+- [Transformer Achieves LB=0.052 Without Feature Engineering!](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/559314) — 80 票 / 55 评论 / 2025-01-24 
+- [An "obvious" decomposition from previous competitions](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/554349) — 72 票 / 20 评论 / 2025-01-01 
+- [Starting materials and references](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/554331) — 59 票 / 22 评论 / 2025-01-01 
+- [New column - holidays.](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/554680) — 52 票 / 12 评论 / 2025-01-02 
+- [Stacking versus Ensemble? What is Difference?](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/560853) — 51 票 / 15 评论 / 2025-02-02 
+- [Anyone Trying NN? i.e. CNN, RNN, or Transformer?](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/557425) — 42 票 / 54 评论 / 2025-01-19 
+- [3rd place solution](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/560535) — 31 票 / 10 评论 / 2025-02-02 **write-up?**
+- [Rounding may improve your score in this competition](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/555149) — 30 票 / 10 评论 / 2025-01-05 
+- [WaveNet Starter - LB=0.082 - No Feature Engineering!](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/557904) — 27 票 / 14 评论 / 2025-01-22 
+- [1st place solution](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/560629) — 26 票 / 16 评论 / 2025-02-01 **write-up?**
+- [Public LB occurs before the private LB and is sequential!](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/554338) — 26 票 / 5 评论 / 2025-01-01 
+- [A very similar tabular competition with prize money](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/554772) — 25 票 / 2 评论 / 2025-01-03 
+- [Additional factors to be considered](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/556900) — 24 票 / 7 评论 / 2025-01-15 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/554574) — 19 票 / 8 评论 / 2025-01-02 
+- [Sunday Effect: Sunday is peak](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/555496) — 18 票 / 4 评论 / 2025-01-07 
+- [linear trees is worth noting if using GBDT](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/555275) — 17 票 / 3 评论 / 2025-01-06 
+- [Visualize your predictions to understand them better](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/554547) — 16 票 / 3 评论 / 2025-01-02 
+- [Different GDP from different data sources](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/555716) — 14 票 / 7 评论 / 2025-01-08 
+- [Introducing the yearly patterns significntly improves the score](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/557955) — 14 票 / 14 评论 / 2025-01-22 
+- [5th place solution](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/560554) — 13 票 / 7 评论 / 2025-02-01 **write-up?**
+- [Delayed holiday effect](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/559828) — 13 票 / 7 评论 / 2025-01-28 
+- [Get started here!](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/537544) — 11 票 / 5 评论 / 2024-10-03 
+- [12th Place Solution: Linear Regression + XGBoost for Residuals](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/560588) — 11 票 / 0 评论 / 2025-02-01 **write-up?**
+- [Separate analysis of predictions in different categories](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/555500) — 11 票 / 5 评论 / 2025-01-07 
+- [[Cold-Start] There are 2 groups of [country, store, product] with 100% missing values in train data](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/554348) — 11 票 / 8 评论 / 2025-01-01 
+- [4th place solution](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/560692) — 10 票 / 3 评论 / 2025-02-01 **write-up?**
+- [Visualizing the leaderboard churn](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/560537) — 10 票 / 6 评论 / 2025-02-01 
+- [9 Public, 11 Private (Single Model) - Solution Writeup (Public LB 0.04605, Private LB 0.04766)](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/560569) — 10 票 / 0 评论 / 2025-02-02 **write-up?**
+- [Please help! Why do many use "np.sin(2 * np.pi * data['day'] / 31) ? ](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/555806) — 10 票 / 19 评论 / 2025-01-09 
+- [How should one handle missing values in target variable?](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/554358) — 10 票 / 33 评论 / 2025-01-01 
+- [Share your Best Single Model [ CV / LB ]  ](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/554501) — 9 票 / 17 评论 / 2025-01-01 
+- [Time series forecasting versus regression ](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/557077) — 9 票 / 7 评论 / 2025-01-16 
+- [PSS3E19 1st place solution: Less Is More](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/554334) — 9 票 / 0 评论 / 2025-01-01 **write-up?**
+- [Deep learning versus boosted trees for time series forecasting. Past competitions, literature review and outlook.](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/554384) — 8 票 / 1 评论 / 2025-01-01 
+- [6th Place Solution](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/560653) — 8 票 / 4 评论 / 2025-02-01 **write-up?**
+- [How do you proceed with Chris Deotte's work? How to best utilize the extracted features?](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/559684) — 7 票 / 3 评论 / 2025-01-27 
+- [If divide the task, or rather if distribute it in parts - for each architecture "its" product?](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/560007) — 7 票 / 11 评论 / 2025-01-29 
+- [My first time-series competition: From potentially #15 to eventually #232](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/560548) — 7 票 / 0 评论 / 2025-02-01 
+- [A word of caution with the eval metric and CV scheme](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/554466) — 6 票 / 2 评论 / 2025-01-01 
+- [Significance of sin-cos transformation in date field?](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/554559) — 6 票 / 5 评论 / 2025-01-02 
+- [Missing num_sold in "train.csv"](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/554553) — 6 票 / 2 评论 / 2025-01-02 
+- [Public rankings and private rankings](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/560544) — 6 票 / 6 评论 / 2025-02-01 
+- [Why do many talented people come to participate in this competition?](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/560410) — 6 票 / 8 评论 / 2025-01-31 
+- [Some usefull plots to gain insights](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/557275) — 6 票 / 0 评论 / 2025-01-18 
+- [Why do people `log1p` transforming num_sold?](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/556164) — 6 票 / 20 评论 / 2025-01-11 
+- [Using Neural Networks](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/555509) — 5 票 / 7 评论 / 2025-01-07 
+- [Have holiday feature engineering been handled in previous competitions？](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/554399) — 5 票 / 4 评论 / 2025-01-01 
+- [Do we really need Machine Learning for this competition?](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/556841) — 5 票 / 3 评论 / 2025-01-15 
+- [Tests I did.](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/555031) — 4 票 / 7 评论 / 2025-01-04 
+- [What tools do you use to track your ML experiments?](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/554801) — 4 票 / 8 评论 / 2025-01-03 
+- [Should one focus on imputing the target column?](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/555615) — 4 票 / 19 评论 / 2025-01-08 
+- [Tableau now availeble in Kaggle through GWalkR an PyWalker ](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/554500) — 4 票 / 0 评论 / 2025-01-01 
+- [Testing Kolmogorov-Arnold Networks (KANs) for Large Datasets, Time series](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/556532) — 4 票 / 2 评论 / 2025-01-13 
+- [Submissions Archive - PS-S5E1 | Ensemble of solutions](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/560570) — 4 票 / 0 评论 / 2025-02-01 **write-up?**
+- [Leveraging Social Media Sentiment for Forecasting Product Sales](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/560178) — 3 票 / 7 评论 / 2025-01-29 
+- [Unlocking Better Forecasting: Advanced Techniques for Encoding Categorical Variables](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/554915) — 3 票 / 0 评论 / 2025-01-04 
+- [Why is lightgbm so advantageous in this competition? What advantages does it have over catboost and xgboost?](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/554899) — 3 票 / 3 评论 / 2025-01-04 
+- [Fine-Tuned and Ready: ML Model Performance on Test Data!](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/555205) — 3 票 / 0 评论 / 2025-01-06 
+- [Simple NN get good validation](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/557783) — 3 票 / 3 评论 / 2025-01-21 
+- [Verification method](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/555946) — 2 票 / 10 评论 / 2025-01-10 
+- [ Struggling to Improve My Score – Seeking Alternative Approaches!  ](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/554573) — 2 票 / 2 评论 / 2025-01-02 
+- [API Error for competition](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/554697) — 2 票 / 1 评论 / 2025-01-02 
+- [Missing values in target variable behaving weird?](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/554498) — 2 票 / 4 评论 / 2025-01-01 
+- [Stacking Model Not Performing Well—Seeking Advice](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/560257) — 2 票 / 3 评论 / 2025-01-30 
+- [Choosing between encoding techniques](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/554922) — 2 票 / 10 评论 / 2025-01-04 
+- [Basic Dataset optimization](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/554609) — 2 票 / 2 评论 / 2025-01-02 
+- [Good appearing plots but Bad score !](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/559725) — 2 票 / 6 评论 / 2025-01-27 
+- [How do I can make features contributory?](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/555258) — 2 票 / 4 评论 / 2025-01-06 
+- [just starting out](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/555743) — 2 票 / 1 评论 / 2025-01-09 
+- [【Help me】Is it rational to use LSTM model for this task?](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/559389) — 2 票 / 5 评论 / 2025-01-25 
+- [Variable Interactions](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/554879) — 1 票 / 0 评论 / 2025-01-03 
+- [Nixtla Library For Time Series](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/554855) — 1 票 / 1 评论 / 2025-01-03 
+- [Next playground challenge](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/560558) — 1 票 / 0 评论 / 2025-02-01 
+- [Can we perform rolling, resampling, and lag?](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/555134) — 1 票 / 2 评论 / 2025-01-05 
+- [Null Values](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/554661) — 1 票 / 7 评论 / 2025-01-02 
+- [original Dataset ?](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/554994) — 1 票 / 6 评论 / 2025-01-04 
+- [One or separate models](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/556051) — 1 票 / 3 评论 / 2025-01-10 
+- [Help Needed: How to Create Submission File from Model Predictions](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/559345) — 1 票 / 1 评论 / 2025-01-24 
+- [GDP per capita of countries || Global Normalization performs better than Country specific normalization](https://www.kaggle.com/competitions/playground-series-s5e1/discussion/557431) — 1 票 / 2 评论 / 2025-01-19 

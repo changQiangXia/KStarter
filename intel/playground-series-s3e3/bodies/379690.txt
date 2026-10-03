@@ -1,0 +1,141 @@
+# https://www.kaggle.com/competitions/playground-series-s3e3/discussion/379690
+
+Topic #379690: Hill Climbing for ensembling
+  Author: Samuel Cortinhas
+  Posted: 2023-01-20 16:47:45.963000
+  Votes: 61  Comments: 39
+
+I wanted to learn something new this week so I've been experimenting with Hill climbing. This is a technique for automatically ensembling predictions by iteratively searching for the best model (and best weight) to add to the current ensemble. The models are evaluated using out-of-fold predictions, so you need to save these each time. 
+
+Pseudo-code:
+
+while not STOP:
+    potential_new_best_cv_score = auc(y_train, current_best_ensemble)
+    for k in MODELS:
+        for wgt in range(-0.5,0.51,0.01):
+            potential_ensemble = (1-wgt) * current_best_ensemble + wgt * MODELS[k]
+            cv_score = auc(y_train, potential_ensemble)
+            if cv_score &gt; potential_new_best_cv_score: 
+                potential_new_best_cv_score = cv_score
+                k_best, wgt_best = k, wgt
+
+    current_best_ensemble = (1-wgt_best) * current_best_ensemble + wgt_best * MODELS[k_best]
+    MODELS.drop(k_best)
+    if MODELS is None:
+        STOP = True
+
+
+It improved my CV by nearly 1%, small yes but I can definitely see it being very useful in the big competitions. 
+
+Full notebook: https://www.kaggle.com/code/samuelcortinhas/ps-s3e3-hill-climbing-like-a-gm
+
+Comments:
+├─ Chris Deotte (2023-01-21 00:27:05.580000) [+15]
+│  Great suggestion. Hill climbing is one of my favorite ensemble algorithms. I share code in my notebook here. There is a parameter to determine if we should only use positive weights or allow both p...
+  ├─ Matt OP (2023-01-21 01:17:28.457000) [+1]
+  │  If the train data is small and we are afraid of overfitting, then restricting to only positive weights is safer and more likely to generalize to private LB.
+  │  
+  │  
+  │  How large would the train set have to ...
+    ├─ paddykb (2023-01-21 10:35:28.230000) [+3]
+    │  An issue on a small imbalanced dataset like this is that the "optimal weights" shift significantly when subsampling from the train set. 
+    │  
+    │  Randomly sampling 90% from train, I see weights for three m...
+├─ Tilii (2023-01-20 19:37:31.967000) [+8]
+│  If you like hill-climbing that will also print weights:
+│  
+│  https://www.kaggle.com/code/hhstrand/hillclimb-ensembling
+│  
+│  Contrary to what some people think, this topic has been around for a very long ti...
+  ├─ Ryan Susman (2023-01-21 03:01:01.133000) [+0]
+  │  Thank you! Keeping this in my back pocket!
+├─ paddykb (2023-01-20 17:08:30.667000) [+3]
+│  Hi Samuel, excellent stuff. I've also been taking a look at this technique. Is this "greedy" approach better than optimising weights "globally"?
+  ├─ Samuel Cortinhas (2023-01-20 17:19:47.207000) [+6]
+  │  Optimising globally (w_1*preds_1+w_2*preds_2+...+w_n*preds_n) will probably give slightly better results but in most cases it is completely infeasible. If you have n models and try 100 weights for ...
+    ├─ @kaggleqrdl (2023-01-20 17:48:50.910000) [+3]
+    │  This is kinda true, but there are search techniques which can optimize this, genetic, annealing, optuna's Tree-structured Parzen Estimator, etc.  Greedy is frequently a good way to go tho
+    ├─ Tilii (2023-01-20 19:17:54.587000) [+3]
+    │  but in most cases it is completely infeasible.
+    │  
+    │  
+    │  Global optimization doesn't necessarily mean testing every single weight for every single model. It typically requires less than 100,000 iterations ...
+    ├─ Samuel Cortinhas (2023-01-20 19:28:08.817000) [+0]
+    │  Thanks for correcting me, yes you are right. I should have said as the number of models increases to say above 20 it becomes very difficult if not impossible to find the global minimum. I quite lik...
+    ├─ Tilii (2023-01-20 19:44:21.537000) [+0]
+    │  I quite like that in hill climbing you can add a model and be sure that your CV will improve, whereas if you re-optimise globally you might find a different global minimum.
+    │  
+    │  
+    │  Don't mean to be nitpi...
+    ├─ @kaggleqrdl (2023-01-21 05:48:41.207000) [+0]
+    │  I wouldn't be too down on greedy approaches.  I've found they frequently work well, and are particularly useful when time is an issue.
+  ├─ Tilii (2023-01-20 19:10:17.627000) [+3]
+  │  Generally speaking, it isn't a better approach because it doesn't optimize globally. Some models may not even be part of the solution because there is no improvement by the time they are added to t...
+  ├─ Jose Cáliz (2023-01-21 07:53:42.443000) [+2]
+  │  It seems there was a good discussion over here so I decided to join, beware, lots of time complexities ahead.
+  │  
+  │  TL;DR; It depends. If "better" means better score then as @tili7's suggestion (and I a...
+    ├─ @kaggleqrdl (2023-01-21 11:02:06.270000) [+2]
+    │  Another advantage of greedy / hill climbing is early stopping often has positive outcomes.  Global approaches can sometimes dial in too many features/models and overfit (though regularization and e...
+    ├─ Aviralmishra1998 (2023-01-25 06:47:41.800000) [+0]
+    │  can anyone help
+    │  Dataset:
+    │  https://drive.google.com/drive/folders/1d70I-XacHhA7i7MsVQa-iFJvp2nTiayA?usp=share_link
+    │  Details of the data set:
+    │  data set contains real-time current readings of a 3-phase A...
+├─ Benny (2023-01-22 09:07:26.780000) [+4]
+│  you did a good job.
+├─ RossFriscia (2023-01-23 20:24:19.473000) [+1]
+│  Thanks for sharing! Introduced me to a new concept.
+├─ Muhammad Ammar Jamshed (2023-01-23 19:12:41.203000) [+1]
+│  Now that visualization is AMAZING !!!
+├─ firdausj 5 (2023-01-23 11:00:40.147000) [+1]
+│  Interesting
+├─ Macklin Shanahan (2023-01-23 04:50:47.623000) [+1]
+│  This seems like a great idea, and like you said would be great for competitions that you're doing on a larger scale.
+├─ Ryan Greiner (2023-01-22 18:56:56.650000) [+1]
+│  This seems like a great concept! I will try to implement this in future projects of mine. Thank you for posting.
+├─ Brady Wagner (2023-01-22 05:39:45.127000) [+1]
+│  Wasnt even aware of this method! Thank you for posting, I definitely will use it in the future!
+├─ Dalton Dencklau (2023-01-21 21:58:35.730000) [+1]
+│  This is a great suggestion. Thank you for your insight!
+├─ Ahmed Samir (2023-01-20 19:27:16.880000) [+1]
+│  Wow, this concept is totally new to me. Thanks for sharing @samuelcortinhas 🙏
+├─ @kaggleqrdl (2023-01-20 17:45:17.210000) [+1]
+│  Very cool, hill climbing is super powerful and after knowing how to cross validate I'd say it's the next most important skillset a kaggler needs.
+│  
+│  My one comment on the above, is that the method do...
+  ├─ Samuel Cortinhas (2023-01-20 17:52:32.360000) [+1]
+  │  Here are the weights (from my notebook). Interestingly, allowing for negative weights helps a lot!
+  │  
+  │  Iteration: 1, Model added: LogisticRegression, Best weight: 0.33, Best AUC: 0.85318
+  │  Iteration: 2,...
+    ├─ @kaggleqrdl (2023-01-20 18:11:00.103000) [+1]
+    │  Hmm, I guess though because you aren't using a weighted average of models it's a bit tricky to understand how these models are being weighted.   Eg, Xgboost isn't really .21, right?  Because as you...
+    ├─ Samuel Cortinhas (2023-01-20 19:02:37.903000) [+0]
+    │  Yes true, it becomes a bit harder to interpret.
+    ├─ Tilii (2023-01-20 19:21:15.467000) [+0]
+    │  Many people argue that weights should always be non-negative and sum up to one. I used to be one of them.
+    │  
+    │  I have done enough weight optimizations by now to know that weights can be negative, and d...
+    ├─ Chris Deotte (2023-01-21 07:48:46.273000) [+3]
+    │  Eg, Xgboost isn't really .21, right? Because as you hill climb you change the weights of the models that came before.
+    │  
+    │  
+    │  After iterations of hill climbing, we can convert all the relative weights in...
+├─ Jose Cáliz (2023-01-20 20:13:33.343000) [+2]
+│  That's a great algorithm, Sam. Thanks for sharing your implementation.
+├─ Boyfriend of Your Stepmom (2023-01-24 21:14:04.750000) [+0]
+│  sick man awesome dude
+├─ [deleted] (2023-01-23 20:08:47.887000) [+1]
+│  [deleted]
+├─ [deleted] (2023-01-23 19:27:26.830000) [+1]
+│  [deleted]
+├─ JahobKhan (2023-01-25 01:19:12.993000) [+1]
+│  Good one! Thanks for sharing
+├─ André Moura (2023-01-24 10:47:39.437000) [+1]
+│  Thanks for sharing!
+├─ Melanie Kailly (2023-01-24 06:16:07.567000) [+1]
+│  Thank you for sharing!
+├─ Ahmed Sayed (2023-01-23 14:58:37.340000) [+1]
+│  Great!! Thanks for sharing!

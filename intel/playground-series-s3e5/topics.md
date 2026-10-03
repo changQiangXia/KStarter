@@ -1,0 +1,82 @@
+# playground-series-s3e5 讨论区（按票数排序，共 80 条）
+
+- [Feature Engineering Ideas](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/382698) — 67 票 / 29 评论 / 2023-01-31 
+- [Quadratic Kappa Metric Understanding](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/382421) — 56 票 / 14 评论 / 2023-01-31 
+- [4th Place Solution](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/386645) — 48 票 / 18 评论 / 2023-02-14 **write-up?**
+- [[1st place solution] Single model (RAPIDS XGBoost) ](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/387882) — 40 票 / 12 评论 / 2023-02-22 **write-up?**
+- [Model interpretation with partial dependence plots](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/384317) — 36 票 / 10 评论 / 2023-02-07 
+- [Is this competition a lottery?](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/383429) — 36 票 / 15 评论 / 2023-02-03 
+- [Transform Your Regressor with Rounder Integration](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/382960) — 34 票 / 8 评论 / 2023-02-01 
+- [Starter materials and references](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/382420) — 32 票 / 7 评论 / 2023-01-31 
+- [💡 XGBoost only using 4 features LB-0.58267 (updated) 💡](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/383158) — 31 票 / 22 评论 / 2023-02-02 
+- [PS - S3 E5: Treat as a regression problem?](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/382525) — 29 票 / 9 评论 / 2023-01-31 
+- [Third place solution: mode ensemble of 6 public notebooks.](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/386683) — 27 票 / 12 评论 / 2023-02-14 **write-up?**
+- [14th place solution NN (surviving the big shakeup)](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/386627) — 21 票 / 9 评论 / 2023-02-14 **write-up?**
+- [2nd Place Solution](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/388011) — 18 票 / 1 评论 / 2023-02-15 **write-up?**
+- [When your kappa is kaput! ](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/384448) — 18 票 / 5 评论 / 2023-02-08 
+- [Quadratic Weighted Kappa metric - simply explained](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/383479) — 17 票 / 11 评论 / 2023-02-03 
+- [ These are the stories up to this point!](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/384487) — 16 票 / 10 评论 / 2023-02-08 
+- [New Feature Engineering Idea](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/382891) — 16 票 / 5 评论 / 2023-02-01 
+- [13th Place Solution](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/386657) — 15 票 / 1 评论 / 2023-02-14 **write-up?**
+- [24th Solution.](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/386789) — 15 票 / 0 评论 / 2023-02-14 **write-up?**
+- [Duplicates present between train & original dataset](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/383737) — 15 票 / 5 评论 / 2023-02-04 
+- [New to Machine Learning or Kaggle?](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/380697) — 14 票 / 3 评论 / 2023-01-23 
+- [How to choose final submission?](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/384539) — 14 票 / 12 评论 / 2023-02-08 
+- [Intuition for Quadratic Weighted Kappa Metric 🤔](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/382505) — 13 票 / 1 评论 / 2023-01-31 
+- [Two Famous Competition which scored based on the quadratic weighted kappa](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/382429) — 13 票 / 0 评论 / 2023-01-31 
+- [Collection of helpful ideas - S3E5](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/384131) — 13 票 / 9 评论 / 2023-02-06 
+- [I trained with 1600+ more wine quality data that I accessed from this site, Here's what I found! ](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/383082) — 12 票 / 7 评论 / 2023-02-02 
+- [A faster QWK method](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/382530) — 12 票 / 4 评论 / 2023-01-31 
+- [Do not forget to report blatant plagiarism](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/386145) — 11 票 / 7 评论 / 2023-02-11 
+- [Sample Submission Typo](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/382437) — 11 票 / 1 评论 / 2023-01-31 
+- [Feature engineering with ChatGPT](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/383685) — 11 票 / 10 评论 / 2023-02-04 
+- [Expanded QWK](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/384903) — 10 票 / 16 评论 / 2023-02-10 
+- [21 New Features in total : Feature Engg Idea which got me 18 place in this competition](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/382890) — 9 票 / 1 评论 / 2023-02-01 
+- [	🍷 Feature Engineering: selecting from 155 combinations](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/382984) — 9 票 / 1 评论 / 2023-02-01 
+- [Good luck everyone ](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/382417) — 9 票 / 4 评论 / 2023-01-31 
+- [Train and test sets look similar with adversarial validation](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/382545) — 8 票 / 0 评论 / 2023-01-31 
+- [Weighted Kappa Loss for Pytorch](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/384684) — 8 票 / 2 评论 / 2023-02-09 
+- [NN Model - unexpectedly high LB 0.60224](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/383578) — 8 票 / 15 评论 / 2023-02-04 
+- [A new competition you may be interested in](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/383871) — 8 票 / 2 评论 / 2023-02-05 
+- [Is wine dataset prediction really that hard?](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/382488) — 8 票 / 6 评论 / 2023-01-31 
+- [Ordinal regression with any classifier💡](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/382615) — 8 票 / 1 评论 / 2023-01-31 
+- [Drinking Wine, much more than 13 features. When Origin became Quality? Both UCI Wine datasets.](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/382552) — 7 票 / 0 评论 / 2023-01-31 
+- [Is ChatGPT know how to win the competition?](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/383385) — 7 票 / 6 评论 / 2023-02-03 
+- [Ultra Fast  Quadratic Weighted Kappa Calculation](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/382600) — 7 票 / 2 评论 / 2023-01-31 
+- [16th place Solution](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/386745) — 7 票 / 0 评论 / 2023-02-14 **write-up?**
+- [Getting > 0.52 without ML](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/382544) — 7 票 / 5 评论 / 2023-01-31 
+- [Strange metric behavior](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/382675) — 6 票 / 11 评论 / 2023-01-31 
+- [Simple ensembling takes #7 pub | #3 priv](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/384925) — 6 票 / 5 评论 / 2023-02-10 
+- [Research Papers On Wine Quality Prediction 💥💥](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/382964) — 6 票 / 3 评论 / 2023-02-01 
+- [What is the purpose of predicting wine quality？](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/386270) — 6 票 / 6 评论 / 2023-02-12 
+- [What is Quadratic Weighted Kappa?](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/382954) — 6 票 / 4 评论 / 2023-02-01 
+- [Newbie here. Please help](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/384017) — 5 票 / 2 评论 / 2023-02-06 
+- [Extra data for your models!](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/384927) — 5 票 / 5 评论 / 2023-02-10 
+- [How outliers are determined and handled?](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/383544) — 5 票 / 2 评论 / 2023-02-04 
+- [Imbalanced Target column](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/384960) — 4 票 / 3 评论 / 2023-02-10 
+- [StratifiedKFold or simple train_test_split? ](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/384417) — 4 票 / 12 评论 / 2023-02-07 
+- [Imbalanced Learning](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/384104) — 4 票 / 2 评论 / 2023-02-06 
+- [Please advise to my code with accuracy 0.55758](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/383946) — 4 票 / 0 评论 / 2023-02-06 
+- [Quality Class Separation](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/383026) — 4 票 / 0 评论 / 2023-02-02 
+- [Numeric feature plots ](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/382692) — 4 票 / 2 评论 / 2023-01-31 
+- [Stack with mode - #8 position](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/382843) — 4 票 / 2 评论 / 2023-02-01 
+- [All duplicates are from the original (real-life) dataset!](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/386298) — 3 票 / 4 评论 / 2023-02-12 
+- [Imbalanced data](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/383817) — 3 票 / 6 评论 / 2023-02-05 
+- [Why the result is worse after using some over- or under-sampling methods?](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/383270) — 3 票 / 9 评论 / 2023-02-03 
+- [Cork Master, Voting Ring and a not so cute picture by AI.](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/383402) — 3 票 / 0 评论 / 2023-02-03 
+- [R yardstick Kappa metric with quadratic weighting](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/382690) — 3 票 / 0 评论 / 2023-01-31 
+- [Merge original and synthetic data](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/383115) — 2 票 / 2 评论 / 2023-02-02 
+- [5 model in R with very good performace (Best - 0.56782 with Torch)](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/383366) — 2 票 / 1 评论 / 2023-02-03 
+- [5.7 starter](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/383700) — 2 票 / 2 评论 / 2023-02-04 
+- [Seeking Education - Feature Engineering](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/383759) — 2 票 / 1 评论 / 2023-02-05 
+- [Episode 6 is now open](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/384413) — 2 票 / 2 评论 / 2023-02-07 
+- [standardization helps for GBDT method?](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/384319) — 2 票 / 2 评论 / 2023-02-07 
+- [Feature Engineering](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/383917) — 2 票 / 6 评论 / 2023-02-05 
+- [Why XGB is performing very bad?](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/384274) — 2 票 / 4 评论 / 2023-02-07 
+- [custom metric in R to improve your performance](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/383729) — 1 票 / 0 评论 / 2023-02-04 
+- [XGB boot optimization](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/383212) — 1 票 / 7 评论 / 2023-02-02 
+- [Does cross validating train set matters in Predicting??](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/386306) — 1 票 / 8 评论 / 2023-02-12 
+- [Plotly doesn't display !](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/382770) — 1 票 / 6 评论 / 2023-02-01 
+- [Is it a good competition to start with?](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/410461) — 1 票 / 1 评论 / 2023-05-15 
+- [quality category imbalance](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/382700) — 1 票 / 1 评论 / 2023-01-31 
+- [how to solve submission error ,During submission time i got this type of error](https://www.kaggle.com/competitions/playground-series-s3e5/discussion/382512) — 1 票 / 2 评论 / 2023-01-31 

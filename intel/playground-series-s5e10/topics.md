@@ -1,0 +1,77 @@
+# playground-series-s5e10 讨论区（按票数排序，共 75 条）
+
+- [1st place - I think it was genetic programming](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/614086) — 215 票 / 88 评论 / 2025-11-01 **write-up?**
+- [Key Strategies to Boost Your CV Score for beginers](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/610983) — 106 票 / 52 评论 / 2025-10-08 
+- [XGB Boosting Over Residuals - CV 0.05595 🎉 🥳 🥇](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/610828) — 67 票 / 28 评论 / 2025-10-06 
+- [5th Place - One Hundred Folds!](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/614079) — 58 票 / 25 评论 / 2025-11-01 **write-up?**
+- [High accident risk values are systematically underpredicted](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/610422) — 46 票 / 29 评论 / 2025-10-03 
+- [It will be tough sledding to get diverse models for ensembling.](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/610974) — 40 票 / 33 评论 / 2025-10-07 
+- [3rd Place Solution - From Base to Stacking: A Multilevel Ensembling Approach](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/614114) — 37 票 / 7 评论 / 2025-11-01 **write-up?**
+- [Single Tabm with more Feature Engineer(CV:0.05592,LB:0.05546)](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/611405) — 26 票 / 6 评论 / 2025-10-11 
+- [Single TabM Achieves CV 0.05596, LB 0.05545](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/610792) — 25 票 / 9 评论 / 2025-10-06 
+- [How a tiny difference in the OOF score/public LB score could persist in the private LB](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/613578) — 22 票 / 5 评论 / 2025-10-28 
+- [About origin dataset](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/609994) — 22 票 / 9 评论 / 2025-10-01 
+- [Categorical auto-recoding in xgboost 3.1.0+](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/612990) — 21 票 / 3 评论 / 2025-10-23 
+- [S5E10 | 14th place solution](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/614089) — 19 票 / 11 评论 / 2025-11-01 **write-up?**
+- [8th Place Solution for S5E10: Predict Road Accident Risk](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/614207) — 18 票 / 3 评论 / 2025-11-01 **write-up?**
+- [Escape from Alcatraz](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/612888) — 17 票 / 2 评论 / 2025-10-22 
+- [We were steady for the most part](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/614076) — 16 票 / 3 评论 / 2025-11-01 
+- [CV score vs LB score](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/610147) — 16 票 / 1 评论 / 2025-10-02 
+- [Here is why ensembling works](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/610716) — 15 票 / 5 评论 / 2025-10-05 
+- [184th Place | Potential 5th(?) Place Solution](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/614213) — 14 票 / 8 评论 / 2025-11-02 **write-up?**
+- [The road to glory is paved with rainbow colors](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/610123) — 14 票 / 3 评论 / 2025-10-01 
+- [I used an open-source Agentic AI system to solve PS5E10 - lessons learned](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/614081) — 12 票 / 10 评论 / 2025-11-01 
+- [4th Place – Residual XGBoost + Meta NN + Hill Climb Opt](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/614153) — 12 票 / 6 评论 / 2025-11-01 **write-up?**
+- [What are we trying to predict?](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/612882) — 12 票 / 6 评论 / 2025-10-22 
+- [7th Place - Ridge](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/614265) — 11 票 / 0 评论 / 2025-11-02 **write-up?**
+- [Place 347: No difference between submitting once and submitting 100 times](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/614077) — 11 票 / 4 评论 / 2025-11-01 
+- [kaggle probably has secret insights that only the top 1% can read 🙂🙂💔 ](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/613170) — 9 票 / 11 评论 / 2025-10-24 
+- [If I crash my model… does that count as an accident? (just for fun)](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/610011) — 6 票 / 1 评论 / 2025-10-01 
+- [Seeking Guidance on Feature Engineering and Ensembling Approach](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/610567) — 4 票 / 6 评论 / 2025-10-04 
+- [Correct way of using Early Stopping in XGBoost 3.1.0+ with KFold](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/613289) — 4 票 / 1 评论 / 2025-10-25 
+- [Anybody who's going to take part in the second challenge?](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/610443) — 3 票 / 1 评论 / 2025-10-03 
+- [Data Heterogeny and understanding the latent structure](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/612088) — 3 票 / 0 评论 / 2025-10-16 
+- [What do you experienced data scientist recommend for tracking experiments ?](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/612560) — 3 票 / 5 评论 / 2025-10-20 
+- [Observations on High `accident_risk` Despite Zero Reported Accidents](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/613636) — 3 票 / 2 评论 / 2025-10-28 
+- [I think there might be an issue with the evaluation.](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/610002) — 2 票 / 1 评论 / 2025-10-01 
+- [How can we Improve Feature Engineering & processing for This Competitions](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/610232) — 2 票 / 4 评论 / 2025-10-02 
+- [Clustering as a Potential Solution for Accident Risk Analysis](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/610174) — 2 票 / 5 评论 / 2025-10-02 **write-up?**
+- [ML or DL for this     competetion      to    perform   better ](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/610246) — 2 票 / 4 评论 / 2025-10-02 
+- [How to boost score after a certain limit. I used everything.](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/611167) — 2 票 / 5 评论 / 2025-10-09 
+- [ [Question] How Much Feature Engineering Are　strong performers in the leaderboard Using?](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/611187) — 2 票 / 8 评论 / 2025-10-09 
+- [My second competition any suggestion🤔 ](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/610091) — 1 票 / 2 评论 / 2025-10-01 
+- [There are some duplicates ](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/610047) — 1 票 / 1 评论 / 2025-10-01 
+- [what does a benchmark submission mean?](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/610046) — 1 票 / 2 评论 / 2025-10-01 
+- [How do i get better at kaggle competition](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/610581) — 1 票 / 4 评论 / 2025-10-04 
+- [I am not sure what to do next](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/610864) — 1 票 / 2 评论 / 2025-10-07 
+- [A question about TE](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/610795) — 1 票 / 2 评论 / 2025-10-06 
+- [Strange values appear in the training data precisely when the accident risk equals to 0, 0.1, 0.2, and 1.0.](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/611260) — 1 票 / 3 评论 / 2025-10-09 
+- [Can Anyone, recommend some resource(books,etc) about different types of model building Techniques](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/613438) — 1 票 / 0 评论 / 2025-10-26 
+- [Stuck at 0.05557 - Seeking Advice.](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/613031) — 1 票 / 11 评论 / 2025-10-23 
+- [Is there relatively serious overfitting in the public leaderboard?](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/612319) — 1 票 / 5 评论 / 2025-10-18 
+- [RMSE 0.05558 using triple ensemble](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/611803) — 1 票 / 4 评论 / 2025-10-14 
+- [Ensemble-Boosting over residuals not doing much](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/612805) — 1 票 / 8 评论 / 2025-10-22 
+- [Advice Needed: Blending vs. Stacking](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/613209) — 1 票 / 4 评论 / 2025-10-25 
+- [How do we make CV correlated with LB](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/611900) — 0 票 / 2 评论 / 2025-10-15 
+- [Your submission should be a CSV or Parquet file with 172585 rows and a header ](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/611838) — 0 票 / 2 评论 / 2025-10-15 
+- [Speed limit (km/h or mph)](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/613761) — 0 票 / 3 评论 / 2025-10-29 
+- [Is This A "Random" Kaggle Playground Competition?](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/613847) — 0 票 / 1 评论 / 2025-10-30 
+- [[Question] NN Reproducibility Issue with Single Seed](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/611339) — 0 票 / 14 评论 / 2025-10-10 
+- [Should I use a pipeline approach, and for which steps?](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/611351) — 0 票 / 2 评论 / 2025-10-10 
+- [First Competition Progress – Need Guidance on Features & Ensembling](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/613870) — 0 票 / 2 评论 / 2025-10-30 
+- [How can i improve my models?](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/613488) — 0 票 / 2 评论 / 2025-10-27 
+- [Need inputs for my knowledge](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/611387) — 0 票 / 1 评论 / 2025-10-10 
+- [new rows not working.](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/611349) — 0 票 / 0 评论 / 2025-10-10 
+- [Validation, CV and LB correlation mismatch.](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/611597) — 0 票 / 20 评论 / 2025-10-12 
+- [Is the data leaked, or is there something wrong with my code logic?](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/613645) — 0 票 / 9 评论 / 2025-10-28 
+- [Lighting matters, time of day - not](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/610971) — 0 票 / 1 评论 / 2025-10-07 
+- [Prediction distributions are different?](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/610975) — 0 票 / 1 评论 / 2025-10-07 
+- [Newbie Help](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/611322) — 0 票 / 3 评论 / 2025-10-10 
+- [How to improve my model?](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/612233) — 0 票 / 4 评论 / 2025-10-17 
+- [how to improve score on kaggle for this competition atleast?](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/610915) — 0 票 / 3 评论 / 2025-10-07 
+- [What are some ways to use the original dataset to improve the performance of the ensemble (or single tuned model) ?](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/610949) — 0 票 / 1 评论 / 2025-10-07 
+- [Any thoughts about samples with target 0, 0.1, 0.2 and 1?](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/614070) — 0 票 / 1 评论 / 2025-10-31 
+- [Hit a wall with my score - It no longer improves](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/612808) — 0 票 / 4 评论 / 2025-10-22 
+- [Accident Risk → Policy v1: Net-Value Optimization with SHAP](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/612959) — 0 票 / 0 评论 / 2025-10-23 
+- [Which Approach will Overfit the Test Data?](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/613910) — -2 票 / 2 评论 / 2025-10-30 
+- [New Competition based on Computer Prices!](https://www.kaggle.com/competitions/playground-series-s5e10/discussion/610007) — -3 票 / 0 评论 / 2025-10-01 

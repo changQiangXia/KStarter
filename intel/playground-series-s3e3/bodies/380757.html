@@ -1,0 +1,64 @@
+<p>Hello all, it was another very fun competition! I have a decent amount to go through in my solution so I'll just get right to it. Link to full notebook: <a href="https://www.kaggle.com/code/mattop/14th-place-catboost-xgboost-lgbm-ps-s3-e3/notebook" target="_blank">here</a></p>
+<h3>Encoding</h3>
+<p>We had a decent amount of categorical features so there were many different valid approaches that I observed. Here is what I used:</p>
+<pre><code> on 
+ on 
+ on 
+</code></pre>
+<h3>Outliers</h3>
+<p>There were a couple values in the train set that could be potentially disruptive for building models. Here was my strategy for dealing with them:</p>
+<pre><code>train = 
+train = 
+train = train()
+</code></pre>
+<h3>Feature Engineering</h3>
+<p><a href="https://www.kaggle.com/snnclsr" target="_blank">@snnclsr</a> had a great idea in the first episode of season 3 to <a href="https://www.kaggle.com/competitions/playground-series-s3e1/discussion/376043" target="_blank">add a feature to denote if the data is generated or not</a>:</p>
+<pre><code>train[]  
+test[]  
+original[]  
+</code></pre>
+<p>I ended up using this feature because we were once again working with synthetic data and it gave a small boost in CV score.</p>
+<p><a href="https://www.kaggle.com/craigmthomas" target="_blank">@craigmthomas</a> also had a great idea in the second episode of season 3 to use <a href="https://www.kaggle.com/competitions/playground-series-s3e2/discussion/377370" target="_blank">Number of Risk Factors as a Feature</a>. It took a good amount of time but I went through all of features and looked closely at the ratio of <code>Attrition</code>. I experimented with a bunch of different subsets but this setup ended up improving CV the most:</p>
+<pre><code>def feature_risk_factors(df):
+    df[] = df[[
+    , , 
+    , , , 
+    , , , 
+    , , 
+    , , 
+    ]].apply(
+        lambda x: 
+         + (  x.MonthlyIncome &lt;   ) + 
+        (  x.BusinessTravel ==   ) + 
+        (  x.Department ==   ) + 
+        (  x.EducationField  [, ]  ) + 
+        (  x.Education ==   ) + 
+        (  x.JobInvolvement ==   ) + 
+        (  x.JobSatisfaction ==   ) + 
+        (  x.StockOptionLevel ==   ) + 
+        (  x.TrainingTimesLastYear ==   ) + 
+        (  x.WorkLifeBalance ==   ) + 
+        (  x.OverTime ==   ),
+        axis = 
+    )
+     df
+</code></pre>
+<p>This feature actually ended up having the most feature importance by far for CatBoost &amp; XGBoost. Strangely, LGBM only had this feature as 13th most important.</p>
+<p>Alright alright, I didn't just use other people's feature engineering ideas. Here are the features I personally engineered:</p>
+<pre><code>def feature_engineering(df):
+    df[] = df[] + df[] + df[]
+    df[] = df[] * df[]
+    df[] = df[] * df[]
+    df[] = df[] * df[]
+    df[] = df[] * df[]
+    return df
+</code></pre>
+<p>Pretty basic interaction features, not much to comment on here other than using intuition and trial &amp; error.</p>
+<h3>Models &amp; Validation</h3>
+<p><a href="https://www.kaggle.com/kirkdco" target="_blank">@kirkdco</a> (who placed 1st in episode 2) had an excellent idea to not include the original data that the competition data was generated from in cross validation splits. I used this technique with 10 fold StratifiedKFold. I also used a basic GridSearch to find optimal hyper parameters for all 3 models. Random note: <code>max_depth = 1</code> for CatBoost surprisingly worked the best.</p>
+<p>final blended submission was: <code>cat_preds * 0.55 + xgb_preds * 0.25 + lgbm_preds * 0.2</code> </p>
+<p>However <code>cat_preds * 0.34 + xgb_preds * 0.33 + lgbm_preds * 0.33</code> ended up being <strong>just slightly</strong> better (0.00004+).</p>
+<h3>Bonus</h3>
+<p><a href="https://www.kaggle.com/tilii7" target="_blank">@tilii7</a> posted this topic in episode 1: <a href="https://www.kaggle.com/competitions/playground-series-s3e1/discussion/377092#2093296" target="_blank">A colorful reminder to always ensemble your predictions</a> He explained that in some cases it helps to plot a cumulative distribution function of multiple models and visualize the differences directly. So that's exactly what I did!</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F10590800%2F8d510e9a4874dcdf7501589b2603a07c%2Fcdf-models.png?generation=1674527964067379&amp;alt=media" alt=""></p>
+<p>Thanks again to everyone who participated and shared their ideas! See you in episode 4!</p>

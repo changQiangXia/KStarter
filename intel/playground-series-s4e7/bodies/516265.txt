@@ -1,0 +1,190 @@
+# https://www.kaggle.com/competitions/playground-series-s4e7/discussion/516265
+
+Topic #516265: [4th Place Solution AutoML Grand Prix] AutoML Grandmasters
+  Author: Nick Erickson
+  Posted: 2024-07-02 00:44:37.592000
+  Votes: 48  Comments: 31
+
+Hey Everyone!
+
+Wow. That was an intense one. The large amount of data made most experiments very time consuming relative to the 24 hour time budget. Kudos to all the teams, and congrats to DAI, Team Oxygen, and LightAutoML for their very strong solutions!
+
+Notebook Link: https://www.kaggle.com/code/innixma/4th-place-automl-grand-prix-automl-grandmasters
+
+We started off with a lot of ideas such as OpenFE, stacking, ensembling, exotic models, etc., which landed us an early 2nd on the leaderboard with a public leaderboard score of 0.88797 for our first submission (using AutoGluon).
+
+However, the gap between 1st and 2nd was large, and we didn't have much time left to fit another ensemble. In that time I started tinkering with XGBoost hyperparameters, specifically the max_bin hyperparameter, which is default 255. I remember from previous competitions I had competed in within industry that the 255 value can be low for very large datasets, so I tried increasing the value by powers of 2. This led us all the way to max_bin=262143 (2^18-1), an absurd number, but it seemed to work well on a small 300k subsample of the data. We then fit on that subsample the first 5 zeroshot-hpo configurations in AutoGluon with this max_bin and picked the XGBoost hyperparameters that got the best val score. I also doubled the learning rate to try to get it to converge faster.
+
+These are the XGBoost hyperparameters we ended up with:
+
+{
+    : ,
+    : ,
+    : ,
+    : ,
+    : ,
+    : ,
+    : ,
+}
+
+
+We had very little time left (about 90 minutes), so we kicked off a run on all the data to fit this single XGBoost model with AutoGluon. We used an m7i.48xlarge EC2 instance with 192 vCPUs. We gave it a time limit of 60 minutes to have barely enough time to get the predictions and upload them.
+
+The model early stopped due to the time limit at 30770 iterations, likely nowhere near fully fit, but we had to make due:
+
+[]    validation_0-logloss:
+[]    validation_0-logloss:
+[]    validation_0-logloss:
+[]    validation_0-logloss:
+[]    validation_0-logloss:
+[]    validation_0-logloss:
+Ran  of time, early stopping  iteration  Best iteration :     [] 
+Saving AutogluonModels/ag_223828/models/XGBoost_r98/model.pkl
+Saving AutogluonModels/ag_223828/utils/attr/XGBoost_r98/y_pred_proba_val.pkl
+       =      = Training   runtime
+
+
+We uploaded the submission and it landed us at a public leaderboard score of 0.89262, just minutes before the end. While it was a strong score bump, it didn't end up moving our placement, and we remained at 4th.
+
+I suspect with more training time, it might have matched or exceeded the scores of the teams ahead of us.
+
+A big takeaway on our end is to prioritize looking at individual model hyperparameters when working with large datasets, rather than jumping straight into time consuming multi-layer stack ensembles. If we would have identified max_bin as an important hyperparameter early on, maybe things would have been different.
+
+Here is the code, we didn't do any special data processing, and we didn't use the original training data:
+
+ autogluon.common.savers import save_pd
+ autogluon.tabular import TabularPredictor, TabularDataset
+
+label = 
+eval_metric = 
+train_data = TabularDataset(path_train)
+test_data = TabularDataset(path_test)
+
+train_data = train_data.drop(columns=[])
+
+hyperparameters = {
+    : {
+        : 0.516652313273348,
+        : ,
+        : 0.015,
+        : 9,
+        : 0.8567068904025429,
+        : 262143,
+        : 150000,
+    },
+}
+
+predictor = TabularPredictor(
+    =label,
+    =eval_metric,
+).fit(
+    =train_data,
+    =hyperparameters,
+    =3600,  # out of necessity, would increase  as high as possible  time permitted
+    =4,  #  log val score every iteration of XGBoost
+)
+
+y_pred_proba_test = predictor.predict_proba(test_data, =)
+
+y_pred_proba_test_w_id = test_data[[]]
+y_pred_proba_test_w_id[label] = y_pred_proba_test
+save_pd.save(=, =y_pred_proba_test_w_id)
+
+
+predictor.leaderboard output:
+
+                   score_val eval_metric  pred_time_val     fit_time
+          XGBoost_r98   .     roc_auc       .  .
+  WeightedEnsemble_L2   .     roc_auc       .  .
+
+
+
+
+Best regards,
+
+Nick and Lennart (@lennartpuruckerisg), on behalf of the "AutoML Grandmasters"
+
+Prior Grand Prix Competition Write-ups: First AutoML Grand Prix Competition, Second AutoML Grand Prix Competition
+
+Comments:
+├─ Lennart Purucker (2024-07-02 00:51:16.040000) [+9]
+│  Heyho, I wanted to share some more insights our team found, which are very interesting for this dataset.
+│  
+│  
+│  
+│  There seems to be an oscillating pattern related to the ID:
+│  
+│  
+│  
+│  We believe this might be d...
+  ├─ Robert Hatch (2024-07-02 17:48:22.387000) [+3]
+  │  Stacking seems really hard to do effectively in the 24 hour period, though. My plan was to instead "self stack" meaning lower learning rate and aiming for balanced hyperparams that converge, but on...
+    ├─ Lennart Purucker (2024-07-02 18:02:59.967000) [+1]
+    │  Interestingly, the stacking models trained much quicker for this dataset. The expensive part was getting the data for stacking at L1 (which one could also use holdout for, given that it is such a b...
+├─ Thomas Meißner (2024-07-02 03:34:09.143000) [+3]
+│  Big congats! I totally forgot about max_bin
+├─ Mart Preusse (2024-07-02 04:31:21.730000) [+3]
+│  Congratulations and thanks a lot for the details. So tuning on a subset did work for you, this is great news. How large was the subset?
+  ├─ Lennart Purucker (2024-07-02 12:21:07.983000) [+3]
+  │  Heyho, we used 300k for fast prototyping and 2.5 million up to 4 million to test whether something will be added to the pipeline. 
+  │  These numbers were based on the learning curve plot I posted below...
+├─ John Carter (2024-07-03 12:40:08.600000) [+1]
+│  You've made this seem really straight forward, which I'm sure it's not. May I ask, do you think this approach works for lots/most data science competitions? Specifically, could this code be used as...
+├─ SWARAJPATIL24 (2024-07-03 05:32:31.207000) [+1]
+│  Good work!!
+├─ Optimistix (2024-07-02 19:15:43.727000) [+1]
+│  Congratulations, and thanks for sharing the code! It looks like the top few positions were probably a shootout between highly tuned single models.
+  ├─ Nick Erickson (2024-07-02 21:52:39.943000) [+1]
+  │  I'm very pleased to see so far that we all chose different models to get our results, a sign that this competition is a good one with room for improvement and exploration beyond the first 24 hours.
+├─ Tirthankar De (2024-07-02 18:16:08.803000) [+1]
+│  Hello I wanted to ask how did you choose the model to work further on (XgBoost in your case). I am new to machine learning, and this is my first time handling such a big dataset, so I wanted to kno...
+  ├─ Nick Erickson (2024-07-02 21:49:23.220000) [+1]
+  │  Mostly it was the model I happened to try knowing that it should be able to fit within the limited time we had left, and I suspected that the only way to get a large performance boost needed to imp...
+├─ Robert Hatch (2024-07-02 17:40:14.143000) [+1]
+│  Totally thought of max bin and discarded it because I knew it would make the long training time problem even worse! Ugh, kicking myself for not trying it! :)
+│  
+│  Congrats on 4th, and good luck on the ...
+  ├─ Robert Hatch (2024-07-02 18:01:32.930000) [+2]
+  │  Oh, duh, max bin 290 could obviously be better, and a crazy high max bin wouldn't be too much slower because above 290 only affects 1 feature iirc!
+  │  
+  │  Although that's not counting ID. Given the crazy...
+    ├─ Nick Erickson (2024-07-02 19:26:11.203000) [+0]
+    │  We also dropped ID. I think ID will only be useful if you are able to reverse engineer the way the synthetic data was generated. We decided not to go down that road and focused on the intended info...
+    ├─ Robert Hatch (2024-07-03 02:44:12.207000) [+0]
+    │  Now that I realize it would've only affected one critical feature, I'd do it in a heartbeat. It might even speed up training time (by converging faster) at a very moderate if not minimal increase t...
+  ├─ Nick Erickson (2024-07-02 19:26:53.810000) [+1]
+  │  Thanks Robert! Indeed things are very close within the top 5, best of luck to you as well!
+    ├─ Robert Hatch (2024-07-03 02:38:31.510000) [+0]
+    │  First place never felt less safe, lol
+├─ Thomas Meißner (2024-07-02 13:25:48.743000) [+1]
+│  I tested adding max_bin to my tuning and the result was astonishing.. (notebook for reference)
+│  
+│  A public LB of 0.888… wow, what an impact!
+├─ rıza temizel (2024-07-02 10:37:54.500000) [+1]
+│  m7i.48xlarge:) Such a computation need for a playground competition seems insane.
+  ├─ mehmettellioglu (2024-07-02 10:44:17.623000) [+0]
+  │  Yes ur right
+├─ Georgios Nikolitsis (2024-07-02 10:12:50.100000) [+1]
+│  Very nice and helpful information, congrats.
+├─ [deleted] (2024-07-02 09:43:57.203000) [+1]
+│  First, Congrats. The value of max_binis odd and strange. Why 262143 and not 262000, for example? did you need to experiment to accurately adjust the value to 262143, or how?
+│  Then, &nbsp;how were al...
+  ├─ Nick Erickson (2024-07-02 16:19:56.347000) [+3]
+  │  262143 is 2^18-1 , as I was searching increasing powers of 2 via 2^N-1.
+  │  
+  │  For the hyperparameters, they are from the fixed Zeroshot-HPO hyperparameters list used by AutoGluon. I ran the first 5 conf...
+    ├─ [deleted] (2024-07-02 19:40:47.290000) [+1]
+    │  Ok and Thanks for the links. 
+    │  Regarding 262143 is 2^18-1,  I can understand the logic, and when I compare it to border_count in catboost (which is the equivalent of max_bin, I can see, because it c...
+    ├─ Nick Erickson (2024-07-02 21:51:11.073000) [+2]
+    │  Generally once datasets reach 10M+ rows, validation overfitting stops being a relevant concern. Yes the model might overfit on the training data, but we monitor the validation score and we can trus...
+├─ Robert Hatch (2024-07-02 18:26:15.993000) [+2]
+│  First place's version of max bin equal size of largest feature.nunique(): categorical everything even annual premium
+  ├─ Nick Erickson (2024-07-02 21:54:12.437000) [+1]
+  │  It is very interesting to me their solution. I need to dive into it deeper and consider adding it within the search spaces we consider for TabRepo to determine AutoGluon's zeroshot portfolio. I als...
+├─ Rafael Gallo (2024-07-24 14:39:36.140000) [+0]
+│  Autogluon is a fascinating AutoML tool. It is designed to automate the process of building and optimizing machine learning models for tasks such as classification and regression, similar to other A...
+├─ Nikhil Patil944 (2024-07-03 05:40:17.193000) [+0]
+│  nice……..
+├─ [deleted] (2024-07-02 05:17:59.400000) [+-1]
+│  [deleted]

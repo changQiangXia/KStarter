@@ -1,0 +1,134 @@
+# https://www.kaggle.com/competitions/playground-series-s3e3/discussion/380757
+
+Topic #380757: 14th Place Solution
+  Author: Matt OP
+  Posted: 2023-01-24 02:49:58.636000
+  Votes: 25  Comments: 10
+
+Hello all, it was another very fun competition! I have a decent amount to go through in my solution so I'll just get right to it. Link to full notebook: here
+
+Encoding
+
+We had a decent amount of categorical features so there were many different valid approaches that I observed. Here is what I used:
+
+ on 
+ on 
+ on 
+
+
+Outliers
+
+There were a couple values in the train set that could be potentially disruptive for building models. Here was my strategy for dealing with them:
+
+train = 
+train = 
+train = train()
+
+
+Feature Engineering
+
+@snnclsr had a great idea in the first episode of season 3 to add a feature to denote if the data is generated or not:
+
+train[]  
+test[]  
+original[]  
+
+
+I ended up using this feature because we were once again working with synthetic data and it gave a small boost in CV score.
+
+@craigmthomas also had a great idea in the second episode of season 3 to use Number of Risk Factors as a Feature. It took a good amount of time but I went through all of features and looked closely at the ratio of Attrition. I experimented with a bunch of different subsets but this setup ended up improving CV the most:
+
+def feature_risk_factors(df):
+    df[] = df[[
+    , , 
+    , , , 
+    , , , 
+    , , 
+    , , 
+    ]].apply(
+        lambda x: 
+         + (  x.MonthlyIncome &lt;   ) + 
+        (  x.BusinessTravel ==   ) + 
+        (  x.Department ==   ) + 
+        (  x.EducationField  [, ]  ) + 
+        (  x.Education ==   ) + 
+        (  x.JobInvolvement ==   ) + 
+        (  x.JobSatisfaction ==   ) + 
+        (  x.StockOptionLevel ==   ) + 
+        (  x.TrainingTimesLastYear ==   ) + 
+        (  x.WorkLifeBalance ==   ) + 
+        (  x.OverTime ==   ),
+        axis = 
+    )
+     df
+
+
+This feature actually ended up having the most feature importance by far for CatBoost &amp; XGBoost. Strangely, LGBM only had this feature as 13th most important.
+
+Alright alright, I didn't just use other people's feature engineering ideas. Here are the features I personally engineered:
+
+def feature_engineering(df):
+    df[] = df[] + df[] + df[]
+    df[] = df[] * df[]
+    df[] = df[] * df[]
+    df[] = df[] * df[]
+    df[] = df[] * df[]
+    return df
+
+
+Pretty basic interaction features, not much to comment on here other than using intuition and trial &amp; error.
+
+Models &amp; Validation
+
+@kirkdco (who placed 1st in episode 2) had an excellent idea to not include the original data that the competition data was generated from in cross validation splits. I used this technique with 10 fold StratifiedKFold. I also used a basic GridSearch to find optimal hyper parameters for all 3 models. Random note: max_depth = 1 for CatBoost surprisingly worked the best.
+
+final blended submission was: cat_preds * 0.55 + xgb_preds * 0.25 + lgbm_preds * 0.2 
+
+However cat_preds * 0.34 + xgb_preds * 0.33 + lgbm_preds * 0.33 ended up being just slightly better (0.00004+).
+
+Bonus
+
+@tilii7 posted this topic in episode 1: A colorful reminder to always ensemble your predictions He explained that in some cases it helps to plot a cumulative distribution function of multiple models and visualize the differences directly. So that's exactly what I did!
+
+
+
+Thanks again to everyone who participated and shared their ideas! See you in episode 4!
+
+Comments:
+├─ aci.patlican (2023-01-24 06:10:53.837000) [+1]
+│  Hi Matt,
+│  2 questions:
+│      1) how did you do feature selection?
+│      2) the weights for the blended model, how did you decide?
+│  Thanks
+  ├─ Matt OP (2023-01-24 15:36:06.883000) [+2]
+  │  Hi @acipatlican
+  │  
+  │  
+  │  
+  │  
+  │  I used feature importance to remove a couple of very unimportant features. Also the interaction features helped to reduce the total amount of features.
+  │  
+  │  
+  │  I plotted a cumulative ...
+    ├─ aci.patlican (2023-01-25 12:01:27.717000) [+0]
+    │  1) Ok, about the interaction features. 2 cases: Let'say
+    │  First.Case: I have two continuous features (col1,col2) that are correlated (spearman) with 0.91 and they are at our top-10 important features...
+    ├─ Matt OP (2023-01-25 23:19:05.033000) [+0]
+    │  There is really no definitive answer I can give for both cases. Interaction features are usually derived from possessing domain knowledge of the topic and/or using intuition. For features that are ...
+├─ KirkDCO (2023-01-24 05:10:30.140000) [+1]
+│  Well done, @mattop !  Great discussion on feature encoding and engineering.  
+│  
+│  I'm super excited that my CV approach helped.  👍
+  ├─ Matt OP (2023-01-24 05:22:34.093000) [+1]
+  │  Thank you @kirkdco, congratulations on another top 10. That CV approach really seems to do the trick with these synthetic datasets.
+    ├─ KirkDCO (2023-01-24 06:04:09.280000) [+1]
+    │  It does indeed.  I'll write up my approach shortly, but it is essentially the same as the last episode with a small amount of extra feature engineering.  We'll see how it does on truly unbalanced d...
+    ├─ Matt OP (2023-01-24 15:33:40.600000) [+1]
+    │  It will be exciting to see how it performs in episode 4, looking forward to it! Also, I am interested to see your solution post.
+├─ Minh T. Nguyen (2023-01-30 14:42:54.310000) [+0]
+│  @mattop Nice feature engineering on Dedication, JobSkill, and Satisfaction.
+├─ Ebc (2023-01-26 15:54:38.473000) [+0]
+│  Hi Matt, 
+│  
+│  thanks for sharing. Can you expand a bit on how you decided to encode differently the various categorical variables? (e.g. what criteria did you use? did you compare more strategies? was...

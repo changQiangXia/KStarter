@@ -1,0 +1,49 @@
+<p>Thank's to Kaggle for organizing tabular competitions like this one. I learned a lot from those competitions. I learned a lot also from public notebooks and discussions, thank you everyone for sharing so much.</p>
+<p>Because this dataset contains a sum of <a href="https://en.wikipedia.org/wiki/Sim%C3%A9on_Denis_Poisson" target="_blank">Poisson</a> distributions, the winner of this competition had to be from France. Thank you M. Simeon Denis Poisson for giving us such a tool, and thank you for giving me a extra motivation during this competition.</p>
+<p>Thank you to all competitors, you are really challenging, playing with you is a pleasure. Congrat's to <a href="https://www.kaggle.com/mdoroch" target="_blank">@mdoroch</a> (I will contact you, you were very impressive), <a href="https://www.kaggle.com/lashfire" target="_blank">@lashfire</a>, <a href="https://www.kaggle.com/mattop" target="_blank">@mattop</a> , <a href="https://www.kaggle.com/tilii7" target="_blank">@tilii7</a> : your submissions during last days  stressed me so much !</p>
+<p>My solution is  :</p>
+<ul>
+<li>an ensemble ajusted with a ridge regression <code>positive = False, fit_intercept = False</code>.</li>
+<li>and ajusted with 3 repeated oof predictions of a variety of models produced with catboost, xgboost, lightgbm and 2 public notebooks<ul>
+<li><strong>Auto Gluon Starter</strong> by <a href="https://www.kaggle.com/mfmfmf3" target="_blank">@mfmfmf3</a> available <a href="https://www.kaggle.com/code/mfmfmf3/autogluon-starter" target="_blank">https://www.kaggle.com/code/mfmfmf3/autogluon-starter</a></li>
+<li><strong>Flood Prediction LGBM</strong> by <a href="https://www.kaggle.com/igorvolianiuk" target="_blank">@igorvolianiuk</a> <a href="https://www.kaggle.com/code/igorvolianiuk/flood-prediction-lgbm" target="_blank">https://www.kaggle.com/code/igorvolianiuk/flood-prediction-lgbm</a></li></ul></li>
+</ul>
+<p><strong>EDA</strong> helped me to understand that original dataset was completly different from train dataset. EDA helped me to understand that the sum of 16 of 17 orginal features was still a Poisson distribution in train dataset, but sum of 18, 19, and 20 original features was not (neither in test dataset). And EDA helped me to find interesting features, correlated to target (thank you <a href="https://www.kaggle.com/ambrosm" target="_blank">@ambrosm</a> for the most important feature)</p>
+<p>I took care for my own GBMs to <strong>feature selection</strong> :</p>
+<ul>
+<li><p>usefull features : sum of each lign, std of each lign, max of each lign, sorted original features (thank you <a href="https://www.kaggle.com/siukeitin" target="_blank">@siukeitin</a> for <a href="https://www.kaggle.com/competitions/playground-series-s4e5/discussion/499579" target="_blank">Sorting along the feature axis as "feature engineering"</a>'s discussion, number of variables which have a value higher than 6, or than 7, or than 8 (count features) : </p></li>
+<li><p>useless features : original features, skewness of each lign, kurtosis of each lign, redondant features. I dropped them.</p></li>
+<li><p>magic feature : because target could be seen as a discrete variable, I used a <strong>target encoder</strong>, and <code>train.groupby("sum")["FloodProbability"].std()</code> was an interesting feature (where <code>train["sum"] = train[test.columns].sum(axis=1)</code>)</p></li>
+<li><p>I used <strong>permutation feature importance</strong> technique explained in <a href="https://scikit-learn.org/stable/modules/permutation_importance.html" target="_blank">scikit-learn</a> or in <a href="https://www.kaggle.com/code/dansbecker/permutation-importance" target="_blank">Kaggle</a> to detect useless features. I used <strong>backward</strong> technique too.</p></li>
+</ul>
+<p><strong>Variety of models</strong><br>
+I trained more than 30 GBM's, with various sets of features : sometimes with sorted original features, or sometimes with count features <code>"nb_inf4", "nb_inf3", "nb_inf2", "nb_sup6", "nb_sup7", "nb_sup8"</code>, sometimes with target encoder, sometimes without.<br>
+I used also a <strong>target transformation</strong> sometimes : there was a strong signal (sum), and a noisy signal (deviance from sum). My transformed target was : <br>
+<code>train["target_transf"] = train["FloodProbability"] - df[original_features].mean(axis=1) * 0.1</code><br>
+or <code>train["target_transf"] = (train["FloodProbability"]*400 - train[original_features].mean(axis=1) * 40).astype(np.int16)</code><br>
+Thank's to <a href="https://www.kaggle.com/act18l" target="_blank">@act18l</a> for <a href="https://www.kaggle.com/competitions/playground-series-s4e5/discussion/499263#2787165" target="_blank">https://www.kaggle.com/competitions/playground-series-s4e5/discussion/499263#2787165</a></p>
+<p>During the first 10 days, I used only default parameters (with early stopming) and didn't optimize any GBM, concentrated on my features and my ensemble loop.<br>
+After, hyperparameters were optimized with optuna by using only my kaggle quota of GPU. I optimized only the following hyper parameters (with max timeout = 5400 seconds, it's a lot) : </p>
+<ul>
+<li>depth for catboost and xgboost, </li>
+<li>num_leaves for lightgbm, </li>
+<li>alpha, lambda, min_child_weight or min_child_samples for xgboost and ligntgbm </li>
+<li>bagging_temperature, random_strength for catboost</li>
+<li>subsample, colsample_by_node for xgboost and lightgbm</li>
+</ul>
+<p>I used default <strong>grow_policy</strong> of each GBM method (xgboost, catboost and lightgbm have each a different default grow_policy value, it gives variety of predictions), I used default learning_rate or .1, I used early_stopping (od_wait in catboost) to fit n_iterations. </p>
+<p><strong>Ensemble</strong><br>
+During the first two weeks, I trained my ensemble with <strong>LinearRegression</strong> and positive = True and fit_intercept = False. Until I tried <strong>Ridge</strong> and positive = False (still fit_intercept = False) which gave me a little improvement. To have a robust ensemble, I trained all my models on 3 repeated kfold, and select by CV the features for my ensemble.</p>
+<p>At the end of week 2, I made a submssion with a blind blend using <a href="https://www.kaggle.com/code/mfmfmf3/autogluon-starter" target="_blank">https://www.kaggle.com/code/mfmfmf3/autogluon-starter</a> output. I had a .86939 public score better than .96934 my previous one. Few days later, I had a first complete oofs file from AutoGluon. Then I fitted carefully a new ensemble, and get .86941 score at the end of week 3.</p>
+<p>Then I decided to get 3 oofs AutoGluon files and to fit AutoGluon with some other features (3 more oofs). I trained in parallel autogluon <a href="https://www.kaggle.com/code/adaubas/pss4e05-copy-autogluon-starter" target="_blank">here</a> to get 6 oofs files. And then I fitted my final ensemble which score .86943 on public LB. </p>
+<p>In conclusion, I have success by combining :</p>
+<ul>
+<li>EDA</li>
+<li>feature engineering</li>
+<li>variety of GBM</li>
+<li>AutoGluon</li>
+<li>a strong CV for my Ridge ensemble</li>
+</ul>
+<p>I'm proud to have made only 2 submissions between the 18th of may and the end, to win on public and private LB. My CV was highly reliable to public LB since the first day, I trusted my CV and didn't need to submit.</p>
+<p>My final ensemble is available here <a href="https://www.kaggle.com/code/adaubas/pss4e05-ensemble-with-ridge" target="_blank">https://www.kaggle.com/code/adaubas/pss4e05-ensemble-with-ridge</a>.</p>
+<p>I'm so happy ! Waouh</p>

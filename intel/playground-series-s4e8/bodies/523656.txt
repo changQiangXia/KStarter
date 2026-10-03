@@ -1,0 +1,392 @@
+# https://www.kaggle.com/competitions/playground-series-s4e8/discussion/523656
+
+Topic #523656: [1st Place Solution AutoML Grand Prix] AutoML Grandmasters: AutoGluon Distributed + Post-Hoc Ensembling
+  Author: Lennart Purucker
+  Posted: 2024-08-02 00:48:30.444000
+  Votes: 75  Comments: 65
+
+Heyho everyone!
+
+Another exciting 24 hours of automatically fitting machine learning models! Kudos to all the competitors, and a shoutout to Team AGA, who gave us a run for our money with an early 0.98533 score that we spent the next 12 hours trying to beat. In the end, the winner was decided by a difference in score so small that Kaggle’s leaderboard doesn’t even visualize it, so we consider ourselves pretty lucky to have eeked it out. We detail our approach to the fourth Grand Prix in the following. 
+
+But first, we would like to highlight that the International Conference on Automated Machine Learning 2024 is is taking place in Paris from September 09. to 12. (see https://2024.automl.cc/)! We are going to be at the conference and would be happy to meet other (Auto)ML enthusiasts from Kaggle at the conference :) 
+
+
+
+Overview Figure
+
+
+
+
+
+Summary
+
+We used AutoGluon as our AutoML system, installing via source on the latest mainline with tweaks to enable distributed computation (see below). With it, our approach to this competition can be summarized as follows:
+
+Preprocessing
+
+
+
+We replaced noisy observations in the data. Nothing else improved our offline cross-validation (CV) score. 
+
+
+Model Fitting
+
+We ran a default version of AutoGluon for one hour and a custom version of AutoGluon for four hours. For the custom version, we used the following settings:
+
+
+
+We used log loss as an early stopping metric while optimizing/picking based on the target metric MCC. We are unsure if this helped, but it improved our offline CV score.
+
+We used 16-fold cross-validation and AutoGluon’s multi-layer stacking implementation.
+
+We trained a customized portfolio of models, meta-learned from TabRepo (i.e., zero-shot HPO)
+
+We used 100 iterations (instead of the default 25) for post hoc ensembling. 
+
+
+Kaggle Tricks
+
+
+
+AutoGluon rounds to the first 6 decimals of the score when determining tiebreakers during the final weighted ensemble. It turns out that is too few for the deltas we were looking for, so we upped it to 8 at the very end to eke out an epsilon improvement.
+
+We manually created a post hoc ensembling logic for this competition in an effort to go from 0.98531 to 0.98533. We cached all pred probas from all models on all experiments and then ran the post hoc ensembling for the final solution. This allowed us to just barely leapfrog Team AGA!
+
+
+Compute
+
+After the last competition, we felt the need to expand our computing power for these (very) large data competitions. Therefore, in addition to using an individual AWS compute instance, we put much effort into using AutoGluon distributed across compute nodes. 
+
+
+
+We used a prototype of a distributed version of AutoGluon to parallelize AutoGluon across compute resources.
+
+We used an in-house SLURM cluster (from the University of Freiburg) together with Ray to distribute AutoGluon’s model training across 1000 CPUs. 
+
+
+
+
+Code
+
+The supplementary code repository for this write-up can be found here: https://github.com/AutoML-Grandmasters/Fourth-AutoML-Grand-Prix/tree/main
+
+Our copy-able settings for the custom run of AutoGluon can be found in this file.
+
+Preprocessing
+
+We used the following code to clean noisy observations that do not exist in the test predictions by setting them to nan. 
+
+ numpy  np
+ pandas  pd
+
+train_data = pd.read_csv()
+test_data = pd.read_csv()
+
+weird_columns = [
+    ,
+    ,
+    ,
+    ,
+    ,
+    ,
+    ,
+    ,
+    ,
+    ,
+    ,
+    ,
+    ,
+    ,
+    ,
+    ,
+]
+
+ col  weird_columns:
+    allowed_vals = test_data[col].unique()
+    train_data.loc[~train_data[col].isin(allowed_vals), col] = np.nan
+    test_data.loc[~test_data[col].isin(allowed_vals), col] = np.nan
+
+
+Early Stopping Metric
+
+To early stop on log_loss, pass the following to AutoGluon’s fit call: ag_args_fit={"stopping_metric": "log_loss"}. This can sometimes help as early stopping on threshold-based metrics such as MCC can be too early. 
+
+Distributed AutoGluon &amp; Compute
+
+Here is the current version of distributed AutoGluon: https://github.com/LennartPurucker/autogluon/tree/distributed_autogluon
+An example script with more details on how to use it can be found here: https://github.com/AutoML-Grandmasters/Fourth-AutoML-Grand-Prix/blob/main/autogluon_distributed_example.py
+
+In our experience with it, it is mostly stable but has a few GPU-related problems that we hope to fix for the prototype. We plan to integrate a more mature version of this into mainline AutoGluon in the future (and are already working on it). 
+
+We used 1000 CPUs spread across nodes with 20 or 32 Intel(R) Xeon(R) Gold 6242 CPUs @ 2.80GHz, each node with around 150 GB of RAM. The cluster is managed with SLURM, and we used Ray to create a sub-cluster that AutoGluon can (natively) use to fit models. To run AutoGluon distributed, only a Ray cluster is needed, which can be created on local compute, SLURM clusters, or cloud resources.  
+
+Additionally, we used an AWS m7i.48xlarge EC2 instance with 192 vCPUs to run default AutoGluon.
+
+Customized Portfolio
+
+To obtain a better portfolio than currently existing in AutoGluon, we re-ran the work of the TabRepo paper (to be presented at the AutoML conference), but use a portfolio of size 200 instead of the 100 size portfolio used by AutoGluon’s best_quality setting. We also included more model families: Linear models and KNN, although some of those models we ended up disabling those since they weren’t helping and, at times, took a long time to infer. 
+
+We additionally added configurations with larger max_bin values for LightGBM, XGBoost, and CatBoost. Moreover, we removed a set of configurations that we found to take too long to predict for large datasets. You can find the final portfolio in this file. We filtered the portfolio to models that were working well (see here).
+
+More Iterations for Post Hoc Ensembling
+
+We wanted to find a better final post hoc ensemble by giving the greedy ensemble selection in AutoGluon more iterations. Sadly, so far, there is no easy interface to increase this number. Thus, we simply monkey patched our local install of AutoGluon. To do so, one needs to set the value in this line to 100.
+
+Kaggle Tricks
+
+
+
+To adjust the number of decimals for rounding, set the round_decimals variable in
+autogluon.core.models.greedy_ensemble.ensemble_selection.EnsembleSelection Line 112 to 8 (see here on GitHub).
+
+Our manual post hoc ensembling logic can be found in this file. It assumes that you have a finished run of AutoGluon on disk (in our cases we used the default one-hour run for this) and the following artfiacts from another run of AutoGluon: a) the prediction probabilities on test data, b) the out-of-fold prediction probabilities on training data, and c) predictions on test data. 
+
+
+
+
+Best regards,
+Lennart, Nick (@innixma), and Arjun (@neonkraft), on behalf of the "AutoML Grandmasters"
+
+Prior Grand Prix Competition Write-ups: First AutoML Grand Prix Competition, Second AutoML Grand Prix Competition, Third AutoML Grand Prix Competition
+
+Comments:
+├─ Robert Hatch (2024-08-02 05:17:18.400000) [+8]
+│  Congrats, well done on first, and officially locking in a place in the top 5! 
+│  
+│  I'll see your 1000 CPUs and raise you… Umm, Kaggle? A little help here?! 😆
+│  
+│  I thought I was handicapped with only 30 ...
+  ├─ Thomas Meißner (2024-08-02 10:54:42.847000) [+6]
+  │  For the next iteration Kaggle could set hard bounderies like:
+  │  
+  │  
+  │  
+  │  one submission only 
+  │  
+  │  Kaggle Kernel allowed only 
+  │  etc
+  │  
+  │  
+  │  Or use smaller datasets such that the competition is less resource demanding...
+    ├─ Lennart Purucker (2024-08-02 11:18:33.997000) [+4]
+    │  Agree! 
+    │  
+    │  IMO, the dataset needs to be smaller as well to reduce the compute requirements for these competitions with AutoML. 
+    │  But only the training data! The synthetic test data could still be very...
+    ├─ Robert Hatch (2024-08-02 16:16:11.567000) [+2]
+    │  Test data size has a semi-big impact too. Especially lightgbm, neural nets, and… AutoGluon. But 500k rows would probably be fine. They could have 100k test datasets with less variance than 2 millio...
+    ├─ Nick Erickson (2024-08-02 18:34:16.270000) [+1]
+    │  Probably the sweet spot is enough test data to not overfit using normal techniques, but not so much that public notebook blending doesn't overfit, since public notebook blending (by blindly weighti...
+├─ Anirudh Dagar (2024-08-02 03:48:47.183000) [+5]
+│  Congrats team AutoML Grandmasters! Indeed a lot of effort clearly to eek out the last bit of improvement, amazing!
+  ├─ Lennart Purucker (2024-08-02 10:04:49.037000) [+4]
+  │  Thank you! I look forward to your write-up on how you achieved this high performance without the post hoc ensembling tricks!
+├─ Nick Erickson (2024-08-02 00:50:42.707000) [+5]
+│  This one was wild. We got a good score early on, but to get just a small improvement required 10x+ effort and some luck.
+  ├─ Robert Hatch (2024-08-02 05:24:01.523000) [+8]
+  │  I officially hate accuracy and all such binary prediction metrics, lol. So painful to know that your advanced Frankenstein model ensemble can easily tell which mushrooms are 99% safe and which are ...
+    ├─ Nick Erickson (2024-08-02 18:38:07.727000) [+5]
+    │  Absolutely! ROC_AUC and log_loss are far better. I've read so many papers that use metrics like accuracy and f1 that lead to very confusing / misleading results. There are cases in business where a...
+    ├─ Robert Hatch (2024-08-02 19:44:37.923000) [+1]
+    │  If anything, I could see doing something like an arctangent wave as a way of doing accuracy without doing accuracy. In other words, rewarding going from 49.9% to 50.1% more than any other increment...
+    ├─ Robert Hatch (2024-08-02 19:54:17.603000) [+3]
+    │  I suppose there exists or could exist a weighted version of ROC that works like that arctangent wave though. In other words, rank them as a number from 0 to 1, then apply arctan wave scoring to tho...
+├─ Melisa Kara (2024-08-06 06:43:37.517000) [+3]
+│  Congratulations 🎉 Detailed explanations like this are very helpful beginners like me, thank you🌸
+├─ ShariQ (2024-08-05 16:20:10.910000) [+3]
+│  Congratulations  🎉. A very intuitive approach indeed.
+├─ Akmal Azzam o'g'li (2024-08-02 09:36:24.313000) [+3]
+│  @lennartpuruckerisg i think preprocessing code needs correction:
+│  
+│  
+│  
+│   col  weird_columns:
+│      **allowed_vals** = test_data[col].unique()
+│      train_data.loc[~train_data[col].isin(**allowed_vals**), c...
+  ├─ Lennart Purucker (2024-08-02 09:59:35.727000) [+2]
+  │  It does! Thank you for pointing this out. Fixed it.
+  │  
+  │  Copy-paster error at 3 am in the morning😅
+    ├─ James King (2024-08-02 15:22:00.460000) [+4]
+    │  I found counting the number of these human input errors in each column or at least setting a flag if the entry had a human input error was helpful. Although I also restricted it to the actual valid...
+    ├─ Lennart Purucker (2024-08-02 18:41:03.210000) [+4]
+    │  Cool idea as well!
+├─ turtle (2024-08-02 08:29:37.863000) [+3]
+│  Congratulations!
+├─ Optimistix (2024-08-02 02:29:35.867000) [+3]
+│  Congratulations!
+├─ Thomas Meißner (2024-08-02 02:23:25.170000) [+3]
+│  Congratulations!
+├─ sethpointaverage (2024-08-03 09:50:10.110000) [+4]
+│  Any chance you could provide your performance on more comprehensive metrics like ROC-AUC and F1 score? Not a part of the competition but working on something with my local reading group and wanted ...
+  ├─ Lennart Purucker (2024-08-03 10:39:18.313000) [+5]
+  │  Here are a few validation scores for our second-to-last submission without the Kaggle tricks, which had a public LB score of 0.98531:
+  │  
+  │  
+  │  
+  │  Matthews Correlation Coefficient (Target Metric): 0.98509305...
+├─ Robert Hatch (2024-08-03 00:43:51.437000) [+4]
+│  AutoGluon question:
+│  Since perpetually people will publish public notebooks and save models but not out of fold predictions, I was wondering whether this code (manually added on top of this notebook...
+  ├─ Nick Erickson (2024-08-03 09:16:45.677000) [+3]
+  │  Easier to do predictor.predict_proba_multi() which gets all model oofs. You would need a live session unless they cache the oofs or the predictor.
+├─ Robert Hatch (2024-08-02 16:07:57.113000) [+4]
+│  I don't see anything in the rules (other than what happens if teammates submit separately before joining), I suppose teams are allowed to add teammates at any time? Or were you always registered as...
+  ├─ Nick Erickson (2024-08-02 18:28:28.020000) [+3]
+  │  Good question!
+  │  
+  │  We registered at the start with Arjun, along with others. I don't think there is anything in the rules that all members need to be visible on the leaderboard team on Kaggle. And als...
+    ├─ Robert Hatch (2024-08-02 20:10:28.197000) [+3]
+    │  So you have been working as a team of more than 3 on every competition, and only having two bother to be connected and submitting live on kaggle? I see
+    │  
+    │  Yeah, not publishing team members is just on...
+    ├─ Nick Erickson (2024-08-02 20:20:17.840000) [+3]
+    │  It has generally been Lennart and myself working on the competitions in a Discord call. The other members had expressed interest, which is why we included them in the team at the time we submitted ...
+    ├─ Robert Hatch (2024-08-02 21:27:47.553000) [+2]
+    │  Thanks for clarifying! It doesn't really matter, but I do find it interesting. And, yeah, I was sure you had been aboveboard on this, but I'll admit seeing a third team member was pretty much the c...
+├─ Subashanan Nair (2024-09-02 01:17:25.700000) [+1]
+│  This is a brilliant approach and I was using a MacBook Pro with 32 GB and this shows the processing power required to achieve the point decimal difference. Mind-blowing
+├─ Dropdead072 (2024-08-21 15:56:46.257000) [+1]
+│  Extremely nice reading! Congratulations on such a high score!
+├─ Seiji Hirano (2024-08-04 16:56:24.620000) [+2]
+│  Congratulations!!
+│  
+│  I have a question. I believe that using the test data during the preprocessing phase leads to data leakage. You found unique values in the test set and labeled NaN for any values...
+  ├─ Lennart Purucker (2024-08-04 20:02:28.393000) [+3]
+  │  I believe that using the test data during the preprocessing phase leads to data leakage.
+  │  
+  │  
+  │  It is data leakage but in a "good" intended way, in this case. 
+  │  
+  │  Here, we are leaking information from the...
+    ├─ Seiji Hirano (2024-08-10 02:11:59.673000) [+1]
+    │  I see…thank you very much for your detailed explanation!
+├─ Michael Tinglof (2024-09-03 17:17:07.240000) [+0]
+│  Thank you for the results and explanation! 
+│  
+│  Such a simple preprocessing solution. Sometimes the simplest idea is the best. 
+│  
+│  Cheers on your success
+├─ Davi N. (2024-09-03 11:17:30.297000) [+0]
+│  Very good approach! Congratulations 🎉 @lennartpuruckerisg
+├─ Sajib Bhattacharjee (2024-09-01 18:50:13.760000) [+0]
+│  Congratulations 🎉. And thanks for this detailed approach.
+├─ Nihal Thomas (2024-09-01 17:53:48.170000) [+0]
+│  Congrats Team!💯
+├─ hoon0303 (2024-09-01 11:28:40.423000) [+0]
+│  Congratulations. Thank you for sharing such an excellent solution.
+├─ [deleted] (2024-08-31 12:53:10.227000) [+0]
+│  We used 100 iterations (instead of the default 25) for post hoc ensembling.
+│  
+│  
+│  Why your post-hoc assembly find only the positive coefficients?
+│  
+│  scipy.optimize.minimize  find the negative coefficient...
+  ├─ Lennart Purucker (2024-08-31 13:12:12.130000) [+1]
+  │  We use an algorithm that, by design, only finds positive coefficients. This has many positive effects, but mainly to avoid overfitting. 
+  │  
+  │  The algorithm is described here, and you can find some poin...
+    ├─ [deleted] (2024-08-31 16:58:09.293000) [+0]
+    │  I like to compare your algorithm with scipy.optimize.minimize.
+    │  If I share 
+    │  dataset with: models OOF 
+    │  and submissions_OOF
+    │  
+    │  Can you calculate your algorithm summission.csv
+    │  
+    │  I will calculate scipy.opt...
+    ├─ Lennart Purucker (2024-08-31 18:31:57.247000) [+1]
+    │  You can use the algorithm yourself if you want. 
+    │  
+    │  You can use AutoGluon's implementation as mentioned elsewhere in this post, or take (for classification) the version from my library (PHEM).
+    ├─ [deleted] (2024-08-31 18:56:16.507000) [+0]
+    │  Do you have code to call python function find ensemble width using AutoGluon or your library?
+    │  
+    │  I don't know how to pass parameters:
+    │  
+    │  I have input data in pandas format:
+    │  
+    │  train_oof - pandas DataFram...
+    ├─ Lennart Purucker (2024-08-31 20:58:23.570000) [+0]
+    │  I do not have a code snippet for this. See the examples or code of AutoGluon / PHEM.
+├─ HyeLi Jeon (2024-08-31 12:40:28.800000) [+0]
+│  Thank you for your amazing insights! Congratulations!!!
+├─ Muhammad N1sar (2024-08-27 05:51:13.873000) [+0]
+│  Congratulations 🎉
+├─ [deleted] (2024-08-26 19:33:29.577000) [+0]
+│  Hi
+│  
+│  How many models did you build at the first level of AutoGluon?
+│  
+│  Count 5 folds as one model. 
+│  
+│  How many models did you build at the second level, where predictions are passed from the first leve...
+  ├─ Lennart Purucker (2024-08-26 20:05:08.063000) [+2]
+  │  How many models did you build at the first level of AutoGluon?
+  │    How many models did you build at the second level, where predictions are passed from the first level?
+  │  
+  │  
+  │  In both cases, up to a total...
+    ├─ [deleted] (2024-08-29 07:20:01.983000) [+0]
+    │  max_base_models_per_type
+    │  
+    │  
+    │  Could you show the different model types that are available in Autogluon?
+    │   Which model type are on your roadmap for adding them to AutoGluon?
+    ├─ Lennart Purucker (2024-08-29 07:32:50.037000) [+1]
+    │  You can find the current list here: https://auto.gluon.ai/stable/api/autogluon.tabular.models.html
+    │  
+    │  We would add any model (or general method) that performs well in our empirical benchmarks.
+    │  
+    │  We us...
+    ├─ [deleted] (2024-08-29 09:42:19.627000) [+0]
+    │  Can AutoGluon process video and audio?
+├─ [deleted] (2024-08-25 17:52:39.177000) [+0]
+│  How to modify the AutoGluon code on GitHub so that it doesn't build models but creates an ensemble of the models I give it? (Where and in what form should I provide the models?)
+  ├─ Lennart Purucker (2024-08-26 07:54:27.653000) [+1]
+  │  By default, AutoGluon always builds an ensemble. 
+  │  
+  │  If you want to build a post hoc ensemble with models from AutoGluon, you can use this https://github.com/AutoML-Grandmasters/Fourth-AutoML-Grand-P...
+├─ [deleted] (2024-08-17 16:44:21.600000) [+0]
+│  Hello!
+│  
+│  @lennartpuruckerisg 
+│  How to install GitHub AutoGluon?
+│  
+│  (I need this to change  the number of decimal places for rounding to 8)
+│  
+│  !pip install git+https://github.com/autogluon/autogluon  
+│  
+│  Co...
+  ├─ Lennart Purucker (2024-08-26 07:56:07.213000) [+1]
+  │  Heyho, sorry for the late reply. I did not get an email for your message.
+  │  
+  │  You can install AutoGluon on Kaggle via https://auto.gluon.ai/stable/install.html (see the Kaggle point).
+  │  
+  │  !pip install -U...
+  ├─ Nick Erickson (2024-08-26 18:09:35.970000) [+2]
+  │  You can also follow source install instructions, for example:
+  │  
+  │  !git clone https:thub.comautogluon
+  │  !cd autogluon &amp;&amp; ./full_install.sh
+  │  
+  │  
+  │  
+  │  from autogluon.tabular import TabularDataset, Tabular...
+├─ [deleted] (2024-08-17 13:38:06.387000) [+0]
+│  @lennartpuruckerisg How to calculate how much time on kaggle to give AutoGluon default configuration so that it is the same as in your AWS m7i.48xlarge EC2 instancewith 192 vCPUs?
+  ├─ Lennart Purucker (2024-08-26 07:57:10.277000) [+1]
+  │  Heyho, sorry for the late reply. I did not get an email for your message.
+  │  
+  │  I would suggest roughly taking the number of CPUs times the number of hours minus an overhead of 25%.
+├─ [deleted] (2024-08-17 13:02:45.210000) [+0]
+│  @lennartpuruckerisg Could you please post the Python code for the default AutoGluon?
+  ├─ Lennart Purucker (2024-08-26 07:57:55.237000) [+1]
+  │  The default AutoGluon, e.g., as shown here: https://auto.gluon.ai/stable/tutorials/tabular/tabular-quick-start.html
+├─ Jon Ingvar Skånøy (2024-08-16 17:58:15.087000) [+0]
+│  Goooooooooooooooooooooood!!!
+├─ [deleted] (2024-08-03 09:39:24.620000) [+0]
+│  [deleted]
+├─ [deleted] (2024-10-14 00:47:33.340000) [+0]
+│  [deleted]

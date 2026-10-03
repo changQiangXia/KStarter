@@ -1,0 +1,104 @@
+# https://www.kaggle.com/competitions/playground-series-s3e20/discussion/432294
+
+Topic #432294: Explained: Why our usual methods don't work in this competition
+  Author: AmbrosM
+  Posted: 2023-08-16 19:55:29.369000
+  Votes: 64  Comments: 18
+
+Many of us have applied standard machine learning methods (e.g., LightGBM and Optuna) to this competition and got disastrous scores. Can you explain why? Here's my explanation.
+
+1. The satellite measurements are useless: These features are terribly noisy and unrelated to the target. A satellite measurement applies only to a single point in time whereas the targets are the CO2 emissions of a whole week. The time of the measurement is determined by the satellite's orbit. Its result depends on clouds, temperature, volcano eruptions and other factors. Furthermore, CO2 emissions come from different sectors (ground traffic, heating, power generation, air traffic, …), and these sectors don't contribute proportionally to NO2, CO or SO2. With a diameter of 200 km, Rwanda is a small country, and the wind replaces Rwanda's whole atmosphere with air from neighboring countries every day.
+
+After dropping the satellite measurements, we have only four features left: latitude, longitude, year and week_no.
+
+2. Location data is in the wrong form: The location data is given in two dimensions (latitude and longitude), and machine learning models naturally assume that nearby locations have similar emissions. Maybe all cities have similar emissions, all villages are similar, and all forests have similar emissions, but these three classes of locations don't form contiguous regions — a city may be in the middle of a forest — and at least two locations are outliers.
+
+Keeping locations in latitude–longitude form is wrong; three better forms are:
+
+
+
+Transform the locations into a five- or six-dimensional space with an SVD or NMF (discussion post).
+
+Cluster the locations according to their emission patterns (notebook).
+
+Use the locations as categorical features or calculate the predictions for every location independently.
+
+
+3. The lockdown was a singular event: Nobody could foresee the lockdown, and cross-validating a machine-learning model on a validation set which contains the year 2020 is nonsense.
+
+The lockdown hinders not only validation: What happens if the training dataset contains the lockdown period? Do we want our model to learn that the emissions of week 10 can be drastically lower than the emissions of week 9? No: Although such a reduction occurred in week 10 of 2020, it doesn't occur in week 10 of 2022, and we're using our model only for predicting 2022. We want our model to learn that Lake Kivu emissions triple every year from week 53 to week 0, but we do not want it to learn that Kihanga emissions can suddenly shrink in week 10. Standard machine-learning models cannot distinguish the two cases; they are programmed to predict averages (e.g., random forest or gradient boosting) or to extrapolate from averages (e.g., linear regression or Holt–Winters).
+
+
+
+What are our options? 
+
+Having seen that traditional machine learning fails at distinguishing seasonal variations from lockdown effects, human intervention is necessary. We need to give our prior information about the lockdown to the model. The lockdown weeks of the training data are outliers and must be dropped or adjusted!
+
+Typical approaches are:
+
+
+
+As the lockdown reduced the emissions for most locations, the maximum emission of the three training years is a good baseline for predicting 2022 (notebook).
+
+To reduce the variance compared to the first approach, we can scale the training data to the levels of 2021 (because this year is closest to 2022) or to the levels of 2019 (because this year is unaffected by Covid) (notebook).
+
+By taking the maximum we ignore that the economy hadn't completely recovered from the lockdown at the beginning of 2022. This observation leads to the idea of using the recovery-from-lockdown phase (mid-2020 through end of 2021) as the basis for extrapolating into 2022 (discussion post).
+
+
+
+
+Advice:
+
+
+
+Be creative
+
+Validate your model on more than just the public leaderboard (e.g. on the second half of 2021)
+
+Ensemble
+
+Have fun!
+
+Comments:
+├─ Marília Prata (2023-08-21 00:27:10.583000) [+2]
+│  Your topics are brilliant: "The satellite measurements are useless", " "Location data is in the wrong form". Then the approaches.
+│  It's a pleasure to read them all.
+│  I can only follow the advices (be...
+├─ Hamed JOORATI (2023-08-21 07:59:30.573000) [+1]
+│  Thank you for the clear explanations ! There is always story behind those data that we need to understand before analyzing those data and create our model !
+├─ Hengist (2023-08-21 07:48:41.817000) [+1]
+│  a nice work.
+├─ Ujas Lathiya (2023-08-20 17:27:44.567000) [+1]
+│  explained very well…..
+├─ Bassem Gouty (2023-08-20 09:10:22.017000) [+1]
+│  Spectacular insights! your notebooks are always such a snack to read, thank you .
+├─ Sambit Barik (2023-08-19 22:27:42.513000) [+1]
+│  Thanks @ambrosm for writing such an insightful piece!
+├─ Tariq Mahmood (2023-08-19 17:56:06.297000) [+1]
+│  Thanks @ambrosm for providing a treasure of knowledge in very easy way. 👍
+├─ Suraj (2023-08-18 18:26:31.843000) [+1]
+│  Great insights @ambrosm ! Thanks for sharing it 🤍
+│  I've used your insights in my kernel's latest version-11. It's an initial attempt, though.
+│  
+│  If you've time, request you to kindly have a look at Ap...
+├─ VantakulaSatyakiran (2023-08-18 07:09:50.773000) [+1]
+│  observation💥
+├─ datadote (2023-08-17 23:20:32.687000) [+1]
+│  Hi ambrosm, thank you for the insights. Have you tried running these experiments and seeing how your CV score varied? I'm trying to get a better understanding on how much signal each of these ideas...
+  ├─ AmbrosM (2023-08-18 06:28:24.447000) [+1]
+  │  Hi @datadote I haven't implemented any of the models which take maxima. My focus today is on improving the model for the recovery-from-lockdown phase.
+├─ NirGilad (2023-08-17 07:16:32.180000) [+1]
+│  Great work @ambrosm, very insightful
+├─ Maria Suchkova (2023-08-22 10:12:47.053000) [+0]
+│  This dataset has 15 locations (2385 rows) with 0 emission in 2019, 2020, 2021 years. They had to be excluded from training and testing, because in 2022 these 0 emissions will be the same. 
+│  I filled...
+├─ Niveditha Vudayagiri (2023-08-21 16:56:00.880000) [+0]
+│  Really good analysis @ambrosm . Handling COVID data has been a major issue with time series lately. While in this case, it was okay to remove or take the highest, what about some universal ways of ...
+├─ [deleted] (2023-08-19 03:44:32.017000) [+0]
+│  [deleted]
+├─ C4rl05/V (2023-08-19 23:59:20.517000) [+1]
+│  Thanks for sharing @ambrosm
+├─ Umair Zia (2023-08-17 11:40:07.293000) [+1]
+│  Great analysis, Thanks
+├─ Manav Manoj (2023-08-17 10:26:08.150000) [+1]
+│  Thank you for this @ambrosm

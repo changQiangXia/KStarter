@@ -1,0 +1,177 @@
+# https://www.kaggle.com/competitions/playground-series-s5e1/discussion/560549
+
+Topic #560549: 2nd Place - Stacking Transformer and Linear Regression
+  Author: Chris Deotte
+  Posted: 2025-02-01 01:18:03.737000
+  Votes: 86  Comments: 39
+
+Forecasting Challenge
+
+Wow, i'm excited to win 2nd place and I feel lucky. Forecasting competitions are hard because choosing the right multipliers for the future years (2017, 2018, 2019) has a greater effect on your final LB score and rank then having a model which predicts days accurately (i.e. what happens on Monday versus Sunday, or holiday versus non-holiday). In this comp, the training data can help us predict days, but what occurs in future years requires guessing and/or assumptions.
+
+In this competition we are given sales data for years 2010, 2011, 2012, 2013, 2014, 2015, 2016 and we must predict 2017, 2018, 2019. In each future year, we must predict 90 numbers per day for each country, store, product combination. After we build a linear regression model (with sinusoidal engineered features) and include the effects of: GDP, store, product, country, day of week, day of year, there is still an unaccounted for trend (how data changes per year) in the data (pictured below). 
+
+Below is an image of prediction error from top public notebooks. The y axis is the multiplier we need to multiply our predictions (i.e. percentage error) to match ground truth. We see this error ranges between plus and minus 6%. So what do we do about the future? 
+
+
+
+
+
+We can multiple all future predictions by the last known percentage error which is m=1.06 (like popular public notebooks). 
+
+We can use no multiplier, m=1.00.
+
+We can use linear multiplier that increases or decreases as we move forward in time m = 1.06 + slope * (year - 2017) for some slope. 
+
+
+These different options are pictured above with dotted lines. There are many choices for future multipliers. This is why forecasting is so difficult. We cannot say with any certainty which future trend is correct (without having more information from outside the train data). So we just need to guess. For my final two submissions, I chose constant 1.06 (green dotted line) and mild linear up (orange dotted line) 🤞
+
+Transformer Only - Public LB = 0.04867, Private LB = 0.04967 (59th Place)
+
+Using only my public starter here, we can achieve public LB = 0.04867, private LB = 0.04967 and 59th place private with the following changes:
+
+
+
+train 1 model on all 5 products (for 15 epochs cosine schedule)
+
+add 30 boolean features for 30 holidays
+
+use first predictions (of 2017,2018) as pseudo label to train second predictions
+
+use second predictions (of 2017,2018,2019) as pseudo label to train third predictions
+
+use the median of 5 models trained with different seeds (for 1st, 2nd, 3rd predictions)
+
+submit the 3rd predictions
+
+use no multiplier. Transformer determines what to do about future
+
+
+Note that we use 2 rounds of pseudo labeling (which is in addition to autoregression). For more details about pseudo labeling reading comment below here. We also ensemble 5 copies of the model with itself trained on different seeds. Both these techniques improve accuracy and help us get good predictions far into the future at year 2019 private test data.
+
+Linear Regression Only - Public LB = 0.04733, Private LB = 0.04650 (6th Place)
+
+Starting with Konstantin's great public notebook (model 1) here, we can achieve public LB = 0.04733, private LB = 0.04650, and 6th place private here by adding the effect of holidays. (See all holidays here).
+
+
+
+add country holidays
+
+keep multiplier m=1.06
+
+
+Below is an example of how to locate and add holidays for a specific country. Holidays can change day each year, so we perform EDA and put black vertical lines before and after a holiday (for a specific country). Then we look at each year 2010 thru 2016 in a specific country and see if the sales consistently are raised or lowered. If so, we add this holiday to our model.
+
+For Singapore we observe that sales are raised for the following 7 holidays each year: Chinese New Year, Easter, Vesak Day, National Day, Eid al-Fitr, Deepavali, Eid al-Adha. These 7 holidays are shown for years 2014, 2015, and 2016 below. For more examples, see my notebook here. For linear regression model, we boost these windows of time. For transformer model, we add boolean features so the model can find and predict these holidays.
+
+
+Stacking - Public LB = 0.04526, Private LB = 0.04498  (2nd Place)
+
+By stacking my transformer over linear regression to predict the residuals (error), we can achieve public LB = 0.04526, private LB = 0.04498, and 2nd place private! 🎉 (Stacking versus Ensemble is explained in detail here)
+
+The transformer learns patterns that the linear regression model does not learn. The most efficient way to use both is to train the transformer on the prediction error of the linear regression model. So, first we use the linear regression model to predict the train data Jan 2010 thru Dec 2016. We then subtract the predictions from the ground truth to get the prediction error. Next we train the transformer to learn and predict this error (i.e we train transformer with target = truth minus prediction for Jan 2010 thru Dec 2016). Finally we submit the sum of the two models' predictions.
+
+Comments:
+├─ narsil (jobs-in-data.com) (2025-02-01 09:14:16.077000) [+3]
+│  Thanks Chris! I always go through your writeups with my students. A great learning resource!
+├─ Johannes Heller (2025-02-01 08:58:39.367000) [+3]
+│  @cdeotte Congratulations on the awesome performance! I was stuck at around 0.044 public LB with a good linear model for day-in-year-ratios and no ideas left but probing public lb with things like c...
+  ├─ Chris Deotte (2025-02-02 05:04:00.830000) [+1]
+  │  Thanks Johannes. Congratulations achieving solo 4th place!
+├─ Optimistix (2025-02-01 01:20:30.483000) [+3]
+│  Congrats on another great performance, and thanks for the informative notebooks and posts! Hope you continue to participate in the playground episodes, it's great to have you around.
+  ├─ Chris Deotte (2025-02-01 04:23:53.237000) [+4]
+  │  Thanks Optimistix! I was scared of a big shakeup here. With time series forecasting we never now what happens in future years. We make guesses and assumptions and hope it works, but sales could hav...
+├─ Konstantin Dmitriev (2025-02-02 22:36:47.043000) [+4]
+│  @cdeotte, I was very impressed with your transformer-based solution and the speed of your LB score decreasing in the competition! That's the power of a true Grandmaster!
+├─ [deleted] (2025-04-11 00:55:52.330000) [+2]
+│  The concept is great and well-presented.
+├─ Rahul (2025-02-06 10:15:42.143000) [+1]
+│  Very good 👍🏻
+├─ Jayant Khandelwal (2025-02-05 20:27:28.767000) [+1]
+│  Congratulations, I have learned a lot from your notebooks.
+├─ Less (2025-02-04 15:36:15.203000) [+1]
+│  Congratulations, I have learned a lot from your notebooks.
+├─ Chloris (2025-02-04 12:27:09.173000) [+1]
+│  very helpful and nice
+├─ Olabode James (2025-02-04 09:11:48.383000) [+1]
+│  Excellent work @cdeotte, as the idea of training the transformer on the prediction errors of the linear regression, is quite ingenious and I  believe this can make for a new class of machine learni...
+├─ AkshatBhatnagar29 (2025-02-03 17:47:47.963000) [+1]
+│  Very NIce. Goopd Job.
+├─ Chagin (2025-02-02 10:22:25.107000) [+1]
+│  That's a very insightful explanation! Thank you for sharing such amazing learning resources! And congratulations 🎉 @cdeotte
+├─ HyperNeonByte (2025-02-02 09:06:01.920000) [+1]
+│  Hi Chris, thank you for sharing your work and all the other helpful notebooks, I learned a lot following your notebooks.
+│  
+│  Could you explain more about the following part? Is this different from 'au...
+  ├─ Chris Deotte (2025-02-02 13:15:27.177000) [+3]
+  │  Yes, this is pseudo labeling (which is an advanced technique and different than autoregression). Let me be more specific:
+  │  
+  │  
+  │  
+  │  We train 1 model on all train data Jan 1 2010 thru Dec 31 2016 (all 5 pr...
+    ├─ HyperNeonByte (2025-02-03 01:05:30.160000) [+0]
+    │  Thank you Chris for the detailed walkthrough and for sharing your observation about the gap between public LB and private, it is very interesting and insightful!
+    │  
+    │  Out of curiosity, what's your expe...
+├─ İsmail Uğuz (2025-02-01 18:38:10.797000) [+1]
+│  It is an very impressive work, Thanks for sharing. Konstantin's notebook is an great source of study
+├─ Özgür Deniz Çelik (2025-02-01 16:21:32.863000) [+1]
+│  Thanks for the solution! I liked your WaveNet notebook. it’s interesting, but I found it a bit overwhelming to read. Could you create a simpler version of it?
+├─ błażej makowski (2025-02-01 12:27:17.183000) [+1]
+│  Amazing learning resource!
+├─ Denis Kurovskii (2025-02-01 10:53:13.913000) [+1]
+│  Good Work! Congratulations!
+├─ RAHUL ARYA (2025-02-01 09:12:56.577000) [+1]
+│  why not use GDP data with holidays ?
+├─ yihao zhu (2025-02-01 01:22:50.323000) [+1]
+│  Your work is excellent and thank you for your detailed sharing.
+│  I can learn a lot of knowledge from it, which is of great help to me.
+├─ Shreyans Solanki (2025-02-10 06:54:49.783000) [+2]
+│  The best place to learn new things, here I was just handling the date column and using DL models, i mostly cant understand a thing from this discussion forum but i will try to look it up and grasp ...
+├─ [deleted] (2025-02-03 06:12:17.330000) [+2]
+│  very helpful and nice
+├─ delai50 (2025-02-03 01:29:58.127000) [+2]
+│  Congratulations and thanks for sharing as always. A couple of questions here:
+│  
+│  
+│  
+│  How did you come up with those specific pseudolabeling phases? I mean, for example you predicted 2017 and 2018 at fi...
+  ├─ Chris Deotte (2025-02-03 13:30:12.007000) [+2]
+  │  Hi.
+  │  
+  │  
+  │  
+  │  
+  │  My plan was to do one round of pseudo label using all predictions of 2017, 2018, 2019. However when i looked at EDA, the transformer predictions did not look perfect for 2019. So I used 201...
+├─ Sheikh Muhammad Abdullah (2025-02-01 02:02:46.390000) [+2]
+│  @cdeotte Good Work. Congratulations. 😍
+│  
+│  Any tips how to find "we are overfitting or not". 
+│  I didn't spend much time on this because of less Knowledge in Time series problem, but my base models achi...
+  ├─ Chris Deotte (2025-02-01 04:28:14.540000) [+5]
+  │  It is very hard to prevent overfitting in time series. To be honest it usually comes down to luck regarding what we guess or assume will happen in future years.
+  │  
+  │  We can use local validation to eval...
+├─ Samith Chimminiyan (2025-02-01 01:32:45.463000) [+2]
+│  @cdeotte Excellent Work !!! Lots of knowledge shared.
+│  
+│  Thank you !!!
+├─ David Daly (2025-07-29 01:35:30.533000) [+0]
+│  Wow. Great stuff.
+├─ [deleted] (2025-02-03 16:31:23.260000) [+1]
+│  @cdeotte I learned a lot from going through this. Some of the concepts were new to me, so I looked them up to understand them better. I also put together a simple notebook with dummy data to try th...
+├─ Nanang Safiu Ridho (2025-02-04 03:00:49.500000) [+1]
+│  very nice thank you
+├─ Joshua Immanuel (2025-02-03 04:01:48.337000) [+1]
+│  Awesome!!!
+├─ Madhavik Dogra (2025-02-02 17:16:56.593000) [+1]
+│  Thanks Chris! Thats's insightful.
+├─ [deleted] (2025-02-02 16:12:06.903000) [+1]
+│  [deleted]
+├─ [deleted] (2025-02-01 06:42:10.120000) [+1]
+│  [deleted]
+├─ [deleted] (2025-02-04 20:59:38.760000) [+1]
+│  [deleted]
+├─ [deleted] (2025-02-02 17:15:37.467000) [+0]
+│  [deleted]

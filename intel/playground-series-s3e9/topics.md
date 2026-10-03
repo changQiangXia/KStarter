@@ -1,0 +1,47 @@
+# playground-series-s3e9 讨论区（按票数排序，共 45 条）
+
+- [#1 Solution: Cross-validation and diversity win](https://www.kaggle.com/competitions/playground-series-s3e9/discussion/394592) — 89 票 / 50 评论 / 2023-03-14 **write-up?**
+- [Don't reduce your model portfolio too much!](https://www.kaggle.com/competitions/playground-series-s3e9/discussion/391644) — 47 票 / 15 评论 / 2023-03-02 
+- [Some context from a Structural Engineer](https://www.kaggle.com/competitions/playground-series-s3e9/discussion/391237) — 43 票 / 9 评论 / 2023-02-28 
+- [Don't take things for granted. Remember to vote Mayur's Concrete Original data.](https://www.kaggle.com/competitions/playground-series-s3e9/discussion/391013) — 33 票 / 12 评论 / 2023-02-28 
+- [The great duplicate saga](https://www.kaggle.com/competitions/playground-series-s3e9/discussion/391011) — 32 票 / 9 评论 / 2023-02-28 
+- [Detailed feature description and feature engineering by ChatGPT](https://www.kaggle.com/competitions/playground-series-s3e9/discussion/391066) — 24 票 / 13 评论 / 2023-02-28 
+- [#12th place solutions:  My 6 step process for any competition ](https://www.kaggle.com/competitions/playground-series-s3e9/discussion/394600) — 20 票 / 4 评论 / 2023-03-21 **write-up?**
+- [Feature descriptions and relationship with strength](https://www.kaggle.com/competitions/playground-series-s3e9/discussion/391067) — 16 票 / 4 评论 / 2023-02-28 
+- [(Mathematical / Discovered)  Formula for Concrete Strength](https://www.kaggle.com/competitions/playground-series-s3e9/discussion/393816) — 14 票 / 6 评论 / 2023-03-10 
+- [Collection of helpful ideas - S3E9](https://www.kaggle.com/competitions/playground-series-s3e9/discussion/392758) — 14 票 / 12 评论 / 2023-03-06 
+- [Feature Engineering Ideas and formulas !!!!!](https://www.kaggle.com/competitions/playground-series-s3e9/discussion/391580) — 13 票 / 6 评论 / 2023-03-01 
+- [Quick and dirty approach to boost the local CV score](https://www.kaggle.com/competitions/playground-series-s3e9/discussion/391207) — 11 票 / 3 评论 / 2023-02-28 
+- [🧐 Look out for duplicated observations in train and test 🧐](https://www.kaggle.com/competitions/playground-series-s3e9/discussion/391001) — 11 票 / 7 评论 / 2023-02-28 
+- [Dataset Description](https://www.kaggle.com/competitions/playground-series-s3e9/discussion/390959) — 9 票 / 1 评论 / 2023-02-28 
+- [ feature engineering errors.](https://www.kaggle.com/competitions/playground-series-s3e9/discussion/392472) — 9 票 / 6 评论 / 2023-03-05 
+- [Points taken into Consideration about this dataset and getting the Best Model .](https://www.kaggle.com/competitions/playground-series-s3e9/discussion/392436) — 8 票 / 7 评论 / 2023-03-05 
+- [Caution: Using Original Data (Edited)](https://www.kaggle.com/competitions/playground-series-s3e9/discussion/391002) — 8 票 / 2 评论 / 2023-02-28 
+- [#44 place solution using features based on LinearRegression](https://www.kaggle.com/competitions/playground-series-s3e9/discussion/394641) — 8 票 / 0 评论 / 2023-03-14 **write-up?**
+- [My approach of handling Duplicates](https://www.kaggle.com/competitions/playground-series-s3e9/discussion/393395) — 7 票 / 4 评论 / 2023-03-09 
+- [Cement Mixing Ratios ](https://www.kaggle.com/competitions/playground-series-s3e9/discussion/390973) — 7 票 / 1 评论 / 2023-02-28 
+- [Results as far - S3e9](https://www.kaggle.com/competitions/playground-series-s3e9/discussion/391091) — 7 票 / 10 评论 / 2023-02-28 
+- [New to Machine Learning or Kaggle?](https://www.kaggle.com/competitions/playground-series-s3e9/discussion/380700) — 6 票 / 6 评论 / 2023-01-23 
+- [best way to handle duplicate in train](https://www.kaggle.com/competitions/playground-series-s3e9/discussion/392848) — 5 票 / 9 评论 / 2023-03-07 
+- [3 model in R with very good performace (Best - 11.89710 with CatBoost)](https://www.kaggle.com/competitions/playground-series-s3e9/discussion/390970) — 5 票 / 1 评论 / 2023-02-28 
+- [A helpful tip on "feature engineering".](https://www.kaggle.com/competitions/playground-series-s3e9/discussion/393176) — 4 票 / 7 评论 / 2023-03-08 
+- [help me out to deal with outliers](https://www.kaggle.com/competitions/playground-series-s3e9/discussion/393349) — 4 票 / 7 评论 / 2023-03-09 
+- [Help About Score](https://www.kaggle.com/competitions/playground-series-s3e9/discussion/392763) — 4 票 / 1 评论 / 2023-03-06 
+- [#10 - Nothing fancy, tuning and stacking with tidymodels](https://www.kaggle.com/competitions/playground-series-s3e9/discussion/394654) — 4 票 / 1 评论 / 2023-03-14 
+- [Another quick (but less dirty approach) to boost the local cv-score](https://www.kaggle.com/competitions/playground-series-s3e9/discussion/391624) — 3 票 / 0 评论 / 2023-03-02 
+- [watch out for the extra space in the first column heading of...](https://www.kaggle.com/competitions/playground-series-s3e9/discussion/391257) — 3 票 / 0 评论 / 2023-02-28 
+- [Incorrect Link on Original Data](https://www.kaggle.com/competitions/playground-series-s3e9/discussion/390953) — 3 票 / 1 评论 / 2023-02-28 
+- [What is rf_benchmark.csv](https://www.kaggle.com/competitions/playground-series-s3e9/discussion/393733) — 2 票 / 2 评论 / 2023-03-10 
+- [Kaggle Progression | How to level up ?](https://www.kaggle.com/competitions/playground-series-s3e9/discussion/393233) — 2 票 / 2 评论 / 2023-03-08 
+- [Multicollinearity and Feature Selection](https://www.kaggle.com/competitions/playground-series-s3e9/discussion/392693) — 2 票 / 4 评论 / 2023-03-06 
+- [Fantastic Feature Engineering Question](https://www.kaggle.com/competitions/playground-series-s3e9/discussion/392506) — 2 票 / 1 评论 / 2023-03-05 
+- [What happened? ](https://www.kaggle.com/competitions/playground-series-s3e9/discussion/394795) — 2 票 / 1 评论 / 2023-03-14 
+- [Additional Features with ChatGPT and Recursive Feature Selection using RFECV](https://www.kaggle.com/competitions/playground-series-s3e9/discussion/392529) — 2 票 / 0 评论 / 2023-03-05 
+- [Any feature engineering we can carry out?](https://www.kaggle.com/competitions/playground-series-s3e9/discussion/391478) — 2 票 / 3 评论 / 2023-03-01 
+- [Link to the right orginal dataset](https://www.kaggle.com/competitions/playground-series-s3e9/discussion/390957) — 2 票 / 1 评论 / 2023-02-28 
+- [When to do transformation](https://www.kaggle.com/competitions/playground-series-s3e9/discussion/392660) — 1 票 / 2 评论 / 2023-03-06 
+- [kudos to @AmbrosM for topping episode 9 challenge. ](https://www.kaggle.com/competitions/playground-series-s3e9/discussion/394565) — 1 票 / 4 评论 / 2023-03-14 
+- [Fairly Large Difference in Corr Matrix Between Original & Train](https://www.kaggle.com/competitions/playground-series-s3e9/discussion/392720) — 1 票 / 0 评论 / 2023-03-06 
+- [Anyone interested to solve this problem in a team?](https://www.kaggle.com/competitions/playground-series-s3e9/discussion/391538) — 1 票 / 5 评论 / 2023-03-01 
+- [Basic_model using rfr](https://www.kaggle.com/competitions/playground-series-s3e9/discussion/392530) — 0 票 / 0 评论 / 2023-03-05 
+- [Team Formation](https://www.kaggle.com/competitions/playground-series-s3e9/discussion/391513) — 0 票 / 1 评论 / 2023-03-01 

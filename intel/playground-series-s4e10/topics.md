@@ -1,0 +1,82 @@
+# playground-series-s4e10 讨论区（按票数排序，共 80 条）
+
+- [1st Place Solution - CatBoost All The Way Down](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/543725) — 174 票 / 105 评论 / 2024-11-01 **write-up?**
+- [A few tips for beginners](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/539612) — 55 票 / 63 评论 / 2024-10-09 
+- [Starter materials and references ](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/536970) — 47 票 / 20 评论 / 2024-10-01 
+- [Rank 4 approach - thoughtful model choices and effective ensembles](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/543672) — 45 票 / 41 评论 / 2024-11-01 
+- [Unleashing the Power of max_bin in XGBoost: A Significant Performance Boost](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/539963) — 34 票 / 28 评论 / 2024-10-11 
+- [There are clear groups in data](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/538099) — 34 票 / 31 评论 / 2024-10-07 
+- [Linear booster as ensembler](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/540769) — 33 票 / 28 评论 / 2024-10-16 
+- [2nd place solution](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/543766) — 31 票 / 22 评论 / 2024-11-01 **write-up?**
+- [loan_status  value_counts: 50295 (Zero) and 8350 (One). Zero is No Loan? Shouldn't be the other way around?](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/536981) — 29 票 / 21 评论 / 2024-10-01 
+- [Random Forest can achieve a CV score of 0.96](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/539610) — 25 票 / 12 评论 / 2024-10-09 
+- [Adding the original dataset to training data improves both CV and public LB scores](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/537494) — 25 票 / 50 评论 / 2024-10-03 
+- [🤔 Anomaly or what does means ''person_emp_length'' feature?](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/536990) — 22 票 / 11 评论 / 2024-10-01 
+- [8th place solution](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/543772) — 21 票 / 7 评论 / 2024-11-01 **write-up?**
+- [What are the most important plots for the modelling process?](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/537715) — 21 票 / 19 评论 / 2024-10-04 
+- [Descriptions of Loan Data](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/536984) — 20 票 / 12 评论 / 2024-10-01 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/536974) — 19 票 / 17 评论 / 2024-10-01 
+- [10th place solution : no blind blend](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/543735) — 19 票 / 11 评论 / 2024-11-01 **write-up?**
+- [The Original Dataset](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/536971) — 19 票 / 13 评论 / 2024-10-01 
+- [A jungle of models, "sophisticated" overfitting, and suboptimal selections: How I rose to #1, and fell to #299](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/543869) — 18 票 / 8 评论 / 2024-11-02 
+- [Can we do a better job ensembling AutoGluon OOF predictions than AutoGluon?](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/539539) — 18 票 / 35 评论 / 2024-10-09 
+- [Visualizing the shakeup](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/543684) — 17 票 / 16 评论 / 2024-11-01 
+- [📘 One great resource to learn area under the ROC curve metric!](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/536976) — 17 票 / 12 评论 / 2024-10-01 
+- [What is your score estimate?](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/540042) — 15 票 / 26 评论 / 2024-10-12 
+- [Using Newton-based score function to boost score](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/540262) — 14 票 / 6 评论 / 2024-10-13 
+- [Is this our new benchmark?](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/539974) — 14 票 / 18 评论 / 2024-10-11 
+- [Has anyone tried oversampling the training dataset by SMOTE?](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/538077) — 14 票 / 8 评论 / 2024-10-06 
+- [PerpetualBooster is interesting for this competition](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/541573) — 14 票 / 14 评论 / 2024-10-20 
+- [Even Kmeans can do 0.93+ in this competition](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/539567) — 14 票 / 5 评论 / 2024-10-09 
+- [Why is Up-sampling a Bad Idea?](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/541071) — 13 票 / 15 评论 / 2024-10-17 
+- [Solution writeup - Where did LLM-written approaches end up?](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/543734) — 12 票 / 6 评论 / 2024-11-01 **write-up?**
+- [🤔 Is StratifiedKFold the best Cross-Validation variant for this competition?](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/538303) — 12 票 / 7 评论 / 2024-10-08 
+- [Are we expecting a shake-up in a couple of hours?](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/543639) — 12 票 / 22 评论 / 2024-10-31 
+- [CV-LB thread](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/537373) — 12 票 / 9 评论 / 2024-10-02 
+- [loan_percent_income error to true value is important](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/539903) — 12 票 / 11 评论 / 2024-10-11 
+- [finally touched 0.97](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/540582) — 12 票 / 22 评论 / 2024-10-15 
+- [kNN is suprisingly decent](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/538332) — 12 票 / 8 评论 / 2024-10-08 
+- [Post AutoML Grand Prix Blues?](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/536977) — 12 票 / 16 评论 / 2024-10-01 
+- [Simple models OOFs!](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/539983) — 11 票 / 4 评论 / 2024-10-11 
+- [A month-long race to 0.98, to be decided by the 4th or 5th decimal place?](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/537607) — 11 票 / 21 评论 / 2024-10-04 
+- [Get started here!](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/533163) — 10 票 / 12 评论 / 2024-09-09 
+- [Ensembling for this competition](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/540475) — 10 票 / 6 评论 / 2024-10-14 
+- [430th place (up 57) lessons and non-working ideas](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/543671) — 7 票 / 0 评论 / 2024-11-01 **write-up?**
+- [Approval or Default? ](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/537337) — 7 票 / 3 评论 / 2024-10-02 
+- [Look at the training curves](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/541233) — 6 票 / 0 评论 / 2024-10-18 
+- [How to iterate your models and do version control of different models?](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/542798) — 6 票 / 9 评论 / 2024-10-26 
+- [Suppress "[LightGBM] [Warning] No further splits with positive gain, best gain: -inf"](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/537260) — 6 票 / 5 评论 / 2024-10-02 
+- [Need help on ensembling techniques](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/537376) — 6 票 / 9 评论 / 2024-10-02 
+- [Experimenting with LightGBM, XGBoost and CatBoost models](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/537869) — 6 票 / 8 评论 / 2024-10-05 
+- [Limits of Models](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/541492) — 6 票 / 27 评论 / 2024-10-19 
+- [Features That Increase CV score](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/539889) — 6 票 / 4 评论 / 2024-10-11 
+- [Dimension reduction using PCA and t-SNE](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/540902) — 5 票 / 6 评论 / 2024-10-16 
+- [Experimenting Different Models](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/545257) — 5 票 / 2 评论 / 2024-11-09 
+- [Ensemble weights](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/542481) — 5 票 / 24 评论 / 2024-10-25 
+- [Any tips on hyperparameter optimization?](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/542453) — 5 票 / 17 评论 / 2024-10-25 
+- [Using initial scores for LightGBM/CatBoost/XGBoost](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/541981) — 5 票 / 2 评论 / 2024-10-22 
+- [How do you Handle Skewed datasets?](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/537410) — 5 票 / 14 评论 / 2024-10-03 
+- [Long running sessions and data persistence](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/542617) — 5 票 / 9 评论 / 2024-10-25 
+- [Does PolynomialFeatures work in tree-based models?](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/542212) — 4 票 / 2 评论 / 2024-10-23 
+- [How can i understand that i overfit?](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/541421) — 4 票 / 2 评论 / 2024-10-19 
+- [Is the GPU hardware random?](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/541419) — 4 票 / 3 评论 / 2024-10-19 
+- [Optimal number of trials for optuna-tuning?](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/537945) — 4 票 / 9 评论 / 2024-10-06 
+- ["Area under the ROC curve" metric in other Kaggle playground competitions](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/537177) — 4 票 / 1 评论 / 2024-10-01 
+- [using Tomek’s links to remove boundary data point between two classes](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/543202) — 3 票 / 7 评论 / 2024-10-29 
+- [Catboost or one-hot? Fitting or averaging? Feature engineering?](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/542880) — 3 票 / 4 评论 / 2024-10-27 
+- [Blending 🎉!](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/540210) — 3 票 / 3 评论 / 2024-10-13 
+- [Disparity between prediction results on validation and test set](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/542979) — 3 票 / 12 评论 / 2024-10-28 
+- [The increasing index is where the data is shifted.](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/543664) — 3 票 / 2 评论 / 2024-10-31 
+- [Catboost Error](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/541915) — 3 票 / 7 评论 / 2024-10-22 
+- [What’s Your Biggest Struggle in This Competition?](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/540960) — 3 票 / 2 评论 / 2024-10-16 
+- [Data is shifted towards decreasing the target in increasing index.](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/537188) — 3 票 / 13 评论 / 2024-10-01 
+- [More Interesting Competition](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/537377) — 3 票 / 9 评论 / 2024-10-02 
+- [{hexsession} responsive hex tile with the logos of loaded packages](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/538355) — 3 票 / 1 评论 / 2024-10-08 
+- [loan_percent_income = 0.3: the loan_status will go from 20% to 60%](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/537284) — 3 票 / 1 评论 / 2024-10-02 
+- [Anyone familiar with these 3 columns?](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/537095) — 3 票 / 4 评论 / 2024-10-01 
+- [What should be the optimal cross validation outputs for this competition??](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/540745) — 3 票 / 8 评论 / 2024-10-15 
+- [Where to find original data?](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/542811) — 3 票 / 7 评论 / 2024-10-27 
+- [Kaggle Notebooks for Loan Approval Prediction Challenge](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/537060) — 3 票 / 0 评论 / 2024-10-01 
+- [Understanding what ROC is! ](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/537040) — 3 票 / 0 评论 / 2024-10-01 
+- [Improving Neural network results ?](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/539675) — 2 票 / 10 评论 / 2024-10-10 
+- [What can we do to avoid shake-ups?](https://www.kaggle.com/competitions/playground-series-s4e10/discussion/539855) — 2 票 / 5 评论 / 2024-10-11 

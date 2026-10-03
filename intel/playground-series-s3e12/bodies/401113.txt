@@ -1,0 +1,202 @@
+# https://www.kaggle.com/competitions/playground-series-s3e12/discussion/401113
+
+Topic #401113: Why you mustn't use train_test_split
+  Author: AmbrosM
+  Posted: 2023-04-11 20:13:34.578000
+  Votes: 78  Comments: 51
+
+When I looked at the 16 most recent public notebooks, wanting to know what cv scores they reported, I was shocked that only three of them cross-validate properly:
+
+
+
+
+3 notebooks didn't report any score at all. They obviously don't validate their models before submitting.
+
+2 notebooks reported only a training score. The training scores look good, but unfortunately they don't measure generalization performance.
+
+8 notebooks reported a validation score based on train_test_split, usually with a test_size of 0.2. This is wrong.
+
+Only 3 notebooks cross-validated correctly and reported a validation score based on StratifiedKFold.
+
+
+Validating models with a simple train_test_split is wrong because with such a small validation set the result depends too much on the random seed. Imagine you want to compare LogisticRegression and RandomForest. Depending on the random_state, LogisticRegression looks either 0.057 better than RandomForest or 0.080 worse:
+
+for random_state in [464, 879]:
+    X_tr, X_va, y_tr, y_va = train_test_split(train[['cond', 'calc']],
+                                              train[target],
+                                              test_size=0.2,
+                                              random_state=random_state)
+    lr = make_pipeline(StandardScaler(), LogisticRegression(random_state=0))
+    lr.fit(X_tr, y_tr)
+    lr_score = roc_auc_score(y_va, lr.predict_proba(X_va)[:,1])
+    rf = RandomForestClassifier(n_estimators=400, max_depth=2,
+                                min_samples_leaf=13, max_features=2,
+                                random_state=0)
+    rf.fit(X_tr, y_tr)
+    rf_score = roc_auc_score(y_va, rf.predict_proba(X_va)[:,1])
+    print(f"random_state={random_state:4}:   lr: {lr_score:6.3f}   "
+          f"rf: {rf_score:6.3f}   difference: {lr_score-rf_score:6.3f}")
+
+# random_state= 464:   lr:  0.785   rf:  0.864   difference: -0.080
+# random_state= 879:   lr:  0.822   rf:  0.764   difference:  0.057
+
+
+We're not talking about the fifth decimal digit here - an error of 0.137 brings you from the top of the leaderboard almost to the bottom!
+
+Now imagine that you used the same train_test_split in the objective function of Optuna: The hyperparameters you get from Optuna would be completely random.
+
+In the current competition, you need at least a StratifiedKFold or better a RepeatedStratifiedKFold to get meaningful results because ten folds are not enough.
+
+Comments:
+├─ BlamerX (2023-04-13 21:14:59.880000) [+10]
+│  Train split testing is a quick and easy way to check model performance, but it has limitations such as high variance and risk of overfitting. 
+│  
+│  StratifiedKFold provides more reliable estimates of m...
+  ├─ Sergey Kubarev (2023-04-14 12:14:54.960000) [+1]
+  │  @blamerx thank you, I will give it a try! But are there any limitations in using StratifiedKFold, despite computational power? I mean are there any specific requirements for data in this case.
+    ├─ BlamerX (2023-04-14 12:38:16.437000) [+1]
+    │  Sure, here are the main data requirements for the train-test split and StratifiedKFold:
+    │  
+    │  Train-Test Split:
+    │  
+    │  
+    │  
+    │  Randomly split data into a training set and a test set.
+    │  
+    │  Ensure that the test set is re...
+    ├─ Lucy (2023-04-14 12:43:42.143000) [+4]
+    │  @blamerx 
+    │  
+    │  "..May not be suitable for imbalanced datasets"
+    │   I thought that is precisely why we need to use StratifiedKFold.
+    ├─ Sergey Kubarev (2023-04-14 14:55:58.903000) [+0]
+    │  @blamerx thank you for a detailed answer!
+    │  Possibly it's a separate topic, but I have used SMOTE for classification with an imbalanced datasets. So, after implementing the sampling we can use Strati...
+├─ Anil Ozturk (2023-04-11 20:42:18.870000) [+6]
+│  This is almost always the case for TPS competition kernels. I even saw notebooks that cherrypick only the models giving the best fold scores. 👀
+  ├─ Lucy (2023-04-12 12:33:06.840000) [+4]
+  │  @nlztrk I was one of them two months ago. 😂 If you learn ML by yourself and google the subject online, train_test_splt is used everywhere!!  and I am glad that I finally came to the right place to ...
+    ├─ Anil Ozturk (2023-04-12 12:46:18.390000) [+4]
+    │  And it's pretty normal. TPS may be the best place to practice every approach and get rewarded / punished. 😄
+├─ waticson (2023-04-16 08:33:48.953000) [+1]
+│  Thank you for the tip:)
+│  Do you mean you don't use train_test_split at all or is there any effective ways to use for you?
+│  
+│  I sometimes use it with changing random_state to check the performance and ...
+  ├─ AmbrosM (2023-04-16 09:55:00.910000) [+4]
+  │  @yutodennou Use train_test_split
+  │  
+  │  
+  │  
+  │  when you don't need high-precision results
+  │  
+  │  when training takes too much time and you can't wait for a more precise kfold result
+    ├─ waticson (2023-04-17 02:21:29.983000) [+0]
+    │  @ambrosm Appreciate, I understood!
+    ├─ Vaibhav Gupta (2023-04-19 08:04:06.690000) [+0]
+    │  Yeah this makes sense, thank you
+├─ Yue Sun (2023-04-14 02:30:47.617000) [+1]
+│  How do you choose the number of folds and repeats for cross-validation? Do you have any rule of thumb or best practices for choosing them?
+  ├─ AmbrosM (2023-04-14 05:17:42.873000) [+10]
+  │  For the number of folds, Microsoft documentation says:
+  │  
+  │  
+  │  
+  │  
+  │  Training&nbsp;data&nbsp;size
+  │  Validation technique
+  │  
+  │  
+  │  
+  │  
+  │  Larger&nbsp;than&nbsp;20,000&nbsp;rows
+  │  Train/validation data split is applied. The d...
+    ├─ Lucy (2023-04-14 12:52:51.753000) [+1]
+    │  So for a huge data set "Larger than 20,000 rows", Train/validation data split scheme has its place!(It makes sense statistically).
+├─ Leandro Cassius (2023-04-13 12:04:10.333000) [+1]
+│  Thanks so much for the tip! I have to confess: I'm often using train_test_split too. I should start working with StratifiedKFold and see the differences between the results.
+  ├─ Swapnil Jikar (2023-04-19 10:03:12.940000) [+0]
+  │  Whichever method you use, use techniques such as cross-validation to ensure that the results are reliable :)
+    ├─ Trust The Process (2023-04-23 05:24:58.053000) [+0]
+    │  does this count as CV;
+    │  Doing train test split, then comparing the test results to the train results and then tuning based on those?
+    │  Or do you need to split the data down again to another smaller set?
+├─ Shyamaray Aravattu (2023-04-17 08:48:00.203000) [+2]
+│  When you have small amount of data that could be a problem
+  ├─ Jacky Wong (2023-04-17 22:41:08.723000) [+0]
+  │  Agreed - especially when you have a small amount of a specific category. I imagine this must be mixed with some over-sampling approach like SMOTE?
+├─ Alexander Lomakin (2023-04-12 11:12:21.040000) [+2]
+│  Thanks for this tip. StratifiedKFold give good result in Spaceship Titanic competition. Nevertheless after some features added cross_val_score shows performance improvement, but public score consid...
+  ├─ Lucy (2023-04-12 17:16:00.940000) [+3]
+  │  Hi @ximader  use the same way to calculate the train score 
+  │  in here rf_score = roc_auc_score(y_va, rf.predict_proba(X_va)[:,1]), replace y_va with y_train, X_va with X_train, then you have train sc...
+    ├─ Olúbini (2023-04-13 14:45:49.423000) [+0]
+    │  Hey, what do you mean with 'Compare that with valid score from the code block' ?
+    ├─ Lucy (2023-04-13 15:19:24.533000) [+2]
+    │  Hi @caiocsn2, here it is: 
+    │  compare 
+    │  validation_score = roc_auc_score(y_va, rf.predict_proba(X_va)[:,1])  with train_score = roc_auc_score(y_tr, rf.predict_proba(X_tr)[:,1]).  For auc score, you wan...
+    ├─ [deleted] (2023-04-13 16:30:30.960000) [+0]
+    │  [deleted]
+├─ Luis Torres (2023-04-12 13:43:19.260000) [+-1]
+│  Interesting. I'll take this into consideration in my next competition posts. 
+│  Thank you.
+├─ Chen miaomiao (2023-04-18 10:49:01.520000) [+0]
+│  Thankyou!! good job, it is so helpful!
+├─ Jon Blanchard (2023-04-18 00:26:58.683000) [+0]
+│  Your posts are always very informative.  Thanks!
+├─ Mouelle Richard (2023-04-17 15:41:38.087000) [+0]
+│  what if I have a dataset like those from SKLearn that I split in training and testing, then I fit the model on the training dataset with CV before testing its performance with the testing dataset?
+│  ...
+  ├─ AmbrosM (2023-04-17 15:55:31.777000) [+0]
+  │  @richarddev In Kaggle competitions, the data is already split into training and testing when you get it. I wouldn't split the training part again unless there is really more than enough data availa...
+    ├─ Mouelle Richard (2023-04-18 21:26:22.980000) [+0]
+    │  oh I see! btw, thanks to your post, I discovered an apparently better way to split dataset using KFold. I am researching about that
+├─ ThomCat (2023-04-17 07:09:41.990000) [+0]
+│  Ty for tips!
+├─ Matteo Morellini (2023-04-16 22:14:47.463000) [+0]
+│  Thankss really helpful
+├─ Mariam Akter (2023-04-14 14:40:46.027000) [+0]
+│  crucial thing discuss @ambrosm
+├─ GOVINDA BHASKARE (2023-04-14 10:32:21.940000) [+0]
+│  Because this algorithm is decreases error.
+├─ TomK (2023-04-13 20:31:34.727000) [+0]
+│  Thanks for the tip. I use often train_test_split top. I will try StratifiedKFold 👍
+├─ JMAscacibar (2023-04-12 10:20:22.240000) [+0]
+│  Actually, you can use cross_val_score with scoring = 'roc_auc' and cv = RepeatedStratifiedKFold…
+│  
+│  What are your thoughts about hyperparameter tuning? Because a GridSearchCV with a very high cv can ...
+  ├─ AmbrosM (2023-04-12 20:13:43.067000) [+4]
+  │  @jmascacibar
+  │  
+  │  
+  │  
+  │  We have to accept that machine learning takes a lot of time. This competition with its small datasets is easy. Others are much worse.
+  │  
+  │  Experiment with the other hyperparameter optim...
+├─ Iqbal Syah Akbar (2023-04-12 10:04:50.957000) [+0]
+│  This makes me wonder if most people even read competition discussion at all. Most of the top topics here recommend using RepeatedStratifiedKFold to get reliable CV. At this point I won't even be su...
+├─ SM Nuruzzaman Nobel (2023-04-11 20:15:52.413000) [+0]
+│  good job!👍👍
+├─ [deleted] (2023-04-11 22:43:41.040000) [+3]
+│  [deleted]
+  ├─ AmbrosM (2023-04-12 04:14:58.377000) [+6]
+  │  Hi @usedpython In my experiment, the validation set had 0.2 * 414 = 83 samples and the two rf measurements have a difference of 0.864 - 0.764 = 0.1. The public test set has been created with a trai...
+  ├─ Lucy (2023-04-12 12:36:34.197000) [+1]
+  │  @usedpython You are not the only one who has that question.   ” If you are thinking of asking a question, chances are that others are wondering the same thing, so be brave and ask. The act of askin...
+├─ Brayan G. Moreno (2023-04-19 01:00:42.827000) [+0]
+│  Thanks so much for the tip!
+├─ Lev Crylov (2023-04-18 14:57:46.377000) [+0]
+│  Thanks, that some help me)
+├─ Nishidh Shekhawat (2023-04-17 00:21:37.283000) [+0]
+│  Thank you for the tip:)
+├─ Nguyen D. Q. Dai (2023-04-14 09:02:02.617000) [+0]
+│  thanks for this tip👌💪
+├─ Sachin p r (2023-04-14 08:58:34.473000) [+0]
+│  Thank You for the content
+├─ ChrisB_1999 (2023-04-13 20:52:13.467000) [+0]
+│  Interesting, thanks for the tip!
+├─ Arslan3x5 (2023-04-12 17:23:07.507000) [+0]
+│  Thanks for this tip Good job.
+├─ Guilherme Henrique (2023-04-11 21:17:03.897000) [+0]
+│  Thanks for this tip

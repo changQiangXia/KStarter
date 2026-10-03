@@ -1,0 +1,82 @@
+# physionet-ecg-image-digitization 讨论区（按票数排序，共 80 条）
+
+- [1st place solution](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/669584) — 73 票 / 6 评论 / 2026-01-23 **write-up?**
+- [7th place solution](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/669548) — 48 票 / 13 评论 / 2026-01-23 **write-up?**
+- [[placeholder] Let's design winning solution step by step](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/613540) — 40 票 / 40 评论 / 2025-10-27 **write-up?**
+- [from lb 0.16 to 0.20: open sauce to secret sauce](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/624054) — 39 票 / 17 评论 / 2025-11-16 
+- [Start visualizing!](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/613483) — 37 票 / 6 评论 / 2025-10-27 
+- [2nd place solution](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/669871) — 36 票 / 3 评论 / 2026-01-24 **write-up?**
+- [3rd place solution](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/669668) — 31 票 / 2 评论 / 2026-01-23 **write-up?**
+- [6th place solution](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/669562) — 30 票 / 5 评论 / 2026-01-23 **write-up?**
+- [Another data generation competition?](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/612769) — 28 票 / 23 评论 / 2025-10-22 
+- [13th Place Solution](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/669546) — 28 票 / 2 评论 / 2026-01-23 **write-up?**
+- [4th Place Solution](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/669897) — 27 票 / 3 评论 / 2026-01-25 **write-up?**
+- [5th place solution: Multi-stages Heatmap-based Modeling](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/670227) — 25 票 / 4 评论 / 2026-01-26 **write-up?**
+- [Welcome to the PhysioNet-Kaggle ECG Digitization Challenge! ](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/612729) — 24 票 / 38 评论 / 2025-10-21 
+- [reference solution: High Precision ECG Digitization Using Artificial Intelligence - medRxiv, 2024-sep](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/613391) — 23 票 / 2 评论 / 2025-10-26 **write-up?**
+- [14th Place Solution](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/669558) — 22 票 / 6 评论 / 2026-01-23 **write-up?**
+- [21st Place Solution](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/669645) — 21 票 / 8 评论 / 2026-01-23 **write-up?**
+- [Data quality question](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/613040) — 19 票 / 4 评论 / 2025-10-23 
+- [Ideas for improving models](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/614416) — 18 票 / 3 评论 / 2025-11-03 
+- [8th Place Solution](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/669740) — 18 票 / 8 评论 / 2026-01-24 **write-up?**
+- [Electrocardiographic Lead.  12-lead EKG. The EASI system. Types of ECG leads](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/612766) — 18 票 / 0 评论 / 2025-10-22 
+- [example of grid point annotation](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/614067) — 18 票 / 7 评论 / 2025-10-31 
+- [9th Place Solution](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/670169) — 16 票 / 0 评论 / 2026-01-26 **write-up?**
+- [10th Place Solution - Yolo+Unet](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/670262) — 16 票 / 1 评论 / 2026-01-28 **write-up?**
+- [12th place solution](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/669594) — 16 票 / 2 评论 / 2026-01-23 **write-up?**
+- [26th Place Solution](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/669556) — 15 票 / 0 评论 / 2026-01-23 **write-up?**
+- [Segments classifier](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/614032) — 15 票 / 6 评论 / 2025-10-31 
+- [Open-Sourcing Your ECG Digitization Solutions](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/666779) — 13 票 / 3 评论 / 2026-01-09 **write-up?**
+- [17th Place Solution: An Alternative Rectification Workflow](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/669887) — 12 票 / 1 评论 / 2026-01-24 **write-up?**
+- [curve tracing method](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/662460) — 12 票 / 1 评论 / 2025-12-13 
+- [Einthoven’s Law ](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/613240) — 11 票 / 2 评论 / 2025-10-25 
+- [15th place solution](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/669697) — 11 票 / 0 评论 / 2026-01-23 **write-up?**
+- [At last: a supervised learning model](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/614318) — 10 票 / 3 评论 / 2025-11-03 
+- [27th place solution - Only Pre&Postprocessing ](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/670511) — 9 票 / 0 评论 / 2026-01-28 **write-up?**
+- [How many samples in private test set?](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/612728) — 9 票 / 3 评论 / 2025-10-21 
+- [Minor Metric Update: No Impact on Leaderboard Rankings](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/631277) — 8 票 / 1 评论 / 2025-11-18 
+- [training code for stage0/stage1](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/679524) — 8 票 / 1 评论 / 2026-03-02 
+- [97th Place Solution](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/669553) — 8 票 / 0 评论 / 2026-01-23 **write-up?**
+- [How to Get Started + Competition's Official Discord](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/611706) — 7 票 / 0 评论 / 2025-10-13 
+- [Critical Metric Vulnerability: One artifact can overwhelm the remaining 999 samples](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/663901) — 7 票 / 4 评论 / 2025-12-21 
+- [evalutaion code for kaggle metric?](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/612773) — 7 票 / 1 评论 / 2025-10-22 
+- [How to digitize ECG waveforms after neural network–based extraction](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/662842) — 7 票 / 5 评论 / 2025-12-15 
+- [Design an optimal ground truth mask for ECG signal segmentation (30 dB barrier?)](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/667624) — 6 票 / 13 评论 / 2026-01-13 
+- [New Public Synthetic ECG Data Generator With All You Need.](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/666639) — 6 票 / 2 评论 / 2026-01-08 
+- [🥉PhysioNet 98th place solution Training+Inference](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/669620) — 6 票 / 0 评论 / 2026-01-23 **write-up?**
+- [24th Place Solution](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/670060) — 6 票 / 0 评论 / 2026-01-25 **write-up?**
+- [Open-ECG-Digitizer Development Dataset](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/668181) — 5 票 / 1 评论 / 2026-01-15 
+- [PhysioNet | 97th place solution](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/669817) — 5 票 / 0 评论 / 2026-01-24 **write-up?**
+- [respect to all baseline provider](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/669724) — 5 票 / 1 评论 / 2026-01-24 
+- [Grid artifacts](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/614972) — 5 票 / 22 评论 / 2025-11-07 
+- [11th Place Solution](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/670256) — 5 票 / 0 评论 / 2026-01-28 **write-up?**
+- [connected-components-3d for python 3.12](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/668289) — 4 票 / 2 评论 / 2026-01-16 
+- [PhysioNet 2024 - Digitization Challenge Winning Solutions](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/612891) — 4 票 / 5 评论 / 2025-10-22 **write-up?**
+- [Several ECG Corrections Based on Fundamental Principles — and Their Failures](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/668981) — 4 票 / 1 评论 / 2026-01-20 
+- [The GPU's computation speed has slowed down](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/669397) — 4 票 / 1 评论 / 2026-01-22 
+- [Resolution limits for signal reconstruction.](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/615117) — 4 票 / 5 评论 / 2025-11-09 **write-up?**
+- [Sharing processed stage0 and stage1 dataset](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/666853) — 3 票 / 0 评论 / 2026-01-09 
+- [Wrong stuff in training data](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/663493) — 3 票 / 2 评论 / 2025-12-18 
+- [Strategies for Obtaining Signal Segmentation Masks from ECG Images](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/663749) — 3 票 / 0 评论 / 2025-12-20 
+- [How many patient data are in the dataset ](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/613653) — 3 票 / 0 评论 / 2025-10-28 
+- [ECG ROI Segmentation Dataset](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/637689) — 3 票 / 1 评论 / 2025-11-22 
+- [Leaderboard score not representative of private test performance.](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/613049) — 3 票 / 2 评论 / 2025-10-23 
+- [Is It Normal for Submission Scoring to Take Several Hours?](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/613000) — 3 票 / 2 评论 / 2025-10-23 
+- [At least 75% null values in 11/12 Leads? ](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/612929) — 3 票 / 3 评论 / 2025-10-22 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/670969) — 2 票 / 0 评论 / 2026-01-30 
+- [installing connected-components-3d for stage_0](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/668244) — 2 票 / 3 评论 / 2026-01-15 
+- [Clarification on the 9-hour GPU runtime limit for final submission notebook](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/666954) — 2 票 / 1 评论 / 2026-01-10 
+- [Which image type to be used for extraction, and will be used of evaluation?](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/666075) — 2 票 / 3 评论 / 2026-01-05 
+- [What is the hardware submission code is run on?](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/665846) — 2 票 / 1 评论 / 2026-01-04 
+- [How are segmentation masks created](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/614515) — 2 票 / 1 评论 / 2025-11-04 
+- [Q. Image type of test/[id].png (-0001 to -0012?)](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/613511) — 2 票 / 1 评论 / 2025-10-27 
+- [Why do we have sample rate mentioned in test.csv when it is not needed?](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/613179) — 1 票 / 10 评论 / 2025-10-24 
+- [Converting from training csv files to data frame compatible with score function.](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/613736) — 1 票 / 5 评论 / 2025-10-29 
+- [average time for submission to get completed ](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/614055) — 1 票 / 1 评论 / 2025-10-31 
+- ["calibration_pulse" and "lead_names"](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/613721) — 1 票 / 1 评论 / 2025-10-29 
+- [Is this direction reasonable?](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/613348) — 1 票 / 4 评论 / 2025-10-26 
+- [Only 5 Prize Contenders on the leaderboard](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/617624) — 1 票 / 1 评论 / 2025-11-11 
+- [Comprehensive guide for 🫀ECG Interpretation](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/623661) — 1 票 / 0 评论 / 2025-11-15 
+- [Help needed for a complete beginner](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/613480) — 1 票 / 1 评论 / 2025-10-27 
+- [Vibe coding allowed?](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/612862) — 1 票 / 3 评论 / 2025-10-22 
+- [Someone wants to use VLM to solve this problem. If you'd like to team up with someone, please contact me.](https://www.kaggle.com/competitions/physionet-ecg-image-digitization/discussion/614999) — 1 票 / 2 评论 / 2025-11-08 

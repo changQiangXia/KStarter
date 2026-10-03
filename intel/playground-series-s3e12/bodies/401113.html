@@ -1,0 +1,31 @@
+<p>When I looked at the 16 most recent public notebooks, wanting to know what cv scores they reported, I was shocked that only three of them cross-validate properly:<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F7917824%2F4b584345ce9dc5cffbc72127909ee223%2Fpie(1).png?generation=1681241062008717&amp;alt=media" alt="pie"></p>
+<ul>
+<li>3 notebooks didn't report any score at all. They obviously don't validate their models before submitting.</li>
+<li>2 notebooks reported only a training score. The training scores look good, but unfortunately they don't measure generalization performance.</li>
+<li>8 notebooks reported a validation score based on <code>train_test_split</code>, usually with a <code>test_size</code> of 0.2. This is wrong.</li>
+<li>Only 3 notebooks cross-validated correctly and reported a validation score based on <code>StratifiedKFold</code>.</li>
+</ul>
+<p>Validating models with a simple <code>train_test_split</code> is wrong because with such a small validation set the result depends too much on the random seed. Imagine you want to compare <code>LogisticRegression</code> and <code>RandomForest</code>. Depending on the <code>random_state</code>, <code>LogisticRegression</code> looks either 0.057 better than <code>RandomForest</code> or 0.080 worse:</p>
+<pre><code>for random_state in [464, 879]:
+    X_tr, X_va, y_tr, y_va = train_test_split(train[['cond', 'calc']],
+                                              train[target],
+                                              test_size=0.2,
+                                              random_state=random_state)
+    lr = make_pipeline(StandardScaler(), LogisticRegression(random_state=0))
+    lr.fit(X_tr, y_tr)
+    lr_score = roc_auc_score(y_va, lr.predict_proba(X_va)[:,1])
+    rf = RandomForestClassifier(n_estimators=400, max_depth=2,
+                                min_samples_leaf=13, max_features=2,
+                                random_state=0)
+    rf.fit(X_tr, y_tr)
+    rf_score = roc_auc_score(y_va, rf.predict_proba(X_va)[:,1])
+    print(f"random_state={random_state:4}:   lr: {lr_score:6.3f}   "
+          f"rf: {rf_score:6.3f}   difference: {lr_score-rf_score:6.3f}")
+
+# random_state= 464:   lr:  0.785   rf:  0.864   difference: -0.080
+# random_state= 879:   lr:  0.822   rf:  0.764   difference:  0.057
+</code></pre>
+<p><strong>We're not talking about the fifth decimal digit here - an error of 0.137 brings you from the top of the leaderboard almost to the bottom!</strong></p>
+<p>Now imagine that you used the same <code>train_test_split</code> in the objective function of Optuna: The hyperparameters you get from Optuna would be completely random.</p>
+<p>In the current competition, you need at least a <code>StratifiedKFold</code> or better a <code>RepeatedStratifiedKFold</code> to get meaningful results because <a href="https://www.kaggle.com/competitions/playground-series-s3e12/discussion/399869" target="_blank">ten folds are not enough</a>.</p>

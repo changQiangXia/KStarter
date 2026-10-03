@@ -1,0 +1,82 @@
+# playground-series-s4e2 讨论区（按票数排序，共 80 条）
+
+- [Starting resources](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/472392) — 91 票 / 40 评论 / 2024-02-01 
+- [4th place solution: Stacking with XGB + Pseudo labeling + metric optimizing.](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/480939) — 76 票 / 28 评论 / 2024-03-01 **write-up?**
+- [Sharing first insights about the data](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/472471) — 65 票 / 25 评论 / 2024-02-01 
+- [Don't forget to give credit to people's work that inspires you](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/473648) — 57 票 / 31 评论 / 2024-02-05 
+- [The beauty of Being  a Kaggler 24/7/365. The Readiness is all. Be prepared for your short pro deadlines.](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/472435) — 56 票 / 12 评论 / 2024-02-01 
+- [Wiki: About Column names](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/472433) — 43 票 / 13 评论 / 2024-02-01 
+- [BMI has flaws](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/476939) — 41 票 / 8 评论 / 2024-02-14 
+- [Feature Engineering Ideas](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/472417) — 40 票 / 16 评论 / 2024-02-01 
+- [Analyzing the shakeup and leaderboard dynamics](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/480792) — 37 票 / 11 评论 / 2024-03-01 
+- [New to Machine Learning or Kaggle?](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/471886) — 33 票 / 25 评论 / 2024-01-30 
+- [Dataset missing a categorical value under CALC feature - How to address this issue✅](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/472597) — 33 票 / 32 评论 / 2024-02-01 
+- [Significant Increase In Accuracy with ONE change.(Multiclass vs Multiclass_ova)](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/477862) — 30 票 / 32 评论 / 2024-02-18 
+- [Is this another competition that should have been shorter?](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/476451) — 29 票 / 34 评论 / 2024-02-12 
+- [6th place solution](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/480795) — 27 票 / 28 评论 / 2024-03-01 **write-up?**
+- [Useful feature engineering](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/473220) — 24 票 / 9 评论 / 2024-02-04 
+- [Going a bit deeper with PCA](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/473359) — 21 票 / 0 评论 / 2024-02-04 
+- [Brief description of all the columns of the dataset.](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/472516) — 19 票 / 8 评论 / 2024-02-01 
+- [classifiers dont represent ordered nature of labels](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/475438) — 19 票 / 28 评论 / 2024-02-08 
+- [Information about Features in the data](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/479279) — 18 票 / 21 评论 / 2024-02-23 
+- [New possible features?](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/472514) — 17 票 / 4 评论 / 2024-02-01 
+- [Feature engineering - how to do it?](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/473671) — 16 票 / 13 评论 / 2024-02-05 
+- [Revisiting blending techniques- hard and soft voting](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/473096) — 15 票 / 5 评论 / 2024-02-03 
+- [Obesity : [rand] Seed is superfood! 😱😶‍🌫️](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/477983) — 15 票 / 23 评论 / 2024-02-18 
+- [24th Place Solution](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/480927) — 14 票 / 8 评论 / 2024-08-02 **write-up?**
+- [🤓 Kernel Comparison Study : my learnings from the best kernels ](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/478380) — 14 票 / 3 评论 / 2024-02-20 
+- [WHY NOT DEEP ENOUGH EDA EVERYONE ?? GONE DEEP?](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/472896) — 13 票 / 11 评论 / 2024-02-02 
+- [Almost all Obesity Type II are Male and Obesity Type III are Female](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/472935) — 12 票 / 5 评论 / 2024-02-02 
+- [Feature Engineering](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/473273) — 12 票 / 3 评论 / 2024-02-04 
+- [Enhancing Model Accuracy by Addressing the Challenge of Narrow Overweight Intervals](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/477731) — 12 票 / 3 评论 / 2024-02-17 
+- [2nd solution write-up](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/481062) — 12 票 / 10 评论 / 2024-03-01 **write-up?**
+- [BMI Feature](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/472743) — 11 票 / 8 评论 / 2024-02-01 
+- [Is it possible to win with a simple heuristic?](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/475576) — 11 票 / 10 评论 / 2024-02-09 
+- [Seeking Insights: LightGBM's Unusual Fondness for 'Noise' Feature](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/475812) — 11 票 / 14 评论 / 2024-02-09 
+- [What model do you guys find the best here ?](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/473675) — 10 票 / 17 评论 / 2024-02-05 
+- [Ideas for conformal prediction](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/476091) — 10 票 / 0 评论 / 2024-02-11 
+- [How many Expect a Shake-down? And Why?](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/480106) — 10 票 / 11 评论 / 2024-02-27 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/480274) — 9 票 / 3 评论 / 2024-02-28 
+- [Feature Engineering to make your Multi-Class Obesity Risk Prediction spotless✨](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/473428) — 9 票 / 0 评论 / 2024-02-04 
+- [Whats the best strategy for executing a feature selection for tree based models ](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/475563) — 9 票 / 9 评论 / 2024-02-08 
+- [400+ Features to Add](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/473276) — 9 票 / 8 评论 / 2024-02-04 
+- [Place 70 solution  trust CV is all you need](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/480787) — 9 票 / 4 评论 / 2024-03-01 **write-up?**
+- [Seeking Advice on Binary Classifiers for Multiclass Obesity Classification.](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/476239) — 9 票 / 7 评论 / 2024-02-11 
+- [Determining the original survey responders](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/476893) — 9 票 / 3 评论 / 2024-02-13 
+- [What is the meaning of the features? ](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/475754) — 8 票 / 7 评论 / 2024-02-09 
+- [AutoML solutions produce good score](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/472534) — 8 票 / 8 评论 / 2024-02-01 **write-up?**
+- [Overview of Multi-Class Prediction of Obesity Risk](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/472450) — 8 票 / 0 评论 / 2024-02-01 
+- [Collection of helpful ideas - S4E2](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/480255) — 8 票 / 6 评论 / 2024-02-27 
+- [Explaining the columns](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/472610) — 8 票 / 12 评论 / 2024-02-01 
+- [Looking for new features try these](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/479766) — 8 票 / 7 评论 / 2024-02-25 
+- [Use of BMI for prediction.](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/475347) — 7 票 / 12 评论 / 2024-02-08 
+- [Feature Engineering Thoughts - BMI, PCA, Discretization, rounding etc..](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/478819) — 7 票 / 11 评论 / 2024-02-22 
+- [Generative AI for EDA 🤔](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/476194) — 7 票 / 9 评论 / 2024-02-11 
+- [Interesting Insights from Chi-Square Test(Train Dataset)](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/473726) — 7 票 / 0 评论 / 2024-02-05 
+- [Looking for people with a cv score greater than  0.915301](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/477902) — 7 票 / 12 评论 / 2024-02-18 
+- [19th Place Solution ](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/482075) — 7 票 / 1 评论 / 2024-03-06 **write-up?**
+- [Best Fitting Data Distribution](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/476060) — 6 票 / 7 评论 / 2024-02-11 
+- [How can we classify Overweight_Level_I and Overweight_Level_II with greater accuracy?](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/477602) — 6 票 / 9 评论 / 2024-02-16 
+- [2945th Place Solution](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/481129) — 6 票 / 0 评论 / 2024-03-02 **write-up?**
+- [And the shake down/up hits again...](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/480783) — 6 票 / 4 评论 / 2024-03-01 
+- [Calling Experts & Veterans - What does it Require to Ace PlayGround](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/472875) — 6 票 / 3 评论 / 2024-02-02 
+- [About Target transformer](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/472585) — 6 票 / 4 评论 / 2024-02-01 
+- [FCVC, CH20, FAF, TUE variables measure in what?](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/472970) — 6 票 / 4 评论 / 2024-02-02 
+- [Handling Multimodal Distributions in Numerical Features - Seeking Guidance](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/472521) — 6 票 / 3 评论 / 2024-02-01 
+- [Hyperparameter Tuning](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/472899) — 6 票 / 6 评论 / 2024-02-02 
+- [Quantile adjustment for outlier detection](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/476195) — 5 票 / 9 评论 / 2024-02-11 
+- [Model Tuning with Optuna ](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/477331) — 5 票 / 6 评论 / 2024-02-15 
+- [leaderboard vs cv score](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/477744) — 5 票 / 2 评论 / 2024-02-17 
+- [What are the best methods to identify overfitting in a model? Is there a particular approach that is most effective?](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/473768) — 5 票 / 8 评论 / 2024-02-06 
+- [WE SHOULD USE DL FOR ...??](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/475231) — 5 票 / 0 评论 / 2024-02-07 
+- [Description of feature columns .](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/472605) — 5 票 / 1 评论 / 2024-02-01 
+- [PCA plot show square](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/473491) — 5 票 / 2 评论 / 2024-02-05 
+- [Here is the paper publishing the real data with more information](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/476157) — 5 票 / 0 评论 / 2024-02-11 
+- [Does PCA do well? Also, Feature selection differs from each model?](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/475174) — 5 票 / 7 评论 / 2024-02-07 
+- [Training data is not perfectly labeled, but it is actually positive thing!](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/473414) — 5 票 / 2 评论 / 2024-02-04 
+- [Deep Neural Networks - should I one-hot encode categorical or use numericals](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/475973) — 5 票 / 16 评论 / 2024-02-10 
+- [Dataset's Data Dictionary ](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/472849) — 5 票 / 1 评论 / 2024-02-02 
+- [Two classes lead models to struggle with improving their performance.](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/478218) — 5 票 / 8 评论 / 2024-02-19 
+- [best parameters...?🤔](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/473625) — 5 票 / 0 评论 / 2024-02-05 
+- [Isn't it strange that improving the score is really challenging?](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/480469) — 5 票 / 4 评论 / 2024-02-28 
+- [Kaggle notebook + CSS question!](https://www.kaggle.com/competitions/playground-series-s4e2/discussion/472796) — 5 票 / 4 评论 / 2024-02-02 

@@ -1,0 +1,82 @@
+# playground-series-s3e21 讨论区（按票数排序，共 80 条）
+
+- [Data-centric approach. Why we need it. Quality of data is Paramount.](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/433516) — 44 票 / 3 评论 / 2023-08-22 
+- [Resource for Data-Centric AI](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/433491) — 35 票 / 16 评论 / 2023-08-22 
+- [Pseudolabeling helps](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/433531) — 32 票 / 15 评论 / 2023-08-22 
+- [The original train data might be dangerous](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/434969) — 32 票 / 11 评论 / 2023-08-27 
+- [The power of a single sample](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/437175) — 31 票 / 6 评论 / 2023-09-05 
+- [Evaluating the isolation forest](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/434581) — 30 票 / 8 评论 / 2023-08-25 
+- [Visualizing the shakeup](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/438625) — 25 票 / 22 评论 / 2023-09-12 
+- [Think out of the box and construct a submission from scratch](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/433843) — 25 票 / 1 评论 / 2023-08-23 
+- [Domain elements for reference](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/433479) — 24 票 / 10 评论 / 2023-08-22 
+- [Metric Change: MAE to RMSE](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/434071) — 20 票 / 3 评论 / 2023-08-23 
+- [You Should Not Trust Public LB Now](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/434376) — 20 票 / 27 评论 / 2023-08-25 
+- [Does clipping target really improve model performance?](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/435714) — 20 票 / 18 评论 / 2023-08-30 
+- [very strange metrics](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/434292) — 18 票 / 1 评论 / 2023-08-24 
+- [How to get top score? (Concise and Short)](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/433662) — 18 票 / 10 评论 / 2023-08-22 
+- [Naïve dataset distillation (Public LB 1.51956)](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/434712) — 14 票 / 5 评论 / 2023-08-26 
+- [Collection of helpful ideas - S3E21](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/435508) — 14 票 / 11 评论 / 2023-08-29 
+- [Thank you for this competition!](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/438528) — 13 票 / 3 评论 / 2023-09-11 
+- [Some Scientific Useful Information](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/437762) — 13 票 / 8 评论 / 2023-09-08 
+- [Find anomalous rows using quantile regression](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/436623) — 13 票 / 11 评论 / 2023-09-03 
+- [Improving scores in this competition](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/433517) — 12 票 / 6 评论 / 2023-08-22 
+- [Evaluating Feature Selection](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/434842) — 12 票 / 0 评论 / 2023-08-26 
+- [4th place solution](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/439142) — 11 票 / 5 评论 / 2023-09-13 **write-up?**
+- [What a shakeup! ](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/438599) — 10 票 / 13 评论 / 2023-09-12 
+- [23rd place solution](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/438824) — 10 票 / 0 评论 / 2023-09-12 **write-up?**
+- [What I learned so far!](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/435409) — 10 票 / 8 评论 / 2023-08-29 
+- [Combining multiple ideas [Public LB 1.32094]](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/434932) — 9 票 / 0 评论 / 2023-08-27 
+- [Model error analysis](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/434986) — 9 票 / 5 评论 / 2023-08-27 
+- [CV vs. Public LB: Which should you trust more?](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/436571) — 9 票 / 5 评论 / 2023-09-03 
+- [Missed 2nd place. Not selected submission.](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/438635) — 9 票 / 10 评论 / 2023-09-12 **write-up?**
+- [Is this a data generator competition?](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/433476) — 8 票 / 6 评论 / 2023-08-22 
+- [Understanding Evaluation criteria](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/433606) — 8 票 / 2 评论 / 2023-08-22 
+- [Comments on the final standing: a few days to go](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/437238) — 8 票 / 5 评论 / 2023-09-06 
+- [Time for data cleaning 🧹](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/434519) — 8 票 / 3 评论 / 2023-08-25 
+- [66th Place Solution for Playground 3.21 "Improve a Fixed Model the Data-Centric Way"](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/438609) — 8 票 / 0 评论 / 2023-09-12 **write-up?**
+- [What Are Your Takeaways? & What Was Your Best Score?](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/438624) — 8 票 / 11 评论 / 2023-09-12 
+- [How to check cross validation score properly? (Short and Concise)](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/436104) — 8 票 / 5 评论 / 2023-09-01 
+- [What a shake-up!](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/438598) — 8 票 / 2 评论 / 2023-09-12 
+- [I Have Tried Clipping All Features](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/437272) — 7 票 / 3 评论 / 2023-09-06 
+- [Was the discrepancy in metrics intentionnal  ?](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/433895) — 7 票 / 5 评论 / 2023-08-23 
+- [Three Copies of My Notebook Republished](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/438445) — 7 票 / 2 评论 / 2023-09-11 
+- [Which Anomaly Detection Method To Rely On?](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/436112) — 7 票 / 10 评论 / 2023-09-01 
+- [Base model CV score vs number of KFold splits (✴️updated✴️)](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/435001) — 7 票 / 8 评论 / 2023-08-27 
+- [Removing outliers would have been all you need](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/438629) — 7 票 / 6 评论 / 2023-09-12 
+- [Pipelines!](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/433816) — 6 票 / 0 评论 / 2023-08-23 
+- [Larger model teaches a smaller model to predict](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/436434) — 6 票 / 5 评论 / 2023-09-02 
+- [Size of Evaluation Dataset Creating Deceiving Public Scores?](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/435098) — 6 票 / 13 评论 / 2023-08-28 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/433870) — 5 票 / 2 评论 / 2023-08-23 
+- [Outlier Removal Strategies](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/434743) — 5 票 / 0 评论 / 2023-08-26 
+- [Anyone doing Feature Creation?](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/435318) — 5 票 / 4 评论 / 2023-08-28 
+- [Isolation Forest: contamination and number of estimators Parameters](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/435535) — 5 票 / 8 评论 / 2023-08-29 
+- [Do not clip values](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/438227) — 4 票 / 5 评论 / 2023-09-10 
+- [Data Manuplating - The journey](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/434427) — 4 票 / 2 评论 / 2023-08-25 
+- [#33 Solution: Model distillation](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/438745) — 4 票 / 1 评论 / 2023-09-12 **write-up?**
+- [Will there be a huge shakeup?](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/437103) — 4 票 / 8 评论 / 2023-09-05 
+- [Do people use the cross_val_score function?](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/434319) — 4 票 / 11 评论 / 2023-08-24 
+- [# 95 PLACE SOLUTION](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/438736) — 4 票 / 2 评论 / 2023-09-12 **write-up?**
+- [Adversarial selection for train / test / sample comparison](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/435927) — 4 票 / 5 评论 / 2023-08-31 
+- [Big changes in private scores by just changing random state](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/440766) — 4 票 / 0 评论 / 2023-09-16 
+- [69th Place Solution for the Improve a Fixed Model the Data-Centric Way! Competition](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/438901) — 4 票 / 2 评论 / 2023-09-13 **write-up?**
+- [Open-sourcing the code of Missed 5th place :)](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/438802) — 4 票 / 1 评论 / 2023-09-12 **write-up?**
+- [New to Machine Learning or Kaggle?](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/431775) — 3 票 / 4 评论 / 2023-08-14 
+- [Feature selection technique to identify high correlation features](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/433566) — 3 票 / 0 评论 / 2023-08-22 
+- [It's not enough to just reduce the margin of error.](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/433691) — 3 票 / 2 评论 / 2023-08-22 
+- [This looks like a feature engineering competition](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/433478) — 3 票 / 12 评论 / 2023-08-22 
+- [Differences in distribution between sample_submission.csv and the testing dataset?](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/433940) — 3 票 / 2 评论 / 2023-08-23 
+- [Change test data. Mistake???](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/435196) — 3 票 / 4 评论 / 2023-08-28 
+- [Does adding new constant columns in random forest model impact model performance? ](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/436020) — 3 票 / 3 评论 / 2023-08-31 
+- [5th Place Solution](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/438935) — 3 票 / 2 评论 / 2023-09-13 **write-up?**
+- [Is anyone using something other than the SGDOneClassSVM, LocalOutlierFactor or IsolationForest?](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/435965) — 3 票 / 5 评论 / 2023-08-31 
+- [Is RandomForestRegressor right model for this problem?](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/438103) — 3 票 / 11 评论 / 2023-09-09 
+- [A change in perspective](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/438404) — 3 票 / 6 评论 / 2023-09-11 
+- [Do we consider this kind of problem as Discrete Regression Problem?](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/436225) — 2 票 / 1 评论 / 2023-09-01 
+- [Autoencoders](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/435764) — 2 票 / 4 评论 / 2023-08-30 
+- [Detecting Errors in Numerical Data via any Regression Model](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/441418) — 2 票 / 0 评论 / 2023-09-18 
+- [The ID column is NOT used for training and evaluation in the hidden test dataset](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/433967) — 2 票 / 2 评论 / 2023-08-23 
+- [It's fine tuning the data, not the model!](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/434551) — 2 票 / 0 评论 / 2023-08-25 
+- [Doesn't the use of pseudo-labels lead to overfitting?](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/434189) — 2 票 / 3 评论 / 2023-08-24 
+- [max_depth Question](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/434100) — 2 票 / 6 评论 / 2023-08-24 
+- [#120 Solution - Simple with huge jump in LB](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/439101) — 2 票 / 0 评论 / 2023-09-13 **write-up?**
+- [Submitting the sample_submission.csv without any modifications = Top 200 in private LB](https://www.kaggle.com/competitions/playground-series-s3e21/discussion/438597) — 2 票 / 1 评论 / 2023-09-12 

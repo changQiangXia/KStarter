@@ -1,0 +1,145 @@
+# https://www.kaggle.com/competitions/playground-series-s3e11/discussion/396291
+
+Topic #396291: Feature Engineering Ideas 📊
+  Author: Jonathan Bown
+  Posted: 2023-03-21 03:53:20.405000
+  Votes: 57  Comments: 42
+
+Here are some feature engineering ideas that might be useful:
+
+
+  
+
+  
+Ratios:
+  Revenue per unit: store_sales / unit_sales
+  Sales per sqft: store_sales / Store_sqft
+  Units per sqft: unit_sales / Store_sqft
+  Children ratio: Total_children / Num_children_at_home
+  Weight per unit: Gross_weight / unit_sales
+  
+Polynomials:
+  Create polynomial features for numerical columns such as store_sales, unit_sales, Total_children, avg_cars_at_home, Num_children_at_home, Gross_weight, Units_per_case, and Store_sqft to capture potential non-linearities.
+  
+Interactions:
+  Multiply binary features (Coffee_bar * Video_store) to capture potential interactions between store amenities.
+  Combine numerical features (store_sales * Store_sqft or Total_children * Num_children_at_home) to capture additional interactions between them.
+  
+Aggregates:
+  Create aggregated features using store_sales, unit_sales, Total_children, and Num_children_at_home, such as mean, median, or sum for each group of stores with similar characteristics (stores with similar store_sales or store_sqft ranges).
+  
+Bins:
+  Bin numerical columns such as store_sales, unit_sales, Total_children, avg_cars_at_home, Num_children_at_home, Gross_weight, Units_per_case, and Store_sqft. Play around with bin size and create larger categories like low, medium, and high sales, this will reduce the cardinality of these features and potentially some of the noise.
+  
+
+
+Feel free to add in the comments any additional ideas you have!
+
+Comments:
+├─ yann barthelemy (2023-03-23 18:08:59.073000) [+5]
+│  Thank you for those ideas.
+│  
+│  Here is what i get with lgbm with a 3*5 repeatedkfold (with is perhaps not enough) :
+│  
+│  df.loc[:,]=df.loc[:,[, , , , ]].(axis=)
+│   df.drop([, , , , ], axis=, inplace=)
+│      d...
+  ├─ İlyas Demir (2023-03-27 12:58:05.677000) [+1]
+  │  train.loc[:,'child_ratio']=np.where(train.num_children_at_home&gt;0, train.num_children_at_home/train.total_children, 0)
+  │  train.loc[:,'store/unit']=train.loc[:,'store_sales(in millions)']/train.loc[...
+├─ Iqbal Syah Akbar (2023-03-21 04:43:12.190000) [+3]
+│  I have tested children ratio and it works actually, except that my formula is num_children_at_home / total_children. As for the revenue per unit, it actually gave me worse CV so I dropped it. I hav...
+  ├─ JEANMPIA (2023-03-21 04:54:08.857000) [+4]
+  │  Agree with you, 
+  │  units_per_sqftand children_ratioare the ones that worked for me 
+  │  
+  │  Note :Use this to avoid infinity issues :
+  │  train['children_ratio'] = train['children_ratio'].replace([np.inf, -np.i...
+    ├─ Iqbal Syah Akbar (2023-03-21 04:57:12.693000) [+2]
+    │  Oh right, I forgot to pinpoint out about the issue of division by zero. I actually just filled NaN with 0 and it works fine.
+    ├─ JEANMPIA (2023-03-21 05:00:34.930000) [+1]
+    │  If you are using a tree to predict, it makes sense to use 10, 
+    │  since all it needs is a value above the rest, so 10 or 10 million would work the same way, it just doesn't accept inf values for reaso...
+    ├─ Iqbal Syah Akbar (2023-03-21 05:10:12.673000) [+0]
+    │  Keep in mind that the formula that I use is actually flipped compared to the one posted by Bown (num_children_at_home / total_children), and I assume that num_children_at_home will always be less t...
+    ├─ JEANMPIA (2023-03-21 08:07:10.323000) [+1]
+    │  You are right, I was referring to the ratio from this post.
+    │  On the other hand, consider making it -1 since with the 0 value the model sees it the same way as the rows where num_children_at_home is ...
+    ├─ Iqbal Syah Akbar (2023-03-21 12:06:55.663000) [+0]
+    │  I don't see the necessity since if total_children is 0, num_children_at_home is also 0, and I intend them to be the same anyway. Thanks for the suggestion though!
+    ├─ Oscar Aguilar (2023-03-25 01:47:48.937000) [+0]
+    │  Agree on units_per_sqft. I noticed a very little boost in my CV. I will include children_ratio as well.
+  ├─ Jonathan Bown (2023-03-22 16:34:31.737000) [+3]
+  │  Ideas 2-5 are pretty standard for tabular data especially the binning idea for reducing cardinality of features. It has a lot of similarity to clustering. The ratios come from my business backgroun...
+    ├─ Iqbal Syah Akbar (2023-03-23 05:50:41.237000) [+4]
+    │  You're welcome! Also I'll add another suggestion: Try summing up florist, video_store, coffee_bar, and salad_bar or prepared_food. This will get you the amount of facilities and will improve your C...
+    ├─ Elric (2023-03-23 19:09:34.983000) [+1]
+    │  This is very insighful, thanks for sharing! May I ask, what is the rationale of preferring the ratio of features? And do you drop the original ones if you add the ratio?
+    ├─ Iqbal Syah Akbar (2023-03-24 03:06:15.273000) [+3]
+    │  @eleonoraricci ratio is a common way to express relationship between two features and also the easiest relationship to find in my opinion. I'll just take a look at correlation matrix and see if the...
+    ├─ Elric (2023-03-24 07:57:12.493000) [+1]
+    │  Understood, thank you @iqbalsyahakbar!
+├─ Sofia Matias (2023-03-29 19:20:06.210000) [+1]
+│  As a beginner, I don't understand yet what's the purpose of polynomial features or how to apply them. Instead of values, are they calculated as a polynomial function? Is there a kind soul to answer...
+  ├─ Mohamed Ifreen (2023-03-29 20:01:28.470000) [+0]
+  │  Polynomial features are something thats obtained by using (power or exponent) on the independent variables.
+  │  
+  │  I will just give an example to make things more clear here….
+  │  
+  │  Suppose you have 3 feature...
+    ├─ Sofia Matias (2023-03-30 11:29:28.130000) [+0]
+    │  Thank you for your explanation. Seems much clear now :) We basically define a new feature with polynomial functions relating original features to "capture" the non-linearities of our problem.
+├─ Tariq Mahmood (2023-03-26 00:06:54.123000) [+1]
+│  Thanks for sharing inspiring idea for us. Gained a useful points in feature engineering domain.
+├─ Hsin1022 (2023-03-22 16:26:40.430000) [+1]
+│  I should have seen this before I did my model! 
+│  Very impressive.
+  ├─ Jonathan Bown (2023-03-22 16:35:47.230000) [+0]
+  │  I actually think you're exactly where you need to be. You should always have a baseline model and your baseline model should come from existing features with minimal manipulation!
+├─ JEANMPIA (2023-03-21 04:01:20.650000) [+1]
+│  Those seem like good ideas, Have you tried them out yet ? I'll test them right now
+  ├─ Jonathan Bown (2023-03-21 04:15:01.197000) [+1]
+  │  Not yet, I'll be sure to update this post once I have a baseline to compare these against!
+    ├─ JEANMPIA (2023-03-21 04:26:25.013000) [+2]
+    │  sales_per_sqft and revenue_per_unit didn't work for me yet, still testing the rest !
+    │  
+    │  I'll update this comment when I'm done if you don't mind
+├─ Grant Gonnerman (2023-03-26 00:12:33.100000) [+2]
+│  As others have stated, units_per_sqft and children_ratio, worked for me slightly increasing my cv scores.
+├─ Siddharth Kumar (2023-03-24 03:47:59.567000) [+1]
+│  Great ideas! Feature engineering is a crucial step in building a successful machine learning model, and these suggestions seem like they would capture a lot of useful information from the dataset. ...
+├─ Omarvar2000 (2023-04-03 20:57:31.427000) [+0]
+│  Thank you for the ideas. I will try a few of these out as others have stated they worked for them.
+├─ Byron J Ehrke (2023-04-03 19:51:55.127000) [+0]
+│  Wish I would have saw this earlier in the competition might have been really helpful thanks for posting.
+├─ Kshitij K (2023-04-03 04:41:29.360000) [+0]
+│  Appreciate it man , thanks for putting this out there.
+├─ Dalton Dencklau (2023-04-02 19:26:16.503000) [+0]
+│  These are great ideas! Thank you for sharing!
+├─ Catadanna (2023-04-02 17:49:55.583000) [+0]
+│  Just a reflexion : half of the values in the train dataset in feature Num_children_at_home are zeros. Perhaps one should inverse Children ratio.
+│  
+│  In what I am concerned, I wrote : children_ratio = ...
+├─ /dany/eth (2023-04-01 09:58:27.513000) [+0]
+│  Hi, I am a beginner. How did you get the ideas for feature engineering ? Is it domain knowledge, did you find them with data visualisation, or is it something else ?
+│  Thank you in advance for the ex...
+  ├─ Sharov Anton (2023-04-01 11:10:22.910000) [+0]
+  │  Hi. Ideally it is domain knowledge but data vis. can really help -- reveal some feature interactions and so on and so forth.
+    ├─ /dany/eth (2023-04-01 19:42:41.277000) [+0]
+    │  Okay thank you !
+├─ Mitchell Sabbadini (2023-04-01 03:15:13.310000) [+0]
+│  Interesting.  Do features like polynomial combinations and interactions still help if they are used with a tree-based model? If so, how come?
+  ├─ soonernotfaster (2023-04-01 14:13:20.483000) [+0]
+  │  @mitchellsabbadini, yup interactions and non-linear features can still help tree-based models. Creating features that represent interactions gives the trees better information to create splits on, ...
+├─ [deleted] (2023-03-22 13:12:35.727000) [+3]
+│  I've tested and created a notebook about polynomial features in this competition.
+├─ [deleted] (2023-03-21 06:00:38.827000) [+0]
+│  [deleted]
+├─ McKayla (2023-03-28 19:50:18.187000) [+1]
+│  Thanks for sharing!!
+├─ Amitabh Anand (2023-03-28 19:12:15.493000) [+1]
+│  Thanks for the suggestion.
+├─ [deleted] (2023-03-27 14:13:43.410000) [+1]
+│  Thanks for sharing!
+├─ zenzen (2023-03-31 04:51:58.933000) [+0]
+│  This is helpful thanks 👍

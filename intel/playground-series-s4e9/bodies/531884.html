@@ -1,0 +1,61 @@
+<p>[AutoML Grand Prix] 1st Place Solution Team LightAutoML testers </p>
+<p>Thanks for the competition and congratulations to all the participants for reaching the final stage of the  AutoML Grand Prix. Next, I'll share the solution of Team LightAutoML testers (me, <a href="https://www.kaggle.com/alexryzhkov" target="_blank">@alexryzhkov</a>, <a href="https://www.kaggle.com/rinchin" target="_blank">@rinchin</a> ).</p>
+<p><a href="https://github.com/sb-ai-lab/LightAutoML_testers_solution_tps_sep_24/tree/main" target="_blank">Github repo with the training code</a>.</p>
+<p><strong>TLDR</strong>: 24 base regression and classification models, GBDT + NN, blend and stack. </p>
+<p>We trained all models (catboost and lgbm for regression, denselight and fttransformer for both regression and classification) with original and clipped target (clip all price values higher than 500k for training fold) using original and augmented with kagglex (added only in train fold) datasets (thanks to <a href="https://www.kaggle.com/lashfire" target="_blank">@lashfire</a>).</p>
+<p>Our final ensemble with 10-Fold CV scores is:<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F597945%2Fec16e57f8d54df381cbc2ca8fcecb9d1%2FFinal_solution2.png?generation=1725372367490210&amp;alt=media" alt=""></p>
+<p>It may seem scary, but training of all models was completed in 5 hours on a single A100 GPU.</p>
+<p><strong>Feature generation:</strong><br>
+To receive a better model we have created several new features for more proper car specifications description:</p>
+<ul>
+<li>the <code>engine</code> column was converted into separated columns with the horsepower, litres, cylinder count and type, fuel type etc</li>
+<li>from <code>milage</code> column we calculated the "significant" percent of figures - for 50000 it is 20% and for 12345 it is 0% (this can help to check how detailed the car description is)</li>
+<li>from <code>transmission</code> column we got speeds count and transmission type</li>
+<li><code>ext_col</code> and <code>int_col</code> goes to lower case to merge similar values into one</li>
+</ul>
+<p><strong>NN models:</strong><br>
+Target scaling was essential for training the neural networks, so we used the Robust Scaler and applied the inverse transform to the model predictions.</p>
+<p>Another important observation that the price has only 1569 unique values and 222 after rounding them to the nearest 1000. So, we decided to train multiclass classification model. During inference we multiplied probabilities of each class by the corresponding unique target value and use this estimation as a final prediction. We choose NN as a base model due to computational complexity of training multioutput gbdt (which scales linearly with the number of classes) and we didn`t have enough time to integrate PyBoost (which has constant complexity) into our pipeline.  Multiclass DenseLight achieved the best solo result in our ensemble. </p>
+<p>We also replaced default FTTransformer encoder model with HuggingFace Bert Tiny, initialising it with pre-trained text weights. It gave us a slight boost on single holdout score, but this result might be random (we didn`t check it on full CV :) ). Nevertheless, we choose this variant for diversification.</p>
+<p>Metrics for different approaches for FTTransformer on holdout:</p>
+<table>
+<thead>
+<tr>
+<th>init</th>
+<th>bert tiny</th>
+<th>bert small</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>random</td>
+<td>72468,59</td>
+<td>74282,90</td>
+</tr>
+<tr>
+<td>t fixup</td>
+<td>72460,23</td>
+<td>74604,82</td>
+</tr>
+<tr>
+<td>text</td>
+<td>72426,17</td>
+<td>77790,66</td>
+</tr>
+<tr>
+<td>text, lora r=8</td>
+<td>72632,96</td>
+<td>72825,80</td>
+</tr>
+<tr>
+<td>text, lora r=128</td>
+<td>72480,61</td>
+<td>72570,98</td>
+</tr>
+</tbody>
+</table>
+<p>As for <strong>GBDT</strong> models everything is standard. We use CatBoost and LGBM with manually tuned hyperparameters and default LightAutoML preprocessing with feature auto typing.</p>
+<p>The stack wasn’t particularly different from a standard DenseLight model, but it used the OOF predictions from the previous 24 models as input during the training stage.</p>
+<p>All the best,<br>
+Dmitry</p>

@@ -1,0 +1,78 @@
+# playground-series-s3e16 讨论区（按票数排序，共 76 条）
+
+- [3rd private 6th public | Brute-force ensemble| Post-processing](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/416783) — 67 票 / 25 评论 / 2023-06-13 
+- [Solved, without any submission. This Crab has Eleven Years Kaggling. ](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/413750) — 63 票 / 32 评论 / 2023-05-30 
+- [Feature engineering that helped me reduce MAE to 1.33708](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/415721) — 48 票 / 31 评论 / 2023-06-07 
+- [Some Domain Materials Regarding the Dataset](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/413741) — 46 票 / 7 评论 / 2023-05-30 
+- [To round or not to round?](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/413971) — 37 票 / 25 评论 / 2023-05-30 
+- [Tips and Tricks to help you improve your score. ( Part 2) ](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/415200) — 27 票 / 10 评论 / 2023-06-05 
+- [#1 Solution - Experimenting with the data generation model](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/416766) — 24 票 / 21 评论 / 2023-06-13 **write-up?**
+- [#5 Solution | five models + LADRegression](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/416769) — 23 票 / 10 评论 / 2023-06-13 **write-up?**
+- [The Most Bizarre Feature Correlation I've Ever Seen](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/413882) — 21 票 / 15 评论 / 2023-05-30 
+- [#2nd Solution | Open-Close Tries | Synthetic Data](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/416903) — 19 票 / 5 评论 / 2023-06-13 **write-up?**
+- [#11 solution: what worked and what didn't](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/416819) — 16 票 / 2 评论 / 2023-06-13 **write-up?**
+- [Collection of helpful ideas - S3E16](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/415038) — 16 票 / 8 评论 / 2023-06-04 
+- [Starting materials and references](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/413736) — 15 票 / 5 评论 / 2023-05-30 
+- [[Compilation] Good starter notebooks](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/413866) — 14 票 / 13 评论 / 2023-05-30 
+- [Feature Engineering Using New Bing](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/413771) — 11 票 / 8 评论 / 2023-05-30 
+- [Improve your CV and LB: generating additional data for training](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/414138) — 11 票 / 20 评论 / 2023-05-31 
+- [#8 Solution | Three models + Weighted Ensemble](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/416782) — 11 票 / 3 评论 / 2023-06-13 **write-up?**
+- [Feel free to use synthetic data for modeling](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/414003) — 9 票 / 0 评论 / 2023-05-31 
+- [Can the height be zero?](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/414157) — 9 票 / 8 评论 / 2023-05-31 
+- [Shell Density Has Higher Linear Correlation With Age](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/414703) — 9 票 / 9 评论 / 2023-06-02 
+- [New to Machine Learning or Kaggle?](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/403223) — 8 票 / 12 评论 / 2023-04-21 
+- [XGBoost: Why One-Hot is Overkill？](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/416309) — 8 票 / 7 评论 / 2023-06-10 
+- [Feature Engineering Ideas ](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/414233) — 8 票 / 7 评论 / 2023-05-31 
+- [Join Vibrant Discord Community for Kaggle PlayGround Competitions](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/415598) — 7 票 / 2 评论 / 2023-06-07 
+- [my first try in competitions/Question about Kaggle Score.](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/416725) — 5 票 / 6 评论 / 2023-06-12 
+- [Dealing with randomness in synthetic data](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/416323) — 5 票 / 7 评论 / 2023-06-10 
+- [Crabs above the age of 19 appear to be indistinguishable](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/416419) — 5 票 / 3 评论 / 2023-06-11 
+- [A Light Reminder To Not Abandon Linear Model](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/414332) — 5 票 / 0 评论 / 2023-06-01 
+- [Increasing Features : taking numerous mathematical operations. Does it Work ?](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/415277) — 5 票 / 1 评论 / 2023-06-05 
+- [Running 12 regression models and visualization with a single function .](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/414849) — 4 票 / 1 评论 / 2023-06-03 
+- [Should we try classification on this particular playground? (also Neural network possibilities)](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/414478) — 4 票 / 7 评论 / 2023-06-01 
+- [Anybody explain why we have 4th Sex called "0.025" in extended dataset?](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/414732) — 4 票 / 5 评论 / 2023-06-03 
+- [Any insights on numeric features](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/413892) — 4 票 / 0 评论 / 2023-05-30 
+- [Mr. Eugene Harold Krabs 🦀 low code baseline to improve... ](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/413838) — 4 票 / 0 评论 / 2023-05-30 
+- [To Lasso, PCA or drop?](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/414097) — 4 票 / 9 评论 / 2023-05-31 
+- [Recoding Outliers as NA](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/414226) — 4 票 / 5 评论 / 2023-05-31 
+- [My first Kaggle contest and I screwed up 😪](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/417171) — 3 票 / 1 评论 / 2023-06-14 
+- [Some Insights Using XGBRegressor](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/414776) — 3 票 / 17 评论 / 2023-06-03 
+- [Just made my first contribution to the competition ](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/415963) — 3 票 / 0 评论 / 2023-06-08 
+- [Question about XGBRegressor's parameters](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/414070) — 2 票 / 2 评论 / 2023-05-31 
+- [Too early to ensemble ? 🤔](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/414245) — 2 票 / 3 评论 / 2023-05-31 
+- [Extra Trees Regressor Cannot Converge?](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/414591) — 2 票 / 3 评论 / 2023-06-02 
+- [EDA with Pandas Profiling](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/415577) — 2 票 / 3 评论 / 2023-06-07 
+- [Not participating to compete, Participating to Practice GPT](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/416362) — 2 票 / 0 评论 / 2023-06-11 
+- [you must one-hot encode "Sex"](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/414103) — 1 票 / 9 评论 / 2023-05-31 
+- [How to Improve Model Further?](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/416231) — 1 票 / 10 评论 / 2023-06-10 
+- [What about Weight Difference?](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/414719) — 1 票 / 6 评论 / 2023-06-02 
+- [Where is the original and submission files.](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/416594) — 1 票 / 2 评论 / 2023-06-12 
+- [Can it be translated into a classification problem, not a regression problem？](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/416221) — 1 票 / 4 评论 / 2023-06-10 
+- [Validation set vs test data file?](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/415036) — 1 票 / 5 评论 / 2023-06-04 
+- [Done this using Logistic regression](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/416495) — 1 票 / 4 评论 / 2023-06-11 
+- [537th - Regression with a Crab Age Dataset, NN, MAE=1.364 ](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/416957) — 1 票 / 0 评论 / 2023-06-13 
+- [Determining the missing gender](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/414580) — 1 票 / 5 评论 / 2023-06-02 
+- [LGBM features & parameters from Genetic Algorithm](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/417006) — 1 票 / 0 评论 / 2023-06-13 
+- [Can we take advantage of the source model probability distribution?](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/414876) — 1 票 / 2 评论 / 2023-06-03 
+- [What is PS-S3-E16? Can any explain in simple](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/416624) — 1 票 / 2 评论 / 2023-06-12 
+- [Top 50% solution in Tabular Playground ](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/417093) — 1 票 / 0 评论 / 2023-06-14 **write-up?**
+- [Initial PCA Explained Variance #s](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/414194) — 1 票 / 3 评论 / 2023-05-31 
+- [Outlier Handling and Feature Engineering || 1.34330 MAE Score](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/417168) — 1 票 / 1 评论 / 2023-06-14 
+- [After a certain age, continuous features matter less?](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/414570) — 1 票 / 3 评论 / 2023-06-02 
+- [A GReaT (?) impute function](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/414256) — 1 票 / 3 评论 / 2023-05-31 
+- [want missing file : CrabAgePrediction.csv](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/418720) — 1 票 / 0 评论 / 2023-06-22 
+- [Need Some Insight into my solution](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/434281) — 1 票 / 0 评论 / 2023-08-24 **write-up?**
+- [Way to deal with high correlation](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/414328) — 1 票 / 3 评论 / 2023-06-01 
+- [Auto ML - Model comparison as an initial start](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/413744) — 1 票 / 0 评论 / 2023-05-30 
+- [How to deal with the highly correlated features? ](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/415718) — 0 票 / 0 评论 / 2023-06-07 
+- [I am looking for a partner to team up with ](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/415465) — 0 票 / 0 评论 / 2023-06-06 
+- [Adding additional training data improves private MAE score too!](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/416758) — 0 票 / 0 评论 / 2023-06-13 
+- [Dealing with asymptotic features](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/415312) — 0 票 / 1 评论 / 2023-06-06 
+- [Как использовать PolynomialFeatures?](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/414988) — 0 票 / 0 评论 / 2023-06-04 
+- [How accurate will the Leaderboard be?](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/414647) — 0 票 / 2 评论 / 2023-06-02 
+- [Square Root the Age to get better score and the square the preds later.](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/414712) — 0 票 / 1 评论 / 2023-06-02 
+- [Is my model Overfitting or Is it getting better?](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/414711) — 0 票 / 0 评论 / 2023-06-02 
+- [🔥 Hill Climbing 🔥 ](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/414583) — 0 票 / 0 评论 / 2023-06-02 
+- [Understanding Crab Weight Measurements](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/427256) — 0 票 / 2 评论 / 2023-07-27 
+- [What's your favourite cover?](https://www.kaggle.com/competitions/playground-series-s3e16/discussion/414706) — -10 票 / 0 评论 / 2023-06-02 

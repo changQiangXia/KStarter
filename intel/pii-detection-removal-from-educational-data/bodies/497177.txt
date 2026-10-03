@@ -1,0 +1,120 @@
+# https://www.kaggle.com/competitions/pii-detection-removal-from-educational-data/discussion/497177
+
+Topic #497177: 9th place solution (🥧)
+  Author: Nicholas Broad
+  Posted: 2024-04-24 00:18:01.280000
+  Votes: 68  Comments: 26
+
+I'm very surprised to have moved up so much on private lb. 
+
+Modeling
+
+
+
+deberta v3 large
+
+deberta v3 large with layer drop and multisample dropout
+
+deberta v2 xlarge lora
+
+
+Since deberta v2 and deberta v3 have different tokenizers, I first got predictions at token level, mapped them to characters, and then took the maximum over the characters that represented the final (spacy) token. All models had max length of 512, stride of 128
+
+Data
+
+
+
+a slightly better version of my dataset made with mixtral 8x7b. I added in quotes by famous people (these person names were not pii), as well as phrases like, "With my teammates Joe and Sally" where Joe and Sally are pii, and also phrases like, "please check out my work at my site [URL]". You can easily prompt the model to add this to the essays.
+
+a corrected train.json (from competition). There were about 30 or so instances of labels that needed to be changed, so I manually fixed them. 
+
+
+I would train using 4 fold to find good settings and then train on all data. I also used a callback every epoch to swap out all the names with new ones.
+
+Postprocessing
+
+
+
+names must be title cased and should not contain anything other than A-Za-z and "."
+
+remove dr, mr, miss, etc. as being labeled as names. Make sure to change the following token to have B- instead of I-
+
+If a name is mentioned multiple times in one document and one of them is pii, mark them all as pii
+
+if an I- prediction does not have B- in front of it, change it to B-
+
+remove coursera, wikipedia, and .edu urls as predictions
+
+if a phone number prediction has more than 6 numbers, switch it to id_num
+
+regex expression for phone numbers
+
+
+And that's it!
+
+Final thoughts
+
+It can be really annoying making sure the mappings align properly. I can't tell you how much time I spent debugging alignment errors…
+
+Code here: https://github.com/nbroad1881/pii-data-detection
+
+Comments:
+├─ Raja Biswas (2024-04-24 00:57:30.777000) [+5]
+│  Many congratulations @nbroad !🎉 well deserved, 4x GM is only a matter of time!!
+├─ Geremie Yeo (2024-04-24 01:02:50.930000) [+3]
+│  Congrats! @nbroad huge step towards being a Competitions Grandmaster!
+├─ Quan H. Cap (2024-04-24 02:10:42.853000) [+4]
+│  Congratulations and thanks for sharing a simple yet effective approach @nbroad! Also, thanks for your dataset (I used your shared dataset in my final submission)
+│  
+│  Never thought the train.json data ...
+  ├─ Nicholas Broad (2024-04-25 18:57:26.527000) [+3]
+  │  Adding repeated names was the most impactful. +0.01
+├─ Darek Kłeczek (2024-04-24 20:48:56.583000) [+1]
+│  Woohoo, congrats on the solo gold Nicholas, very well deserved!!!
+├─ Maksym Dolgikh (2024-04-24 20:09:17.930000) [+1]
+│  Good to see that your work payed off! Congratulations!
+├─ FPP_ZRH (2024-04-24 15:26:41.327000) [+1]
+│  Congrats, well deserved Gold medal. And many thanks again for your great training data set.
+├─ Amed (2024-04-24 08:02:55.420000) [+1]
+│  Huge congratz @nbroad for the solo gold, and thank you once more for sharing !
+├─ C R Suthikshn Kumar (2024-04-24 04:07:25.350000) [+1]
+│  Congratulations on securing the 9th place in this competition. Thanks for sharing insights into your solution.
+├─ Chinmaya (2024-04-24 02:51:56.217000) [+1]
+│  Congratulations @nbroad
+├─ Shakleen Ishfar (2024-04-24 00:52:01.717000) [+1]
+│  Congratulations @nbroad. Your dataset helped a kaggle newbie team like mine get a really great position. Thank you so much for sharing your solution as well.
+├─ Sohaib (2024-04-24 00:43:14.520000) [+1]
+│  Congrats. Can you please share your lora setting? Did you apply it on all layers? what was r, alpha? lr? and f5? Just before the competition end, I was trying to use deberta xxlarge with lora appli...
+├─ Hyunsoo Lee 1010 (2024-04-24 00:35:02.673000) [+1]
+│  Congratulation @nbroad. Your initial external dataset inspired me to conduct a few experiments using Mixtral-8x7B. It allowed me to get an idea of the impact of syntax datasets.
+  ├─ Sohaib (2024-04-24 00:51:05.183000) [+1]
+  │  Congrats for such a high leap in LB (+1032!). Do you mind sharing a little more about these experiments.
+    ├─ Hyunsoo Lee 1010 (2024-04-24 01:14:49.867000) [+0]
+    │  Thank you, but this post is not mine. Please leave a message on my post instead.
+├─ Ravi Ramakrishnan (2024-04-24 00:22:44.377000) [+1]
+│  This illustrates the potential of simple work and approaches! 
+│  Great work and hearty congrats for the gold medal solution @nbroad
+├─ Gaurav Rawat (2024-04-25 18:02:10.600000) [+2]
+│  congrats @nbroad for the Solo 🥇 learned a lot from you in the comp especially your dataset and accelerate pipeline that helped us scale on top of it .
+├─ william.wu (2024-04-24 01:05:57.577000) [+2]
+│  Congrats! Through this competition, I didn't figure out how you inserted the PIIs into the text using Rules. Would you like to share your data generation code now? That would be a great lesson for ...
+  ├─ Nicholas Broad (2024-04-24 02:20:59.270000) [+4]
+  │  Yes I'm cleaning it up and I'll release it soon
+  ├─ Nicholas Broad (2024-06-02 21:52:43.980000) [+0]
+  │  Code here: https://github.com/nbroad1881/pii-data-detection
+  │  
+  │  Sorry for the delay
+├─ AK (2024-04-24 00:26:56.597000) [+2]
+│  Congrats @nbroad  for solo gold…. what are those 30 examples if you can ellaborate on that
+  ├─ Nicholas Broad (2024-04-24 00:30:04.940000) [+6]
+  │  When doing OOF predictions, I reviewed the ones the model was very confident in but wrong and if I felt it was actually pii, I would modify the dataset. It's mainly a lot of names that were origina...
+    ├─ Maksym Dolgikh (2024-04-24 20:11:29.910000) [+2]
+    │  Did you use any tools or libraries for that? Or did you make your own?
+    │  
+    │  I had a clunky pipeline for analysing errors, but perhaps there are ready-made solutions I should know about :)
+    ├─ Nicholas Broad (2024-04-26 07:17:42.510000) [+2]
+    │  Looked at predictions in dataframes, checked essays using this visualization running locally
+  ├─ Nicholas Broad (2024-06-02 21:53:22.647000) [+1]
+  │  @aman1391 , please see my corrections here: https://github.com/nbroad1881/pii-data-detection/blob/main/notes/corrections.md
+    ├─ AK (2024-06-07 17:19:30.363000) [+0]
+    │  Thanks man

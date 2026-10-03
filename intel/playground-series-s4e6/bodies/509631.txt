@@ -1,0 +1,204 @@
+# https://www.kaggle.com/competitions/playground-series-s4e6/discussion/509631
+
+Topic #509631: 1st Place Second AutoML Grand Prix [Team AutoML Grandmasters] 
+  Author: Lennart Purucker
+  Posted: 2024-06-03 08:37:55.032000
+  Votes: 32  Comments: 30
+
+Heyho everyone,
+
+The following details our approach during this competition. In addition, we provide supplementary information and an aggregation of our main contributions into one code file via this GitHub repository.
+
+
+
+The notebook by @gauravduttakiit really changed this competition because we found nothing in our offline evaluation that explained why this specific model and preprocessing was so good on the public leaderboard. Thus, it seemed like the notebook won a lottery ticket on the public leaderboard. 
+
+An alternative theory was that renaming the columns had some unknown impact that we could not reproduce or pinpoint. We also investigated replacing values with Null (as described here), but this only gave a small increase in offline validation score, which we also got by other means. 
+
+Thus, we opted to include it in an ensemble together with our own submission.  As @roberthatch pointed out, this made the rest of the competition an averaging gamble. 
+
+Although it seems we took a bit of a different approach to produce the average at the time. In detail, we opted to produce a weighted ensemble of the model created by @gauravduttakiit and our own submission. To do so, we took the notebook's data and used FLAML to get prediction probabilities of the winning lottery ticket model (loosely related, see this):
+
+gbm_hyperparameters = {: , : , : , : , : , : , : , : }
+
+starting_points = {: gbm_hyperparameters}
+ flaml  AutoML
+automl = AutoML(eval_method=)
+automl.fit(X, y, task=, metric=,time_budget=, starting_points=starting_points)
+
+y_pred_proba = automl.predict_proba(test)
+
+
+Then, we averaged the prediction probabilities and finally converted the average into the final submission. We used a weight of 0.14 (our submission) and 0.86 (the winning lottery ticket model).
+
+Details on Our Submission
+
+For our own submissions, we used an offline evaluation setup to determine how to configure AutoGluon for a three-hour training run. 
+
+Early Stopping Metric
+
+We started using log loss as an early stopping metric in AutoGluon very early on. Importantly, when doing this with the following code, our evaluation metric (i.e., accuracy) is still the selection metric and used for post hoc ensembling! 
+
+ autogluon.tabular  TabularPredictor
+predictor = TabularPredictor(
+    label=,
+    eval_metric=,
+    problem_type=,
+    verbosity=,
+)
+
+predictor.fit(
+    time_limit=**,
+    train_data=train_data,
+    presets=,
+    dynamic_stacking=,
+    
+    ag_args_fit = {
+            : ,
+        }
+)
+predictor.fit_summary(verbosity=)
+
+
+After we saw the notebook, which used ROC AUC instead of Log Loss, we also implemented and tested how it would perform. This, however, did not improve performance.   
+
+Overview of Other Offline Evaluation Results
+
+In our offline evaluation, we also came to the following conclusions:
+
+
+
+Treating ordinal features as numerical features is beneficial.
+
+Using original data is better for model performance (even with its distribution shift).
+
+Using sample weights does not help.
+
+Using repeated cross-validation is beneficial. 
+
+Using transductive learning is beneficial. Yet, we did not use it in our submissions as we did not trust the results of our test. 
+
+We verified that gradient-bosted decision trees (GBDTs) and neural networks (NNs) are both capable of solving this task. 
+
+
+Stacking
+
+We noticed that NNs were much better than GBDTs among all stacking models. Based on our prior work on stacked overfitting, we knew this pattern and thus opted not to use GBDTs as stacking models anymore, which further improved offline performance. 
+
+ autogluon.tabular.configs.hyperparameter_configs  get_hyperparameter_config
+
+hyperparameters_raw = get_hyperparameter_config()
+
+hyperparameters_only_nn = {}
+hyperparameters_only_nn[] = hyperparameters_raw[]
+hyperparameters_only_nn[] = hyperparameters_raw[]
+
+hyperparameters = {
+    : hyperparameters_raw,
+    : hyperparameters_only_nn,
+}
+
+
+Feature Engineering
+
+We used OpenFE to obtain new features, which improved our offline validation score. We do not know if it made our final submission worse, as the lottery ticket model did not use similar features. 
+
+EDA
+
+We looked at the features with EDA, but nothing seemed off nor worthy of further manual investigation.
+
+
+
+Best regards,
+
+Lennart and Nick (@innixma), on behalf of the "AutoML Grandmasters"
+
+Prior Grand Prix Competition Write-ups: First AutoML Grand Prix Competition
+
+Comments:
+├─ Yan Teixeira (2024-06-06 17:28:33.177000) [+1]
+│  Did you publish the notebook?
+  ├─ Lennart Purucker (2024-06-07 07:37:22.243000) [+0]
+  │  We did not use a notebook but ran our code offline similar to the last competition.
+    ├─ Yan Teixeira (2024-06-07 23:02:29.083000) [+1]
+    │  @lennartpuruckerisg sorry, but I didn't understand. Do you not have a code repository? It's my understand that is in the rules.
+    ├─ Lennart Purucker (2024-06-08 10:18:04.470000) [+1]
+    │  Yes, see the comment below for more information. We develop locally with open-source tools.
+├─ Samvel Kocharyan (2024-06-07 03:51:46.153000) [+2]
+│  Today is the last day when you should share the full code.
+  ├─ Lennart Purucker (2024-06-07 07:45:20.437000) [+1]
+  │  Thanks for being interested in our work. See my comment below for more information.
+├─ Robert Hatch (2024-06-04 14:55:10.783000) [+2]
+│  What were your prior submissions? I recall you were under me with 3 subs (but above the public notebook? I forget), tied for first but ranked behind me after four subs, before passing me on the fin...
+  ├─ Lennart Purucker (2024-06-04 15:19:17.913000) [+5]
+  │  We had one more submission of an AutoGluon run without the original data, mostly because I still do not believe our offline methods can correctly determine if the original data is beneficial. Moreo...
+    ├─ Thomas Meißner (2024-06-04 15:51:09.020000) [+1]
+    │  For me adding the original data ended up being much worse on public LB. I have the feeling this was not due to the data itself, but adding the data changed how the random seeds impacts the whole tu...
+    ├─ Robert Hatch (2024-06-04 18:04:37.250000) [+2]
+    │  I would suggest CV logloss or auc or a custom weighted variation of one of those (weighting hard to predict rows slightly higher to use as a smoothed version of accuracy metric). Public LB score is...
+    ├─ Lennart Purucker (2024-06-04 21:15:29.557000) [+1]
+    │  That is a very good point; I think that is a reasonable explanation. It might just be that the additional data biases the data-based randomness favorable for the public leaderboard split.
+├─ [deleted] (2024-06-12 09:11:17.730000) [+0]
+│  Please provide the full link to ./data.csv ?
+│  
+│  original_dataset = pd.read_csv(, sep=)
+│  
+│  
+│  https://github.com/AutoML-Grandmasters/Second-AutoML-Grand-Prix/blob/main/main.py
+  ├─ Lennart Purucker (2024-06-12 11:12:13.683000) [+1]
+  │  Heyho, please see this link, as mentioned in greater detail in the README of the repository.
+├─ Syed Faizan Ali (2024-06-10 18:42:13.323000) [+0]
+│  Congrats on 1st place
+├─ Samvel Kocharyan (2024-06-07 05:00:58.190000) [+0]
+│  @lennartpuruckerisg @innixma Hey guys, today is the last day to publish your notebook. Keep an eye on the competition rules. As I understand it, it is a crucial point to save your 1st place.
+  ├─ Lennart Purucker (2024-06-07 07:43:51.903000) [+1]
+  │  As far as I understand, the code/write-up we provided is sufficient based on our last competition write-up and others' write-ups. I'm happy to get feedback from Kaggle on this. We did not use a Kag...
+  ├─ Nick Erickson (2024-06-07 07:50:33.783000) [+1]
+  │  Thanks @samvelkoch for the heads up! I'm a bit unsure what the exact requirements are. @addisonhoward could maybe clarify. Happy to provide code, although likely after I wake up as it is late where...
+    ├─ Addison Howard (2024-06-10 14:26:37.860000) [+2]
+    │  Hi all,
+    │  
+    │  Rules per the competition page and official rules state:
+    │  
+    │  Top 10 submissions must be accompanied by a detailed write-up in the competition forums within one week of the competition launch ...
+    ├─ Addison Howard (2024-06-10 14:47:16.053000) [+1]
+    │  Note - As this competition had a later than usual notification (June 4) due to the conclusion over the weekend, and I was tagged before the deadline for a rules clarification but could not respond ...
+    ├─ Lennart Purucker (2024-06-10 14:52:13.927000) [+1]
+    │  Heyho @addisonhoward, thanks for joining this discussion!
+    │  
+    │  Could you provide more details on this? 
+    │  I am currently a bit confused about the rules' definition and subsequent enforcement. 
+    │  
+    │  For examp...
+    ├─ Thomas Meißner (2024-06-10 14:56:59.690000) [+1]
+    │  What would happen if the rules are enforced and someone from the top 10 is disqualified due to this? Would then the no. 11 be asked to provide the code?
+    ├─ Yan Teixeira (2024-06-10 15:12:19.950000) [+1]
+    │  @thomasmeiner exactly. To be honest, the rules regarding the code repository are clear. If the rules are not met, the team should be disqualified.
+    ├─ Nick Erickson (2024-06-10 18:28:06.887000) [+5]
+    │  @addisonhoward @samvelkoch @thomasmeiner @yantxx
+    │  
+    │  We have updated our post with a link to our code repository: https://github.com/AutoML-Grandmasters/Second-AutoML-Grand-Prix/tree/main
+    ├─ Addison Howard (2024-06-10 18:32:31.413000) [+4]
+    │  Hi Lennart,
+    │  
+    │  The qualifier on the code repository is "so that the results obtained can be reproduced." Users who use a Kaggle notebook as their primary method of submission, and make that notebook ...
+    ├─ Addison Howard (2024-06-10 18:41:41.750000) [+3]
+    │  Hey Thomas,
+    │  
+    │  As this is the first competition of its kind with documentation and requirements located in multiple places (something we hope to improve upon for any future versions), we're willing t...
+    ├─ Robert Hatch (2024-06-10 19:01:57.287000) [+4]
+    │  I'm really appreciative and supportive of your flexibility and active participation in this. Thanks for working to make this a success. 
+    │  
+    │  I'm not sure it's necessary, but I did notice there's not r...
+    ├─ Thomas Meißner (2024-06-10 19:47:09.860000) [+1]
+    │  I asked just for clarification. I am happy that there is this flexibility. People worked hard to earn their rank, it shall not vanish just because of formalities.
+    ├─ Samvel Kocharyan (2024-06-12 06:43:00.073000) [+0]
+    │  Thank you guys! 🌟 at Github done
+├─ Mahdi Ravaghi (2024-06-04 11:18:30.863000) [+0]
+│  Congrats on 1st place! and thank you for the detailed explanation.
+│  
+│  What CV / public LB score did the AutoGluon model get on its own?
+  ├─ Lennart Purucker (2024-06-04 11:52:42.060000) [+3]
+  │  Thanks! 
+  │  
+  │  The public LB was 0.83758. The offline repeated CV score was 0.8348.

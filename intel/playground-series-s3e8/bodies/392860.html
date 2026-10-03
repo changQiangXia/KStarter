@@ -1,0 +1,66 @@
+<p><strong>Intro</strong>:<br>
+Another week and another salute to the winners of the competition! <br>
+This was painful to write, but <a href="https://www.kaggle.com/jcaliz" target="_blank">@jcaliz</a> cheered me up since the solution was not trivial.</p>
+<p><strong>Preface</strong>:<br>
+I was interested in gemology during my university days and was considering getting a GIA (Gemological Institute of America) certification to appraise precious stones. I even had plans to open my own pawn shop to sort diamonds not pandas dataframes. It's amazing how our interests and career paths can change over time. While my current focus is not in gemology at all, the past experiences and interests can still be valuable assets.</p>
+<p><strong>Part 1. Fighting outliers</strong>:<br>
+Take a look at these 3 illustrations where I tried to clip the outliers based on their reasonable price range (red boxes shows the areas where the <code>train</code> and <code>original</code> datasets are awfully different).</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F6259210%2F89d57375aa6343871605de2c5ecd91d6%2FTrain%20before%20fixing%20outliers%20with%20markings.png?generation=1678164119617473&amp;alt=media" alt=""></p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F6259210%2F28f1c02dea9d31a140da1fdb7e6dfee5%2FOrigin%20with%20boxes.png?generation=1678168163715361&amp;alt=media" alt=""></p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F6259210%2Fb677d1c94335f77c55c96961d10ca9c4%2FTrain%20after%20fixing%20outliers.png?generation=1678168188355901&amp;alt=media" alt=""></p>
+<p>Once I fixed the values of outliers I got extreme boost on CV, but poor results on LB…<br>
+In order to understand why that happened, I decided to look at the best predictions and voila! It happened to be that all models already squashed the outliers so there was no reason to fix it.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F6259210%2Ffe79e85ae6e22d3dd92e975ed9f4edc8%2FTest%20preds.png?generation=1678168291563132&amp;alt=media" alt=""></p>
+<p><strong>Part 2. The models were good already:</strong><br>
+I looked at public works written by <a href="https://www.kaggle.com/tetsutani" target="_blank">@tetsutani</a> and <a href="https://www.kaggle.com/eamonntweedy" target="_blank">@eamonntweedy</a> since their modeling part was somewhat similar to mine. One thing I found in common is that the models were good and generalized well from the very beginning. Though I did not really like the squashed predictions, so I tried to help the model myself. I ventured to imagine myself a certified Appraiser and start labeling the data manually.</p>
+<p><strong>Part 3. Visualizations and perfect stone:</strong><br>
+No self-promotion intended, but I started looking into <a href="https://www.kaggle.com/competitions/playground-series-s3e8/discussion/389465" target="_blank">When 4Cs Concept becomes an Art</a> topic more and more. I chose 'Ideal" cut stones of "D" color (best colorless), 'Flawless'  within a specified carat range from the train. The idea was to find the max possible value for a specified group of stones and compare it to the test predictions, if for some reason test predictions were higher - assign Q3 + (1.5 * IQR) from train to the test predictions. It gave +0.01 LB for 20 examples. When I decided to automate it a bit:</p>
+<pre><code> () -&gt; pd.DataFrame:
+    
+    
+    
+
+    sub = best_sub.copy()
+    train = pd.read_csv().drop(columns=)
+    test = pd.read_csv().drop(columns=)
+    test_sub = pd.concat([test, sub], axis=)
+
+    bins = np.arange(, , )
+    train[] = pd.cut(train.carat, bins=bins, labels=(((bins)-)))
+    test_sub[] = pd.cut(test_sub.carat, bins=bins, labels=(((bins)-)))
+     cl  tqdm(train.clarity.unique()):
+
+         cb  (train.carat_bin.unique()):
+            price_frame = train.query().query()
+
+             price_frame.shape[] &gt; :
+                Q1 = np.percentile(price_frame.price, , interpolation=)
+                Q3 = np.percentile(price_frame.price, , interpolation=)
+                IQR = Q3 - Q1
+                lower_bound = Q3 - ( * IQR)
+                upper_bound = Q3 + ( * IQR)
+
+                idx = test_sub.loc[test_sub.carat_bin.eq(cb) &amp; test_sub.clarity.eq(cl)].
+                sub.loc[sub..isin(idx), ]  = sub.loc[sub..isin(idx), ].clip(, upper_bound*alpha)
+     sub 
+</code></pre>
+<p><strong>This algorithm gave me straight +0.2.</strong></p>
+<p><strong>Part 4. Jumping to the first position on the public LB:</strong><br>
+Once I clipped my max predicted values, I came down to the min ones.<br>
+And this is how I found myself +1.1 right away.<br>
+The algorithm:</p>
+<ul>
+<li>iterate thru <code>carat</code> in train with sliding window with range (0.15)</li>
+<li>inside the range iterate thru <code>cut</code></li>
+<li>inside the 'cut' iterate thru <code>clarity</code></li>
+<li>inside the 'clarity' iterate thru <code>color</code></li>
+<li>filter the train frame by this group of parameters and if there were more than 5 records found look for the same in the test predictions</li>
+<li>if the predictions were for some reason lower than the min possible train, assign min train to those records.</li>
+</ul>
+<p>This basically did impossible with any average model pushing it straight to the <strong>Top 10</strong>.</p>
+<p><strong>Part 5. Why it is painful.</strong><br>
+Winning a Kaggle competition can bring a sense of accomplishment and validation, similar to the rush of euphoria that comes with using drugs.</p>
+<p>However, Kaggle competitions can also be incredibly challenging and frustrating. Participants may spend countless hours tweaking their models, only to find that they still fall short of the competition leaders. This can lead to feelings of disappointment and sadness, similar to the lows experienced by drug addicts during withdrawal.</p>
+<p>In both cases, the highs and lows can create a cycle of addiction. Participants may become obsessed with winning Kaggle competitions, constantly seeking the next challenge to achieve that feeling of euphoria again. Similarly, drug addicts often chase the initial rush of euphoria, leading to a cycle of addiction and seeking out the next high. Be careful! Be save!</p>
+<p><strong>Outro</strong>:<br>
+Night changes many thoughts. it is a bit messy but I hope you found this write-up useful.</p>

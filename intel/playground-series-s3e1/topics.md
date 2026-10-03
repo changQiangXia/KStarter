@@ -1,0 +1,61 @@
+# playground-series-s3e1 讨论区（按票数排序，共 59 条）
+
+- [That was a surprise! Here is the 1st place solution....](https://www.kaggle.com/competitions/playground-series-s3e1/discussion/377137) — 69 票 / 46 评论 / 2023-01-12 **write-up?**
+- [Lat / Long Feature Engineering tricks from previous competitions](https://www.kaggle.com/competitions/playground-series-s3e1/discussion/376210) — 46 票 / 8 评论 / 2023-01-05 
+- [Simple feature that boost your score +0.002](https://www.kaggle.com/competitions/playground-series-s3e1/discussion/376043) — 40 票 / 13 评论 / 2023-01-04 
+- [Feature engineering ideas](https://www.kaggle.com/competitions/playground-series-s3e1/discussion/375859) — 32 票 / 14 评论 / 2023-01-03 
+- [Best regards and thanks a lot- became a Grandmaster](https://www.kaggle.com/competitions/playground-series-s3e1/discussion/376446) — 32 票 / 27 评论 / 2023-01-06 
+- [Mind your CV scores (and ignore the original California dataset)](https://www.kaggle.com/competitions/playground-series-s3e1/discussion/376709) — 30 票 / 30 评论 / 2023-01-08 
+- [wow, this competition looks great! 🔥](https://www.kaggle.com/competitions/playground-series-s3e1/discussion/375714) — 28 票 / 18 评论 / 2023-01-03 
+- [This is why Longitude/Latitude are the most important Features 🌎](https://www.kaggle.com/competitions/playground-series-s3e1/discussion/376078) — 25 票 / 8 评论 / 2023-01-04 
+- [2nd place solution - brief summary](https://www.kaggle.com/competitions/playground-series-s3e1/discussion/377179) — 21 票 / 4 评论 / 2023-01-10 **write-up?**
+- [Clip Max (Boost +0.003)](https://www.kaggle.com/competitions/playground-series-s3e1/discussion/376396) — 21 票 / 9 评论 / 2023-01-06 
+- [A big boost with original data](https://www.kaggle.com/competitions/playground-series-s3e1/discussion/375754) — 19 票 / 3 评论 / 2023-01-03 
+- [Initial thoughts and resources for onboarding](https://www.kaggle.com/competitions/playground-series-s3e1/discussion/375720) — 16 票 / 8 评论 / 2023-01-03 
+- [24th Place Solution 🏅 - My second ever Kaggle competition 🔥](https://www.kaggle.com/competitions/playground-series-s3e1/discussion/377993) — 15 票 / 5 评论 / 2023-01-13 **write-up?**
+- [Coordinates using google maps](https://www.kaggle.com/competitions/playground-series-s3e1/discussion/376542) — 15 票 / 10 评论 / 2023-01-06 
+- [Collection of helpful ideas - S3E1](https://www.kaggle.com/competitions/playground-series-s3e1/discussion/375738) — 15 票 / 7 评论 / 2023-01-03 
+- [Coastline distance (Implementation)](https://www.kaggle.com/competitions/playground-series-s3e1/discussion/376683) — 15 票 / 2 评论 / 2023-01-07 
+- [Working with (Latitude, Longitude) data](https://www.kaggle.com/competitions/playground-series-s3e1/discussion/376121) — 13 票 / 1 评论 / 2023-01-04 
+- [Comparing the Kaggle's Dataset to Sklearn's California Housing Dataset.](https://www.kaggle.com/competitions/playground-series-s3e1/discussion/375724) — 13 票 / 6 评论 / 2023-01-03 
+- [Good luck! Looking forward to competition write-ups](https://www.kaggle.com/competitions/playground-series-s3e1/discussion/377040) — 13 票 / 0 评论 / 2023-01-09 **write-up?**
+- [Don't share high scoring kernels - Do share high scoring memes](https://www.kaggle.com/competitions/playground-series-s3e1/discussion/376672) — 13 票 / 4 评论 / 2023-01-07 
+- [Colorful LightGBM predictions](https://www.kaggle.com/competitions/playground-series-s3e1/discussion/376722) — 12 票 / 2 评论 / 2023-01-08 
+- [My First Kaggle Comp ✨](https://www.kaggle.com/competitions/playground-series-s3e1/discussion/375798) — 11 票 / 9 评论 / 2023-01-03 
+- [Caution- Beware of overfitting and churned leaderboard next week](https://www.kaggle.com/competitions/playground-series-s3e1/discussion/375865) — 11 票 / 8 评论 / 2023-01-03 
+- [Getting the most out of the original Sklearn dataset](https://www.kaggle.com/competitions/playground-series-s3e1/discussion/376153) — 10 票 / 1 评论 / 2023-01-04 
+- [What ChatGPT thinks about the latitude and longitude data?](https://www.kaggle.com/competitions/playground-series-s3e1/discussion/376130) — 9 票 / 3 评论 / 2023-01-04 
+- [You can now clone this competition](https://www.kaggle.com/competitions/playground-series-s3e1/discussion/377118) — 9 票 / 7 评论 / 2023-01-10 
+- [👨‍💻🌎 Geo features: clustering?](https://www.kaggle.com/competitions/playground-series-s3e1/discussion/376098) — 8 票 / 12 评论 / 2023-01-04 
+- [Not the shakeup I was expecting](https://www.kaggle.com/competitions/playground-series-s3e1/discussion/377129) — 8 票 / 13 评论 / 2023-01-10 
+- [Highly Correlated Cartesian Coordinate Features](https://www.kaggle.com/competitions/playground-series-s3e1/discussion/376364) — 6 票 / 10 评论 / 2023-01-05 
+- [How realistic are the latitudes and longitudes?](https://www.kaggle.com/competitions/playground-series-s3e1/discussion/376073) — 6 票 / 5 评论 / 2023-01-04 
+- [Features Skewed!!!😯](https://www.kaggle.com/competitions/playground-series-s3e1/discussion/375762) — 6 票 / 3 评论 / 2023-01-03 
+- [Don't just blindly augment your dataset](https://www.kaggle.com/competitions/playground-series-s3e1/discussion/375793) — 6 票 / 2 评论 / 2023-01-03 
+- [[Suggestions]- Choosing your final submissions and managing time effectively](https://www.kaggle.com/competitions/playground-series-s3e1/discussion/376721) — 5 票 / 2 评论 / 2023-01-08 
+- [Treacherous neighbors](https://www.kaggle.com/competitions/playground-series-s3e1/discussion/376377) — 5 票 / 4 评论 / 2023-01-06 
+- [Ideas for Cross Validation](https://www.kaggle.com/competitions/playground-series-s3e1/discussion/376551) — 5 票 / 1 评论 / 2023-01-06 
+- [Logical fallacy about the source (and date) of this dataset.  📅 ](https://www.kaggle.com/competitions/playground-series-s3e1/discussion/376262) — 5 票 / 4 评论 / 2023-01-05 
+- [Feature descriptions and definitions](https://www.kaggle.com/competitions/playground-series-s3e1/discussion/375786) — 5 票 / 2 评论 / 2023-01-03 
+- [Notebook On HANDLING SKEWNESS & OUTLIER || BASELINE🚀](https://www.kaggle.com/competitions/playground-series-s3e1/discussion/375886) — 5 票 / 0 评论 / 2023-01-03 
+- [How are you avoiding data leakage?](https://www.kaggle.com/competitions/playground-series-s3e1/discussion/376626) — 4 票 / 15 评论 / 2023-01-07 
+- [deciding optimal params for models?](https://www.kaggle.com/competitions/playground-series-s3e1/discussion/376412) — 4 票 / 6 评论 / 2023-01-06 
+- [ 📌 New Feature Distribution Library Featdist ❤️❤️❤️](https://www.kaggle.com/competitions/playground-series-s3e1/discussion/375956) — 4 票 / 4 评论 / 2023-01-04 
+- [Improving Linear Regression Models?](https://www.kaggle.com/competitions/playground-series-s3e1/discussion/376056) — 4 票 / 2 评论 / 2023-01-04 
+- [Congratulations To All The Winners 🎉🎉](https://www.kaggle.com/competitions/playground-series-s3e1/discussion/377156) — 3 票 / 4 评论 / 2023-01-10 
+- [Don't forget to link your solution write-ups](https://www.kaggle.com/competitions/playground-series-s3e1/discussion/377595) — 3 票 / 0 评论 / 2023-01-11 **write-up?**
+- [A colorful reminder to always ensemble your predictions](https://www.kaggle.com/competitions/playground-series-s3e1/discussion/377092) — 3 票 / 5 评论 / 2023-01-09 
+- [Validation strategy for this competition](https://www.kaggle.com/competitions/playground-series-s3e1/discussion/376581) — 3 票 / 0 评论 / 2023-01-07 
+- [No Welcome from Kaggle Team?? Playground is already crowded. California here we go!](https://www.kaggle.com/competitions/playground-series-s3e1/discussion/375849) — 3 票 / 0 评论 / 2023-01-03 
+- [Censored target variable](https://www.kaggle.com/competitions/playground-series-s3e1/discussion/375946) — 2 票 / 8 评论 / 2023-01-04 
+- [DATASET BALANCING APPROACH](https://www.kaggle.com/competitions/playground-series-s3e1/discussion/376628) — 2 票 / 2 评论 / 2023-01-07 
+- [How is it possible to Submit notebook in competition with a submission file?](https://www.kaggle.com/competitions/playground-series-s3e1/discussion/376045) — 2 票 / 9 评论 / 2023-01-04 
+- [Does linear regression or regularized linear regression still get used?](https://www.kaggle.com/competitions/playground-series-s3e1/discussion/377051) — 1 票 / 5 评论 / 2023-01-09 
+- [Extraction of geopatial variables and vectors of bigger parks](https://www.kaggle.com/competitions/playground-series-s3e1/discussion/377358) — 1 票 / 1 评论 / 2023-01-10 
+- [Feature engineering for this data.(Seeking Reviews)](https://www.kaggle.com/competitions/playground-series-s3e1/discussion/426130) — 1 票 / 0 评论 / 2023-07-21 
+- [Does Tree Based Models not need feature Scaling?](https://www.kaggle.com/competitions/playground-series-s3e1/discussion/376190) — 1 票 / 5 评论 / 2023-01-05 
+- [What actually means when it comes to Baseline, Baseline Model?](https://www.kaggle.com/competitions/playground-series-s3e1/discussion/376173) — 1 票 / 2 评论 / 2023-01-05 
+- [Why am I getting a overfitting badly?](https://www.kaggle.com/competitions/playground-series-s3e1/discussion/376013) — 0 票 / 14 评论 / 2023-01-04 
+- [EDA - PS Season 3, Episode 1](https://www.kaggle.com/competitions/playground-series-s3e1/discussion/376358) — 0 票 / 0 评论 / 2023-01-05 
+- [数据可视化实训平台搭建](https://www.kaggle.com/competitions/playground-series-s3e1/discussion/375986) — 0 票 / 0 评论 / 2023-01-04 
+- [No SWAG for this competition?](https://www.kaggle.com/competitions/playground-series-s3e1/discussion/375778) — 0 票 / 1 评论 / 2023-01-03 

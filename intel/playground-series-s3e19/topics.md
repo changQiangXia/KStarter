@@ -1,0 +1,82 @@
+# playground-series-s3e19 讨论区（按票数排序，共 80 条）
+
+- [Starter materials and onboarding resources](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/423643) — 62 票 / 20 评论 / 2023-07-11 
+- [Print variable name and value trick](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/426258) — 43 票 / 9 评论 / 2023-07-22 
+- [Data construction error?](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/425538) — 37 票 / 18 评论 / 2023-07-19 
+- [2nd Place Solution](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/428385) — 32 票 / 14 评论 / 2023-08-01 **write-up?**
+- [Submission tip](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/425973) — 25 票 / 20 评论 / 2023-07-21 
+- [Some Domain Knowledge on the Data](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/423644) — 21 票 / 13 评论 / 2023-07-11 
+- [Collection of helpful ideas - S3E19](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/426427) — 20 票 / 11 评论 / 2023-07-23 
+- [Sales breakdown by country correlates with GDP per capita](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/423725) — 19 票 / 5 评论 / 2023-07-11 
+- [Beware of data drift - Public leaderboard runs from Jan-Mar22](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/423657) — 19 票 / 7 评论 / 2023-07-11 
+- [This and the next Playground will be 3 weeks duration](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/423625) — 18 票 / 4 评论 / 2023-07-10 
+- [Analysis of every Playground Series Episode in Season 3](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/423650) — 18 票 / 7 评论 / 2023-07-11 
+- [Multiplication trick & New Year](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/424573) — 18 票 / 5 评论 / 2023-07-14 
+- [Date feature code snippet](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/423645) — 18 票 / 1 评论 / 2023-07-11 
+- [#8 private 6 public approach- Simple ensemble and probing](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/428368) — 18 票 / 0 评论 / 2023-08-01 
+- [Explaining Trends in Sales](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/423652) — 17 票 / 5 评论 / 2023-07-11 
+- [📚Resources for Beginners [Time series forecasting]](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/423648) — 17 票 / 4 评论 / 2023-07-11 
+- [New to Machine Learning or Kaggle?](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/421612) — 14 票 / 4 评论 / 2023-07-06 
+- [Time series full decomposition](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/424520) — 14 票 / 6 评论 / 2023-07-14 
+- [Forecasting Sales on Kagglazon. LLMs to Win and More Stuff.](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/423699) — 13 票 / 2 评论 / 2023-07-11 
+- [3rd Place Solution: EDA is the key](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/428682) — 13 票 / 2 评论 / 2023-08-02 **write-up?**
+- [A cautionary tale of trusting the public LB](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/428304) — 12 票 / 2 评论 / 2023-08-01 
+- [Finally, time-series competition! One more idea regarding Playgrounds](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/423719) — 11 票 / 7 评论 / 2023-07-11 
+- [And the magic is ...](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/424512) — 11 票 / 16 评论 / 2023-07-14 
+- [9th place solution](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/428300) — 11 票 / 4 评论 / 2023-08-02 **write-up?**
+- [5th place solution](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/428347) — 11 票 / 2 评论 / 2023-08-03 **write-up?**
+- [📌 Feature Distribution Library FeatDist ❤️❤️❤️](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/424757) — 10 票 / 4 评论 / 2023-07-15 
+- [Curated some more resources from top time series kaggle discussions on  tips & tricks  to Feature Engg,tools, CV ,notebooks](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/425117) — 10 票 / 2 评论 / 2023-07-17 
+- [16th Place Solution "Magic Trick" ](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/428438) — 10 票 / 0 评论 / 2023-08-01 **write-up?**
+- [Difference of SMAPE score in validation and test set.](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/423805) — 9 票 / 25 评论 / 2023-07-11 
+- [51st Place Solution - And Some of my Explorations and Learning](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/428317) — 9 票 / 0 评论 / 2023-08-01 **write-up?**
+- [Forecasting annual sales by GDP per capita](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/423919) — 9 票 / 3 评论 / 2023-07-12 
+- [Cyclical sales breakdown among products](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/423654) — 9 票 / 6 评论 / 2023-07-11 
+- [Leaderboard Probing (Risky Tactic)](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/424949) — 8 票 / 18 评论 / 2023-07-16 
+- [#70 solution](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/428390) — 7 票 / 1 评论 / 2023-08-05 **write-up?**
+- [Blending best public submissions - 17th | Simple approach - ~70th](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/428433) — 7 票 / 1 评论 / 2023-08-01 
+- [Optimizing SMAPE Directly](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/423772) — 6 票 / 5 评论 / 2023-07-11 
+- [How to handle outliers? (I'm a Beginner)](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/427266) — 6 票 / 21 评论 / 2023-07-27 
+- [Point to note while using some high scoring public kernels](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/424954) — 6 票 / 4 评论 / 2023-07-16 
+- [Approaching Success: My Approach for this Problem 🙂🙂 !!!](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/427372) — 6 票 / 0 评论 / 2023-07-27 
+- [7th Place Solution](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/428514) — 6 票 / 1 评论 / 2023-08-01 **write-up?**
+- [Kaggle team- please correct the sample submission file column name](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/423656) — 6 票 / 1 评论 / 2023-07-11 
+- [How to overfit on LB (wisely)](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/425252) — 5 票 / 6 评论 / 2023-07-17 
+- [skforecast: A recommended time series forecasting library](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/423797) — 5 票 / 2 评论 / 2023-07-11 
+- [Anomalous Dip in Sales in 2020: an additional layer of challenge to the competition](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/423771) — 5 票 / 2 评论 / 2023-07-11 
+- [Approaches to try for this competition - an overview](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/423835) — 5 票 / 0 评论 / 2023-07-11 
+- [My journey through this competition](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/428483) — 5 票 / 0 评论 / 2023-08-01 
+- [Format Date Column While Loading CSV](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/428249) — 5 票 / 2 评论 / 2023-07-31 
+- [Predicting on the Entire Training Data vs. Within Folds](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/424168) — 4 票 / 0 评论 / 2023-07-12 
+- [Covid 2020 time-series data smoothed ](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/424277) — 4 票 / 0 评论 / 2023-07-13 
+- [Huge difference between validation and public score](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/424133) — 4 票 / 14 评论 / 2023-07-12 
+- [How to tune ARIMA SARIMAX Parameter using Optuna](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/424657) — 4 票 / 3 评论 / 2023-07-15 
+- [A slight improvement on the "Highest score" public notebook](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/428123) — 4 票 / 0 评论 / 2023-07-31 
+- [Overview of the whole Dataset](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/423890) — 3 票 / 3 评论 / 2023-07-11 
+- [Example of how to filter holidays using library](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/424183) — 3 票 / 0 评论 / 2023-07-12 
+- [(Almost) Free Lunch 20.86 / 19.80. But stuck to reproduce it at Kaggle.](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/424368) — 3 票 / 1 评论 / 2023-07-13 
+- [Awesome playlist to learn Time Series Modeling by Konrad](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/423976) — 3 票 / 1 评论 / 2023-07-12 
+- [Fourier Features](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/426640) — 3 票 / 5 评论 / 2023-07-24 
+- [How to handle lower values of sales in 2020 due to Corona](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/424424) — 3 票 / 2 评论 / 2023-07-13 
+- [Prophet for extrading trend, conditional seasonality, holidays and extra regressors](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/425284) — 3 票 / 3 评论 / 2023-07-18 
+- [📚Similar Playground Series  Competitions and solutions](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/423947) — 3 票 / 0 评论 / 2023-07-12 **write-up?**
+- [Handling corona lockdown data](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/428268) — 3 票 / 1 评论 / 2023-07-31 
+- [Name of the Artist ](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/423647) — 2 票 / 3 评论 / 2023-07-11 
+- [Understanding Symmetric mean absolute percentage error (SMAPE) and comparison with other regression matrices](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/424122) — 2 票 / 0 评论 / 2023-07-12 
+- [Periodogram for Feature Engineering](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/423895) — 2 票 / 0 评论 / 2023-07-11 
+- [MOM (Motive | Opportunity | Means) concept for features and external data predictors ](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/425202) — 2 票 / 2 评论 / 2023-07-17 
+- [Why no one using neural network apart from me to get best training result for these series?](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/424658) — 2 票 / 7 评论 / 2023-07-15 
+- [Times series stationary check.](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/426631) — 2 票 / 3 评论 / 2023-07-24 
+- [Lag features](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/426520) — 2 票 / 3 评论 / 2023-07-24 
+- [How to improve predictions?](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/428002) — 2 票 / 7 评论 / 2023-07-30 
+- [What better to do with data for 2020?](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/428033) — 2 票 / 5 评论 / 2023-07-30 
+- [Approach To Take In Time Series](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/425015) — 1 票 / 2 评论 / 2023-07-16 
+- [Do i need to know LSTM models to work with the dataset.](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/425371) — 1 票 / 5 评论 / 2023-07-18 
+- [Differentiation as a forecasting method?](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/426373) — 1 票 / 0 评论 / 2023-07-23 
+- [Dataset for top public notebook submissions](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/424663) — 1 票 / 1 评论 / 2023-07-15 
+- [What's the best way for encoding dates?](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/425464) — 1 票 / 4 评论 / 2023-07-18 
+- [75 Separate Models](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/424286) — 1 票 / 4 评论 / 2023-07-13 
+- [About numpy.exp() vs numpy.expm1() functions](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/426175) — 1 票 / 5 评论 / 2023-07-22 
+- [Public LB score correlates well with local validation SMAPE on Jan to Mar 2021 data](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/426911) — 1 票 / 1 评论 / 2023-07-25 
+- [How to get the Random Forest Regressor to run](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/428131) — 1 票 / 7 评论 / 2023-07-31 
+- [What kind of Accuracy Metric has been used for evaluation?](https://www.kaggle.com/competitions/playground-series-s3e19/discussion/424384) — 1 票 / 1 评论 / 2023-07-13 

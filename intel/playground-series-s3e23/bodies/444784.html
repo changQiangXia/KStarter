@@ -1,0 +1,227 @@
+<p>Hi all, </p>
+<p>In this competition the evaluation metric is the popular <a href="https://en.wikipedia.org/wiki/Receiver_operating_characteristic" target="_blank">area under the ROC curve</a>, which is ranking metric. It has shown in previous competitions that this metric can be optimized by the ensemble of different model predictions. This <a href="https://www.kaggle.com/code/ambrosm/pss3e23-eda-which-makes-sense" target="_blank">notebook</a> from <a href="https://www.kaggle.com/ambrosm" target="_blank">@ambrosm</a> shows that ensemble works. Then, I decided to use ensemble in a slight different way; that is, I used the hill-climbing strategy that was used in a previous tabular competition by <a href="https://www.kaggle.com/samuelcortinhas" target="_blank">@samuelcortinhas</a> (see this <a href="https://www.kaggle.com/competitions/playground-series-s3e3/discussion/379690" target="_blank">post</a>). The idea behind hill-climbing is very simple. It combines model predictions in a linear fashion as long as the objective metric improves. Notice that in the below implementation of the <code>hill_climbing</code> function, we allow for negative weights. This does not have to be the case all the time. You can restrict the weights to be only positive.</p>
+<p>In my case, I ensemble six of the traditional tree-based models with the hill-climbing strategy as shown below. First we define the <code>hill_climbing</code> function.</p>
+<pre><code> hill_climbing(x, y, x_test):
+
+    
+     = {}
+     col in x.columns:
+        [col] = roc_auc_score(y, x[col])
+
+    
+     = {k: v for k, v in sorted(scores.items(), key = lambda item: item[], reverse = True)}
+
+    
+     = x[list(scores.keys())]
+     = x_test[list(scores.keys())]
+
+     = False
+     = x.iloc[:,]
+     = x_test.iloc[:,]
+     = x.iloc[:,:]
+     = np.arange(-., ., .) 
+     =
+     = 
+
+     not STOP:
+         += 
+         = roc_auc_score(y, current_best_ensemble)
+        , wgt_best = None, None
+         k in MODELS:
+             wgt in weight_range:
+                 = ( - wgt) * current_best_ensemble + wgt * MODELS[k]
+                 = roc_auc_score(y, potential_ensemble)
+                 cv_score &gt; potential_new_best_cv_score:
+                     = cv_score
+                    , wgt_best = k, wgt
+
+         k_best is not None:
+             = ( - wgt_best) * current_best_ensemble + wgt_best * MODELS[k_best]
+             = ( - wgt_best) * current_best_test_preds + wgt_best * x_test[k_best]
+            .drop(k_best, axis = , inplace = True)
+             MODELS.shape[] == :
+                 = True
+            .append(potential_new_best_cv_score)
+        :
+             = True
+
+     = current_best_ensemble
+     = current_best_test_preds
+
+    
+</code></pre>
+<p>Then, we run the usual cross-validation routine. </p>
+<pre><code>ens_cv_scores, ens_preds = list(), list()
+hill_ens_cv_scores, hill_ens_preds =  list(), list()
+
+sk = RepeatedStratifiedKFold(n_splits = , n_repeats = , random_state = )
+for i, (train_idx, test_idx)  enumerate(sk.split(X, Y)):
+
+    X_train, X_test = X.iloc[train_idx], X.iloc[test_idx]
+    Y_train, Y_test = Y.iloc[train_idx], Y.iloc[test_idx]
+
+    print()
+
+    ########
+    ## RF ##
+    ########
+
+    RF_md = RandomForestClassifier(n_estimators = , 
+                                   max_depth = ,
+                                   min_samples_split = ,
+                                   min_samples_leaf = ).fit(X_train, Y_train)
+
+    RF_pred = RF_md.predict_proba(X_test)[:, ]
+    RF_score = roc_auc_score(Y_test, RF_pred)
+
+    print(, i, , RF_score)
+
+    RF_pred_test = RF_md.predict_proba(test_cv)[:, ]
+
+    #################
+    ## Extra Trees ##
+    #################
+
+    ET_md = ExtraTreesClassifier(n_estimators = , 
+                                 max_depth = ,
+                                 min_samples_split = ,
+                                 min_samples_leaf = ).fit(X_train, Y_train)
+
+    ET_pred = ET_md.predict_proba(X_test)[:, ]
+    ET_score = roc_auc_score(Y_test, ET_pred)
+
+    print(, i, , ET_score)
+
+    ET_pred_test = ET_md.predict_proba(test_cv)[:, ]
+
+    ##########################
+    ## HistGradientBoosting ##
+    ##########################
+
+    hist_md = HistGradientBoostingClassifier(l2_regularization = ,
+                                             early_stopping = ,
+                                             learning_rate = ,
+                                             max_iter = ,
+                                             max_depth = ,
+                                             max_bins = ,
+                                             min_samples_leaf = ,
+                                             max_leaf_nodes = ).fit(X_train, Y_train)
+
+    hist_pred = hist_md.predict_proba(X_test)[:, ]
+    hist_score = roc_auc_score(Y_test, hist_pred)
+
+    print(, i, , hist_score)  
+
+    hist_pred_test = hist_md.predict_proba(test_cv)[:, ]
+
+    ##########
+    ## LGBM ##
+    ##########
+
+    LGBM_md = LGBMClassifier(objective = ,
+                             n_estimators = ,
+                             max_depth = ,
+                             learning_rate = ,
+                             num_leaves = ,
+                             reg_alpha = ,
+                             reg_lambda = ,
+                             subsample = ,
+                             colsample_bytree = ).fit(X_train, Y_train)
+
+    lgb_pred = LGBM_md.predict_proba(X_test)[:, ]
+    lgb_score = roc_auc_score(Y_test, lgb_pred)
+
+    print(, i, , lgb_score) 
+
+    lgb_pred_test = LGBM_md.predict_proba(test_cv)[:, ]
+
+    #########
+    ## XGB ##
+    #########
+
+    XGB_md = XGBClassifier(objective = ,
+                           tree_method = ,
+                           colsample_bytree = , 
+                           gamma = , 
+                           learning_rate = , 
+                           max_depth = , 
+                           min_child_weight = , 
+                           n_estimators = , 
+                           subsample = ).fit(X_train, Y_train)
+
+    xgb_pred = XGB_md.predict_proba(X_test)[:, ]
+    xgb_score = roc_auc_score(Y_test, xgb_pred)
+
+    print(, i, , xgb_score)
+
+    xgb_pred_test = XGB_md.predict_proba(test_cv)[:, ]
+
+    ##############
+    ## CatBoost ##
+    ##############
+
+    Cat_md = CatBoostClassifier(loss_function = ,
+                                iterations = ,
+                                learning_rate = ,
+                                depth = ,
+                                random_strength = ,
+                                bagging_temperature = ,
+                                border_count = ,
+                                l2_leaf_reg = ,
+                                verbose = , 
+                                task_type = ).fit(X_train, Y_train)
+
+    cat_pred = Cat_md.predict_proba(X_test)[:, ]
+    cat_score = roc_auc_score(Y_test, cat_pred)
+
+    print(, i, , cat_score)
+
+    cat_pred_test = Cat_md.predict_proba(test_cv)[:, ]    
+
+    ##############
+    ## Ensemble ##
+    ##############
+
+    ens_pred_1 = (RF_pred + ET_pred + hist_pred + lgb_pred + xgb_pred + cat_pred) / 
+    ens_pred_2 = (RF_pred_test + ET_pred_test + hist_pred_test + lgb_pred_test + xgb_pred_test + cat_pred_test) / 
+
+    ens_score_fold = roc_auc_score(Y_test, ens_pred_1)
+    ens_cv_scores.append(ens_score_fold)
+    ens_preds.append(ens_pred_2)
+
+    print(, i, , ens_score_fold)
+
+    ############################
+    ## Hill Climbing Ensemble ##
+    ############################
+
+    x = pd.DataFrame({: RF_pred,
+                      : ET_pred, 
+                      : hist_pred, 
+                      : lgb_pred,
+                      : xgb_pred,
+                      : cat_pred})
+    y = Y_test
+
+    x_test = pd.DataFrame({: RF_pred_test,
+                           : ET_pred_test, 
+                           : hist_pred_test, 
+                           : lgb_pred_test,
+                           : xgb_pred_test,
+                           : cat_pred_test})
+
+    hill_results = hill_climbing(x, y, x_test)
+
+    hill_ens_score_fold = roc_auc_score(y, hill_results[])
+    hill_ens_cv_scores.append(hill_ens_score_fold)
+    hill_ens_preds.append(hill_results[])
+
+    print(, i, , hill_ens_score_fold)
+
+print(, np.mean(ens_cv_scores))
+The average ensemble oof ROC-AUC score over the -folds is 
+
+print(, np.mean(hill_ens_cv_scores))
+The hill climbing ensemble oof ROC-AUC score over the -folds is 
+</code></pre>
+<p>For more details, the source code can be found <a href="https://www.kaggle.com/code/oscarm524/ps-s3-ep23-eda-modeling-submission" target="_blank">here</a>.</p>

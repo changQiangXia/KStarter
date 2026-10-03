@@ -1,0 +1,35 @@
+<p>Hi all,</p>
+<p>It seems there was quite a good shake up given that dataset was highly imbalanced and AUC can vary a lot depending the number of samples. I realized there was a good difference between by OOF AUC and the leaderboard so I decided to trust only my CV (10 StratifiedKfold).</p>
+<h3>Tricks that worked</h3>
+<ol>
+<li>Fill <code>unknown</code> category form <code>smoking status</code> as <code>never smoked</code>. The ituition was given on my <strong><a href="https://www.kaggle.com/code/jcaliz/ps-s03e02-eda-baseline" target="_blank">EDA</a></strong> where you can see that <code>unknown</code> class has the lowest probability of stroke.</li>
+<li>Fill <code>other</code> class from <code>gender</code> as <code>male</code>. I spotted a boost on CV when filling that record in synthetic dataset. I didn't probe the leaderboard to validate this on test.</li>
+<li>Ensemble using gradient descent and ranking the predictions.</li>
+<li>Concat original stroke dataset and use StratifiedKfold where validation only has synthetic data.</li>
+<li>Feature selection using RecursiveFeatureElimanation. Additional features I tried:</li>
+</ol>
+<pre><code> ():
+    df[] = df.age / df.bmi
+    df[] = df.age * df.bmi
+    df[] = df.bmi / 
+    df[] = df.avg_glucose_level * df.bmi / 
+    df[]= df.hypertension*df.heart_disease
+     df
+</code></pre>
+<h3>Things that didn't work</h3>
+<ol>
+<li>Use forward selection taken from this <a href="https://www.kaggle.com/code/cdeotte/forward-selection-oof-ensemble-0-942-private/notebook" target="_blank">notebook</a>. This was my second submission and scored 0.89941 on private leaderboard. I think It didn't worked because the final ensemble was only composed of XGBoost models while my best submission has a wide variety of models.</li>
+<li>MeanEncoder, WoEEncoder and CountFrequency encoder. Neither of those provided better solutions that OneHotEncoder.</li>
+</ol>
+<h3>Final Ensemble:</h3>
+<p>My final ensemble is composed of several models:</p>
+<ul>
+<li>LogisticRegression with RFE, l2, and liblinear solver.</li>
+<li>LogisticRegression with RFE, no regularization, lbfgs solver.</li>
+<li>LightGBM no RFE, no Feature Engineering.</li>
+<li>Another LightGBM with early stopping and monitoring logloss (yes, logloss no AUC).</li>
+<li>A Catboost model inspired in <a href="https://www.kaggle.com/code/dmitryuarov/ps-s3e2-catboost-lasso-nn-fiasco" target="_blank">this notebook</a> by <a href="https://www.kaggle.com/dmitryuarov" target="_blank">@dmitryuarov</a>. I made some modifications to make sure the OOF AUC was similar to the mean AUC by fold.</li>
+<li>A tuned XGBoost with feature engineering. (best single model) See the code and results replica <strong><a href="https://www.kaggle.com/code/jcaliz/ps-s03e02-eda-baseline" target="_blank">Here</a></strong></li>
+</ul>
+<p>And that's all.<br>
+Many congratulations to the winners, looking forward to the next playground competitions.</p>

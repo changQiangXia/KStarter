@@ -1,0 +1,105 @@
+<h3>Lat / Long Feature Engineering tricks from previous competitions</h3>
+<p>Hi Guys, </p>
+<p>This is not the first Kaggle competition that had lat / long coordinates in the data.</p>
+<p>I did a little bit of digging and found the following use case examples of lat/long coordinates on Kaggle.</p>
+<blockquote>
+  <p><strong>This is a work in progress:</strong> I plan to use this post as a placeholder and keep updating it as things progress over the next week so stay tuned</p>
+</blockquote>
+<hr>
+<h4><a href="https://www.kaggle.com/competitions/foursquare-location-matching/discussion/336140" target="_blank">Foursquare Competition</a></h4>
+<p>On this competition most of the winning solution had used some information from the lat / long columns of the dataset. </p>
+<h5>Some examples</h5>
+<blockquote>
+  <p>You can read more on <a href="https://www.kaggle.com/competitions/foursquare-location-matching/discussion/336140" target="_blank">my</a> post about the winning solutions</p>
+</blockquote>
+<ul>
+<li>Measuring euclidean distance in latitude and longitude</li>
+<li>Used lat, lon to calculate the nearest distance between objects</li>
+<li>edit-distance</li>
+<li>Simply using them as absolutes</li>
+<li>Latlon embeddings (Just use them as categoricals)</li>
+<li>KNN on L2 norm for a matrix built from Lat / long</li>
+<li>Euclidean, Manhattan, Harvesine distances </li>
+</ul>
+<p><strong>Encoding Trick</strong></p>
+<p>Because the latitude and longitude features are of high precision, it is sometimes necessary to encode them in some way to make them useful for the model. A team on this competition used a technique like positional encoding of transformers to embed these high precision features in vectors.</p>
+<pre><code>emb_size =  
+precision =  
+
+latlon = np.expand_dims(df[[, ]].values, axis=-) 
+
+m = np.exp(np.log(precision) / emb_size) 
+angle_freq = m ** np.arange(emb_size) 
+angle_freq = angle_freq.reshape(, , emb_size) 
+
+latlon = latlon * angle_freq 
+latlon[..., ::] = np.cos(latlon[..., ::]) 
+latlon[..., ::] = np.sin(latlon[..., ::]) 
+latlon = latlon.reshape(-,  * emb_size) 
+</code></pre>
+<h4><a href="https://www.kaggle.com/code/felipefonte99/foursquare-lgb-catboost" target="_blank">Package: reverse-geocode</a></h4>
+<p>This is a really cool useful package for dealing with this type of data. <br>
+Checkout <a href="https://www.kaggle.com/code/felipefonte99/foursquare-lgb-catboost" target="_blank">this</a> notebook to see it's usage.</p>
+<p>You first need to install it:</p>
+<pre><code>!mkdir -p /tmp/pip/cache/
+!cp ..//reverse-geocode/reverse_geocode.xyz /tmp/pip/cache/reverse_geocode.tar.gz
+!pip install /tmp/pip/cache/reverse_geocode.tar.gz
+</code></pre>
+<p>Then you can do all sorts of cool things with it, like:</p>
+<pre><code>coordinates = (lat, long),
+result = reverse_geocode.search(coordinates)
+ result[][]
+</code></pre>
+<h4><a href="https://www.kaggle.com/code/guoyonfan/improved-binary-lgb-baseline-0-839" target="_blank">Distances</a></h4>
+<p>Also on this competition, I found those distance metrics for calculating lat/long features.</p>
+<pre><code> ():
+     np.(lat2 - lat1) + np.(long2 - long1)
+
+ ():
+    radius = 
+    dlat=np.radians(lats2 - lats1)
+    dlon=np.radians(longs2 - longs1)
+    a = np.sin(dlat/) * np.sin(dlat/) + np.cos(np.radians(lats1)) \
+        * np.cos(np.radians(lats2)) * np.sin(dlon/) * np.sin(dlon/)
+    c =  * np.arctan2(np.sqrt(a), np.sqrt(-a))
+    d = radius * c
+     d
+
+ ():
+    latdiff = (lat1 - lat2)
+    londiff = (lon1 - lon2)
+     (latdiff **  + londiff ** ) ** 
+</code></pre>
+<pre><code>
+</code></pre>
+<h4><a href="https://www.kaggle.com/code/guoyonfan/improved-binary-lgb-baseline-0-839" target="_blank">Geographic KNN</a></h4>
+<ul>
+<li>But how do you A-C-T-U-A-L-L-Y do those KNN tricks with the coordinates?</li>
+</ul>
+<p>I found this code on the same notebook, it makes sense: </p>
+<pre><code>knn = KNeighborsRegressor(n_neighbors = neighbors,
+                            metric = ,
+                            n_jobs = -)
+knn.fit(country_df[[,]], country_df.index)
+dists, nears = knn.kneighbors(country_df[[, ]], 
+                                return_distance = )
+</code></pre>
+<pre><code>                           
+</code></pre>
+<h4><a href="https://www.kaggle.com/competitions/bigquery-geotab-intersection-congestion/discussion/108804" target="_blank">How to use latitude longitude for feature engineering</a></h4>
+<p>So on a <a href="https://www.kaggle.com/competitions/bigquery-geotab-intersection-congestion/discussion/108804" target="_blank">different</a> competition I found this interesting post about coordinates feature engineering:</p>
+<p><strong>Calculate distances to the important points to the map</strong></p>
+<ul>
+<li>If there is additional data about infrastructure/buildings, distance to the nearby shop, hospital, distance to the best school etc. If such data is not there, extract interesting points on the map from training/ test data. For example, divide the map into squares/grid, and within each square, find the most expensive flat, and for every other object in the square, add the distance to that flat. Or organize data points into clusters, and then use centers of clusters as important points. Or find some special areas, like the area with very old buildings and add distance to this one.</li>
+</ul>
+<p><strong>Aggregate statistics about surrounding area</strong></p>
+<ul>
+<li>Another approach is to calculate aggregated statistics for objects surrounding area. For example, number of flats around this particular point, representing area's popularity. Or add mean real estate price indicating how expensive area around selected point is.</li>
+</ul>
+<p><strong>Rotation of coordinates</strong></p>
+<ul>
+<li>If coordinates are used to train decision trees, slightly rotated coordinates can act as new features. It helps a model to make more precise selections on the map. Exact rotation needed needs to be found out, so we may want to add rotations like 45 or 22.5 degrees (etc). For example, say the street is dividing an area into two parts : high priced district above the street, and the low priced district below it. If the street is slightly rotated (line a inclined plane), trees will make lot of splits around the street. But if rotated coordinates are used, these two districts can be divided by a single split.</li>
+</ul>
+<hr>
+<p>I plan to use this post as a placeholder and keep updating it as things progress over the next week.<br>
+Stay tuned! </p>

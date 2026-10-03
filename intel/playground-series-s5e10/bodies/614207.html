@@ -1,0 +1,181 @@
+<h2>Overview</h2>
+<h3>1. Base models</h3>
+<p>Rather than training hundreds of models and hill-climbing, I focused on a smaller, higher quality set of models and used their OOF predictions as meta-features:</p>
+<table>
+<thead>
+<tr>
+<th>Model Type</th>
+<th>Variants / Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>XGBoost</strong></td>
+<td>Multiple Optuna-tuned versions of <a href="https://www.kaggle.com/cdeotte" target="_blank">@cdeotte</a>’s <em>“Boosting over Residuals”</em> (<a href="https://www.kaggle.com/code/cdeotte/xgb-boosting-over-residuals-cv-0-05595" target="_blank">notebook</a>). Each variant differed in fold count (5–55 folds) and parameter priors.</td>
+</tr>
+<tr>
+<td><strong>TabM</strong></td>
+<td>Three variants of <a href="https://www.kaggle.com/masayakawamata" target="_blank">@masayakawamata</a>’s TabM (<a href="https://www.kaggle.com/competitions/playground-series-s5e10/discussion/610792" target="_blank">discussion</a>), two of which were <strong>converted to predict residuals</strong> over the synthetic data generator.</td>
+</tr>
+<tr>
+<td><strong>HistGBM / LightGBM</strong></td>
+<td>One HistGradientBoostingRegressor and two diverse LightGBM baselines.</td>
+</tr>
+<tr>
+<td><strong>Neural Networks</strong></td>
+<td>A small Keras MLP, plus a Neural Network Ensemble (averaging several seeds / architectures).</td>
+</tr>
+<tr>
+<td><strong>AutoGluon</strong></td>
+<td>My own variant of <a href="https://www.kaggle.com/aliffaagnur" target="_blank">@aliffaagnur</a>’s <em>AutoGluon Adapter</em> (<a href="https://www.kaggle.com/code/aliffaagnur/road-accident-risk-autogluon" target="_blank">notebook</a>).</td>
+</tr>
+</tbody>
+</table>
+<p>These models were trained using <strong>K-Fold CV (5–55 folds)</strong> with OOF and test predictions saved.</p>
+<hr>
+<h3>2. Meta-features and pruning</h3>
+<p>I stacked all base OOFs (22-48 columns depending on version) into a meta-matrix and applied:</p>
+<ul>
+<li><strong>Filtering:</strong> Drop models with near-zero variance or OOF RMSE ≫ median (initial clean up).</li>
+<li><strong>Duplicate removal:</strong> Eliminate columns with |ρ| &gt; 0.9995, keeping the stronger one.
+After this first stage pruning, the final subset of models used for stacking was chosen via Greedy NNLS and LassoCV selection, which identify the most complementary OOF features.   </li>
+</ul>
+<p>This tended to reduce the feature set from ~40 → 4–6 columns.</p>
+<hr>
+<h3>3. Meta-learning and ensembling</h3>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Model / Technique</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>RidgeCV Sweep</strong></td>
+<td>Tuned α ∈ {0.01 … 10}; produced top single-model CV (0.05579).</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>MetaNN</strong></td>
+<td>Small BN → Dense(32,GELU) → Dropout → Dense(1), AdamW + CosineRestarts, Huber loss; 7-fold stratified CV × 3 seeds.</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>Residual MetaNN</strong></td>
+<td>Trained on <em>(y − ridge OOF)</em> and added back to ridge to capture non-linear leftovers.</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>Greedy NNLS &amp; LassoCV selection</strong></td>
+<td>Identified minimal model subsets and positive blending weights.</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>Final Blends</strong></td>
+<td>• NNLS of {MetaNN, Ridge} • 2-stage Ridge on [ridge, MetaNN].</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3>4. Evaluation and results</h3>
+<table>
+<thead>
+<tr>
+<th>Candidate Submission</th>
+<th>CV (OOF RMSE)</th>
+<th>LB Score</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ridge</td>
+<td>0.05579</td>
+<td><strong>0.05564 (8th Place)</strong></td>
+</tr>
+<tr>
+<td>Two-stage Ridge (Ridge + MetaNN)</td>
+<td>0.05579</td>
+<td>0.05563 (would have been even better !)</td>
+</tr>
+<tr>
+<td>NNLS Blend</td>
+<td>0.05579</td>
+<td>≈ 0.05564</td>
+</tr>
+<tr>
+<td>Greedy / Lasso Subsets</td>
+<td>0.05579 – 0.05580</td>
+<td>≈ 0.05565</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>Code Highlights</h2>
+<p><strong>Prune Weak OOF Features Before Stacking</strong></p>
+<pre><code>
+ ():
+     mean_squared_error(a, b, squared=)
+
+stats = []
+ c  X_meta.columns:
+    p = X_meta[c].values
+    stats.append((c, rmse(y, p), np.std(p), np.corrcoef(p, y)[,]))
+
+stats_df = (pd.DataFrame(stats, columns=[,,,]).sort_values())
+
+
+bad_cut = stats_df.oof_rmse.median() + 
+bad_cols = (stats_df.loc[(stats_df[]&lt;) | (stats_df[]&gt;bad_cut), ])
+
+keep = [c  c  X_meta.columns  c   bad_cols]
+
+
+C = X_meta[keep].corr().values
+drop_dupes, thr = (), 
+ i  ((keep)):
+     keep[i]  drop_dupes: 
+        
+     j  (i+, (keep)):
+         keep[j]  drop_dupes: 
+            
+         (C[i,j]) &gt; thr:
+            rm_i = stats_df.loc[stats_df.col==keep[i], ].iloc[]
+            rm_j = stats_df.loc[stats_df.col==keep[j], ].iloc[]
+            drop_dupes.add(keep[j]  rm_j &gt;= rm_i  keep[i])
+
+sel_cols0 = [c  c  keep  c   drop_dupes]
+X_USED, X_USED_TEST = X_meta[sel_cols0].copy(), X_meta_test[sel_cols0].copy()
+</code></pre>
+<p><strong>Tune Ridge Meta-Learner Over Pruned Feature Set</strong></p>
+<pre><code> ():
+    kf = KFold(n_splits=n_splits, shuffle=, random_state=seed)
+    oof = np.zeros((y)); test_pred = np.zeros((X_test))
+    coefs = []
+     tr, va  kf.split(X):
+        m = Ridge(alpha=alpha, fit_intercept=, random_state=seed)
+        m.fit(X.iloc[tr], y.iloc[tr])
+        oof[va] = m.predict(X.iloc[va])
+        test_pred += m.predict(X_test) / n_splits
+         collect_coefs: coefs.append(m.coef_)
+     rmse(y, oof), oof, test_pred, (np.vstack(coefs)  collect_coefs  )
+
+best_rmse = 
+ a  [, , , , , , ]:
+    r, oof_r, pred_r, coef_arr = cv_ridge_preds(X_USED, y, X_USED_TEST, a, collect_coefs=)
+     r &lt; best_rmse:
+        best_rmse, best_alpha = r, a
+        best_oof_ridge, best_pred_ridge, best_coef_arr = oof_r, pred_r, coef_arr
+</code></pre>
+<hr>
+<h2>Sources and Acks</h2>
+<ul>
+<li><a href="https://www.kaggle.com/code/cdeotte/xgb-boosting-over-residuals-cv-0-05595" target="_blank">@cdeotte – XGB Boosting over Residuals CV 0.05595</a></li>
+<li><a href="https://www.kaggle.com/siukeitin" target="_blank">@siukeitin (broccoli beef) – Bayesian Optimal Solution</a></li>
+<li><a href="https://www.kaggle.com/competitions/playground-series-s5e10/discussion/610792" target="_blank">@masayakawamata – TabM Baseline and Discussion</a></li>
+<li><a href="https://www.kaggle.com/code/aliffaagnur/road-accident-risk-autogluon" target="_blank">@aliffaagnur – AutoGluon Adapter Notebook</a></li>
+</ul>
+<hr>
+<p>Thanks to everyone for a great playground competition!</p>

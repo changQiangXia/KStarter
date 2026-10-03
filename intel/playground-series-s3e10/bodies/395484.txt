@@ -1,0 +1,141 @@
+# https://www.kaggle.com/competitions/playground-series-s3e10/discussion/395484
+
+Topic #395484: A structured review of winning solutions from the first 10 episodes
+  Author: Phong Nguyen
+  Posted: 2023-03-17 13:06:15.453000
+  Votes: 23  Comments: 9
+
+Based on the detailed solutions from A compilation of winning solutions from the first 10 episodes, I extract the main points and organize them into topics.
+
+Data
+
+
+
+In every episode, the competition data is generated from some particular dataset. Adding the original data could help improve the model. There are different ways to use the original dataset: 
+
+
+adding all
+
+adding all except the part that are very different from the train set
+
+adding just the positive class if data is imbalanced
+
+However, the original data needs to be excluded from the validation fold to make the CV more aligned with the LB.
+
+Adversarial validation can be performed to check if two datasets are similar. It's normally used to check if train and test sets come from the same distribution. But in our case, it can also be used to check if the original data is similar enough to be included in the training.
+
+Standard data preprocessing includes missing values handling, standardization, outlier removal, (quasi-)duplicate detection. See Episode 7 - 1st place for an example of exploiting the leakage of labels in duplicate data @hardyxu52.
+
+Techniques to handle imbalanced data, such as oversampling, oversampling, SMOTE, don't seem to work well.
+
+
+Feature engineering
+
+
+
+In Episode 1, it's essential to perform spatial feature engineering to generate relevant features (distance to city, distance to the coastline, etc.) based on raw longitude and latitude. However, in a few episodes, it seems not necessary to perform feature engineering - 1st place Episode 5 didn't use original data and addtional features @rapela.
+
+Feature engineering can be more important for linear models compared to tree-based models @ambrosm.
+
+There are many different ways to encode categorical features besides one hot encoding: ordinal, weight of evidence, target, etc. Even though, simple one hot encoding seems to work well.
+
+Integer datatype doesn't guarantee numerical feature, it can represent categories.
+
+Besides adding new features, dropping ones that don't contribute is also important, such as using RecursiveFeatureElimanation.
+
+
+Cross validation
+
+
+
+The #1 advice is to trust your local CV because the public LB only takes 20% of the test data. 
+
+Standard approach is k-fold (regression) or stratified k-fold ( classification) CV. Common values are 5 or 10 but some solutions use 20-30 @jcaliz.
+
+A pretty unique approach to perform CV based on clustering of PCA projection - 4th place Episode 6 @icfoer.
+
+
+Modelling
+
+
+
+AutoML framework like AutoGluon seems work very well: 1st place Episode 1 @kirderf, 9th place Episode 6 @brendanmoore14, 6th place Episode 8 @kirderf.
+
+tidymodels package if you're an R fan - 10th place Episode 9 @nicobarea.
+
+How to tune hyperparameters?
+
+
+Hyperparmeters are often tuned by Optuna but an initial manual play with the values is recommended to get a good understanding.
+
+A simpler approach to tune is using randomized search - 1st place Episode 2 @kirkdco.
+
+Remember to test if the found hyperparmeters work well with different random seeds.
+
+The most common winning formula found in every episode is a weighted ensemble. However, an ensemble needs to be diverse:
+
+
+Model-wise: don't focus only on boosting models, a linear model (5th place Episode 2 @jcaliz) or neural network (2nd place Episode 1 @jcerpentier) might also help.
+
+CV-wise: 7th place Episode 4 trained each model in an ensemble with a different cross validation strategy @ramjasmaurya.
+
+Data-wise: 3rd place Episode 8 generated a large number of datasets with different combination of columns and used them to train an ensemble @peridon.
+
+A just ensemble of notebooks with high score - 3rd place Episode 5 @group16.
+
+How to find the weights of an ensemble?
+
+
+Just simple mean.
+
+Optuna is also commonly used to tune the weights of the ensemble - 6th place Episode 2 @viktortaran.
+
+sicpy minimize - 4th place Episode 7 @ryanbarretto
+
+hill climbing - 2nd place Episode 7 @jcaliz.
+
+2-level stacking: use predictions from 1st level models as features to build a higher level model - 2nd place Episode 8 @craigmthomas.
+
+It's not uncommon that a single model performs better than a complex ensemble:
+
+
+LGBM - 8th place Episode 2 @k0takahashi.
+
+XGBoost - 2nd place Episode 5 @nhopet.
+
+Random forest - 4th place Episode 6 @icfoer.
+
+Extreme Gradient Boost Regressor - 6th place Episode 6 @iamvaibhav100.
+
+Generalized Addictive Models - 1st place Episode 10 - this is the key in Episode 10 @seascape.
+
+Unique techniques:
+
+
+2nd place Episode 6 predicted price with 3 linear regression models, each for a newly created category high/medium/low price per square. The category was generated with an extra classification model @johng29.
+
+5th place Episode 6 built separate models for different ranges of made feature and cross validate with multiple random seeds stratified k-fold @mscgeorges.
+
+7th place Episode 8 used 7 high-scoring public notebooks to obtain predictions for the test. It then used the highest-scoring notebook to generate test predictions and used them as groundtruth to retrain 7 earlier models to 'predict' price of the training set. Those 7 predictions are used as 7 additional features @jbomitchell.
+
+Comments:
+├─ JEANMPIA (2023-03-19 06:41:01.723000) [+1]
+│  hey, 
+│  Can't stratified be used in a regression problem as well ? where each fold would respect the mean or median of the entirer set ? 
+│  I'm not experienced enough on regression to confirm this
+  ├─ Phong Nguyen (2023-03-19 07:35:03.987000) [+1]
+  │  @janmpia Thank you for your question. How can you split folds so that each has the same mean as the entire set? One approximate approach is to sort and bin the target column by value range. Then st...
+    ├─ JEANMPIA (2023-03-19 09:18:46.097000) [+0]
+    │  What i meant was to respect the target median or mean as we do in Classification
+├─ C4rl05/V (2023-03-17 23:40:49.937000) [+1]
+│  Hello @phongnguyen1 thanks for the summary, I been actively competing and I hope to improve my performance going forward
+├─ RyanCaldwell (2023-03-17 17:32:05.040000) [+1]
+│  @phongnguyen1 In your Hyperparameter section what do you mean by "Remember to test if the found hyperparmeters work well with different random seeds."? Are you talking about a random seed for data ...
+  ├─ RyanCaldwell (2023-03-17 17:39:11.887000) [+0]
+  │  For example, repeat train/val split 100 times with 100 different random seeds and validate the performance of the model with your found optimal hyperparameters. And then you could plot the variabil...
+  ├─ Phong Nguyen (2023-03-17 20:35:49.080000) [+0]
+  │  @ryancaldwell I meant to check if the tuned hyperparameters are stable or not. Train your model, say xgboost, with different random_state and the same tuned hyperparameters. Does your model have si...
+    ├─ RyanCaldwell (2023-03-17 21:09:41.620000) [+0]
+    │  Gotcha, thanks for the reply!
+├─ Yeakub Sadlil (2023-03-17 13:49:24.167000) [+0]
+│  Nice technique @phongnguyen1

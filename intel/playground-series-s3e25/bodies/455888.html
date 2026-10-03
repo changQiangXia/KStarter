@@ -1,0 +1,44 @@
+<p>What do you know about the competition metric MedAE? You know that it is the median of the absolute errors, but what does this mean for fitting a model?</p>
+<p>Let's assume we have a dataset of 10001 samples. If we train a model and then compute predictions and absolute errors for these 10001 samples, 5000 easy samples will have an absolute error below the MedAE and the other (hard) 5000 samples will have an absolute error above the MedAE. Does it matter how high the error of the 5000 hard samples is? No.</p>
+<p>If 5001 samples have absolute errors ≤ 0.4 and the other 5000 samples have absolute errors of ten million, the score will still be 0.4.</p>
+<p>A similar argument is possible for the easy samples: If the median absolute error is at 0.4, it doesn't matter whether the 5000 easy samples all have an error of 0.01 or an error of 0.39.</p>
+<p><strong>We can use this observation to create better models:</strong> As the score depends only on a single sample (the one which has the median absolute error), we should fit the model only to those samples which could end up being the median. The very easy samples and the very hard samples are noise and can (almost) be neglected in training.</p>
+<p>As a proof of concept, I've fitted the same estimator first without sample weights and then with sample weights of 0.01 for samples with absolute errors ≤ 0.06 or ≥ 0.7. <strong>The cv score improved by 0.03.</strong></p>
+<pre><code>base_weight = 
+lower, upper = , 
+kf = KFold(shuffle=, random_state=)
+score_without, score_with = , 
+ fold, (idx_tr, idx_va)  (kf.split(train)):
+    X_tr = train.iloc[idx_tr].copy()
+    X_va = train.iloc[idx_va].copy()
+    y_tr = X_tr.pop()
+    y_va = X_va.pop()
+
+    
+    model = LGBMRegressor(objective=,
+                          learning_rate=,
+                          min_child_samples=,
+                          random_state=)
+    model.fit(X_tr, y_tr)
+    medae = median_absolute_error(y_va, model.predict(X_va))
+    score_without += medae
+
+    
+    
+    
+    y_tr_ae = np.(y_tr - model.predict(X_tr)) 
+    sample_weight_tr = base_weight + ((lower &lt; y_tr_ae) &amp; (y_tr_ae &lt; upper))
+
+    
+    model.fit(X_tr, y_tr, sample_weight=sample_weight_tr)
+    medae = median_absolute_error(y_va, model.predict(X_va))
+    score_with += medae
+
+(
+      
+      )
+
+
+
+</code></pre>
+<p>Good luck!</p>

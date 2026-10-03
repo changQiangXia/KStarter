@@ -1,0 +1,82 @@
+# playground-series-s4e8 讨论区（按票数排序，共 80 条）
+
+- [[1st Place Solution AutoML Grand Prix] AutoML Grandmasters: AutoGluon Distributed + Post-Hoc Ensembling](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/523656) — 75 票 / 65 评论 / 2024-08-05 **write-up?**
+- [Features with a significant number of missing rows still hold substantial value!](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/523474) — 69 票 / 20 评论 / 2024-08-01 
+- [1st Place Solution: 72 OOFs, a whole lotta Autogluon, and 31 scores of 0.98512 or above (on the private LB)](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/531823) — 63 票 / 65 评论 / 2024-09-04 **write-up?**
+- [Green is GO and Red is NO!](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/523702) — 53 票 / 19 评论 / 2024-08-02 
+- [The true "original" dataset?](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/523439) — 49 票 / 6 评论 / 2024-08-01 
+- [Edible Mushroom ML techniques . WEKA-assisted tool. The Classic C4.5 algorithm.](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/523431) — 42 票 / 8 评论 / 2024-08-01 
+- [#6 place - A quick reflection](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/531330) — 40 票 / 30 评论 / 2024-09-01 
+- [Dataset: 1 million mushrooms + (small) competition!](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/523705) — 37 票 / 14 评论 / 2024-08-02 
+- [ Where all the NaN's came about](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/524014) — 32 票 / 5 评论 / 2024-08-04 
+- [Don't neglect neural networks!](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/523531) — 31 票 / 16 评论 / 2024-08-01 
+- [References and starting materials - Playground Season 4 Episode 8](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/523407) — 29 票 / 6 评论 / 2024-08-01 
+- [Categorical correlation matrix: Theil's U](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/529157) — 28 票 / 12 评论 / 2024-08-19 
+- [Useless feature "veil-type" (updated on 12 Aug)](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/524353) — 26 票 / 15 评论 / 2024-08-05 
+- [The AutoML Grand Prix for August (Updated on August 27, 2024)](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/523660) — 24 票 / 4 评论 / 2024-08-02 
+- [[3rd Place Solution AGP August] Team Oxygen [0.98525] - w/ Some additional Data insights + KAN](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/524709) — 24 票 / 4 评论 / 2024-08-07 **write-up?**
+- [#4 Solution | So close yet so far (thank you and congratulations to all!)](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/531343) — 23 票 / 22 评论 / 2024-09-01 **write-up?**
+- [Exact analytical classification model for the "original" data](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/526936) — 22 票 / 1 评论 / 2024-08-09 
+- [[4th Place Solution AutoML Grand Prix] Kitchen Sink approach [0.98525]](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/523837) — 21 票 / 9 评论 / 2024-08-03 **write-up?**
+- [10th place solution (and a potential 5th)](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/531424) — 20 票 / 9 评论 / 2024-09-01 **write-up?**
+- [References- AutoML episode](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/523408) — 20 票 / 2 评论 / 2024-08-01 
+- [[7th Place Solution AutoML Grand Prix] LightAutoML testers ](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/523732) — 20 票 / 3 评论 / 2024-08-02 **write-up?**
+- [Feature importance p-value / chi-square/ cramer / MI / phi_k](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/527455) — 19 票 / 8 评论 / 2024-08-12 
+- [#19 Solution | AutoGluon + TF + LightGBM + XGBoost + Calibration](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/531347) — 18 票 / 9 评论 / 2024-09-01 **write-up?**
+- [ALERT!!  There is some incorrect data that you need to know about](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/527522) — 18 票 / 17 评论 / 2024-08-12 
+- [[AutoML Grand Prix] 2nd Place Solution, Team AGA 🤖, CAAFE + AutoGluon-Best w Dynamic Stacking](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/524752) — 17 票 / 15 评论 / 2024-08-08 **write-up?**
+- [[AutoML Grand Prix] 10th Place Solution Team SAS](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/524430) — 17 票 / 4 评论 / 2024-08-06 **write-up?**
+- [Is there a major shake-up expected to happen in the next 30 days?](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/523418) — 17 票 / 13 评论 / 2024-08-01 
+- [CO2 Footprint ](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/523444) — 16 票 / 4 评论 / 2024-08-01 
+- [[Meme] The Dichotomy of notebooks in this competition](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/524202) — 16 票 / 10 评论 / 2024-08-05 
+- [Get started here!](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/497509) — 14 票 / 10 评论 / 2024-04-24 
+- [Visualizing the churn at the end of the competition](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/531336) — 14 票 / 5 评论 / 2024-09-01 
+- [Strange values in categorical variables](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/523438) — 14 票 / 4 评论 / 2024-08-01 
+- [[AutoML GrandPrix] 6th Place Solution Write Up!](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/524720) — 14 票 / 4 评论 / 2024-08-07 **write-up?**
+- [This competition is eligible for the AutoML Grand Prix!](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/512202) — 13 票 / 0 评论 / 2024-06-13 
+- [XGBoost vs. LightGBM: CPU vs. GPU Performance Comparison](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/528042) — 12 票 / 11 评论 / 2024-08-14 
+- [Who has already registered for the conference?](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/528839) — 11 票 / 25 评论 / 2024-08-17 
+- [Arrow and .parquet - Save a lot of time!](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/526997) — 11 票 / 0 评论 / 2024-08-09 
+- [AutoGulon Error](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/529851) — 11 票 / 9 评论 / 2024-08-23 
+- [Random Forest in XGBoost](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/529174) — 10 票 / 8 评论 / 2024-08-19 
+- [The hallucinated generative model](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/524532) — 10 票 / 8 评论 / 2024-08-06 
+- [MCC metric](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/524223) — 10 票 / 18 评论 / 2024-08-05 
+- [Monte Carlo simulation of MCC  based on 20% sample ](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/529915) — 10 票 / 3 评论 / 2024-08-23 
+- [Around how many 'hard' rows are there?](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/523959) — 10 票 / 7 评论 / 2024-08-03 
+- [8th Place Solution with Autogluon🤔](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/531374) — 10 票 / 1 评论 / 2024-09-01 **write-up?**
+- [## 2nd Place Solution |  Summary](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/531368) — 10 票 / 6 评论 / 2024-09-01 **write-up?**
+- [Random Forest, CatBoost, XGBoost, LightGBM and others... - speed and performance by size](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/527552) — 9 票 / 3 评论 / 2024-08-12 
+- [[9th Place Solution AutoML Grand Prix] Team Arabidopsis thaliana: Ensemble of H2O, AutoGluon, LAMA, LGB, XGB](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/524675) — 9 票 / 1 评论 / 2024-08-07 **write-up?**
+- [[AutoML Grand Prix] 8th place solution](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/524544) — 8 票 / 0 评论 / 2024-08-06 **write-up?**
+- [[Additional 6.7M Rows] 🍄Mushroom Overload](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/524005) — 8 票 / 4 评论 / 2024-08-04 
+- [Combined Original Dataset with the competition dataset. Hope it's helpful!:)](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/523452) — 8 票 / 9 评论 / 2024-08-01 
+- [[AutoML] Orig Match and Swap trick](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/523829) — 8 票 / 1 评论 / 2024-08-02 
+- [Misleading class name](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/523626) — 8 票 / 4 评论 / 2024-08-01 
+- [#3 Solution: AutoGluon Day 1 Submission](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/531956) — 8 票 / 2 评论 / 2024-09-03 **write-up?**
+- [How far can you go with Neural Networks?](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/528596) — 8 票 / 17 评论 / 2024-08-16 
+- [Low LB score. What could be the reason?](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/523781) — 8 票 / 8 评论 / 2024-08-02 
+- [Insights and Challenges in the Mushroom Dataset](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/524434) — 7 票 / 0 评论 / 2024-08-06 
+- [Kaggle Wishlist [inspired by AutoML Grand Prix]](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/527352) — 7 票 / 6 评论 / 2024-08-11 
+- [Are the train, test set and the 'secondary' set same?](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/527548) — 7 票 / 6 评论 / 2024-08-12 
+- [AutoML Grand Prix write-up rules question](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/524542) — 6 票 / 5 评论 / 2024-08-06 **write-up?**
+- [results with target encoding](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/530238) — 6 票 / 12 评论 / 2024-08-25 
+- [Glitch or Something Else ?](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/531348) — 6 票 / 1 评论 / 2024-09-01 
+- [Where Should I apply OneHotEncoder?](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/531039) — 6 票 / 8 评论 / 2024-08-30 
+- [Merging Results from others](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/531072) — 6 票 / 11 评论 / 2024-08-30 
+- [[AutoML Grand Prix: 10th Place Solution] ](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/532548) — 6 票 / 0 评论 / 2024-09-06 **write-up?**
+- [The properties parts of mushroom](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/523632) — 6 票 / 0 评论 / 2024-08-01 
+- [similar competition](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/523440) — 6 票 / 0 评论 / 2024-08-01 
+- [Explore the Mushroom Science Frontier](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/528140) — 6 票 / 4 评论 / 2024-08-14 
+- [fast matthews_corrcoef calc](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/528193) — 6 票 / 5 评论 / 2024-08-15 
+- [Few lines of code scores 0.96678](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/523571) — 5 票 / 6 评论 / 2024-08-01 
+- [High Test Accuracy - Poor Submission Score?](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/523709) — 5 票 / 9 评论 / 2024-08-02 
+- [ 🧼 Cleaning dirty meanie artifacts](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/527536) — 5 票 / 3 评论 / 2024-08-12 
+- [Early stopping with custom metric](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/523594) — 5 票 / 2 评论 / 2024-08-01 
+- [Binary Mushroom EDA | Correlation Analysis & MI Scores!](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/527194) — 5 票 / 2 评论 / 2024-08-10 
+- [Can I make an article of my jupyter notebook on X ? ](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/528738) — 5 票 / 6 评论 / 2024-08-17 
+- [Very Important Question](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/530192) — 5 票 / 20 评论 / 2024-08-25 
+- [Differences between original mushroom dataset columns and this competition's datatset](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/523442) — 4 票 / 1 评论 / 2024-08-01 
+- [Mushroom Research 🍄](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/523658) — 4 票 / 0 评论 / 2024-08-02 
+- [Are we heading for a perfect score in this episode?](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/523469) — 4 票 / 6 评论 / 2024-08-01 
+- [My first ML Competition !](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/531500) — 4 票 / 2 评论 / 2024-09-01 
+- [Simple tricks to iterate quickly (and sanely)](https://www.kaggle.com/competitions/playground-series-s4e8/discussion/528139) — 4 票 / 2 评论 / 2024-08-14 

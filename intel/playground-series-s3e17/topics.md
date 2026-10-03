@@ -1,0 +1,82 @@
+# playground-series-s3e17 讨论区（按票数排序，共 80 条）
+
+- [Domain Knowledge Regarding the Dataset](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/416765) — 65 票 / 29 评论 / 2023-06-13 
+- [Request for some variety in ongoing challenges](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/417785) — 45 票 / 26 评论 / 2023-06-17 
+- [11th Place Solution | Unexpected Top 1%](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/419643) — 44 票 / 36 评论 / 2023-06-28 **write-up?**
+- [Relationship between the continuous features and binary features](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/416844) — 43 票 / 10 评论 / 2023-06-13 
+- [Predictive Maintenance: Machine Learning to Prevent Equipment Breakdowns. Techniques and Benefits.](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/416974) — 39 票 / 9 评论 / 2023-06-13 
+- [Strategies for Dealing with 'Machine failure' Imbalanced feature 📊](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/416923) — 37 票 / 22 评论 / 2023-06-13 
+- [3rd solution | based on 90% multi AutoML solutions](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/419730) — 31 票 / 9 评论 / 2023-06-27 **write-up?**
+- [Starting materials and references](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/416776) — 25 票 / 6 评论 / 2023-06-13 
+- [About the Product ID column](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/416774) — 18 票 / 12 评论 / 2023-06-13 
+- [.predict() vs .predict_proba()](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/416869) — 16 票 / 9 评论 / 2023-06-13 
+- [Collection of helpful ideas - S3E17](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/418054) — 15 票 / 8 评论 / 2023-06-18 
+- [New to Machine Learning or Kaggle?](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/409891) — 15 票 / 28 评论 / 2023-05-13 
+- [Duplicated observations in train and test datasets](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/416919) — 15 票 / 4 评论 / 2023-06-13 
+- [17th Place Solution | Only 1 Catboost](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/419648) — 14 票 / 1 评论 / 2023-06-27 **write-up?**
+- [CV and Metric Tips for Beginners](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/416904) — 14 票 / 6 评论 / 2023-06-13 
+- [Using CatBoost Encoder to Boost Performance (CV and LB 0.96 -> 0.97)](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/419111) — 13 票 / 6 评论 / 2023-06-24 
+- [Which metric to use for CV between 'ROC AUC' and 'Log Loss' for Binary Classification?](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/417063) — 10 票 / 3 评论 / 2023-06-14 
+- [Feature engineering](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/417031) — 9 票 / 5 评论 / 2023-06-13 
+- [Tried very hard but not getting a fair score..?](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/418935) — 9 票 / 7 评论 / 2023-06-23 
+- [Are win in for a churn?](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/419346) — 8 票 / 8 评论 / 2023-06-25 
+- [Be aware duplicate rows can cause data leakage](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/418262) — 8 票 / 3 评论 / 2023-06-19 
+- [Detail Information about the dataset](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/416985) — 8 票 / 0 评论 / 2023-06-13 
+- [Inconsistencies in the data](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/417392) — 7 票 / 4 评论 / 2023-06-15 
+- [Feature Engineering with sample code](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/416893) — 7 票 / 0 评论 / 2023-06-13 
+- [Feature Engineering on Product.Id that got me to AUC(0.97839)-currently position 27](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/419039) — 5 票 / 14 评论 / 2023-06-23 
+- [4th place solution | target encoding rows](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/419698) — 5 票 / 10 评论 / 2023-06-27 **write-up?**
+- [There are 21 pairs of rows in "train" that are identical except for the value of "Machine failure"](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/418314) — 5 票 / 2 评论 / 2023-06-20 
+- [Extremely Unbalanced Distribution and Type of Failure](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/416778) — 5 票 / 6 评论 / 2023-06-13 
+- [My Final Score was Terrible and I Need Some Help](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/418243) — 5 票 / 15 评论 / 2023-06-19 
+- [Balancing the data doesn't help.](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/418059) — 4 票 / 6 评论 / 2023-06-18 
+- [Stucked in Imbalanced Data..???](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/419086) — 4 票 / 2 评论 / 2023-06-24 
+- [47th Place Solution | RepeatedKFold CatBoost](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/419708) — 3 票 / 1 评论 / 2023-06-27 **write-up?**
+- [should i keep the 'Product ID'? or normalizar it after label encoder?](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/417023) — 3 票 / 7 评论 / 2023-06-13 
+- [Any suggestion on creating new features?](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/416821) — 3 票 / 5 评论 / 2023-06-13 
+- [How can Product IDs be used besides classification?](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/416788) — 3 票 / 6 评论 / 2023-06-13 
+- [ the Power of CatBoost Classifier?](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/417673) — 3 票 / 4 评论 / 2023-06-16 
+- [Is performing one hot encoding on "Type" a good idea ?](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/417269) — 3 票 / 4 评论 / 2023-06-15 
+- [Hyperparameter optimization using Optuna taking too much time](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/418128) — 3 票 / 22 评论 / 2023-06-18 
+- [Late Submissions Disabled](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/454620) — 2 票 / 1 评论 / 2023-11-10 
+- [How to handle imbalanced Dataset.](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/417056) — 2 票 / 2 评论 / 2023-06-14 
+- [High cardinality Product Id](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/418293) — 2 票 / 3 评论 / 2023-06-19 
+- [Base Models for Ensemble: Quick Score Comparison](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/417158) — 2 票 / 11 评论 / 2023-06-14 
+- [When should we need to consider balancing the target data?](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/417601) — 2 票 / 8 评论 / 2023-06-16 
+- [Postprocessing Code Based on Type of Failure](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/417163) — 2 票 / 4 评论 / 2023-06-14 
+- [Improve scores without including the original dataset ?](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/418336) — 2 票 / 11 评论 / 2023-06-20 
+- [Is round on prediction useful?](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/416865) — 2 票 / 6 评论 / 2023-06-13 
+- [ML auto tools - which are better?](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/418953) — 2 票 / 8 评论 / 2023-06-23 
+- [Notebook to explain the features in the dataset](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/416790) — 2 票 / 3 评论 / 2023-06-13 
+- [Use of Precision_score instead of accuracy_score.](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/417132) — 2 票 / 0 评论 / 2023-06-14 
+- [12 models single function .](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/417004) — 2 票 / 0 评论 / 2023-06-13 
+- [Calibrating Your Prediction](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/419432) — 2 票 / 2 评论 / 2023-06-25 
+- [Regarding oversampling](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/416858) — 2 票 / 4 评论 / 2023-06-13 
+- [What are some surprises from the competition ? (now that the results are out)](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/419647) — 2 票 / 2 评论 / 2023-06-27 
+- [unsubmitted solution (private score 0.98467 ~ 9th place)](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/419686) — 2 票 / 2 评论 / 2023-06-27 **write-up?**
+- [Possible Data Leakage?](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/419546) — 2 票 / 10 评论 / 2023-06-26 
+- [Clustering Feature is Important](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/419901) — 2 票 / 0 评论 / 2023-06-28 
+- [Target Correlation](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/416767) — 2 票 / 0 评论 / 2023-06-13 
+- [Use .predict_proba() and roc curve for evaluation instead of .predict().](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/417129) — 1 票 / 3 评论 / 2023-06-14 
+- [What is the rf benchmark score on the leader board?](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/417145) — 1 票 / 6 评论 / 2023-06-14 
+- [How is the ROC_AUC score is being calculated over here?](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/417183) — 1 票 / 1 评论 / 2023-06-14 
+- [About the feature Tool Wear Failure (TWF)](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/416939) — 1 票 / 1 评论 / 2023-06-13 
+- [How to make model training fast?](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/417456) — 1 票 / 12 评论 / 2023-06-15 
+- [Random Failure not a Machine failure?](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/417099) — 1 票 / 0 评论 / 2023-06-14 
+- [Achieving Impressive Scores with XGBoost](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/417878) — 1 票 / 2 评论 / 2023-06-17 
+- [Should I trust on LB or CV](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/417818) — 1 票 / 3 评论 / 2023-06-17 
+- [Metric used for evaluation](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/418055) — 1 票 / 2 评论 / 2023-06-18 
+- [Best params? Are they really the best?](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/418192) — 1 票 / 14 评论 / 2023-06-19 
+- [why cross_val_score is misleading ?](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/418562) — 1 票 / 2 评论 / 2023-06-21 
+- [ looking for a team ](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/419035) — 1 票 / 4 评论 / 2023-06-23 
+- [Match Performance LightGBM & Catboost ](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/419431) — 1 票 / 1 评论 / 2023-06-25 
+- [Are aggregated features data leakage? ](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/419219) — 1 票 / 2 评论 / 2023-06-24 
+- [51th Place solution | Using MultilabelStratifiedKFold](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/419689) — 1 票 / 0 评论 / 2023-06-27 **write-up?**
+- [[0.91132] Manually put "1" to Machine failure when (TWF + HDF + PWF + OSF + RNF) > 0 in test data](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/417766) — 0 票 / 4 评论 / 2023-06-17 
+- [Feature Engineering with Product ID idea](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/418178) — 0 票 / 0 评论 / 2023-06-19 
+- [A Comprehensive Analysis and Model Comparison for the classification of Machine Failures](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/418499) — 0 票 / 0 评论 / 2023-06-21 
+- [Feature Engineering is the key to success](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/417752) — 0 票 / 1 评论 / 2023-06-17 
+- [Original Dataset](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/419030) — 0 票 / 3 评论 / 2023-06-23 
+- [It seems that the performance improves when some features are removed.](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/418924) — 0 票 / 2 评论 / 2023-06-23 
+- [CatBoost with Pool is the best model?](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/417701) — 0 票 / 2 评论 / 2023-06-16 
+- [First Contribution to the TP s03 e17](https://www.kaggle.com/competitions/playground-series-s3e17/discussion/419117) — 0 票 / 1 评论 / 2023-06-24 

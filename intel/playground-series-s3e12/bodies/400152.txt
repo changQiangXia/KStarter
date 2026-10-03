@@ -1,0 +1,173 @@
+# https://www.kaggle.com/competitions/playground-series-s3e12/discussion/400152
+
+Topic #400152: Two features are enough and contour plots show the truth
+  Author: AmbrosM
+  Posted: 2023-04-07 03:14:48.484000
+  Votes: 77  Comments: 31
+
+If we use only cond and calc in our classifiers, we get better scores than when using all features of the dataset (see below). The nice side effect is that models can easily be compared with the help of contour plots. Look at the six diagrams and judge which classifiers overfit and which ones underfit:
+
+
+
+The following scatterplot represents the whole dataset. There aren't any more training points than what you see here. It is difficult to avoid overfitting. Now imagine the same points in three (or more) dimensions. The added dimensions make it almost impossible to avoid overfitting!
+
+
+
+A 1000-fold cross-validation should convince everybody that results are better with two features than with all features:
+
+cv = RepeatedStratifiedKFold(n_splits=10, n_repeats=100, random_state=1)
+
+cvs = cross_val_score(ExtraTreesClassifier(n_estimators=800, min_samples_leaf=13,
+                                           max_features=1.0, criterion='entropy'),
+                      train[original_features],
+                      train[target],
+                      scoring='roc_auc',
+                      cv=cv)
+print(f"{cvs.mean():.3f} ExtraTreesClassifier with all features")
+# 0.803 ExtraTreesClassifier with all features
+
+cvs = cross_val_score(ExtraTreesClassifier(n_estimators=800, min_samples_leaf=13,
+                                           max_features=1.0, criterion='entropy'),
+                      train[['cond', 'calc']],
+                      train[target],
+                      scoring='roc_auc',
+                      cv=cv)
+print(f"{cvs.mean():.3f} ExtraTreesClassifier with two features")
+# 0.817 ExtraTreesClassifier with two features
+
+
+Source code for the contour plots:
+
+features = ['cond', 'calc']
+fig, axs = plt.subplots(3, 2, figsize=(8, 12), sharex=True, sharey=True)
+axs = axs.ravel()
+models = [ExtraTreesClassifier(n_estimators=800, min_samples_leaf=13,
+                               max_features=1.0, criterion='entropy'),
+          GradientBoostingClassifier(learning_rate=0.1, n_estimators=34,
+                                     max_features=2, min_samples_leaf=25,
+                                     max_depth=2),
+          RandomForestClassifier(n_estimators=400, min_samples_leaf=3),
+          make_pipeline(StandardScaler(),
+                        Nystroem(gamma=1, n_components=330),
+                        LogisticRegression(C=0.3)),
+          MyGAM(),
+          make_pipeline(StandardScaler(),
+                        GaussianProcessClassifier())
+         ]
+cv = RepeatedStratifiedKFold(n_splits=10, n_repeats=10, random_state=2)
+for ax, model in zip(axs, models):
+    cvs = cross_val_score(model,
+                      train[['cond', 'calc']],
+                      train[target],
+                      scoring='roc_auc',
+                      cv=10)
+
+    m = model
+    if type(m) == Pipeline: m = m.steps[-1][1]
+    ax.set_title(f"{type(m).__name__} {cvs.mean():.3f}")
+    model.fit(train[features], train[target])
+    PartialDependenceDisplay.from_estimator(model, train[features],
+                                            [tuple(features)],
+                                            method='brute',
+                                            percentiles=(0.0, 1.0),
+                                            grid_resolution=100,
+                                            contour_kw={'cmap': 'cool'},
+                                            ax=ax)
+plt.tight_layout()
+plt.show()
+
+Comments:
+├─ JEANMPIA (2023-04-07 06:13:25.603000) [+3]
+│  Random forest seems to be overfitting a lot, that's interesting when compared to a GB model. 
+│  I wonder if it is only experience that made you this knowledgable or if their is any documation that mi...
+  ├─ AmbrosM (2023-04-10 08:35:52.580000) [+14]
+  │  @janmpia and @soumendraprasad Most important in gaining experience are critical thinking, a strong desire to understand things, and a mix of experimentation and reading. I don't like to copy code I...
+    ├─ JEANMPIA (2023-04-10 09:16:51.130000) [+1]
+    │  @ambrosm this is a greater answer than I hoped for, thank you for your answer, it really will help me in my learning process. Impressive stuff
+    ├─ [deleted] (2023-04-13 00:35:06.960000) [+0]
+    │  [deleted]
+├─ broccoli beef (2023-04-08 10:16:05.263000) [+4]
+│  The optimal combination of features is probably classifier-dependent. For the logistic regression with \(\ell_2\) regularization, calc+gravity has better performance than calc+cond.
+│  
+│   sklearn.prepr...
+  ├─ broccoli beef (2023-04-09 11:17:22.313000) [+2]
+  │  It just occurred to me that logistic regression on one feature monotonically transforms the feature to logit so as far as AUC is concerned, it is no different than using the feature directly as out...
+├─ OMID BAGHCHEH SARAEI (2023-04-16 16:02:47.740000) [+1]
+│  Hi AmbrosM, 
+│  Did you try the original dataset?
+│  I tried your codes with and without the original datasets.
+│  
+│  
+│  
+│  Without the original dataset: CV=0.816968217645563 (your results), LB=0.85333
+│  
+│  With the ...
+  ├─ OMID BAGHCHEH SARAEI (2023-04-16 21:00:34.260000) [+1]
+  │  This time, I added the original dataset to train (in the loop):
+  │  The result: CV=0.8188513857106534, LB=0.84800 
+  │  
+  │  train = pd.read_csv('/content/drive/MyDrive/Kidney_Stone_train.csv')
+  │  X = train[['cond...
+    ├─ AmbrosM (2023-04-22 15:28:01.780000) [+1]
+    │  @omidbaghchehsaraei In this competition I didn't look at the original dataset. Seems that this was a mistake…
+    ├─ OMID BAGHCHEH SARAEI (2023-04-22 16:33:51.447000) [+1]
+    │  In the last few days of competition, I tried previous codes and got the results as follows:
+    │  
+    │  
+    │  
+    │  Without the original dataset: CV=0.816968217645563 (your results), LB(public)=0.85333, LB(private)=0.7...
+├─ Sharov Anton (2023-04-16 14:21:46.470000) [+1]
+│  Look at the six diagrams and judge which classifiers overfit and which ones underfit:
+│  
+│  
+│  This is val or train score? I suppose it is val score for classifiers.
+│  All tree-based classifiers looks suspi...
+  ├─ AmbrosM (2023-04-16 14:43:14.980000) [+1]
+  │  Hi @sharovanton It's the validation score (see the source code in the post). To me the random forest looks like the most overfitted, logistic regression and Gaussian process look underfitted. I'm u...
+├─ Yue Sun (2023-04-11 03:22:19.120000) [+1]
+│  I agree that cond and calc are the most important features, and using only them can improve the scores and avoid overfitting. I also like how you use contour plots to visualize and compare the clas...
+├─ SOUMENDRA PRASAD MOHANTY (2023-04-07 07:08:40.577000) [+1]
+│  Each time I read your post/ kernel , something new I found . Very much informative @ambrosm . I am also excited like @janmpia to know whether these things you had gained after a years of experience...
+├─ Laurent Pourchot (2023-04-14 13:04:14.993000) [+2]
+│  Hi @ambrosm , very nice representation and conclusion 👍 I wonder when will you submit your competition killing submission as usual ? 😄😄
+  ├─ [deleted] (2023-04-14 13:40:41.193000) [+0]
+  │  [deleted]
+├─ Lucy (2023-04-12 13:27:14.820000) [+2]
+│  @ambrosm cross_val_score only gives you the validation score, but you won't know the overfitting issue unless you look at the contour plots. My questions are
+│  
+│  1)  When you pick a model or some para...
+  ├─ AmbrosM (2023-04-13 19:07:59.050000) [+2]
+  │  @qiaoningchen
+  │  
+  │  
+  │  
+  │  I rarely look at the training scores. A training score which is too good is just a hint that we should try to regularize more, but in the end you'll win the competition with a good...
+    ├─ Lucy (2023-04-13 20:02:40.150000) [+0]
+    │  That will save me time. I have been trying to find better score/less overfitting for every single model in my ensemble! I guess the diversity of the models will somehow regulate the overfitting iss...
+├─ Iqbal Syah Akbar (2023-04-07 05:54:33.173000) [+2]
+│  Just tried your suggestion and yep, using only cond and calc both improves CV and solves overfitting problem.
+│  
+│  Also, this is the first time I see an implementation of kernel approximation (Nystroem...
+  ├─ AmbrosM (2023-04-07 09:20:20.650000) [+2]
+  │  Hi @iqbalsyahakbar I wanted to use logistic regression for this nonlinear task. In this situation, my preferred methods to create nonlinear features are PolynomialFeatures and Nystroem.
+├─ Lucas Morin (2023-04-12 11:40:43.770000) [+0]
+│  Plots appear realtively symetric; what about $$ calc2 + cond2 $$ with appropriate scaling ?
+├─ Albert Galimov (2023-04-10 18:14:57.547000) [+0]
+│  Interesting, but it seems it's not too complicated to have 0.80-ish.
+│  How this finding could help to reach more?
+├─  Rutuja Sonawane (2023-04-10 14:29:59.760000) [+0]
+│  Ybi foundation is the best learning platform. Nice job
+├─ Sujan Chandra Roy (2023-04-10 08:22:02.923000) [+0]
+│  yes. you are correct and nice visualizations
+├─ ‎ Srihari (2023-04-08 16:26:31.707000) [+0]
+│  Very interesting thought
+├─ Piotr Szulc (2023-04-07 10:04:36.797000) [+0]
+│  @ambrosm I'm curious which of these models you would choose, based on these results :) I built a GAM model with AUC = 0.82 on a 100-fold CV, but nevertheless I'm not sure if it's worth trusting. I ...
+  ├─ Ravi Ramakrishnan (2023-04-07 12:04:15.407000) [+1]
+  │  @seascape, a 100-fold CV may render 2-3 observations per validation fold, is this fine?
+    ├─ Piotr Szulc (2023-04-07 12:39:23.630000) [+2]
+    │  @ravi20076 By 100-fold I mean what @ambrosm by 1000-fold here :) That is, it is actually 10-fold repeated 10 times.
+    ├─ Ravi Ramakrishnan (2023-04-08 06:06:10.400000) [+0]
+    │  Thanks for the clarification, I mistook this for StratifiedKFold with n-splits = 100 instead of RepeatedStratifiedKFold with 10x10 @seascape
+  ├─ AmbrosM (2023-04-10 06:52:55.910000) [+1]
+  │  @seascape You're raising a valid point in your notebook. In the end it is a question of what assumptions we make about the data distribution and the data generation process. We can try to formalize...

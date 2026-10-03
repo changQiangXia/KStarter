@@ -1,0 +1,82 @@
+# playground-series-s4e3 讨论区（按票数排序，共 80 条）
+
+- [Explanation of targets and features](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/481015) — 63 票 / 19 评论 / 2024-03-01 
+- [Seven binary targets.  Multi-Label or Not: Kaggle previous insights.](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/480817) — 60 票 / 30 评论 / 2024-03-01 
+- [2nd place solution: OOF Ensemble](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/488106) — 57 票 / 23 评论 / 2024-04-02 **write-up?**
+- [Possible approaches and associated references](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/480786) — 46 票 / 13 评论 / 2024-03-01 
+- [Multi-Learning (Multiclass, Multilabel, and Multioutput Classification/Regression. My Multi-Issues: )](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/481019) — 34 票 / 1 评论 / 2024-03-01 
+- [Sometimes less is better... drop 6 features](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/482401) — 33 票 / 16 评论 / 2024-03-07 
+- [Feature engineering](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/481016) — 29 票 / 7 评论 / 2024-03-01 
+- [Rank 8| Experiment blending| My part](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/488074) — 28 票 / 8 评论 / 2024-04-01 
+- [Inferring the leaderboard dynamics](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/488072) — 27 票 / 4 评论 / 2024-04-01 
+- [1st place solution: noise contrastive xgb](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/488065) — 25 票 / 15 评论 / 2024-04-01 **write-up?**
+- [Collection of helpful ideas - S4E3](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/484467) — 25 票 / 10 评论 / 2024-03-16 
+- [The original dataset is multiclass; the competition data, almost...](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/480805) — 25 票 / 5 评论 / 2024-03-01 
+- [3rd Place Solution - Mediocres et Impera ](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/488127) — 22 票 / 11 评论 / 2024-04-01 **write-up?**
+- [The downside of copying and running high-scoring kernels just to be on top of the public leaderboard.](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/480834) — 22 票 / 17 评论 / 2024-03-01 
+- [A faster multilabel AUC function](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/480949) — 22 票 / 1 评论 / 2024-03-01 
+- [Choosing a good final candidate submission](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/487948) — 21 票 / 7 评论 / 2024-03-31 
+- [Comparing different multilabel approaches with xgboost](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/481184) — 21 票 / 2 评论 / 2024-03-02 
+- [Advanced Features in Steel Plates Fault Detection](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/481687) — 20 票 / 2 评论 / 2024-03-04 
+- [A first overview of the data and recommendations](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/481098) — 19 票 / 3 评论 / 2024-03-02 
+- [BlueCast - a flexible automl solution](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/482923) — 17 票 / 5 评论 / 2024-03-10 **write-up?**
+- [Is the generated data flawed?](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/483232) — 17 票 / 17 评论 / 2024-03-11 
+- [Be careful with overfitting](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/481339) — 16 票 / 11 评论 / 2024-03-03 
+- [Here's what does each feature stands for](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/480936) — 16 票 / 5 评论 / 2024-03-01 
+- [Helper function to make this a multiclass problem](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/481337) — 16 票 / 2 评论 / 2024-03-03 
+- [5th place solution: Preprocessing and Modeling](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/488071) — 15 票 / 8 评论 / 2024-04-01 **write-up?**
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/480781) — 14 票 / 3 评论 / 2024-03-01 
+- [Rank 8 Approach | Learnings| My part](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/488104) — 13 票 / 5 评论 / 2024-04-01 
+- [Things that I learnt from this Episode's challenge](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/487824) — 12 票 / 6 评论 / 2024-03-30 
+- [Feature Engineering: Leave One Out Feature Differences](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/483320) — 11 票 / 1 评论 / 2024-03-11 
+- [More on the dataset](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/481014) — 11 票 / 0 评论 / 2024-03-01 
+- [What if the 21 instances with more than 1 label are just noise ](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/485350) — 11 票 / 16 评论 / 2024-03-20 
+- [Get started here!](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/472381) — 10 票 / 29 评论 / 2024-01-31 
+- [Bumps and other faults need special attention](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/480916) — 10 票 / 1 评论 / 2024-03-01 
+- [Getting the original data into pandas is easy](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/480797) — 10 票 / 4 评论 / 2024-03-01 
+- [Feature Selection](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/483211) — 8 票 / 2 评论 / 2024-03-11 
+- [Making life easier with RepeatedMultilabelStratifiedKFold](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/486163) — 8 票 / 6 评论 / 2024-03-23 
+- [clustering + PCA didn't help somehow](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/482714) — 8 票 / 2 评论 / 2024-03-09 
+- [Illogical feature characteristics of synthetic data set - understanding synthetical values?](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/482571) — 8 票 / 7 评论 / 2024-03-08 
+- [combining original data with training data](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/482479) — 7 票 / 14 评论 / 2024-03-07 
+- [want new features try these, here's powerfull new features](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/482475) — 7 票 / 0 评论 / 2024-03-07 
+- [Could anyone else weigh in on this?](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/484971) — 7 票 / 10 评论 / 2024-03-19 
+- [What approach/ starting point do you have when thinking about feature selection purely on algebra [no domain related features]?](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/483216) — 6 票 / 0 评论 / 2024-03-11 
+- [EDA target and train_columns.](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/481160) — 6 票 / 9 评论 / 2024-03-02 
+- [Adding only a part of the original set](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/480964) — 6 票 / 5 评论 / 2024-03-01 
+- [Some potential useful methods](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/480937) — 6 票 / 0 评论 / 2024-03-01 
+- [Design of evaluation metric](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/480789) — 6 票 / 0 评论 / 2024-03-01 
+- [Plates with none or more than one defect type.](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/481271) — 5 票 / 7 评论 / 2024-03-02 
+- [The 21 instances with more than 1 label are not noise](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/485992) — 5 票 / 6 评论 / 2024-03-23 
+- [How are continuous values handles in ensemble algorithms?](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/486909) — 5 票 / 4 评论 / 2024-03-26 
+- [Age limit to enter the competition](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/485200) — 5 票 / 11 评论 / 2024-03-19 
+- [Wiki: About Features and Column Data](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/481613) — 5 票 / 1 评论 / 2024-03-04 
+- [Tensorflow FNN](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/481167) — 5 票 / 9 评论 / 2024-03-02 
+- [Description of Features and Resources to better understand the data](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/481006) — 5 票 / 1 评论 / 2024-03-01 
+- [Top 17% solution ](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/488132) — 5 票 / 4 评论 / 2024-04-01 **write-up?**
+- [Multiple defects for some cases. ](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/483206) — 5 票 / 7 评论 / 2024-03-11 
+- [Dataset feature's definition/documentation? ](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/482242) — 4 票 / 7 评论 / 2024-03-06 
+- [Target format (probabilities or rounding)](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/481398) — 4 票 / 9 评论 / 2024-03-03 
+- [Original Data "Other_Faults" NaN Problem](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/483183) — 4 票 / 2 评论 / 2024-03-11 
+- [The inquiry regarding the competition's private leaderboard.](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/483222) — 4 票 / 5 评论 / 2024-03-11 
+- [Little doubt regarding one of the features](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/481068) — 4 票 / 3 评论 / 2024-03-01 
+- [SHAP dependence plot for multiclass issue](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/484296) — 4 票 / 1 评论 / 2024-03-16 
+- [1510th solution](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/491304) — 4 票 / 0 评论 / 2024-04-05 **write-up?**
+- [S4E3 Shakeup and Leaderboard Dynamics Visualisation](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/488103) — 4 票 / 1 评论 / 2024-04-01 
+- [More about Input data](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/487826) — 4 票 / 1 评论 / 2024-03-30 
+- [Interesting observation about SigmoidOfArea!](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/487451) — 4 票 / 4 评论 / 2024-03-29 
+- [Has anyone successfully tackled the class imabalance in this problem?](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/483712) — 4 票 / 14 评论 / 2024-03-13 
+- [Rando state matters?](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/484536) — 4 票 / 8 评论 / 2024-03-17 
+- [Should we consider multiple faults or discard them as noise?](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/486971) — 4 票 / 6 评论 / 2024-03-27 
+- [Can we use Sampling ? to Handle Imbalanced Classes ?](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/485438) — 4 票 / 10 评论 / 2024-03-20 
+- [Unusual effect of adding Random Forest to the ensemble!](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/486429) — 4 票 / 4 评论 / 2024-03-24 
+- [UCI Steel Plates Faults dataset to add to your notebook](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/480828) — 3 票 / 0 评论 / 2024-03-01 
+- [Typo in Target Class](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/480942) — 3 票 / 1 评论 / 2024-03-01 
+- [Relationship between Gini, Entropy, and Permutation Importance](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/483287) — 3 票 / 4 评论 / 2024-03-11 
+- [Combining Multiple Fault Indicators into a Single Target Column| Steel Plate defect Predictions](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/481821) — 3 票 / 0 评论 / 2024-03-05 
+- [Are these 2 Catboost params the same?](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/486159) — 3 票 / 5 评论 / 2024-03-23 
+- [Why the accuracy all submissions can only be up to 90%?](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/486688) — 3 票 / 2 评论 / 2024-03-26 
+- [Looking for teammate?](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/481024) — 2 票 / 1 评论 / 2024-03-01 
+- [Effect of different setting of number of folds in cross validation on scores.](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/483526) — 2 票 / 4 评论 / 2024-03-12 
+- [Problems with A300 and A400 types in data](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/485065) — 2 票 / 1 评论 / 2024-03-19 
+- [Thanks Giving](https://www.kaggle.com/competitions/playground-series-s4e3/discussion/488296) — 2 票 / 0 评论 / 2024-04-01 

@@ -1,0 +1,52 @@
+<p>Hi everyone,</p>
+<p>Thanks to the AutoML Grand Prix organizers team for the new competition format! We are "Team LightAutoML testers" (me, <a href="https://www.kaggle.com/alexryzhkov" target="_blank">@alexryzhkov</a> <a href="https://www.kaggle.com/simakov" target="_blank">@simakov</a>), this is a write-up of our solution for the 1st round of AutoML Grand Prix.</p>
+<h1>Manual feature engineering</h1>
+<ul>
+<li>features described by <a href="https://www.kaggle.com/ambrosm" target="_blank">@ambrosm</a> in his <a href="https://www.kaggle.com/competitions/playground-series-s4e5/discussion/499274" target="_blank">notebook</a>: fsum, fstd, fspecial1: sum, std by row, and indicator "is sum between 71 and 76"</li>
+<li>skew, kurtosis by row</li>
+<li>counts of each unique value in a row </li>
+<li>values at the given quantile over a row</li>
+</ul>
+<h1>Modeling</h1>
+<p><strong>Almost default LightAutoML's TabularAutoML</strong></p>
+<pre><code>automl = TabularAutoML(
+    task = Task(, loss = , metric = ),
+    general_params = {: [[, , ]]},
+    selection_params = { : },
+    tuning_params = {: },
+    ...
+)
+</code></pre>
+<p><a href="https://www.kaggle.com/code/alexryzhkov/tps-may-24-lightautoml-starter" target="_blank">source code</a></p>
+<p>Result pipeline:</p>
+<ul>
+<li>no feature selection</li>
+<li>5 fold CV</li>
+<li>3 models: linear with L2, LGBM, LGBM with hyperparameters tunning (up to 1200 sec)</li>
+<li>each of model has own its auto feature preparation</li>
+<li>blending this 3 model's outputs<br>
+OOF score: 0.86922<br>
+Public score: 0.86917</li>
+</ul>
+<p><strong>TabularUtilizedAutoML</strong><br>
+Since we had time, we tried to run TabularUtilizedAutoML -- a version of TabularAutoML that does multiple runs  different pipelines with different seeds (max_runs_per_config=4). Later it turned out that blenidng assigns zero weight to some configurations, so  so we left only two of them: conf_1_sel_type_1.yml and conf_3_sel_type_1_no_inter_lgbm.yml.</p>
+<pre><code>automl_utilized = TabularUtilizedAutoML(
+    task = Task(, loss = , metric = ), 
+    general_params = {: [[, , ]]},
+    tuning_params = {: },
+    configs_list = [os.path.join(CONFIG_PATH, x)  x  [
+        ,
+        ,
+    ]],
+    max_runs_per_config=
+    ...
+)
+</code></pre>
+<p>Features: all except fskew, fkurtosis.<br>
+OOF score: 0.86929</p>
+<p><strong>Final model</strong><br>
+Blending of two models: 0.7 * TabularUtilizedAutoML + 0.3 * TabularAutoML<br>
+<a href="https://www.kaggle.com/code/rinchin/automl-grand-prix-1th-place-solution" target="_blank">Source code</a><br>
+Public score: 0.86917</p>
+<p>All the best,<br>
+Rinchin</p>

@@ -1,0 +1,80 @@
+<p>Hey Everyone!</p>
+<p>Wow. That was an intense one. The large amount of data made most experiments very time consuming relative to the 24 hour time budget. Kudos to all the teams, and congrats to DAI, Team Oxygen, and LightAutoML for their very strong solutions!</p>
+<p>Notebook Link: <a href="https://www.kaggle.com/code/innixma/4th-place-automl-grand-prix-automl-grandmasters" target="_blank">https://www.kaggle.com/code/innixma/4th-place-automl-grand-prix-automl-grandmasters</a></p>
+<p>We started off with a lot of ideas such as OpenFE, stacking, ensembling, exotic models, etc., which landed us an early 2nd on the leaderboard with a public leaderboard score of <code>0.88797</code> for our first submission (using AutoGluon).</p>
+<p>However, the gap between 1st and 2nd was large, and we didn't have much time left to fit another ensemble. In that time I started tinkering with XGBoost hyperparameters, specifically the <code>max_bin</code> hyperparameter, which is default 255. I remember from previous competitions I had competed in within industry that the 255 value can be low for very large datasets, so I tried increasing the value by powers of 2. This led us all the way to <code>max_bin=262143</code> (2^18-1), an absurd number, but it seemed to work well on a small 300k subsample of the data. We then fit on that subsample the first 5 zeroshot-hpo configurations in AutoGluon with this max_bin and picked the XGBoost hyperparameters that got the best val score. I also doubled the learning rate to try to get it to converge faster.</p>
+<p>These are the XGBoost hyperparameters we ended up with:</p>
+<pre><code>{
+    : ,
+    : ,
+    : ,
+    : ,
+    : ,
+    : ,
+    : ,
+}
+</code></pre>
+<p>We had very little time left (about 90 minutes), so we kicked off a run on all the data to fit this single XGBoost model with AutoGluon. We used an m7i.48xlarge EC2 instance with 192 vCPUs. We gave it a time limit of 60 minutes to have barely enough time to get the predictions and upload them.</p>
+<p>The model early stopped due to the time limit at 30770 iterations, likely nowhere near fully fit, but we had to make due:</p>
+<pre><code>[]    validation_0-logloss:
+[]    validation_0-logloss:
+[]    validation_0-logloss:
+[]    validation_0-logloss:
+[]    validation_0-logloss:
+[]    validation_0-logloss:
+Ran  of time, early stopping  iteration  Best iteration :     [] 
+Saving AutogluonModels/ag_223828/models/XGBoost_r98/model.pkl
+Saving AutogluonModels/ag_223828/utils/attr/XGBoost_r98/y_pred_proba_val.pkl
+       =      = Training   runtime
+</code></pre>
+<p>We uploaded the submission and it landed us at a public leaderboard score of <code>0.89262</code>, just minutes before the end. While it was a strong score bump, it didn't end up moving our placement, and we remained at 4th.</p>
+<p>I suspect with more training time, it might have matched or exceeded the scores of the teams ahead of us.</p>
+<p>A big takeaway on our end is to prioritize looking at individual model hyperparameters when working with large datasets, rather than jumping straight into time consuming multi-layer stack ensembles. If we would have identified <code>max_bin</code> as an important hyperparameter early on, maybe things would have been different.</p>
+<p>Here is the code, we didn't do any special data processing, and we didn't use the original training data:</p>
+<pre><code> autogluon.common.savers import save_pd
+ autogluon.tabular import TabularPredictor, TabularDataset
+
+label = 
+eval_metric = 
+train_data = TabularDataset(path_train)
+test_data = TabularDataset(path_test)
+
+train_data = train_data.drop(columns=[])
+
+hyperparameters = {
+    : {
+        : 0.516652313273348,
+        : ,
+        : 0.015,
+        : 9,
+        : 0.8567068904025429,
+        : 262143,
+        : 150000,
+    },
+}
+
+predictor = TabularPredictor(
+    =label,
+    =eval_metric,
+).fit(
+    =train_data,
+    =hyperparameters,
+    =3600,  # out of necessity, would increase  as high as possible  time permitted
+    =4,  #  log val score every iteration of XGBoost
+)
+
+y_pred_proba_test = predictor.predict_proba(test_data, =)
+
+y_pred_proba_test_w_id = test_data[[]]
+y_pred_proba_test_w_id[label] = y_pred_proba_test
+save_pd.save(=, =y_pred_proba_test_w_id)
+</code></pre>
+<p><code>predictor.leaderboard</code> output:</p>
+<pre><code>                   score_val eval_metric  pred_time_val     fit_time
+          XGBoost_r98   .     roc_auc       .  .
+  WeightedEnsemble_L2   .     roc_auc       .  .
+</code></pre>
+<hr>
+<p>Best regards,</p>
+<p>Nick and Lennart (@lennartpuruckerisg), on behalf of the "AutoML Grandmasters"</p>
+<p>Prior Grand Prix Competition Write-ups: <a href="https://www.kaggle.com/competitions/playground-series-s4e5/discussion/500783" target="_blank">First AutoML Grand Prix Competition</a>, <a href="https://www.kaggle.com/competitions/playground-series-s4e6/discussion/509631" target="_blank">Second AutoML Grand Prix Competition</a></p>

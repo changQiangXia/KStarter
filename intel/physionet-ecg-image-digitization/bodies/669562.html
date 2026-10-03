@@ -1,0 +1,117 @@
+<h2>Acknowledgments</h2>
+<p>I would like to express my sincere gratitude to Kaggle and the competition organizers for providing this invaluable opportunity. Special thanks to <a href="https://www.kaggle.com/hengck23" target="_blank">@hengck23</a> for sharing his strong baseline, which served as a crucial foundation for my work.</p>
+<h2>Summary</h2>
+<p>My solution focuses on optimizing Stage 2 of the baseline provided by <a href="https://www.kaggle.com/hengck23" target="_blank">@hengck23</a>. The key insight is to directly regress the lead signal, bypassing the traditional pipeline of "segmentation followed by post-processing." By treating this as a direct regression task, the model learns the signal features more effectively and reduces the cumulative error often introduced during the post-processing stage.</p>
+<h2>Overall Pipeline</h2>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F5483160%2F478068740d14fb19934fb2f237a9deca%2F1.png?generation=1769161443528035&amp;alt=media" alt=""></p>
+<h3>Resample</h3>
+<p>The training dataset contains ECG signals with diverse sampling rates, ranging from <code>2.5 kHz</code> to <code>10 kHz</code>. To ensure high-quality ground truth and maintain optimal Signal-to-Noise Ratio (SNR), a consistent resampling strategy is required. I implemented a benchmarking framework to evaluate the fidelity of various resampling algorithms—including <code>polyphase, linear, cubic spline, and FFT-based methods</code>. The performance was measured using a transformation:</p>
+<ol>
+<li>Up/Down-sample: Resample the original signal to a target length (e.g., 2560, 5120, or 10250). </li>
+<li>Restore: Resample the signal back to its original length.</li>
+<li>Evaluate: Calculate the SNR by comparing the "Restored" signal against the "Original" ground truth.</li>
+</ol>
+<p>The key observations is</p>
+<ul>
+<li>scipy.signal.resample (FFT-based) yields significantly superior results compared to torch.nn.functional.interpolate (Linear/Bilinear) for this signal processing task.</li>
+<li>fidelity is positively correlated with the intermediate sampling density; higher intermediate lengths (10250 &gt; 5120 &gt; 2560) result in substantially lower information loss.</li>
+</ul>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F5483160%2F2af8c00564301f404ea7b900bf715442%2F1.png?generation=1769138986791210&amp;alt=media" alt=""></p>
+<p>Moreover, to accelerate image resampling and integrate it into the training process, I use <code>resample_torch</code></p>
+<pre><code>def resample_torch(self, x, num, dim=-1):
+        dim = (x.dim() + dim) if dim &lt; 0 else dim
+        X = torch.fft.fft(x, dim=dim)
+        Nx = X.shape[dim]
+
+        sl = [slice(None)] * X.ndim
+        newshape = list(X.shape)
+        newshape[dim] = num
+        Y = torch.zeros(newshape, dtype=X.dtype, device=X.device)
+
+        N = min(num, Nx)
+        sl[dim] = slice(0, (N + 1) // 2)
+        Y[sl] = X[sl]
+        sl[dim] = slice(-(N - 1) // 2, None)
+        Y[sl] = X[sl]
+
+        if N % 2 == 0:
+            if N &lt; Nx:
+                sl[dim] = slice(N//2, N//2+1)
+                Y[sl] += X[sl]
+            elif N &lt; num:
+                sl[dim] = slice(num-N//2, num-N//2+1)
+                Y[sl] /= 2
+                temp = Y[sl]
+                sl[dim] = slice(N//2, N//2+1)
+                Y[sl] = temp
+
+        y = torch.fft.ifft(Y, dim=dim).real * (float(num) / float(Nx))
+        return y
+</code></pre>
+<h3>Signal Regression Head</h3>
+<p>This module converts 2D feature embeddings into precise physical voltage values for ECG leads by using a Soft-Argmax mechanism to estimate vertical coordinates.</p>
+<pre><code># Signal Regression Head
+class MaskEmbeddingToLeadSignalSoftArgmax(nn.Module):
+    def __init__(self, n_leads=4, embedding_dim=32, temperature=0.5):
+        super().__init__()
+
+        self.n_leads = n_leads
+        self.temperature = temperature
+        self.lead_y_logits = nn.Conv2d(embedding_dim, n_leads, kernel_size=1)
+
+        self.register_buffer('zero_mv', torch.tensor([703.5, 987.5, 1271.5, 1531.5]).view(1, 4, 1))
+        self.register_buffer('mv_to_pixel', torch.tensor(79.0))
+
+    def forward(self, masked_feat):
+        B, C, H, W = masked_feat.shape
+        device = masked_feat.device
+        dtype = masked_feat.dtype
+
+        y_logits = self.lead_y_logits(masked_feat)
+        prob = torch.softmax(y_logits / self.temperature, dim=2)
+
+        y_coord = torch.arange(H, device=device, dtype=dtype).view(1,1,H,1)
+        y_pixel = (prob * y_coord).sum(dim=2)  # [B, L, W]
+
+        pred_mv = (self.zero_mv - y_pixel) / self.mv_to_pixel
+        return pred_mv, prob
+</code></pre>
+<h2>Experimental Results</h2>
+<table>
+<thead>
+<tr>
+<th>Signal Length</th>
+<th>TTA (hflip)</th>
+<th>Epochs</th>
+<th>LB Score</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2560</td>
+<td>False</td>
+<td>60</td>
+<td>21.36</td>
+</tr>
+<tr>
+<td>5120</td>
+<td>False</td>
+<td>100</td>
+<td>22.20</td>
+</tr>
+<tr>
+<td>5120</td>
+<td>True</td>
+<td>100</td>
+<td>22.36</td>
+</tr>
+<tr>
+<td>5120</td>
+<td>True</td>
+<td>150</td>
+<td>22.43</td>
+</tr>
+</tbody>
+</table>
+<h2>Code:</h2>
+<p><a href="https://github.com/GWwangshuo/Kaggle-2025-PhysioNet/tree/main" target="_blank">Training Code </a></p>

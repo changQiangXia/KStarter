@@ -1,0 +1,87 @@
+# https://www.kaggle.com/competitions/playground-series-s4e6/discussion/509642
+
+Topic #509642: [AutoML Grand Prix (Pt. 2)] Solution writeup
+  Author: Carl McBride Ellis
+  Posted: 2024-06-03 09:36:18.226000
+  Votes: 36  Comments: 21
+
+As we know, the Playground Series datasets are synthetically augmented variants of long-standing popular tabular datasets, and this month was no exception. 
+
+I am a firm believer in the power of feature engineering to find extra predictive power in datasets, and in view of this a good place for inspiration is to review the work of other people on the 'unadulterated' dataset. However, my off-line tests steadfastly refused to show better results when creating new features such as cross-terms, interaction terms etc. even for features that have shown strong promise on the original dataset.
+
+Another route is to remove very weak features that are essentially noise, but that too degraded my baseline score. Based on the finding of last months' challenge, where the dataset was trivial but the color of the synthetic noise had some weak predictive power my hypothesis is that even useless features became predictive features due to this color, hence dropping them degrades performance.
+
+Also, depending on which features to treat as categorical or not had strange effects (in the end I gave up exploring and went with the "AmbrosM" list). I was left wondering if the categorical data is actually augmented as categorical data or not.
+
+In short; everything I tried in the time available was fruitless. However, as we all know Gaurav Dutta created and published a very strong Public LB notebook (whether it is a actually robust solution or not will have to wait for the Private LB…) 
+
+In the end, with time running short, I blended his output file with a CatBoost baseline and a LightGBM baseline by simply taking the mode of the class predictions: my 'best-of-five' was notebook #2, which only blended CatBoost and gave a Public LB score of 0.83875. (Note: taking the mode of just two values is somewhat ill defined…)
+
+To use up my very last submission of the day, just for fun, I changed the random_seed from 42 to 24, and upped the number of CatBoost estimators form 1000 to 1001, and my Public LB score dropped to 0.83679. With this in mind I am inclined to suspect that there was a fair degree of chance/luck at play; …there is nothing quite like combining the perfect storm of synthetic data with the accuracy score metric to make things "interesting"!
+
+All the best,
+carl
+
+Comments:
+├─ Robert Hatch (2024-06-04 00:38:52.417000) [+7]
+│  Luck: my current hypothesis is it was more bias than luck, with a result that predicted an unusually high percentage of Enrolled, that happens to better match the contested portion of the LB. (95% ...
+  ├─ paddykb (2024-06-04 08:15:00.420000) [+11]
+  │  A possible clue: 26 rows match between the original data and the training data (after rounding to 2dp).  In every matching training row, the target is different from that in the original. This sugg...
+    ├─ Thomas Meißner (2024-06-04 08:49:34.370000) [+2]
+    │  Nice observation!
+    ├─ Robert Hatch (2024-06-04 14:20:57.197000) [+3]
+    │  I saw that recently when visiting Bank Churn (S4E1). No way to know, but my hypothesis is that there's multiple types of transformations with a chance of being applied, and then a newly generated r...
+    ├─ broccoli beef (2024-06-04 16:00:12.907000) [+4]
+    │  There are 25 samples in the train dataset and the "original" dataset with identical features (up to single precision) and different target values. There are 21 such common rows between the test dat...
+    ├─ paddykb (2024-06-04 16:58:32.177000) [+3]
+    │  When I'm grubbing for a fourth decimal place advantage in the final days, I plan to select the second-highest prediction for these specific data points. 
+    │  
+    │  But, I have bigger problems - I don't have...
+    ├─ Robert Hatch (2024-06-04 17:20:49.900000) [+0]
+    │  Oh right, not binary labels, lol. 
+    │  
+    │  I would expect the random swap to be relative to original probabilities (or secondary hypothesis relative to that datapoint's probabilities), so your chart fits ...
+    ├─ Robert Hatch (2024-06-04 17:25:44.967000) [+1]
+    │  But, I have bigger problems - I don't have a CV close enough to the higher LB scores :(
+    │  
+    │  
+    │  A low CV is a bigger problem, yes. :) Although the public LB is "easy", it's not what you meant but just fo...
+    ├─ Robert Hatch (2024-06-04 17:34:09.790000) [+2]
+    │  I'd go a step further based on my hypothesis. If using original data I'd drop those 26 (25) rows from train!
+    │  
+    │  If not using original data I'd replace just those rows with the original labels. 
+    │  
+    │  Basi...
+    ├─ Tilii (2024-06-04 21:20:00.047000) [+1]
+    │  But, I have bigger problems - I don't have a CV close enough to the higher LB scores :(
+    │  
+    │  
+    │  Neither do I, but that doesn't worry me. I don't think those 0.839 scores will hold on private LB. Most of ...
+    ├─ Robert Hatch (2024-06-05 00:32:48.330000) [+1]
+    │  Update: of the 21 labels, 14 of them already had the 'flipped' label I would've predicted. (With my overfitting 83983 sub anyways). When I update the 7, I changed 1 Dropout prediction to Graduate, ...
+    ├─ Yan Teixeira (2024-06-05 00:36:15.543000) [+1]
+    │  @roberthatch Why are we so certain that Gaurav's notebook overfitted? Am I missing something?
+    ├─ Robert Hatch (2024-06-05 01:40:00.167000) [+4]
+    │  I'm more sure that MY sub is overfitting than that his is. I get +3 right by replacing with my more confident predictions but NOT my most confident preds. Why exclude my most confident preds? Only ...
+├─ Tilii (2024-06-04 21:13:04.813000) [+6]
+│  Based on the finding of last months' challenge, where the dataset was trivial but the color of the synthetic noise had some weak predictive power my hypothesis is that even useless features became ...
+  ├─ Robert Hatch (2024-06-04 21:54:03.457000) [+3]
+  │  this synthetic data generation only worries about individual feature distributions but not feature relationships
+  │  
+  │  
+  │  I've suspected that, but I'm curious how much evidence we have at this point? For ...
+    ├─ Tilii (2024-06-04 23:51:06.263000) [+3]
+    │  Related question: has there been any obviously different transformations in different competitions?
+    │  
+    │  
+    │  I would say yes, at least anecdotally. In this competition someone brought up negative GDP valu...
+    ├─ Timur Öztürk (2024-06-05 08:21:36.457000) [+2]
+    │  Looking a little bit into the macroeconomic variables reveals the process behind data generation. I'm not sure how overfitting would work in this case, but it might be a good idea to group up the o...
+    ├─ broccoli beef (2024-06-05 13:13:08.720000) [+4]
+    │  @timuroeztuerk In the "original" dataset, there were 10 sets of macroeconomic data corresponding to Portugal between the years 2008 and 2017 inclusive. During synthesis of the train and test set, t...
+    ├─ Timur Öztürk (2024-06-06 12:00:54.223000) [+1]
+    │  Thank you, now it makes more sense. I will try to adjust my code, and let's see what happens.
+├─ Ravi Ramakrishnan (2024-06-03 11:02:10.890000) [+3]
+│  @carlmcbrideellis both of us probably did very similar experiments. My late night experiment after matching Gaurav's score was very similar
+├─ [deleted] (2024-06-09 09:05:34.967000) [+0]
+│  [deleted]

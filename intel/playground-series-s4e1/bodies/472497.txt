@@ -1,0 +1,103 @@
+# https://www.kaggle.com/competitions/playground-series-s4e1/discussion/472497
+
+Topic #472497: 5th place solution: one xgboost model, not use data leakage
+  Author: kailai
+  Posted: 2024-02-01 08:11:04.140000
+  Votes: 9  Comments: 1
+
+``
+
+
+
+Feature engineering: almost follow logic in real world
+
+
+COUNT(Cusname) OVER (PARTITION BY Age) cntcs ,
+COUNT(CustomerId) OVER (PARTITION BY Surname,Age) cnt ,
+COUNT(Surname) OVER (PARTITION BY Age) cnts ,
+1.0*EstimatedSalary/AVG(EstimatedSalary) OVER (PARTITION BY Geography) res,
+SUM(EstimatedSalary) OVER (PARTITION BY CustomerId,Surname,Age,Gender) css,
+AVG(EstimatedSalary) OVER (PARTITION BY Surname,Age,Gender) sa,
+LEAD(Balance,1) OVER (PARTITION BY CustomerId,Surname,Gender,Geography
+                                    ORDER BY age) /
+(1.0+LEAD(Balance,2) OVER (PARTITION BY CustomerId,Surname,Gender,Geography
+                                    ORDER BY age))ldb,
+LEAD(Balance,2) OVER (PARTITION BY CustomerId,Surname,Gender,Geography
+                                    ORDER BY age) /
+(1.0+LEAD(Balance,3) OVER (PARTITION BY CustomerId,Surname,Gender,Geography
+                                    ORDER BY age))ldb2,                                 
+LAG(Exited,1) OVER (PARTITION BY CustomerId, Surname,Gender,Geography,Balance
+,CreditScore,Tenure,NumOfProducts,IsActiveMember,HasCrCard,EstimatedSalary ORDER BY age)lgex,                                    
+LAG(Exited,2) OVER (PARTITION BY CustomerId, Surname,Gender,Geography,Balance,CreditScore,
+Tenure,NumOfProducts,IsActiveMember,HasCrCard,EstimatedSalary ORDER BY age)lgex2,                                    
+LAG(Exited,3) OVER (PARTITION BY CustomerId, Surname,Gender,Geography,Balance,CreditScore,
+Tenure,NumOfProducts,IsActiveMember,HasCrCard,EstimatedSalary ORDER BY age)lgex3,                                    
+
+LEAD(Exited,1) OVER (PARTITION BY CustomerId, Surname,Gender,Geography,Balance,CreditScore,
+Tenure,NumOfProducts,IsActiveMember,HasCrCard,EstimatedSalary ORDER BY age)ldex,                                    
+LEAD(Exited,2) OVER (PARTITION BY CustomerId, Surname,Gender,Geography,Balance,CreditScore,
+Tenure,NumOfProducts,IsActiveMember,HasCrCard,EstimatedSalary ORDER BY age)ldex2,                                    
+LEAD(Exited,3) OVER (PARTITION BY CustomerId, Surname,Gender,Geography,Balance,CreditScore,
+Tenure,NumOfProducts,IsActiveMember,HasCrCard,EstimatedSalary ORDER BY age)ldex3,                                    
+LAG(Exited,1) OVER (PARTITION BY CustomerId, Surname,Gender,Geography,Balance,age
+,CreditScore,Tenure,NumOfProducts,IsActiveMember,HasCrCard ORDER BY EstimatedSalary)lgsa,
+LEAD(Exited,1) OVER (PARTITION BY CustomerId, Surname,Gender,Geography,Balance,age
+,CreditScore,Tenure,NumOfProducts,IsActiveMember,HasCrCard ORDER BY EstimatedSalary)ldsa,
+LAG(Exited,2) OVER (PARTITION BY CustomerId, Surname,Gender,Geography,Balance,age
+,CreditScore,Tenure,NumOfProducts,IsActiveMember,HasCrCard ORDER BY EstimatedSalary)lgsa2,
+LEAD(Exited,2) OVER (PARTITION BY CustomerId, Surname,Gender,Geography,Balance,age
+,CreditScore,Tenure,NumOfProducts,IsActiveMember,HasCrCard ORDER BY EstimatedSalary)ldsa2,
+LAG(Exited,1) OVER (PARTITION BY CustomerId, Surname,Gender,Geography,CreditScore,age
+,EstimatedSalary,Tenure,NumOfProducts,IsActiveMember,HasCrCard ORDER BY Balance)lgcr,
+LEAD(Exited,1) OVER (PARTITION BY CustomerId, Surname,Gender,Geography,CreditScore,age
+,Tenure,NumOfProducts,IsActiveMember,HasCrCard,EstimatedSalary ORDER BY Balance)ldcr,
+stddev_pop(CreditScore) OVER (PARTITION BY Surname)stds,
+1.0Balance/EstimatedSalary be,
+1.0Balance/CreditScore bc,
+1.0(EstimatedSalary-Balance)/CreditScore ceb,
+AVG(EstimatedSalary-Balance) OVER (PARTITION BY Surname) ate,
+SUM(NumOfProducts) OVER (PARTITION BY Surname)
+/SUM(EstimatedSalary) OVER (PARTITION BY Surname) ne,
+SUM(IsActiveMember) OVER (PARTITION BY Surname)
+/SUM(EstimatedSalary) OVER (PARTITION BY Surname) ie,
+ SUM(Balance) OVER (PARTITION BY Surname)
+/SUM(EstimatedSalary) OVER (PARTITION BY Surname) sbe,
+SUM(Balance) OVER (PARTITION BY CustomerId)
+/SUM(EstimatedSalary) OVER (PARTITION BY CustomerId) cbe,
+SUM(CreditScore) OVER (PARTITION BY Surname)
+/SUM(EstimatedSalary) OVER (PARTITION BY Surname ) ce,
+SUM(Tenure) OVER (PARTITION BY Surname )
+/SUM(EstimatedSalary) OVER (PARTITION BY Surname ) te,
+SUM(CreditScore ) OVER (PARTITION BY Surname ) sc,
+1.0CreditScore/AVG(CreditScore) OVER (PARTITION BY Geography) rc,
+SUM(Balance) OVER (PARTITION BY Surname)  sb,
+COUNT(CASE WHEN Balance=0 THEN 1 ELSE NULL END)
+OVER (PARTITION BY Surname ) bzero,
+MAX(Balance) OVER (PARTITION BY Surname )-
+MIN(Balance) OVER (PARTITION BY Surname ) bmn,
+1.0Balance/AVG(Balance+1) OVER (PARTITION BY Geography) rb,
+1.0Tenure/AVG(Tenure) OVER (PARTITION BY Geography) rt,
+SUM(Tenure) OVER (PARTITION BY CustomerId,Surname ) cst,
+SUM(Tenure) OVER (PARTITION BY CustomerId ) ct,
+SUM(Tenure) OVER (PARTITION BY Surname ) st,
+AVG(Tenure) OVER (PARTITION BY CustomerId,Surname ) csta,
+AVG(Tenure) OVER (PARTITION BY Surname) sta,
+1.0*NumOfProducts/(AVG(NumOfProducts) OVER (PARTITION BY Geography)) rn,
+SUM(NumOfProducts ) OVER (PARTITION BY Surname ) sn,
+AVG(IsActiveMember ) OVER (PARTITION BY CustomerId,Surname) csh,
+AVG(IsActiveMember  ) OVER (PARTITION BY Surname ) sh,
+SUM(IsActiveMember ) OVER (PARTITION BY CustomerId,Surname ) csi,
+SUM(IsActiveMember  ) OVER (PARTITION BY Surname ) si
+,IsActiveMember+HasCrCard CrCard
+
+Train using xgboost, cv 0.9030  private lb 0.902
+
+Reversing leaked data does not help cv, public lb, private lb of my model
+
+Comments:
+├─ Thomas Meißner (2024-02-01 13:12:00.297000) [+2]
+│  Congratulations!
+│  
+│  Could you place everything in a code block for better readability?
+│  
+│  Did you tune Xgboost params as well?

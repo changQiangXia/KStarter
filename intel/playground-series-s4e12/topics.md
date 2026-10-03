@@ -1,0 +1,82 @@
+# playground-series-s4e12 讨论区（按票数排序，共 80 条）
+
+- [1st Place - Single Model - Feature Engineering](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/554328) — 233 票 / 100 评论 / 2025-01-01 **write-up?**
+- [Relationship between NAN and Target](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/552165) — 126 票 / 87 评论 / 2024-12-18 
+- [The Magic Middle - Median, Mean, or Exponented Mean Log 1p?](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/549909) — 62 票 / 12 评论 / 2024-12-04 
+- [New Kaggle Tabular Data Competition for Prizes!](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/550868) — 51 票 / 12 评论 / 2024-12-10 
+- [A competitive algorithm that you may not be aware of](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/549959) — 36 票 / 10 评论 / 2024-12-04 
+- [References and starter materials ](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/549144) — 35 票 / 2 评论 / 2024-12-01 
+- [Regarding the eval metric](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/549149) — 32 票 / 24 评论 / 2024-12-01 
+- [9th place solution: With a little help from my (Kaggle) friends](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/554377) — 29 票 / 9 评论 / 2025-01-01 **write-up?**
+- [Rank 2 approach - brute force ensembling (118 oofs)](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/554505) — 27 票 / 8 评论 / 2025-01-01 
+- [A significant difference between train and original dataset](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/549332) — 26 票 / 7 评论 / 2024-12-01 
+- [What additions do you seek in the next season of the Playground series?](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/554223) — 24 票 / 26 评论 / 2024-12-31 
+- [Best 2 Public Notebooks](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/550350) — 24 票 / 13 评论 / 2024-12-07 
+- [Rank 10 approach - FE + brute force models + ensemble](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/554332) — 21 票 / 5 评论 / 2025-01-01 
+- [How to make your life easier by transforming the target variable & other ideas](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/549336) — 20 票 / 8 评论 / 2024-12-01 
+- [scikit-learn 1.6.0 is the stable version now](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/551228) — 18 票 / 6 评论 / 2024-12-12 
+- [Again about early stopping and CV?](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/549788) — 18 票 / 21 评论 / 2024-12-03 
+- [A tip on how you can shortcut your EDA](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/549195) — 17 票 / 3 评论 / 2024-12-01 
+- [Kaggle kernels environment update](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/552336) — 15 票 / 2 评论 / 2024-12-19 
+- [Some more tabular competitions with relevant use-cases ](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/551259) — 15 票 / 2 评论 / 2024-12-12 
+- [ Most effective ways to use regression analysis in insurance: Risk factors.](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/549164) — 14 票 / 3 评论 / 2024-12-01 
+- [Alternative UDF for the eval metric ](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/549392) — 12 票 / 6 评论 / 2024-12-02 
+- [Did anyone try the new TabM?](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/549836) — 12 票 / 9 评论 / 2024-12-04 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/549540) — 10 票 / 8 评论 / 2024-12-02 
+- [It might sound weird, but null values in Marital Status might not be missing by random](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/549662) — 10 票 / 6 评论 / 2024-12-03 
+- [Visualizing the leaderboard ](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/554335) — 8 票 / 5 评论 / 2025-01-01 
+- [6th Place Solution: Enhancing Features with Binned and RMSE-Optimized CatBoost Predictions](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/554373) — 7 票 / 5 评论 / 2025-01-01 **write-up?**
+- [Get started here!](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/533165) — 6 票 / 7 评论 / 2024-09-09 
+- [Numerical feature processing](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/553025) — 6 票 / 7 评论 / 2024-12-23 
+- [Is Stacking effective for this task?](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/553608) — 5 票 / 12 评论 / 2024-12-27 
+- [How to improve the error contribution from the left mode?](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/551206) — 5 票 / 8 评论 / 2024-12-11 
+- [I want to say thank you ](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/554394) — 5 票 / 2 评论 / 2025-01-01 
+- [What is the insurance for??](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/549226) — 5 票 / 4 评论 / 2024-12-01 
+- [An useful extension that i use](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/549299) — 5 票 / 2 评论 / 2024-12-01 
+- [Dataset Description](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/549145) — 5 票 / 2 评论 / 2024-12-01 
+- [Pretty good score - 1.04 but rSquared sucks.](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/550676) — 5 票 / 18 评论 / 2024-12-08 
+- [Outlier processing](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/552312) — 5 票 / 14 评论 / 2024-12-19 
+- [Why does log-transforming the target produce better results?](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/549741) — 4 票 / 12 评论 / 2024-12-03 
+- [Results and tests I did.](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/552240) — 4 票 / 8 评论 / 2024-12-18 
+- [Some Doubts about an approach in CAtboost with Optuna | Long Post | Please help me understand ](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/552175) — 4 票 / 4 评论 / 2024-12-18 
+- [Using OOF predictions along base data](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/552434) — 4 票 / 10 评论 / 2024-12-19 
+- [Is holidays?](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/552384) — 4 票 / 4 评论 / 2024-12-19 
+- [why is a "good " prediction way off ?](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/554287) — 4 票 / 1 评论 / 2024-12-31 
+- [When and Why to Apply Log Transformation on Features Like Annual Income?](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/550546) — 3 票 / 3 评论 / 2024-12-08 
+- [Best way to scale?](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/552359) — 3 票 / 7 评论 / 2024-12-19 
+- [Experiment (explained): Splitting between NaNs & Not NaNs](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/552885) — 3 票 / 0 评论 / 2024-12-22 
+- [Which approaches would be a good choice when starting to build models?](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/552713) — 3 票 / 7 评论 / 2024-12-21 
+- [Hyperparameter optimization](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/552374) — 3 票 / 11 评论 / 2024-12-19 
+- [Analysis on NaN values.](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/552568) — 3 票 / 5 评论 / 2024-12-20 
+- [No hyperparameter](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/552875) — 3 票 / 14 评论 / 2024-12-22 
+- [New playground cloned competition with $16k total prize!](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/552928) — 3 票 / 4 评论 / 2024-12-22 
+- [Negative target in prediction](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/549878) — 3 票 / 8 评论 / 2024-12-04 
+- [Don't do imputation blindly "most frequent"  & "Mean"  🙅‍♂️](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/549383) — 3 票 / 5 评论 / 2024-12-02 
+- [Handling 'Policy Start Date' - Cyclical Features](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/549691) — 3 票 / 9 评论 / 2024-12-03 
+- [Same time values in Policy Start Date](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/551907) — 3 票 / 3 评论 / 2024-12-16 
+- [How to handle missing values.](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/550627) — 3 票 / 9 评论 / 2024-12-08 
+- [😉 Some backgrounds on pricing the data from a inssurance prespective 😉](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/549203) — 3 票 / 1 评论 / 2024-12-01 
+- [Model's perfomance with non correlated features](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/550664) — 2 票 / 9 评论 / 2024-12-08 
+- [Some interesting questions](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/551125) — 2 票 / 9 评论 / 2024-12-11 
+- [ Seeking Help for Optuna Hyperparameter Tuning Issues](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/549921) — 2 票 / 8 评论 / 2024-12-04 
+- [Distributed JAX training example](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/551264) — 2 票 / 1 评论 / 2024-12-12 
+- [Help. I tried  to import the metric](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/549904) — 2 票 / 4 评论 / 2024-12-04 
+- [Training-Test Adversial Validation reg](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/549785) — 2 票 / 4 评论 / 2024-12-03 
+- [ Looking for Teammates for Regression with an Insurance Dataset – ML Enthusiast Seeking Collaboration](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/549394) — 2 票 / 5 评论 / 2024-12-02 
+- [How far ahead can we optimize the metric in the competition?](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/550478) — 2 票 / 17 评论 / 2024-12-07 
+- [Should I use optuna with cross validation or  train test split](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/551639) — 2 票 / 4 评论 / 2024-12-14 
+- [Is the Start Policy Date a Valuable Feature or Should We Drop It?](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/551870) — 2 票 / 2 评论 / 2024-12-16 
+- [7th place solution: ensemble of 10 models](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/554746) — 2 票 / 2 评论 / 2025-01-03 **write-up?**
+- [Average of Multi model vs. single model made by optuna.](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/552013) — 2 票 / 9 评论 / 2024-12-17 
+- [How to prevent over-fitting?? (LightGBM)](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/551732) — 2 票 / 14 评论 / 2024-12-15 
+- [I have an idea that I hope will help us😊](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/551423) — 2 票 / 13 评论 / 2024-12-13 
+- [NaN filling by maintaining statistical distribution.](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/553000) — 2 票 / 3 评论 / 2024-12-23 
+- [About the loss](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/553177) — 2 票 / 5 评论 / 2024-12-24 
+- [How to group data in this competition?](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/549424) — 1 票 / 2 评论 / 2024-12-02 
+- [Why simple linear Regression giving a bad score?](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/560134) — 1 票 / 0 评论 / 2025-01-29 
+- [The potential of conformal prediction](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/549634) — 1 票 / 2 评论 / 2024-12-03 
+- [notebook based on the first place solution comparison](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/556074) — 1 票 / 2 评论 / 2025-01-11 **write-up?**
+- [Why RMSLE??](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/556974) — 1 票 / 1 评论 / 2025-01-16 
+- [About Early Stopping](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/549673) — 1 票 / 10 评论 / 2024-12-03 
+- [Annual Income Null Values](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/549261) — 1 票 / 4 评论 / 2024-12-01 
+- [High Runtime for the Large dataset](https://www.kaggle.com/competitions/playground-series-s4e12/discussion/554371) — 1 票 / 6 评论 / 2025-01-01 

@@ -1,0 +1,48 @@
+<p>Congratulation to all the winners and many thanks to those contributing quality discussions and code: <a href="https://www.kaggle.com/cdeotte" target="_blank">@cdeotte</a>, <a href="https://www.kaggle.com/siukeitin" target="_blank">@siukeitin</a>, <a href="https://www.kaggle.com/optimistix" target="_blank">@optimistix</a>, <a href="https://www.kaggle.com/mikhailnaumov" target="_blank">@mikhailnaumov</a>, <a href="https://www.kaggle.com/mahoganybuttstrings" target="_blank">@mahoganybuttstrings</a> You know who you are even if I forgot to mention you here.</p>
+<p>I want to credit in particular <a href="https://www.kaggle.com/masayakawamata" target="_blank">@masayakawamata</a> and his <a href="https://www.kaggle.com/code/masayakawamata/s5e10-single-tabm-tuned" target="_blank"><strong>excellent TabM notebook</strong></a>. It helped my ensemble, but mostly because I learned to use a new group of neural networks that I suspect will be useful in the future.</p>
+<p>It was a close competition on public LB, and remained so on private LB. Other than the top 4 spots "tied" at <code>0.05563</code>, the next ~200 competitors were all at <code>0.05564</code>. We've had it close before, but this seems extreme even by Kaggle standards.</p>
+<p>In my academic calendar I have a somewhat open three-week stretch in October, so this is my only chance to compete meaningfully outside of summer and winter breaks. So I did, and my computers could attest to that. It seemed to me from the beginning that not much progress would be made in this competition after the first week or so. Boy, did I underestimate it! Forget about "not much progress", how about no progress at all? I have had the same LB score for the past 3 weeks, even though it was internally improving by miniscule amounts when I sorted about a dozen submissions that scored <code>0.05537</code>. As scores from other Kagglers remained the same for the most part, it was clear that this stagnation was not happening only to me.</p>
+<p>I tried many things, and it would take me a long time to summarize. Instead, I will mention what I think made the most difference, even though I am not sure there was a difference given that 3 Kagglers are tied with me, and another 200 are behind by only 0.00001.</p>
+<p><img src="https://i.postimg.cc/0Ngc0BwY/S5E10-flowchart.png" alt="Flowchart"></p>
+<p>I meant to make a helpful chart but the result above seems overly complex. Hopefully it will do the trick. The first row is various data types that were used. <code>Mix</code> refers to original data that had both categorical and numerical features. Sometimes they were all converted to <code>Categorical</code> or to <code>Numerical</code>. After about 10 days I added latent space representations by <code>Autoencoder</code> and some features derived by <code>Genetic programming</code>.</p>
+<p>Purely numerical representation didn’t work, or I should say it didn't work by Kaggle standards. For example, I got a 0.058 CV score and a 0.05802 private score from Lasso, which is objectively excellent for a method that takes about 2 minutes for a 10x10 repeated K-fold run. Not only that, but Lasso feature coefficients were extremely informative in this competition.</p>
+<p><img src="https://i.postimg.cc/6QNfv4kC/feature-importance-Lasso-01-v1.png" alt="Lasso works"></p>
+<p>When you translate what’s in that image into numbers (while ignoring coefficients with absolute values &lt; 0.05), you get this:</p>
+<pre><code>accident_risk = 
+0.3046 * curvature +
+0.0706 * lighting_2 +
+
+
+
+
+
+
+0.0646 * speed_limit_4 +
+0.0629 * speed_limit_3 +
+0.0789 * num_reported_accidents_4 +
+0.0704 * num_reported_accidents_5
+</code></pre>
+<p>Compare that to the original equation used to create the target, and we have a strong Lasso model that clearly explains feature contributions.</p>
+<pre><code> = (
+     * data[] + 
+     * (data[] == ).(int) + 
+     * (data[] != ).(int) + 
+     * (data[] &gt;= ).(int) + 
+     * (np.array(data[]) &gt; ).(int)
+)
+</code></pre>
+<p>But enough of that. As you can see from the flowchart above, I tried many different neural networks. Got introduced to PyTorch Tabular and even learned rudimentary PyTorch programming. None of those "worked" by Kaggle standards. That’s where the TabM notebook was so valuable, because it gave another model that could work with my Keras FM and TF embedding networks. I added XGB residual boosting by <a href="https://www.kaggle.com/cdeotte" target="_blank">@cdeotte</a> too late to my ensemble, and by that time neither my CV nor LB scores were budging regardless of promising individual models. In the end I fine-tuned TabM parameters and got three models that had better scores than the original, and those parameters can be found in <a href="https://www.kaggle.com/code/tilii7/s5e10-tabm-tuned-further" target="_blank"><strong>this notebook</strong></a>. One of the three parameter sets is used, and the other two are commented out. You may want to try all three and see if that helps your ensembles. XGBoost and CatBoost were fairly standard for me in this competition, didn’t use LightGBM except for a couple of runs at the start.</p>
+<p>I do ensembling with multiple methods because it is generally easy, and one never knows what will work. That said, my preference is with NNs and Lasso for regression, followed by hill climbing for getting a quick result. That’s because all these methods generally require no tunning. You will see from the flowchart that I also used XGB and CatB for ensembling, but those are long Optuna runs where finding the optimal parameters takes 4-10 hours. After about 2 weeks I was ensembling exclusively with NNs as it worked better than anything else and was reasonably fast (1-2 hours for 40-50 models).</p>
+<p>I did several AugoGluon runs that produced many promising models, but none of them were helping the ensemble.</p>
+<p>Since I didn’t talk about it up in the data section, I should say here that neither autoencoders (AE) not genetic programming (GP) produced features that worked well on their own. Again, take this as a relative assessment, because they worked better than Lasso, but were generally not competitive. Adding them to individual models didn’t help much either.</p>
+<p>Here is what I think made a little difference: adding 11 GP-derived features at the ensembling stage. I have a notebook <a href="https://www.kaggle.com/code/tilii7/s5e10-genetic-programming-features" target="_blank"><strong>here</strong></a> showing how the GP features were derived. As they are added to the original data, you can simply copy those files and try them in your pipelines. These features are difficult to rationalize by looking at the formula:</p>
+<pre><code>train = np(np(np(np(np(np(np(np(*train*np(np(train*train*np(train)*np(np(train***np(train***train*np(train))/train))))))))))))
+</code></pre>
+<p>Notice, however, that even here only the relevant features were selected for calculation. Just for fun, I did a couple of GP runs that disallowed all the fancy algebra and trigonometric manipulations, and only [+, -, *, /] operations were allowed. Check out what two of those runs produced independently.</p>
+<pre><code>.*[curvature] + .*[speed_limit_3] + .*[speed_limit_4] + .*[num_reported_accidents_4] + .*[lighting_2] + .*[weather_1] + .*[weather_2] - .
+</code></pre>
+<pre><code>.*[curvature] + .*[speed_limit_3] + .*[speed_limit_4] + .*[num_reported_accidents_4] + .*[lighting_2] + .*[weather_1] + .*[weather_2] + .
+</code></pre>
+<p>One would think that these would be great extra features because they recapitulate the original target equation almost perfectly, but that’s not the case. As they are so similar to good models and individually have ~0.059 RMSE to the target, it seems that they are not really needed at the ensembling stage. Basically, they don’t bring diversity. Other GP features in that notebook were generally more useful in my ensembles. Specifically, adding 11 GP features on top of individual models resulted in a 0.00001 ensemble improvement.</p>
+<p>The last improvement came from using CatBoost as a secondary ensembler. CatB has the ability to use a strong “baseline” model as a seed before ensembling, which is essentially the same as boosting residuals except that adding and subtracting from the target is done automatically for us. So I would first run a Keras ensemble without 11 GP features, then run CatB with the same group of models + 11 GP features and use the Keras ensemble model as a baseline. This improved both pubic and private LB scores by ~0.00002. That and GP features is what I suspect made the difference in the end.</p>
+<p>The final step was taking several first-level ensemble models and making a second-level ensemble by hill climbing. Although, one could argue that they were already second level ensembles because I run them first through Keras and then CatB. That final hill climbing ensemble (using 4 previous ensemble models) finished with the best score and was my winning solution, even though it looks the same over 5 decimals as the best individual ensemble. In fact, all my top 12 solutions look the same over 5 decimals, so I am happy that among them I picked 2nd and 5th best solutions.</p>

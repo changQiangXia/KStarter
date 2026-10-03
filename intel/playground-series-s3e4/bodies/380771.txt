@@ -1,0 +1,106 @@
+# https://www.kaggle.com/competitions/playground-series-s3e4/discussion/380771
+
+Topic #380771: Use your Time wisely
+  Author: Jose Cáliz
+  Posted: 2023-01-24 04:52:21.701000
+  Votes: 44  Comments: 24
+
+Before jumping a throw the usual stuff, let's first identify something:
+
+
+
+Train dataset has Time from 0 to 33.5 hours after the first transactions. Test  on the other side goes from 33.5 to 48 hours. We have non overlapping time windows
+
+Features can be related to time, if we assume all transactions are in the same time zone. This can be easily verified by plotting any feature against the time. Do you spot any pattern?
+
+
+Intuition may suggest that frauds happens at certain times during the day, we don't have clear picture of the exact hour, but the pattern exists.
+
+
+Here are some technical suggestions you may want to try
+
+
+
+Implement a cross-validation strategy where the validation data is 14.5 hours ahead of the training data and carefully analyze the performance of the model on the fold where the test hours are identical to the validation hours.
+
+Normalize the time feature by converting it to seconds and use it as a feature in the model. Additionally, consider bucketizing the time into categorical variables such as "morning", "afternoon", and "evening". Use the following code snippet as a starting point:
+
+
+train_df[] = pd.cut(
+    train_df.Time % ( * ),
+    bins=[, , , , ],
+    labels=[, , , ]
+)
+
+
+
+
+Probe the leaderboard to determine if the public performance is primarily based on the first couple of hours (from 33.5 to 36.4). If so, consider adjusting the model's evaluation metric to place more emphasis on the later hours.
+
+
+Finally, if you are looking for a starting point, the TimeSeriesSplit, among other classical neural networks architectures, in my notebook Keras Deep Learning Primer ✨✨
+
+Comments:
+├─ Ravi Ramakrishnan (2023-01-24 09:44:18.080000) [+16]
+│  Following up on this post, I have tested the public leaderboard for the first 20% samples and the results are negative. The public leaderboard is random in the test set @jcaliz
+  ├─ Jose Cáliz (2023-01-24 13:31:03.673000) [+1]
+  │  Thanks for the follow-up @ravi20076
+  ├─ Thariq Nugrohotomo (2023-01-24 22:29:40.240000) [+1]
+  │  Hi Ravi,
+  │  Would you mind to elaborate what have you did to check that?
+  │  What are the predictions for the first 20%, and what are the predictions for the last 80%?
+  │  
+  │  Thanks.
+    ├─ Ravi Ramakrishnan (2023-01-25 14:13:42.483000) [+1]
+    │  I simply took the first 20% of the samples in the test set and retained my submitted values and made the rest of the values random. This reduced my GINI score to 50% @thariqnugrohotomo
+  ├─ @kaggleqrdl (2023-01-25 22:48:27.583000) [+1]
+  │  @ravi20076 When you say negative, are you saying negative for manual split of pub versus private or negative as in no fraud?
+    ├─ Ravi Ramakrishnan (2023-01-26 05:37:13.420000) [+0]
+    │  I put a value of -1 for a split of leaderboard @kaggleqrdl
+├─ Konstantin Dmitriev (2023-01-24 08:53:41.570000) [+5]
+│  I totally agree, that the Time feature is very important. Here I present the dependence of mean Class feature (target variable) on Time. The averaging period was equal to 1800 sec. The correlation ...
+  ├─ [deleted] (2023-01-24 09:10:22.110000) [+0]
+  │  [deleted]
+  ├─ Shiva Kant Mishra (2023-01-24 09:20:35.777000) [+1]
+  │  @kdmitrie     This plot is really useful🙂
+  ├─ @kaggleqrdl (2023-01-25 22:54:31.463000) [+0]
+  │  fwiw, here's what chatgpt had to say about this:
+  │  
+  │  
+  │    
+  │  Credit card fraud can occur at any time of day, but it is more likely to occur during times when people are less likely to be monitoring their ...
+    ├─ @kaggleqrdl (2023-01-25 22:57:55.663000) [+0]
+    │  If we assume 0 is midnight, then the above graph would dovetail with "during the night".
+    ├─ broccoli beef (2023-01-26 04:03:32.023000) [+3]
+    │  If you run a sliding window through time, you'd find that the windowed fraud probability is strongly and negatively correlated with transaction activity within the window.
+    │  
+    │  fig, ax1 = plt.subplots(...
+├─ Mohit Kumar (2023-01-24 05:39:56.987000) [+1]
+│  Wow..great insight. Thank you @jcaliz 👍
+├─ Oscar Aguilar (2023-01-24 05:11:40.260000) [+1]
+│  Nice catch👍🏻 GroupKFold can be a good starting point to evaluate models.
+├─ Nick Potter (2023-01-25 00:51:12.217000) [+2]
+│  we don't have clear picture of the exact hour
+│  
+│  
+│  From the original dataset description, the "Time" variable is time elapsed since the first transaction (which could be at any time). Maybe we can ded...
+  ├─ Jose Cáliz (2023-01-25 14:50:03.247000) [+0]
+  │  Hi @nnjjpp, without a definitive specification of the temporal context, it is impossible to confirm that t=0 is equivalent to 00:00. However, incorporating additional feature engineering based on t...
+├─ Brady Wagner (2023-01-30 04:42:51.960000) [+0]
+│  Thank you for this insight! This was really helpful to know going into the evaluation process of the data, as well as how it affected the train and test datasets!
+├─ Dalton Dencklau (2023-01-29 20:53:36.540000) [+0]
+│  Very interesting. Thank you for sharing!
+├─ Konstantin Dunaev (2023-01-26 15:41:41.063000) [+0]
+│  interesting finding! thank you for sharing
+├─ Tim Lincoln (2023-01-26 07:17:38.963000) [+0]
+│  This is an interesting find that I didn't realize was happening in the data, thanks for the valuable tip. So, if a model would be fit with this feature among others, it should increase the performa...
+├─ @kaggleqrdl (2023-01-25 22:33:46.583000) [+0]
+│  Part of the problem is that fraud might be related to day of week as well.
+│  
+│  One idea, might be to add features until you can get the adversarial validation to be unable to distinguish between train...
+  ├─ Jose Cáliz (2023-01-26 12:37:26.963000) [+0]
+  │  I concur with your observation. I implemented adversarial validation with a LightGBM Classifier, and even with utilizing a single feature, the area under the ROC curve (AUC) was approximately 0.8. ...
+├─ [deleted] (2023-01-24 18:09:21.150000) [+1]
+│  Thanks for sharing these hints! 😊
+├─ Adnan Zaidi (2023-01-26 18:48:06.717000) [+0]
+│  Really an interesting share. Thanks

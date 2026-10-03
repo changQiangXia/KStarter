@@ -1,0 +1,82 @@
+# playground-series-s4e4 讨论区（按票数排序，共 80 条）
+
+- [1st Place Solution for the Regression with an Abalone Dataset Competition](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/499174) — 122 票 / 51 评论 / 2024-05-01 **write-up?**
+- [Starter materials and references](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/488067) — 77 票 / 31 评论 / 2024-04-01 
+- [Common pitfalls and tips](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/488093) — 63 票 / 22 评论 / 2024-04-01 
+- [Ensemble weights](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/488409) — 52 票 / 14 评论 / 2024-04-02 
+- [log1p-transformed target + MSE objective vs MSLE objective](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/488283) — 42 票 / 2 评论 / 2024-04-01 
+- [Understanding Abalone Dataset Features](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/488073) — 40 票 / 22 评论 / 2024-04-01 
+- [About this competition metric: RMSLE.](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/488081) — 37 票 / 9 评论 / 2024-04-01 
+- [Why ensembling is helpful - for visual learners](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/491428) — 34 票 / 12 评论 / 2024-04-05 
+- [Making RMSLE-optimized predictions from a classifier model](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/491339) — 33 票 / 1 评论 / 2024-04-05 
+- [5th Place Solution | Learnings](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/499204) — 32 票 / 5 评论 / 2024-05-01 **write-up?**
+- [Systematic errors likely exist in data, and also in our models](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/491196) — 29 票 / 8 评论 / 2024-04-05 
+- [Why ensembling works - part 2](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/494165) — 25 票 / 11 评论 / 2024-04-16 
+- [RMSLE Loss Trick](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/488084) — 24 票 / 5 评论 / 2024-04-01 
+- [Last minute changes: two quick wins](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/498552) — 22 票 / 10 评论 / 2024-04-28 
+- [Coming May 1, the AutoML Grand Prix!](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/494071) — 22 票 / 18 评论 / 2024-04-15 
+- [Abalone's Age Regression task: RANSAC, Huber, OLS, CasPer.](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/490583) — 21 票 / 8 评论 / 2024-04-02 
+- [Multiclass Performs Decently!](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/490870) — 21 票 / 18 评论 / 2024-04-03 
+- [🌊🐚⛵🍤 Original dataset for this competition](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/488075) — 18 票 / 5 评论 / 2024-04-01 
+- [Results so far.](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/492082) — 17 票 / 24 评论 / 2024-04-08 
+- [Collection of helpful ideas - S4E4](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/493939) — 17 票 / 9 评论 / 2024-04-15 
+- [We have a perfect leaderboard here!](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/499193) — 16 票 / 2 评论 / 2024-05-01 
+- [Larger Rings tend to result in smaller predictions](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/491185) — 16 票 / 7 评论 / 2024-04-05 
+- [Ensembling models - is more always better?](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/497440) — 16 票 / 6 评论 / 2024-04-24 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/488066) — 15 票 / 10 评论 / 2024-04-01 
+- [4th Place Solution for the Regression with an Abalone Dataset](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/499341) — 13 票 / 2 评论 / 2024-05-01 **write-up?**
+- [Surrogate competition has ended](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/497212) — 13 票 / 21 评论 / 2024-04-24 
+- [Why RMSLE penalize underestimated prediction more than overestimated prediction?](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/488329) — 13 票 / 4 评论 / 2024-04-02 
+- [2nd Place Solution for the Regression with an Abalone Dataset Competition](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/499698) — 12 票 / 5 评论 / 2024-05-06 **write-up?**
+- [Why NNs is better than GBDs?](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/496471) — 12 票 / 34 评论 / 2024-04-21 
+- [Observation: Records with Height = 0](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/488229) — 12 票 / 4 评论 / 2024-04-01 
+- [Get started here!](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/483775) — 11 票 / 3 评论 / 2024-03-13 
+- [3rd Place Solution for the Regression with an Abalone Dataset Competition](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/499747) — 11 票 / 2 评论 / 2024-05-02 **write-up?**
+- [How You Can Get CSV File for Original Dataset](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/488082) — 11 票 / 1 评论 / 2024-04-01 
+- [Good news - train and (public) test distributions are similar](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/497541) — 11 票 / 6 评论 / 2024-04-25 
+- [Few Feature Engineering Ideas.](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/494344) — 10 票 / 8 评论 / 2024-04-17 
+- [Regression or Classification? ](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/496729) — 10 票 / 23 评论 / 2024-04-22 
+- [How to use TabPFN in this competition](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/498449) — 10 票 / 1 评论 / 2024-04-28 
+- [Bye Bye Abalones!  🦪❤️🦪❤️](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/498856) — 10 票 / 6 评论 / 2024-04-29 
+- [Customized Loss Function RMSLE for ANN](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/491158) — 9 票 / 2 评论 / 2024-04-04 
+- [My XGB consistently capping predictions at 19 rings](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/488295) — 9 票 / 3 评论 / 2024-04-01 
+- [8th Place Solution | So simple!](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/499258) — 9 票 / 0 评论 / 2024-05-01 **write-up?**
+- [Useful Ressources 🏆](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/488069) — 8 票 / 6 评论 / 2024-04-01 
+- [Very high correlation](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/493308) — 8 票 / 11 评论 / 2024-04-12 
+- [Catboost Parameter Source? 'random_strength': 3.296124856352495, ](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/497811) — 8 票 / 2 评论 / 2024-04-25 
+- [Competition descriptive stats](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/491903) — 8 票 / 1 评论 / 2024-04-07 
+- [Which Regression Algorithm is the best?](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/491277) — 8 票 / 10 评论 / 2024-04-05 
+- [Difference between votingRegressor and regression on oof predictions?](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/496473) — 7 票 / 4 评论 / 2024-04-21 
+- [Distortion in synthetic data](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/490942) — 7 票 / 4 评论 / 2024-04-04 
+- [Tuning procedure for XGBoost?](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/491391) — 7 票 / 9 评论 / 2024-04-05 
+- [You are invited to a surrogate S4E4 competition - take 2](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/492170) — 7 票 / 5 评论 / 2024-04-08 
+- [Using classification to get decent score [0.148 LB]](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/493104) — 7 票 / 11 评论 / 2024-04-12 
+- [no idea what to do next.](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/491190) — 6 票 / 5 评论 / 2024-04-05 
+- [How do you deal with the correlated features](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/488114) — 5 票 / 9 评论 / 2024-04-01 
+- [Encoding the Sex variable](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/494120) — 5 票 / 15 评论 / 2024-04-16 
+- [Feature Engineering.](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/494327) — 5 票 / 9 评论 / 2024-04-16 
+- [Underprediction of higher rings](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/495078) — 5 票 / 12 评论 / 2024-04-19 
+- [Day 1 Discussion: A very simple EDA on Dataset, and why RMSLE penalizes underestimates](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/488280) — 5 票 / 2 评论 / 2024-04-01 
+- [code for RMSLE metric](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/488450) — 4 票 / 3 评论 / 2024-04-02 
+- [Original Dataset](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/488172) — 4 票 / 8 评论 / 2024-04-01 
+- [Difference between RMSE and RMSL metrics and Penalty](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/494072) — 4 票 / 0 评论 / 2024-04-15 
+- [AutoML Grand Prix registiration question](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/498058) — 4 票 / 9 评论 / 2024-04-26 
+- [Top Feature](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/491494) — 4 票 / 11 评论 / 2024-04-06 
+- [🔥🐚📊  Feature Engineering](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/492323) — 4 票 / 4 评论 / 2024-04-09 
+- [how to combine data to improve LB score](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/491953) — 4 票 / 6 评论 / 2024-04-08 
+- [SVR taking a lifetime to Train](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/491245) — 3 票 / 6 评论 / 2024-04-05 
+- [Validation better but public score not improved ](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/491624) — 3 票 / 9 评论 / 2024-04-06 
+- [Wiki: Zero to Hero: More models, more datasets, how to download data, more info on dataset](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/488107) — 3 票 / 0 评论 / 2024-04-01 
+- [Where is 28 rings?](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/493945) — 3 票 / 5 评论 / 2024-04-15 
+- [How to analyze and take action from visualzation of data?](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/496472) — 3 票 / 2 评论 / 2024-04-21 
+- [Analyze model bottleneck](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/494555) — 3 票 / 4 评论 / 2024-04-17 
+- [Skewness of 'Length' column,its transformation and correlation](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/496636) — 3 票 / 1 评论 / 2024-04-22 
+- [RESULTS ANNOUNCED AND I WANT TO SHARE MY THOUGHTS](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/499182) — 3 票 / 2 评论 / 2024-05-01 
+- [What is the `rf_benchmark.csv`?](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/492934) — 2 票 / 1 评论 / 2024-04-11 
+- [In the submission, should the 'rings' be integer numbers?](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/491500) — 2 票 / 11 评论 / 2024-04-06 
+- [What about CNN to do regression?](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/491323) — 2 票 / 8 评论 / 2024-04-05 
+- [What's the meaning of "I"](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/492896) — 2 票 / 8 评论 / 2024-04-11 
+- [Difference between the two](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/491507) — 2 票 / 3 评论 / 2024-04-06 
+- [My experiences with T4E4](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/494003) — 2 票 / 1 评论 / 2024-04-15 
+- [This is my First Ever Participation on Kaggle. How do I start?](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/493239) — 2 票 / 10 评论 / 2024-04-12 
+- [Correlation of Infants with Rings](https://www.kaggle.com/competitions/playground-series-s4e4/discussion/490877) — 2 票 / 1 评论 / 2024-04-03 

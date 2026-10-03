@@ -1,0 +1,82 @@
+# playground-series-s3e20 讨论区（按票数排序，共 80 条）
+
+- [Dimensionality reduction: 5 dimensions are enough](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/429278) — 78 票 / 22 评论 / 2023-08-04 
+- [Explained: Why our usual methods don't work in this competition](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/432294) — 64 票 / 18 评论 / 2023-08-16 
+- [Extrapolate the trend or drop Covid data](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/428791) — 50 票 / 10 评论 / 2023-08-02 
+- [4th place solution: using PCA (least shakeuped solution)](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/433567) — 43 票 / 11 评论 / 2023-08-22 **write-up?**
+- [Starter materials and references](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/428298) — 37 票 / 7 评论 / 2023-08-01 
+- [NMF explains how the data was generated](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/430850) — 34 票 / 3 评论 / 2023-08-11 
+- [Initial findings from EDA](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/428566) — 33 票 / 9 评论 / 2023-08-01 
+- [3rd Place Solution (convert the COVID affected 2020 week8-week32's emission)](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/433822) — 31 票 / 7 评论 / 2023-08-23 **write-up?**
+- [Holt-Winters exponential smoothing](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/430200) — 25 票 / 4 评论 / 2023-08-08 
+- [Ozone amounts retrieved from TROPOMI. Levenberg-Marquardt algorithm.](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/428332) — 24 票 / 5 评论 / 2023-08-01 
+- [Compare your models to a baseline](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/428336) — 24 票 / 5 评论 / 2023-08-01 
+- [Dealing with a covid year](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/429622) — 21 票 / 9 评论 / 2023-08-06 
+- [Experiments & Insights. Public LB: 26.8 [Update: 8-6-23]](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/429675) — 20 票 / 9 评论 / 2023-08-06 
+- [Peculiar Finding - Volcano Eruption](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/429232) — 19 票 / 3 评论 / 2023-08-04 
+- [23 on public LB with no machine learning](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/430152) — 18 票 / 17 评论 / 2023-08-08 
+- [[Trick #1] Replace the trouble maker in your submission!](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/429717) — 17 票 / 9 评论 / 2023-08-07 
+- [Hiding behind seasonality: the exponential Covid recovery curve](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/431506) — 16 票 / 0 评论 / 2023-08-13 
+- [Be cautious- Episode 19 repeats here!](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/428405) — 15 票 / 6 评论 / 2023-08-01 
+- [CO2 emissions animated](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/429207) — 15 票 / 3 评论 / 2023-08-04 
+- [Pretty Interesting Stuff](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/428320) — 15 票 / 0 评论 / 2023-08-01 
+- [The shortest solution](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/430226) — 14 票 / 5 评论 / 2023-08-08 **write-up?**
+- [New to Machine Learning or Kaggle?](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/421613) — 12 票 / 19 评论 / 2023-07-06 
+- [Collection of helpful ideas - S3E20](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/430707) — 12 票 / 6 评论 / 2023-08-10 
+- [Creating date from year and week - small tip](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/428525) — 9 票 / 2 评论 / 2023-08-01 
+- [Domain Knowledge About the Emission Data](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/428389) — 9 票 / 3 评论 / 2023-08-01 
+- [OpenStreetMap Features](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/428646) — 9 票 / 1 评论 / 2023-08-02 
+- [Feature & Domain Knowledge Information](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/428333) — 8 票 / 4 评论 / 2023-08-01 
+- [Submission tip: Handling negative values in prediction](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/428955) — 7 票 / 3 评论 / 2023-08-03 
+- [Dataset of top public notebook submissions [for blending] 📈](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/431659) — 7 票 / 1 评论 / 2023-08-14 
+- [Guessing about data generation](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/432736) — 7 票 / 3 评论 / 2023-08-18 
+- [Shakeup Predictions](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/433045) — 6 票 / 10 评论 / 2023-08-20 
+- [That was some LB shakeup just like the ICR challenge!](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/433473) — 6 票 / 3 评论 / 2023-08-22 
+- [6th public, 39th private](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/433508) — 6 票 / 3 评论 / 2023-08-22 
+- [2021 emissions for 2022 predictions; public LB = 31.65412](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/429419) — 6 票 / 4 评论 / 2023-08-05 
+- [Altitude above sea level](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/428705) — 6 票 / 0 评论 / 2023-08-02 
+- [Coordinates are the key to victory again!](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/428574) — 5 票 / 2 评论 / 2023-08-02 
+- [Higher emissions in May and October?](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/428540) — 5 票 / 1 评论 / 2023-08-01 
+- [8.71 score notebook](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/433657) — 5 票 / 0 评论 / 2023-08-22 
+- [Big shakeup near the top!](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/433489) — 5 票 / 2 评论 / 2023-08-22 
+- [Impact of using PCA components on RMSE](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/430391) — 5 票 / 0 评论 / 2023-08-09 
+- [[Trick #3] Remove more error bugs in your submission](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/432808) — 4 票 / 4 评论 / 2023-08-19 
+- [WOW - MLFlow feels like a game changer](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/433098) — 4 票 / 6 评论 / 2023-08-20 
+- [Public vs Private Leaderboard Validation](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/432575) — 4 票 / 1 评论 / 2023-08-18 
+- [No ML 20.54PB](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/432464) — 4 票 / 0 评论 / 2023-08-17 
+- [Automated creation of combination of features using GBDT models](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/428882) — 4 票 / 0 评论 / 2023-08-03 
+- [S3E20 | Private Score 9.61 (possible 5th place) submission - Approach](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/433510) — 4 票 / 1 评论 / 2023-08-22 **write-up?**
+- [Not only Rwanda](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/429221) — 4 票 / 3 评论 / 2023-08-04 
+- [Approaches to try for this competition - an overview](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/428388) — 4 票 / 7 评论 / 2023-08-01 
+- [Help me: how can i get the ground-truth label of the test.csv or how can i subbmit my result when the competition have closed ](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/454425) — 4 票 / 1 评论 / 2023-11-10 
+- [Week 0 and Week 52 of a year in train and test datasets [overlap ?]](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/428453) — 4 票 / 2 评论 / 2023-08-01 
+- [[Trick #2] Align 2019-2020 Emission Values with 2021](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/430286) — 4 票 / 0 评论 / 2023-08-09 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/429947) — 4 票 / 0 评论 / 2023-08-07 
+- [Imputation Technique Will Be Important](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/428307) — 4 票 / 2 评论 / 2023-08-01 
+- [Slight boost to your LB score 🚀](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/430170) — 4 票 / 0 评论 / 2023-08-08 
+- [Dealing with Outliers](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/429034) — 3 票 / 1 评论 / 2023-08-03 
+- [Feature Breakdown – What are these chemicals?](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/428618) — 3 票 / 0 评论 / 2023-08-02 
+- [Late Submissions Disabled](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/454622) — 2 票 / 1 评论 / 2023-11-10 
+- [Private LB Test time range](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/429977) — 2 票 / 2 评论 / 2023-08-07 
+- [Anyone has had success achieving a low CV score with the entire feature subset?](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/429980) — 2 票 / 3 评论 / 2023-08-07 
+- [Interpolated Covid Emissions Data](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/428979) — 2 票 / 2 评论 / 2023-08-03 
+- [Country Location Data](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/430263) — 2 票 / 2 评论 / 2023-08-09 
+- [Zero anomal emissions in 15 locations - 2019, 2020, 2021.](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/433602) — 2 票 / 0 评论 / 2023-08-22 
+- [S3E20 | 94th Private with RF Ensemble based on clustering](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/433541) — 2 票 / 1 评论 / 2023-08-23 
+- [Trust Issue on the Public Leaderboard](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/433498) — 2 票 / 2 评论 / 2023-08-22 
+- [Leaderboard Visualization](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/441309) — 2 票 / 2 评论 / 2023-09-18 
+- [Getting Address from Coordinate](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/430868) — 1 票 / 0 评论 / 2023-08-11 
+- [Where they get the CO2 emission data?](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/429936) — 1 票 / 2 评论 / 2023-08-07 
+- [No emission values for few locations](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/431902) — 1 票 / 0 评论 / 2023-08-15 
+- [What unit is `emission` in?](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/429704) — 1 票 / 1 评论 / 2023-08-07 
+- [25th Private, 53th Public - With a variation of "Fix more error bugs 🐞"](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/433559) — 1 票 / 0 评论 / 2023-08-22 
+- [Dealing with time-series data while using k-fold cross validation](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/429306) — 1 票 / 3 评论 / 2023-08-05 
+- [Train and Predict by loc compared wtih by all data](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/429073) — 1 票 / 4 评论 / 2023-08-04 
+- [Who else is in the same situation ?](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/433477) — 1 票 / 12 评论 / 2023-08-22 
+- [How to convert string to float type in co2 Emission data?](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/465774) — 1 票 / 3 评论 / 2024-01-05 
+- [XGB, CB, Ensemble + Preprocessing](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/429316) — 1 票 / 3 评论 / 2023-08-05 
+- [how to solve this error {could not convert string to float: 'ID_-0.510_29.290_2019_00'}](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/466077) — 1 票 / 2 评论 / 2024-01-07 
+- [Missing values imputation.](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/428442) — 1 票 / 1 评论 / 2023-08-01 
+- [Feature Engineering](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/430602) — 0 票 / 2 评论 / 2023-08-10 
+- [need help for improve my code](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/431047) — 0 票 / 1 评论 / 2023-08-11 
+- [Rwanda shapefiles](https://www.kaggle.com/competitions/playground-series-s3e20/discussion/431203) — 0 票 / 0 评论 / 2023-08-12 

@@ -1,0 +1,113 @@
+# https://www.kaggle.com/competitions/playground-series-s4e5/discussion/500700
+
+Topic #500700: [AutoML Grand Prix] 1st place solution write-up
+  Author: Rinchin
+  Posted: 2024-05-06 15:44:30.635000
+  Votes: 35  Comments: 8
+
+Hi everyone,
+
+Thanks to the AutoML Grand Prix organizers team for the new competition format! We are "Team LightAutoML testers" (me, @alexryzhkov @simakov), this is a write-up of our solution for the 1st round of AutoML Grand Prix.
+
+Manual feature engineering
+
+
+
+features described by @ambrosm in his notebook: fsum, fstd, fspecial1: sum, std by row, and indicator "is sum between 71 and 76"
+
+skew, kurtosis by row
+
+counts of each unique value in a row 
+
+values at the given quantile over a row
+
+
+Modeling
+
+Almost default LightAutoML's TabularAutoML
+
+automl = TabularAutoML(
+    task = Task(, loss = , metric = ),
+    general_params = {: [[, , ]]},
+    selection_params = { : },
+    tuning_params = {: },
+    ...
+)
+
+
+source code
+
+Result pipeline:
+
+
+
+no feature selection
+
+5 fold CV
+
+3 models: linear with L2, LGBM, LGBM with hyperparameters tunning (up to 1200 sec)
+
+each of model has own its auto feature preparation
+
+blending this 3 model's outputs
+OOF score: 0.86922
+Public score: 0.86917
+
+
+TabularUtilizedAutoML
+Since we had time, we tried to run TabularUtilizedAutoML -- a version of TabularAutoML that does multiple runs  different pipelines with different seeds (max_runs_per_config=4). Later it turned out that blenidng assigns zero weight to some configurations, so  so we left only two of them: conf_1_sel_type_1.yml and conf_3_sel_type_1_no_inter_lgbm.yml.
+
+automl_utilized = TabularUtilizedAutoML(
+    task = Task(, loss = , metric = ), 
+    general_params = {: [[, , ]]},
+    tuning_params = {: },
+    configs_list = [os.path.join(CONFIG_PATH, x)  x  [
+        ,
+        ,
+    ]],
+    max_runs_per_config=
+    ...
+)
+
+
+Features: all except fskew, fkurtosis.
+OOF score: 0.86929
+
+Final model
+Blending of two models: 0.7 * TabularUtilizedAutoML + 0.3 * TabularAutoML
+Source code
+Public score: 0.86917
+
+All the best,
+Rinchin
+
+Comments:
+├─ Jeremy H (2024-05-06 16:45:52.090000) [+4]
+│  Congratulations on 1st place!  I have a couple of questions about how you did FE.  When you say "skew, kurtosis by row" does that mean that you used the amount of skew as a new feature?  Also, what...
+  ├─ Tilii (2024-05-06 17:36:50.673000) [+6]
+  │  It is in the provided code, cell #7.
+  ├─ Rinchin (2024-05-06 22:13:47.663000) [+5]
+  │  Thanks! 
+  │  
+  │      df[] = df[initial_features].skew(axis=)
+  │      df[] = df[initial_features].kurtosis(axis=)
+  │  
+  │  
+  │  and
+  │  
+  │   i  [, , , , , , ]:
+  │          df[.((i*))] = df[initial_features].quantile(i, axis = )
+  │  
+  │  
+  │  in...
+├─ Ishan Mitra (2024-05-12 21:39:57.957000) [+2]
+│  Congrats on the first place!
+├─ Daniil Chernyshov (2024-05-08 22:17:45.517000) [+2]
+│  Hello!
+│  Could you please explain the main reason for using the skew and kurtosis functions to generate new features?
+  ├─ Alexander Ryzhkov (2024-05-13 09:11:04.407000) [+1]
+  │  @daniilchernyshov the main reasons to do that is the situation that aggregation features works here well (like sum and std). So here we create another aggregations like IQR, unique values counts, s...
+    ├─ [deleted] (2024-05-20 16:09:37.407000) [+0]
+    │  [deleted]
+├─ Sanyam Jain (2024-05-08 08:53:13.557000) [+0]
+│  Thank you for sharing @rinchin! Got some cool insights!

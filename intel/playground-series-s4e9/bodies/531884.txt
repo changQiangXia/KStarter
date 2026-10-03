@@ -1,0 +1,156 @@
+# https://www.kaggle.com/competitions/playground-series-s4e9/discussion/531884
+
+Topic #531884: [AutoML Grand Prix] 1st Place Solution Team LightAutoML testers 
+  Author: DmitryS
+  Posted: 2024-09-03 13:51:15.403000
+  Votes: 53  Comments: 28
+
+[AutoML Grand Prix] 1st Place Solution Team LightAutoML testers 
+
+Thanks for the competition and congratulations to all the participants for reaching the final stage of the  AutoML Grand Prix. Next, I'll share the solution of Team LightAutoML testers (me, @alexryzhkov, @rinchin ).
+
+Github repo with the training code.
+
+TLDR: 24 base regression and classification models, GBDT + NN, blend and stack. 
+
+We trained all models (catboost and lgbm for regression, denselight and fttransformer for both regression and classification) with original and clipped target (clip all price values higher than 500k for training fold) using original and augmented with kagglex (added only in train fold) datasets (thanks to @lashfire).
+
+Our final ensemble with 10-Fold CV scores is:
+
+
+It may seem scary, but training of all models was completed in 5 hours on a single A100 GPU.
+
+Feature generation:
+To receive a better model we have created several new features for more proper car specifications description:
+
+
+
+the engine column was converted into separated columns with the horsepower, litres, cylinder count and type, fuel type etc
+
+from milage column we calculated the "significant" percent of figures - for 50000 it is 20% and for 12345 it is 0% (this can help to check how detailed the car description is)
+
+from transmission column we got speeds count and transmission type
+
+ext_col and int_col goes to lower case to merge similar values into one
+
+
+NN models:
+Target scaling was essential for training the neural networks, so we used the Robust Scaler and applied the inverse transform to the model predictions.
+
+Another important observation that the price has only 1569 unique values and 222 after rounding them to the nearest 1000. So, we decided to train multiclass classification model. During inference we multiplied probabilities of each class by the corresponding unique target value and use this estimation as a final prediction. We choose NN as a base model due to computational complexity of training multioutput gbdt (which scales linearly with the number of classes) and we didn`t have enough time to integrate PyBoost (which has constant complexity) into our pipeline.  Multiclass DenseLight achieved the best solo result in our ensemble. 
+
+We also replaced default FTTransformer encoder model with HuggingFace Bert Tiny, initialising it with pre-trained text weights. It gave us a slight boost on single holdout score, but this result might be random (we didn`t check it on full CV :) ). Nevertheless, we choose this variant for diversification.
+
+Metrics for different approaches for FTTransformer on holdout:
+
+
+
+
+init
+bert tiny
+bert small
+
+
+
+
+random
+72468,59
+74282,90
+
+
+t fixup
+72460,23
+74604,82
+
+
+text
+72426,17
+77790,66
+
+
+text, lora r=8
+72632,96
+72825,80
+
+
+text, lora r=128
+72480,61
+72570,98
+
+
+
+
+As for GBDT models everything is standard. We use CatBoost and LGBM with manually tuned hyperparameters and default LightAutoML preprocessing with feature auto typing.
+
+The stack wasn’t particularly different from a standard DenseLight model, but it used the OOF predictions from the previous 24 models as input during the training stage.
+
+All the best,
+Dmitry
+
+Comments:
+├─ Tilii (2024-09-03 16:11:13.603000) [+11]
+│  Smart. Binning and classification before regression was discussed in this thread, but you guys actually did it. And on a much larger scale.
+│  
+│  Congratulations on your Grand Prix success!
+├─ Robert Hatch (2024-09-03 16:12:56.100000) [+7]
+│  Congrats again!
+│  
+│  Really nice work on the multi classification NN idea! I suspect your approach will ensemble well with mine, as they are very different overall. 
+│  
+│  And so far yours sounds more likel...
+  ├─ DolorNeto (2024-09-03 16:52:01.710000) [+1]
+  │  @roberthatch what was your solution?
+    ├─ Robert Hatch (2024-09-03 17:21:11.327000) [+5]
+    │  I hope it will go up this evening. The very short approximation is used the extra data, tried many extracted features but only kept a few. Tried hundreds of random LGBM runs (only randomizing six p...
+  ├─ DmitryS (2024-09-04 13:46:15.790000) [+1]
+  │  Yep, the result of 50/50 blend is 72038.88503.
+    ├─ Robert Hatch (2024-09-05 00:20:33.427000) [+1]
+    │  72009 just with using a different ensembling method
+  ├─ Robert Hatch (2024-09-05 00:18:09.430000) [+2]
+  │  Can confirm. Combines well. :)
+    ├─ Alexander Ryzhkov (2024-09-05 05:59:37.663000) [+1]
+    │  @roberthatch sounds great Robert 👍
+├─ Balram (2024-09-03 14:12:33.267000) [+3]
+│  Congratulations LightAutoML testers. Thanks for the idea @simakov .
+├─ benkerrouche abdelbasset (2024-09-05 22:46:47.847000) [+1]
+│  congratulations ,you deserve 1st place
+├─ pRI34658 (2024-09-05 17:54:53.610000) [+1]
+│  Nice work on the multi classification NN idea
+├─ Anjali Kalwakurthy (2024-09-05 08:26:31.503000) [+1]
+│  Congrats!!!Great job
+├─ Tanishk Patil (2024-09-04 15:25:49.693000) [+1]
+│  Congratulation! As a beginner i wanted know which model did you use but now i got the answer thank you for sharing. Looking forward to learn from you.
+├─ Maksim Kostritsya (2024-09-04 11:50:29.823000) [+1]
+│  Amazing work!
+├─ Sheikh Muhammad Abdullah (2024-09-03 23:23:31.280000) [+1]
+│  Congratulations  Team LightAutoML. Amazing Solution
+├─ MrSimple (2024-09-05 07:22:43.927000) [+2]
+│  Good Job! I like it, I will try as well
+├─ Alexander Ryzhkov (2024-09-04 16:37:11.980000) [+2]
+│  The small update for the description - you can find all the 24 base models OOFs and test predictions in this dataset 🔥
+  ├─ Robert Hatch (2024-09-04 17:17:04.193000) [+1]
+  │  Thanks for the dataset! (But I'm out of submits for the day, lol)
+  │  
+  │  What was your earlier submit high score on day 1, by the way? The blend alone without 20% stacker model as well?
+  │  Do you plan to up...
+    ├─ DmitryS (2024-09-04 17:24:44.777000) [+1]
+    │  The first hight scoring submit was blend of 12 models without target clipping. It gave 72411 on CV.
+    ├─ Robert Hatch (2024-09-04 17:33:31.960000) [+1]
+    │  I guess I meant the one that was ~72075.X?
+    ├─ DmitryS (2024-09-04 20:13:20.580000) [+2]
+    │  You're correct, the score was 72075.38250. All the weights should remain the same as those shown in the picture, just remove CB with target clipping. CB without clip + LGBM without clip should sum ...
+├─ DolorNeto (2024-09-03 18:22:15.567000) [+2]
+│  @simakov Didn't you try to use other models for classification besides the network? Why not a lightgbm or catboost?
+  ├─ DmitryS (2024-09-03 19:02:55.380000) [+3]
+  │  Because it`s time consuming. LGBM conducts OVA scheme and build x K trees, where K is a number of classes. To build multioutput tree (like catboost does) you should compute separate statistics for ...
+├─ DolorNeto (2024-09-03 16:51:39.850000) [+2]
+│  @simakov 
+│  I understood how the problem became multiclass, how many classes were left in the end?
+├─ seddik Ssd (2024-09-27 14:57:08.907000) [+0]
+│  good job sir
+├─ Dmitry Gilemkhanov (2024-09-26 04:55:14.967000) [+0]
+│  Congratulations!
+├─ Sajib Bhattacharjee (2024-09-10 12:02:45.310000) [+0]
+│  Congratulations and Thanks for sharing!
+├─ [deleted] (2024-09-10 12:02:02.827000) [+0]
+│  [deleted]

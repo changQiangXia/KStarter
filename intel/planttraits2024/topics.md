@@ -1,0 +1,60 @@
+# planttraits2024 讨论区（按票数排序，共 58 条）
+
+- [Machine Vision for Plant Phenotyping.  Segmentation Techniques. Citizen Science. ](https://www.kaggle.com/competitions/planttraits2024/discussion/473745) — 37 票 / 13 评论 / 2024-02-05 
+- [1st Place Solution - PlantHydra 🐍](https://www.kaggle.com/competitions/planttraits2024/discussion/510393) — 29 票 / 13 评论 / 2024-06-07 **write-up?**
+- [Updated test dataset and rescoring](https://www.kaggle.com/competitions/planttraits2024/discussion/486503) — 13 票 / 13 评论 / 2024-03-25 
+- [Column order for submission matters!](https://www.kaggle.com/competitions/planttraits2024/discussion/487985) — 13 票 / 3 评论 / 2024-03-31 
+- [Updated Test Dataset](https://www.kaggle.com/competitions/planttraits2024/discussion/483414) — 11 票 / 8 评论 / 2024-03-12 
+- [Is this a valid competition after all?](https://www.kaggle.com/competitions/planttraits2024/discussion/483259) — 10 票 / 10 评论 / 2024-03-11 
+- [6th Place Solution with AutoML☘️](https://www.kaggle.com/competitions/planttraits2024/discussion/510143) — 9 票 / 4 评论 / 2024-09-01 **write-up?**
+- [9th place solution - DINOv2 + CatBoost = 🚀 ](https://www.kaggle.com/competitions/planttraits2024/discussion/510188) — 9 票 / 1 评论 / 2024-06-05 **write-up?**
+- [How To Handle Extreme Label Values](https://www.kaggle.com/competitions/planttraits2024/discussion/478549) — 9 票 / 10 评论 / 2024-02-21 
+- [New to Kaggle or Machine Learning? Check this out ~](https://www.kaggle.com/competitions/planttraits2024/discussion/473713) — 8 票 / 5 评论 / 2024-02-05 
+- [Question on traits measurements](https://www.kaggle.com/competitions/planttraits2024/discussion/478835) — 8 票 / 3 评论 / 2024-02-22 
+- [Poor labeling](https://www.kaggle.com/competitions/planttraits2024/discussion/481726) — 7 票 / 2 评论 / 2024-03-04 
+- [Migrating from playground Competitions to this seems overwhelming](https://www.kaggle.com/competitions/planttraits2024/discussion/496591) — 7 票 / 4 评论 / 2024-04-21 
+- [Add image features to tabular data - easy .2180 LB](https://www.kaggle.com/competitions/planttraits2024/discussion/487179) — 7 票 / 2 评论 / 2024-03-28 
+- [Why not provide the plant species?](https://www.kaggle.com/competitions/planttraits2024/discussion/485844) — 7 票 / 4 评论 / 2024-03-22 
+- [👀 Take a close look at train_images🌲](https://www.kaggle.com/competitions/planttraits2024/discussion/493236) — 7 票 / 1 评论 / 2024-04-12 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/planttraits2024/discussion/480278) — 6 票 / 0 评论 / 2024-02-28 
+- [ Plants from Photos: Deep Learning & Citizen Science ... according to Bard](https://www.kaggle.com/competitions/planttraits2024/discussion/473764) — 6 票 / 1 评论 / 2024-02-06 
+- [sample_submission problem](https://www.kaggle.com/competitions/planttraits2024/discussion/483990) — 6 票 / 4 评论 / 2024-03-15 
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/planttraits2024/discussion/473714) — 5 票 / 11 评论 / 2024-02-05 
+- [Number of plant traits still 6 - while proposed aggregate dataset is supposed to have 33 of them.](https://www.kaggle.com/competitions/planttraits2024/discussion/475370) — 5 票 / 4 评论 / 2024-02-08 
+- [Tabular+Images -> CNN -> Multi-Target Regression](https://www.kaggle.com/competitions/planttraits2024/discussion/492488) — 5 票 / 1 评论 / 2024-04-09 
+- [👀 Improved prediction accuracy of X50 🍄](https://www.kaggle.com/competitions/planttraits2024/discussion/490743) — 5 票 / 5 评论 / 2024-04-03 
+- [Tabular -> ImageNet for Multi-Target Regression (.22 LB so far)](https://www.kaggle.com/competitions/planttraits2024/discussion/489515) — 4 票 / 0 评论 / 2024-04-02 
+- [Efficientnetb0 only for positive score (+0.08921)](https://www.kaggle.com/competitions/planttraits2024/discussion/486973) — 4 票 / 0 评论 / 2024-03-27 
+- [Need some explnantion regarding the scope of this project (I am new to Kaggle competition)](https://www.kaggle.com/competitions/planttraits2024/discussion/484732) — 4 票 / 5 评论 / 2024-03-18 
+- [Tabular only for +0.02486](https://www.kaggle.com/competitions/planttraits2024/discussion/480563) — 4 票 / 3 评论 / 2024-02-29 
+- [Plant Trait Visualizer](https://www.kaggle.com/competitions/planttraits2024/discussion/481301) — 4 票 / 2 评论 / 2024-03-02 
+- [Outlier Visualization (a clue?)](https://www.kaggle.com/competitions/planttraits2024/discussion/481830) — 4 票 / 0 评论 / 2024-03-05 
+- [Does one outlier make R2 meaningless on numerically large targets?](https://www.kaggle.com/competitions/planttraits2024/discussion/481303) — 4 票 / 5 评论 / 2024-03-03 
+- [Prediction Column Mean Does Not Result In R2 Of 0](https://www.kaggle.com/competitions/planttraits2024/discussion/478544) — 4 票 / 1 评论 / 2024-02-21 
+- [Plant species](https://www.kaggle.com/competitions/planttraits2024/discussion/476553) — 4 票 / 2 评论 / 2024-02-12 
+- [Other competitions at the FGVC11 Workshop [CVPR] ](https://www.kaggle.com/competitions/planttraits2024/discussion/485970) — 3 票 / 0 评论 / 2024-03-22 
+- [Clarifying the Prediction Target: X[*]_mean vs. X[*]](https://www.kaggle.com/competitions/planttraits2024/discussion/494941) — 3 票 / 6 评论 / 2024-04-19 
+- [Better CV, lower LB？](https://www.kaggle.com/competitions/planttraits2024/discussion/479067) — 3 票 / 7 评论 / 2024-02-23 
+- [👀 [Solved] About Timeline🌱](https://www.kaggle.com/competitions/planttraits2024/discussion/500513) — 3 票 / 9 评论 / 2024-05-06 
+- [welwitschia mirabilis : correct or incorrect labeled](https://www.kaggle.com/competitions/planttraits2024/discussion/482433) — 3 票 / 1 评论 / 2024-03-07 
+- ["The R2 can result in large negative values. To prevent that we will only consider R2 values > 0."](https://www.kaggle.com/competitions/planttraits2024/discussion/481308) — 3 票 / 1 评论 / 2024-03-03 
+- [Learning Image Processing and Computer Vision ML](https://www.kaggle.com/competitions/planttraits2024/discussion/476520) — 3 票 / 2 评论 / 2024-02-12 
+- [Congratulations and Collaboration!!!!](https://www.kaggle.com/competitions/planttraits2024/discussion/510006) — 2 票 / 2 评论 / 2024-06-04 
+- [Target units for traits](https://www.kaggle.com/competitions/planttraits2024/discussion/494618) — 2 票 / 1 评论 / 2024-04-17 
+- [👀 CV vs LB - Updated test dataset -🍀](https://www.kaggle.com/competitions/planttraits2024/discussion/487904) — 2 票 / 0 评论 / 2024-03-31 
+- [👀 Impact of outliers on R2 🌿](https://www.kaggle.com/competitions/planttraits2024/discussion/486094) — 2 票 / 4 评论 / 2024-03-23 
+- [Sample_submission + tabular model = .3584 LB](https://www.kaggle.com/competitions/planttraits2024/discussion/483574) — 2 票 / 2 评论 / 2024-03-13 
+- [Negative X4 Values in Dataset](https://www.kaggle.com/competitions/planttraits2024/discussion/494547) — 2 票 / 3 评论 / 2024-04-17 
+- [sample_submission.csv now -33.38 on LB (with new test data)](https://www.kaggle.com/competitions/planttraits2024/discussion/483518) — 2 票 / 0 评论 / 2024-03-12 
+- [MixUp augmentation](https://www.kaggle.com/competitions/planttraits2024/discussion/481778) — 2 票 / 0 评论 / 2024-03-05 
+- [🖥️📚PlantTraits Data Exploration!📊🔍](https://www.kaggle.com/competitions/planttraits2024/discussion/477883) — 2 票 / 2 评论 / 2024-02-18 
+- [Share Your Single Model Scores: Let's See How Far Our Individual Models Went! 🌱](https://www.kaggle.com/competitions/planttraits2024/discussion/512405) — 2 票 / 0 评论 / 2024-06-15 
+- [👀 To enhance model performance 🚀](https://www.kaggle.com/competitions/planttraits2024/discussion/494550) — 1 票 / 3 评论 / 2024-04-17 
+- [NaNs in SD train targets?](https://www.kaggle.com/competitions/planttraits2024/discussion/485354) — 1 票 / 4 评论 / 2024-03-20 
+- [local test set r2score completely different from kaggle test set r2score ](https://www.kaggle.com/competitions/planttraits2024/discussion/487367) — 1 票 / 2 评论 / 2024-03-28 
+- [Do we normalize/scale the labels?](https://www.kaggle.com/competitions/planttraits2024/discussion/486021) — 1 票 / 5 评论 / 2024-03-23 
+- [Units of targets](https://www.kaggle.com/competitions/planttraits2024/discussion/484246) — 1 票 / 3 评论 / 2024-03-15 
+- [How to Improve the Model With the Revised Data?](https://www.kaggle.com/competitions/planttraits2024/discussion/486950) — 1 票 / 0 评论 / 2024-03-27 
+- [Invalid number of submission columns. Found 7](https://www.kaggle.com/competitions/planttraits2024/discussion/505552) — 1 票 / 4 评论 / 2024-05-18 
+- [interesting scores on the private leaderboard 🍀](https://www.kaggle.com/competitions/planttraits2024/discussion/509830) — 0 票 / 4 评论 / 2024-06-04 
+- [Late submissions](https://www.kaggle.com/competitions/planttraits2024/discussion/510201) — 0 票 / 1 评论 / 2024-06-05 

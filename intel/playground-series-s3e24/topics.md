@@ -1,0 +1,82 @@
+# playground-series-s3e24 讨论区（按票数排序，共 80 条）
+
+- [Domain information, feature ideas and references](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/450314) — 74 票 / 35 评论 / 2023-10-24 
+- [#3 Private 8 Public approach - simple ensemble with probing](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/455248) — 57 票 / 37 评论 / 2023-11-14 
+- [Making a "gender" feature](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/452379) — 42 票 / 21 评论 / 2023-11-02 
+- [Be careful with AUC](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/450764) — 42 票 / 15 评论 / 2023-10-25 
+- [Models compositions example - blending, stacking, voting etc](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/452123) — 41 票 / 7 评论 / 2023-10-31 
+- [Stacking vs blending](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/450585) — 31 票 / 1 评论 / 2023-10-24 
+- [Liver Enzymes (AST, ALT , γ-GT) describing columns as required on Datasets usability.](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/451009) — 29 票 / 6 评论 / 2023-10-26 
+- [Smoking impact on Prevalence of Dental Caries. Statistical Analysis.](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/450318) — 26 票 / 5 评论 / 2023-10-24 
+- [[LB 0.88048] How to be in top-10 in several lines of code?](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/453466) — 26 票 / 17 评论 / 2023-11-06 
+- [Stacking LightAutoML kernel](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/450587) — 25 票 / 0 评论 / 2023-10-24 
+- [#4 th place solution - robust Hill Climbing](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/455296) — 24 票 / 12 评论 / 2023-11-14 **write-up?**
+- [Ensemble / Hill Climbing again / In Parallel / Cross Validation](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/450827) — 19 票 / 8 评论 / 2023-10-25 
+- [Tips for beginners](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/450488) — 18 票 / 4 评论 / 2023-10-24 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/450325) — 17 票 / 5 评论 / 2023-10-24 
+- [#7 Private LB and #2 Public LB solution](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/455271) — 17 票 / 7 评论 / 2023-11-14 **write-up?**
+- [If you need more "original" data...](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/450510) — 16 票 / 3 评论 / 2023-10-24 
+- [Why not use a strictly proper scoring rule? (logloss)](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/451317) — 16 票 / 17 评论 / 2023-10-28 
+- [Some useful Jupyter notebook shortcuts to save lots of time and key strokes](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/451929) — 15 票 / 10 评论 / 2023-10-31 
+- [Feature transformations ruined ML algos](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/452621) — 15 票 / 12 评论 / 2023-11-02 
+- [#8 Private LB #7 Public - Solution Approach](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/455268) — 14 票 / 5 评论 / 2023-11-14 **write-up?**
+- [Visualizing the LB](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/455254) — 12 票 / 6 评论 / 2023-11-14 
+- [Meme time!](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/454752) — 11 票 / 8 评论 / 2023-11-11 
+- [Popular CV mistake with code example](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/452440) — 11 票 / 8 评论 / 2023-11-02 
+- [Categorical Features in Datasets](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/450375) — 10 票 / 5 评论 / 2023-10-24 
+- [Suggestion: A blind competition](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/453882) — 10 票 / 9 评论 / 2023-11-08 
+- [Collection of helpful ideas - S3E24](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/452644) — 10 票 / 13 评论 / 2023-11-02 
+- [New to Machine Learning or Kaggle?](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/440710) — 9 票 / 19 评论 / 2023-09-16 
+- [Some Effective Tips for Competition Success](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/450685) — 9 票 / 2 评论 / 2023-10-25 
+- [What are the good models for these kind of data?](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/451016) — 8 票 / 14 评论 / 2023-10-26 
+- [Results as far.](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/453997) — 8 票 / 21 评论 / 2023-11-08 
+- [What is the rf_benchmark that I see on leaderboard?](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/450366) — 7 票 / 11 评论 / 2023-10-24 
+- [Considerations on Removing Outliers](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/450913) — 7 票 / 5 评论 / 2023-10-26 
+- [New to Kaggle and machine learning, seeking guidance on model evaluation](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/453971) — 6 票 / 3 评论 / 2023-11-08 
+- [More Feature Engineering Ideas](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/451280) — 6 票 / 6 评论 / 2023-10-27 
+- [What will be your submission strategy? And what did you learn in this competition?](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/455047) — 6 票 / 4 评论 / 2023-11-13 
+- [More models in VotingClassifier => increase AUC_ROC_Score => decrease public Score?](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/451087) — 6 票 / 15 评论 / 2023-10-27 
+- [Feature Importance and Mutual Information -I can't find improvment](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/454138) — 5 票 / 6 评论 / 2023-11-09 
+- [deep learning with TabPFN](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/454389) — 5 票 / 4 评论 / 2023-11-10 
+- [Tomek Links : Get Better Classification](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/453036) — 5 票 / 5 评论 / 2023-11-04 
+- [Why Ensembles?](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/452124) — 5 票 / 5 评论 / 2023-10-31 
+- [Some tips while working on this dataset](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/450471) — 5 票 / 3 评论 / 2023-10-24 
+- [Experiments with AutoML](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/450546) — 5 票 / 2 评论 / 2023-10-24 
+- [Using Feature Engineering and Selecting the most promissing features](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/454643) — 4 票 / 1 评论 / 2023-11-11 
+- [🤔 How to add original dataset data in my notebook?](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/453394) — 4 票 / 5 评论 / 2023-11-06 
+- [NFOLDS for cross-validation](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/454871) — 4 票 / 1 评论 / 2023-11-12 
+- [Is the test data quite different than the training data?](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/452913) — 4 票 / 5 评论 / 2023-11-04 
+- [The effect of smoking on the body](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/452078) — 4 票 / 1 评论 / 2023-10-31 
+- [Did anyone try causal inference?](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/451076) — 4 票 / 2 评论 / 2023-10-27 
+- [Difference in original dataset](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/450391) — 3 票 / 1 评论 / 2023-10-24 
+- [Going for ensemble again (CV, AutoML, optimization and then ensemble)](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/450422) — 3 票 / 0 评论 / 2023-10-24 
+- [When should we do feature transformation?](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/453870) — 3 票 / 2 评论 / 2023-11-08 
+- [binary classification?](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/450388) — 3 票 / 4 评论 / 2023-10-24 
+- [How far did I get with automl and ChatGPT?](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/455275) — 3 票 / 0 评论 / 2023-11-14 
+- [My past notebook about smoking](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/450535) — 3 票 / 2 评论 / 2023-10-24 
+- [How can I participate in this competition? I don’t see any button to participate in the competition?](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/455009) — 3 票 / 4 评论 / 2023-11-13 
+- [Ensembling other participants' submissions is a harmful trend](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/455201) — 3 票 / 6 评论 / 2023-11-13 
+- [Deep neural net](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/452144) — 3 票 / 5 评论 / 2023-11-01 
+- [#35 - Smoker Status Prediction | Voting and Stacking CLF](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/462385) — 3 票 / 0 评论 / 2023-12-19 
+- [Share your learnings](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/451707) — 3 票 / 11 评论 / 2023-10-30 
+- [０/ 1 , or continuous value](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/451376) — 3 票 / 2 评论 / 2023-10-28 
+- [CatBoost and run time](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/450738) — 3 票 / 17 评论 / 2023-10-25 
+- [Baselines for Trees](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/450532) — 2 票 / 0 评论 / 2023-10-24 
+- [Research on the effects of smoking on various health indicators](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/451257) — 2 票 / 0 评论 / 2023-10-27 
+- [Where do i find the original untrained Dataset?](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/459466) — 2 票 / 1 评论 / 2023-12-05 
+- [Business Understanding - Main goal is unclear!?](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/459464) — 2 票 / 0 评论 / 2023-12-05 
+- [Exploring Cross-Validation Techniques](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/453066) — 2 票 / 10 评论 / 2023-11-04 
+- [Highly Skewed Features](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/455314) — 2 票 / 0 评论 / 2023-11-14 
+- [Related to outliers](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/454242) — 2 票 / 4 评论 / 2023-11-09 
+- [Can anybody provide a Checklist??](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/452370) — 1 票 / 2 评论 / 2023-11-02 
+- [Discrepancy Between Validation AUC and Kaggle Test Results](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/451202) — 1 票 / 4 评论 / 2023-10-27 
+- [Score goes down when I remove outliers for Neural Network. Why?](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/452446) — 1 票 / 4 评论 / 2023-11-02 
+- [HDL and LDL is greater than Cholesterol](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/454522) — 1 票 / 0 评论 / 2023-11-10 
+- [Binary prediction of smoker status with explanation of every step](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/454841) — 1 票 / 1 评论 / 2023-11-12 
+- [Optuna Picks trial 0 nearly every time](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/450547) — 1 票 / 2 评论 / 2023-10-24 
+- [improving the performance of model](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/451878) — 0 票 / 2 评论 / 2023-10-30 
+- [Why is height and weight for non smokers less than smokers](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/451869) — 0 票 / 2 评论 / 2023-10-30 
+- [5 Years Age gap](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/460689) — 0 票 / 0 评论 / 2023-12-10 
+- [It takes too long to model](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/456621) — 0 票 / 1 评论 / 2023-11-20 
+- [A question about RFECV](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/453769) — 0 票 / 2 评论 / 2023-11-07 
+- [A question,How to understand the XGBT?](https://www.kaggle.com/competitions/playground-series-s3e24/discussion/465762) — 0 票 / 2 评论 / 2024-01-05 

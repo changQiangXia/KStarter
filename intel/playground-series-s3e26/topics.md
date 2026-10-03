@@ -1,0 +1,82 @@
+# playground-series-s3e26 讨论区（按票数排序，共 80 条）
+
+- [2nd Place: with help from NNs.](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/464887) — 71 票 / 39 评论 / 2024-01-02 **write-up?**
+- [Resources to refer](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/459389) — 47 票 / 11 评论 / 2023-12-05 
+- [Medical test risk factors](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/459392) — 44 票 / 13 评论 / 2023-12-05 
+- [A quick and dirty trick to give a lite boost to boosted trees models](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/461307) — 33 票 / 6 评论 / 2023-12-13 
+- [Spider Angioma (a.k.a Spider Naevus or Spider Telangectasia) and Liver Disease Stats.](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/459401) — 31 票 / 3 评论 / 2023-12-05 
+- [Tips for beginners](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/459430) — 31 票 / 20 评论 / 2023-12-05 
+- [Visualizing the leaderboard churn](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/464869) — 27 票 / 8 评论 / 2024-01-02 
+- [4th place solution - stacking approach with XGB as meta model.](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/464863) — 26 票 / 9 评论 / 2024-01-02 **write-up?**
+- [7 short tips handling with classification and other Kaggling lessons learned.](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/461062) — 25 票 / 10 评论 / 2023-12-12 
+- [New categorical features to improve performance](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/459860) — 22 票 / 12 评论 / 2023-12-06 
+- [Considerations on clinical data](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/459729) — 22 票 / 16 评论 / 2023-12-06 
+- [Cox PH. Survival Analyses. Life-Tables and Hazard function.](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/460069) — 21 票 / 6 评论 / 2023-12-07 
+- [Plot the decision trees to better understand your model](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/460859) — 21 票 / 2 评论 / 2023-12-11 
+- [Calling for Feedback on Playground Series - Season 3](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/459899) — 20 票 / 25 评论 / 2023-12-07 
+- [1st place solution: everyone can be a winner!](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/464865) — 19 票 / 21 评论 / 2024-01-02 **write-up?**
+- [Brief Description of the features.](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/459409) — 17 票 / 9 评论 / 2023-12-05 
+- [GBDTs results so far](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/460611) — 17 票 / 10 评论 / 2023-12-10 
+- [Team member requirement!!!!](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/459467) — 14 票 / 1 评论 / 2023-12-05 
+- [Understandable Features Description](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/459574) — 14 票 / 4 评论 / 2023-12-05 
+- [Metric Function](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/459400) — 14 票 / 7 评论 / 2023-12-05 
+- [Collection of helpful ideas - S3E26](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/462029) — 13 票 / 9 评论 / 2023-12-17 
+- [Another quick and dirty trick](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/462362) — 12 票 / 7 评论 / 2023-12-19 
+- [Various ways of dealing with imbalance](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/462205) — 12 票 / 5 评论 / 2023-12-18 
+- [Original Dataset in Training](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/463527) — 11 票 / 1 评论 / 2023-12-25 
+- [Our collective tryst with all playground episodes this year](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/464457) — 11 票 / 2 评论 / 2023-12-30 
+- [Remember to evaluate models with a CV strategy](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/460103) — 10 票 / 0 评论 / 2023-12-07 
+- [New to Machine Learning or Kaggle?](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/440712) — 9 票 / 6 评论 / 2023-09-16 
+- [SMOTE works in this competition? 🤯](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/460033) — 9 票 / 7 评论 / 2023-12-07 
+- [Cirrhosis Confessions: A Dive into Liver Predictions](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/459985) — 9 票 / 1 评论 / 2023-12-07 
+- [Asking for Advice.](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/464571) — 9 票 / 6 评论 / 2023-12-31 
+- [Resources for Effective Hyperparameter Tuning](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/459535) — 9 票 / 6 评论 / 2023-12-05 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/459572) — 8 票 / 1 评论 / 2023-12-05 
+- [Beginner Question | Model (Re)Fit after CV](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/459897) — 8 票 / 3 评论 / 2023-12-07 
+- [Trying out a Graph Neural Network ](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/461428) — 8 票 / 13 评论 / 2023-12-14 
+- [(Rank 39 Upto 250 points added) Why there is so significant difference between private and public scores???](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/464876) — 8 票 / 7 评论 / 2024-01-02 
+- [Descriptions of each feature for Japanese](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/459418) — 8 票 / 4 评论 / 2023-12-05 
+- [Pay attention to the random seed and the CL class](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/459654) — 8 票 / 8 评论 / 2023-12-06 
+- [First glance at the dataset](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/459394) — 8 票 / 2 评论 / 2023-12-05 
+- [How to use feature importance?](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/460273) — 7 票 / 4 评论 / 2023-12-08 
+- [Lost in EDA: How Do You Simplify the Process?](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/460524) — 7 票 / 5 评论 / 2023-12-09 
+- [These are the most naive baseline results](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/460284) — 7 票 / 3 评论 / 2023-12-08 
+- [How do you run multiple tests at the same time?](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/462730) — 7 票 / 17 评论 / 2023-12-21 
+- [First notebook and predictions with AutoML](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/459460) — 7 票 / 5 评论 / 2023-12-05 
+- [ Important Information ](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/459543) — 6 票 / 5 评论 / 2023-12-05 
+- [Interesting Ensemble Method](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/461333) — 6 票 / 5 评论 / 2023-12-13 
+- [Innovative Approach to Predictive Modeling: Ensemble Learning with LightGBM and XGBoost - 7th place solution](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/465167) — 6 票 / 1 评论 / 2024-01-03 **write-up?**
+- [Neural Network with these data?](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/462210) — 6 票 / 13 评论 / 2023-12-18 
+- [Data Dashboard 1 | PS3.26](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/461973) — 5 票 / 3 评论 / 2023-12-17 
+- [Order of features](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/464226) — 5 票 / 5 评论 / 2023-12-29 
+- [Does anyone use pseudo-labeling?](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/465129) — 5 票 / 3 评论 / 2024-01-03 
+- [Additional Features from Prior Research](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/463072) — 5 票 / 7 评论 / 2023-12-23 
+- [Seeking Advice on Crafting an Effective CV](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/464537) — 5 票 / 2 评论 / 2023-12-31 
+- [Will Ensemble model increase the score?](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/462955) — 5 票 / 7 评论 / 2023-12-22 
+- [Variable Encoding | LabelEncoder vs. Others](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/460483) — 5 票 / 3 评论 / 2023-12-09 
+- [KMeans to make new features](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/460113) — 5 票 / 5 评论 / 2023-12-07 
+- [XGBClassifier & Optuna | Setup](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/462796) — 4 票 / 2 评论 / 2023-12-21 
+- [I am not able to increase my accuracy from 0.52](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/462786) — 4 票 / 4 评论 / 2023-12-21 
+- [Log Loss Confusion](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/464189) — 4 票 / 3 评论 / 2023-12-29 
+- [Can any one explain me how score will be calculated of submission file](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/464003) — 4 票 / 2 评论 / 2023-12-28 
+- [Important Algorithm ](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/459789) — 3 票 / 0 评论 / 2023-12-06 
+- [About evaluation metric](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/459478) — 3 票 / 7 评论 / 2023-12-05 
+- [Blending for best results](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/460320) — 3 票 / 2 评论 / 2023-12-08 
+- [A way to measure score without submitting?](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/463447) — 3 票 / 9 评论 / 2023-12-25 
+- [Small Typo in Data Section!](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/461324) — 3 票 / 2 评论 / 2023-12-13 
+- [Should I better use Catboost or Scikit ?](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/461071) — 3 票 / 11 评论 / 2023-12-12 
+- [What deep learning model is use for generate data](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/461184) — 2 票 / 1 评论 / 2023-12-13 
+- [Repeated Stratified K Fold vs Stratified K Fold](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/464108) — 2 票 / 3 评论 / 2023-12-28 
+- [Definition Data (Spanish)](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/461024) — 2 票 / 1 评论 / 2023-12-12 
+- [Hyper Parameter Tuning Question](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/464829) — 2 票 / 1 评论 / 2024-01-01 
+- [Is it possible to achieve a score less than 0.4 without using the original dataset?](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/463809) — 2 票 / 3 评论 / 2023-12-27 
+- [Why tag Time series Analysis](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/461722) — 2 票 / 0 评论 / 2023-12-16 
+- [Can someone explain me why we also need to use the original data?](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/464850) — 2 票 / 4 评论 / 2024-01-01 
+- [Dataset documentation](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/460096) — 2 票 / 2 评论 / 2023-12-07 
+- [Clinical experience and feature insights ](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/461540) — 2 票 / 3 评论 / 2023-12-15 
+- [Has someone tried stacking a neural network on ML models?](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/462518) — 2 票 / 1 评论 / 2023-12-20 
+- [Causal inference for oversampling?](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/460178) — 2 票 / 0 评论 / 2023-12-08 
+- [Adding up to 18 feature to the data](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/462251) — 2 票 / 3 评论 / 2023-12-19 
+- [Team member ](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/459644) — 2 票 / 2 评论 / 2023-12-06 
+- [How loss can be 12.7?](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/464844) — 1 票 / 1 评论 / 2024-01-01 
+- [Baseline CV and LB for different dataset combinations](https://www.kaggle.com/competitions/playground-series-s3e26/discussion/460714) — 1 票 / 4 评论 / 2023-12-10 

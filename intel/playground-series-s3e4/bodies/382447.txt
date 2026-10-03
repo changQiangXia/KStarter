@@ -1,0 +1,28 @@
+# https://www.kaggle.com/competitions/playground-series-s3e4/discussion/382447
+
+Topic #382447: 30th Place Solution 
+  Author: Hardy Xu
+  Posted: 2023-01-31 02:12:47.800000
+  Votes: 28  Comments: 5
+
+This comp was an interesting one, and for me the hardest of the Playground Series this month. The addition of the time component to the data, combined with how the train and test sets were split by time, made me more unsure of how to best build a local CV schema and unsure of its reliability. In the end, I used sklearn's TimeSeriesSplit for CV, and at the very least it seemed fairly reliable for optimizing hyperparameters.
+
+My final solution was pretty simple, just an average of 50 XGBoost models with the same hyperparameters, trained using Stratified KFold with 5 folds and 10 repeats. I ended up using the entire train dataset plus the instances of fraud from the original Credit Card Fraud data.
+
+There were 2 things that I think helped my score a little. First, I added transformed versions of the V features created by subtracting the daily average for that feature. This was inspired by @paddykb's comment  about how many features behaved differently between day 1 and day 2, and upon further observation, it seemed to that the general up-down trend of the features throughout a day was similar between day 1 and day 2, and the main difference was that this trend was shifted up or down between days. So I figured that subtracting out the daily average might help uncover some more signal. This did not improve my Public LB score, but it gave me a boost of +.0015 on the Private LB score.
+
+The second addition was inspired by @siukeitin's comment about using the V features to identify customers. Out of curiosity, I ran a check to see if grouping the train data by any 2 V features would result in pure groups of all fraud or all non-fraud, and I found that the combination of V14 and V21 did just that. This gave me 466 rows in the test set that had a (V14, V21) that also existed in the train set, and based on the train data, I predicted 0 for those rows. This boosted both my Public and Private LB scores by +.0004.
+
+Sadly, it was my decision to include the instances of fraud from the original data that prevented me from placing higher, and I suspect that anyone who scored .83 or above probably did it without any original data. Had I excluded the original data, I would've scored .8333, enough for 1st place. With all of the well-documented differences between the original and synthetic data this time around, my instinct was telling me to not use the original data, but it was hard to go against what my CV and the Public LB were telling me. A good lesson for the next one.
+
+Comments:
+├─ Matt OP (2023-01-31 02:57:04.010000) [+1]
+│  I concur that this was the hardest of the Playground Series this month. Very nice work with the feature engineering @hardyxu52. I was also skeptical about adding the original data to the training d...
+├─ snats (2023-02-03 02:21:44.833000) [+0]
+│  Hi! Your solution seems really interesting. Do you have any resources so that we could check the ensemble process?
+├─ Minh T. Nguyen (2023-01-31 15:02:50.740000) [+0]
+│  @hardyxu52 Ohhh XGBoost and Stratified Sampling sound like a good combo. Thanks for the tips!
+├─ Adeel Zafar (2023-01-31 04:01:48.740000) [+0]
+│  Great insights. Congrats
+├─ Oscar Aguilar (2023-01-31 03:48:08.557000) [+0]
+│  Interesting. Good job on feature engineering👍 I also tried TimeSeriesSplit for CV but it didn't help in the LB score.

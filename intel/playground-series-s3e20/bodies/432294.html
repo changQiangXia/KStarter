@@ -1,0 +1,29 @@
+<p>Many of us have applied standard machine learning methods (e.g., LightGBM and Optuna) to this competition and got disastrous scores. Can you explain why? Here's my explanation.</p>
+<p><strong>1. The satellite measurements are useless:</strong> These features are terribly noisy and unrelated to the target. A satellite measurement applies only to a single point in time whereas the targets are the CO2 emissions of a whole week. The time of the measurement is determined by the satellite's orbit. Its result depends on clouds, temperature, volcano eruptions and other factors. Furthermore, CO2 emissions come from different sectors (ground traffic, heating, power generation, air traffic, …), and these sectors don't contribute proportionally to NO2, CO or SO2. With a diameter of 200 km, Rwanda is a small country, and the wind replaces Rwanda's whole atmosphere with air from neighboring countries every day.</p>
+<p>After dropping the satellite measurements, we have only four features left: latitude, longitude, year and week_no.</p>
+<p><strong>2. Location data is in the wrong form:</strong> The location data is given in two dimensions (latitude and longitude), and machine learning models naturally assume that nearby locations have similar emissions. Maybe all cities have similar emissions, all villages are similar, and all forests have similar emissions, but these three classes of locations don't form contiguous regions — a city may be in the middle of a forest — and at least two locations are outliers.</p>
+<p>Keeping locations in latitude–longitude form is wrong; three better forms are:</p>
+<ul>
+<li>Transform the locations into a five- or six-dimensional space with an SVD or NMF (<a href="https://www.kaggle.com/competitions/playground-series-s3e20/discussion/430850" target="_blank">discussion post</a>).</li>
+<li>Cluster the locations according to their emission patterns (<a href="https://www.kaggle.com/code/patrick0302/clustering-might-help" target="_blank">notebook</a>).</li>
+<li>Use the locations as categorical features or calculate the predictions for every location independently.</li>
+</ul>
+<p><strong>3. The lockdown was a singular event:</strong> Nobody could foresee the lockdown, and cross-validating a machine-learning model on a validation set which contains the year 2020 is nonsense.</p>
+<p>The lockdown hinders not only validation: What happens if the training dataset contains the lockdown period? Do we want our model to learn that the emissions of week 10 can be drastically lower than the emissions of week 9? No: Although such a reduction occurred in week 10 of 2020, it doesn't occur in week 10 of 2022, and we're using our model only for predicting 2022. We want our model to learn that Lake Kivu emissions triple every year from week 53 to week 0, but we do not want it to learn that Kihanga emissions can suddenly shrink in week 10. Standard machine-learning models cannot distinguish the two cases; they are programmed to predict averages (e.g., random forest or gradient boosting) or to extrapolate from averages (e.g., linear regression or <a href="https://www.kaggle.com/competitions/playground-series-s3e20/discussion/430200" target="_blank">Holt–Winters</a>).</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F7917824%2F56b51dd05d0705e4a7df2eb6b3ce8f17%2Ftwolocs(1).png?generation=1692215611536439&amp;alt=media" alt="two locations"></p>
+<p><strong>What are our options?</strong> </p>
+<p>Having seen that traditional machine learning fails at distinguishing seasonal variations from lockdown effects, human intervention is necessary. We need to give our prior information about the lockdown to the model. The lockdown weeks of the training data are outliers and must be dropped or adjusted!</p>
+<p>Typical approaches are:</p>
+<ul>
+<li>As the lockdown reduced the emissions for most locations, the maximum emission of the three training years is a good baseline for predicting 2022 (<a href="https://www.kaggle.com/code/danbraswell/no-ml-public-lb-23-02231" target="_blank">notebook</a>).</li>
+<li>To reduce the variance compared to the first approach, we can scale the training data to the levels of 2021 (because this year is closest to 2022) or to the levels of 2019 (because this year is unaffected by Covid) (<a href="https://www.kaggle.com/code/patrick0302/align-2019-2020-emission-values-with-2021" target="_blank">notebook</a>).</li>
+<li>By taking the maximum we ignore that the economy hadn't completely recovered from the lockdown at the beginning of 2022. This observation leads to the idea of using the recovery-from-lockdown phase (mid-2020 through end of 2021) as the basis for extrapolating into 2022 (<a href="https://www.kaggle.com/competitions/playground-series-s3e20/discussion/431506" target="_blank">discussion post</a>).</li>
+</ul>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F7917824%2Fc3938772596d3ba4d5bdad7ee4f13265%2Fseasonalcovid-3(3).png?generation=1692215623835110&amp;alt=media" alt="exponential decay"></p>
+<p><strong>Advice:</strong></p>
+<ul>
+<li>Be creative</li>
+<li>Validate your model on more than just the public leaderboard (e.g. on the second half of 2021)</li>
+<li>Ensemble</li>
+<li>Have fun!</li>
+</ul>

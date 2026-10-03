@@ -1,0 +1,82 @@
+# playground-series-s4e7 讨论区（按票数排序，共 80 条）
+
+- [Winning approach- Team Cross Sellers](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/523404) — 132 票 / 97 评论 / 2024-08-01 **write-up?**
+- [[AutoML Grand Prix] 1st Place Solution (One CatBoost Is All You Need)](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/516475) — 54 票 / 33 评论 / 2024-07-02 **write-up?**
+- [Run your code 4x faster with GPU](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/517305) — 53 票 / 43 评论 / 2024-07-05 
+- [[4th Place Solution AutoML Grand Prix] AutoML Grandmasters](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/516265) — 48 票 / 31 评论 / 2024-07-02 **write-up?**
+- [2nd Place Solution (One model is all you need) - Team Ujjwal Pandey](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/523489) — 45 票 / 15 评论 / 2024-08-01 **write-up?**
+- [[LB 0.89375] 3rd place solution - "LightAutoML testers" team](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/516860) — 43 票 / 16 评论 / 2024-07-03 **write-up?**
+- [This month you'll need a neural network to win the competition](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/518760) — 42 票 / 30 评论 / 2024-07-08 
+- [Do not ignore CPU based kernels in this assignment](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/516674) — 41 票 / 4 评论 / 2024-07-03 
+- [You don't need all the samples!](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/517167) — 38 票 / 10 评论 / 2024-07-05 
+- [[Learn from the Grandmasters] Target Encoding](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/521774) — 35 票 / 18 评论 / 2024-07-22 
+- [[AutoML Grand Prix 23rd place solution] Learnt the art of effective resource and time management](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/516413) — 35 票 / 7 评论 / 2024-07-02 **write-up?**
+- [Logistic Regression as Baseline](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/516462) — 32 票 / 21 评论 / 2024-07-02 
+- [[AutoML July 2nd Place] Team Oxygen ](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/517112) — 32 票 / 10 评论 / 2024-07-04 **write-up?**
+- [Feature Selection for Cross Selling: SFS, Hashing. Vintage Customer. ML Lifecycle.](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/515996) — 32 票 / 3 评论 / 2024-07-01 
+- [See what it takes to get the neural networks to work](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/519562) — 32 票 / 3 评论 / 2024-07-11 
+- [A glitch in the insurance matrix.](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/520253) — 31 票 / 8 评论 / 2024-07-15 
+- [#3 solution | Many individual models and many ensembles](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/523661) — 30 票 / 11 评论 / 2024-08-06 **write-up?**
+- [Simple approach using k-means + k-NN](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/519368) — 28 票 / 4 评论 / 2024-07-10 
+- [Is this the most ideal leaderboard in the playground series?](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/523410) — 25 票 / 2 评论 / 2024-08-01 
+- [6th place solution](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/523484) — 24 票 / 12 评论 / 2024-08-01 **write-up?**
+- [Quick reflection - a tale of diminishing returns [#3 place]](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/523405) — 22 票 / 7 评论 / 2024-08-01 
+- [two lines of code to make life easier during sub](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/516269) — 21 票 / 2 评论 / 2024-07-02 
+- [4th place solution: Competing Without Compute](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/523698) — 20 票 / 16 评论 / 2024-08-04 **write-up?**
+- [[AutoML Grand Prix July 10th Place] Team Tilii](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/518573) — 20 票 / 19 评论 / 2024-07-07 **write-up?**
+- [Don't worry too much about ensembling](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/518705) — 20 票 / 4 评论 / 2024-07-07 
+- [[AutoML Grand Prix] 5th Place Solution (Lama Takes it All)](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/516855) — 19 票 / 7 评论 / 2024-07-03 **write-up?**
+- [[AutoML Grand Prix 26th place solution] - Making unusual decisions in the middle of a desaster](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/516286) — 19 票 / 10 评论 / 2024-07-02 **write-up?**
+- [#9 Solution | 24 Models + Hill Climbing](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/523403) — 17 票 / 12 评论 / 2024-08-01 **write-up?**
+- [Binary classifier- onboarding materials ](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/515970) — 17 票 / 8 评论 / 2024-07-01 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/516204) — 16 票 / 4 评论 / 2024-07-01 
+- [[AutoML GrandPrix ] 7th Place Solution Write-Up](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/517079) — 16 票 / 8 评论 / 2024-07-04 **write-up?**
+- [Finding the Right Balance: Training Data Size](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/516103) — 16 票 / 10 评论 / 2024-07-01 
+- [The AutoML Grand Prix for July](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/516502) — 15 票 / 13 评论 / 2024-07-02 
+- [This competition is eligible for the AutoML Grand Prix!](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/512201) — 15 票 / 1 评论 / 2024-06-13 
+- [Olympics. AutoML Grand Prix in 6 hours. Bring DreamTeam Nvidia. Prompt:On your marks!](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/523357) — 15 票 / 3 评论 / 2024-07-31 
+- [What will be your strategy for the remaining of the competition?](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/516577) — 15 票 / 7 评论 / 2024-07-03 
+- [[AutoML Grand Prix] 6th Place Solution. 0.88729](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/518567) — 13 票 / 6 评论 / 2024-07-07 **write-up?**
+- [A much-needed switch up from previous playground competitions](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/516672) — 13 票 / 1 评论 / 2024-07-03 
+- [8th Place Solution](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/523486) — 13 票 / 11 评论 / 2024-08-01 **write-up?**
+- [Do Catboost and LGBM use  best_iteration automatically for prediction?](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/521278) — 12 票 / 9 评论 / 2024-07-19 
+- [pos_bagging_fraction in LBGM: An imbalanced data sampling technique that works](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/518456) — 12 票 / 4 评论 / 2024-07-06 
+- [You heard it here first](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/516044) — 12 票 / 11 评论 / 2024-07-01 
+- [[AutoML Grand Prix] 9th Place Solution  - "Ensemble of AutoMLs"](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/516963) — 12 票 / 4 评论 / 2024-07-04 **write-up?**
+- [Get started here!](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/487171) — 11 票 / 2 评论 / 2024-03-27 
+- [[0.89041] on GBT+XGB+LGBM | Start here](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/521728) — 11 票 / 8 评论 / 2024-07-22 
+- [22nd place: An AutoML newbie having fun (and running out of time)](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/516274) — 10 票 / 7 评论 / 2024-07-02 **write-up?**
+- [Use 7z compression format for file submission.](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/516739) — 9 票 / 0 评论 / 2024-07-03 
+- [How to Handle Such a Huge Tabular Dataset ](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/516132) — 9 票 / 7 评论 / 2024-07-01 
+- [Is this the best curated playground episode of the year?](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/523384) — 9 票 / 2 评论 / 2024-07-31 
+- [AutoML episode 3 references](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/515968) — 8 票 / 2 评论 / 2024-07-01 
+- [Is this a health insurance/ motor insurance problem?](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/515981) — 7 票 / 2 评论 / 2024-07-01 
+- [thank you very much for this playground](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/522211) — 7 票 / 6 评论 / 2024-07-25 
+- [SMOTE for imbalanced data](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/516729) — 7 票 / 21 评论 / 2024-07-03 
+- [ Optimizing the dataset with Pandas Datatypes](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/516136) — 7 票 / 2 评论 / 2024-07-01 
+- [What strategies or tools have you found effective for reducing training time?](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/516283) — 7 票 / 16 评论 / 2024-07-02 
+- [Results as far.](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/520987) — 6 票 / 1 评论 / 2024-07-18 
+- [Scoring time for submissions?](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/516091) — 6 票 / 7 评论 / 2024-07-01 
+- [Tips for newbies in AutoML and in handling such large datasets](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/516447) — 6 票 / 2 评论 / 2024-07-02 
+- [[AutoML Grand Prix] 8th place solution](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/518542) — 6 票 / 0 评论 / 2024-07-07 **write-up?**
+- [Tip for Reading Large Datasets.](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/518398) — 6 票 / 5 评论 / 2024-07-06 
+- [LGBM error with GPU](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/519230) — 6 票 / 5 评论 / 2024-07-10 
+- [Which one to use? Kaggle Notebook/Google Collab/VS code with Github Copilot](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/518782) — 6 票 / 9 评论 / 2024-07-08 
+- [316 | 56 Additional Features Add-ons](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/516495) — 5 票 / 0 评论 / 2024-07-02 
+- [12th place Solution](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/523449) — 5 票 / 1 评论 / 2024-08-01 **write-up?**
+- [Don't forget about overfitting!](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/516808) — 5 票 / 11 评论 / 2024-07-03 
+- [Reducing Memory Usage](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/518394) — 4 票 / 1 评论 / 2024-07-06 
+- [how to submit my predictions for this competition](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/516929) — 4 票 / 7 评论 / 2024-07-04 
+- [Confused About Submission Accuracy](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/516349) — 4 票 / 5 评论 / 2024-07-02 
+- [Taking a long time for training model](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/521722) — 4 票 / 6 评论 / 2024-07-22 
+- [SMOTE or not SMOTE?](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/516840) — 4 票 / 6 评论 / 2024-07-03 
+- [Using LGB Model for Prediction](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/522410) — 4 票 / 43 评论 / 2024-07-26 
+- [Having trouble with submission](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/521570) — 4 票 / 6 评论 / 2024-07-21 
+- [Cannot improve on these lgbm parameters ](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/518926) — 4 票 / 3 评论 / 2024-07-08 
+- [If someone facing the following two problems, what's the solution for those?](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/516988) — 4 票 / 2 评论 / 2024-07-04 **write-up?**
+- [Optimizing CatBoost for Binary Classification of Insurance Cross Selling](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/517209) — 3 票 / 3 评论 / 2024-07-05 
+- [About the Dataset and Some Ideas](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/518699) — 3 票 / 0 评论 / 2024-07-07 
+- [Baseline Logistic Regression Model & EDA](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/516534) — 3 票 / 0 评论 / 2024-07-02 
+- [Code efficient way to downcast numerical types and save memory](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/518367) — 3 票 / 0 评论 / 2024-07-06 
+- [What to Do of the Non-Drivers that have a Postive Response](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/516141) — 3 票 / 2 评论 / 2024-07-01 
+- [Stratified train test split](https://www.kaggle.com/competitions/playground-series-s4e7/discussion/516821) — 3 票 / 4 评论 / 2024-07-03 

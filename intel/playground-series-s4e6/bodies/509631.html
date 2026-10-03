@@ -1,0 +1,75 @@
+<p>Heyho everyone,</p>
+<p>The following details our approach during this competition. In addition, we provide supplementary information and an aggregation of our main contributions into one code file via <a href="https://github.com/AutoML-Grandmasters/Second-AutoML-Grand-Prix" target="_blank">this GitHub repository</a>.</p>
+<hr>
+<p><a href="https://www.kaggle.com/code/gauravduttakiit/pss4e6-flaml-roc-auc-ovo" target="_blank">The notebook</a> by <a href="https://www.kaggle.com/gauravduttakiit" target="_blank">@gauravduttakiit</a> really changed this competition because we found nothing in our offline evaluation that explained why this specific model and preprocessing was so good on the public leaderboard. Thus, it seemed like the notebook won a lottery ticket on the public leaderboard. </p>
+<p>An alternative theory was that renaming the columns had some unknown impact that we could not reproduce or pinpoint. We also investigated replacing values with Null (as described <a href="https://www.kaggle.com/competitions/playground-series-s4e6/discussion/509510#2852085" target="_blank">here</a>), but this only gave a small increase in offline validation score, which we also got by other means. </p>
+<p>Thus, we opted to include it in an ensemble together with our own submission.  As <a href="https://www.kaggle.com/roberthatch" target="_blank">@roberthatch</a> <a href="https://www.kaggle.com/competitions/playground-series-s4e6/discussion/509316#2850122" target="_blank">pointed out</a>, this made the rest of the competition an averaging gamble. </p>
+<p>Although it seems we took a bit of a different approach to produce the average at the time. In detail, we opted to produce a weighted ensemble of the model created by <a href="https://www.kaggle.com/gauravduttakiit" target="_blank">@gauravduttakiit</a> and our own submission. To do so, we took the notebook's data and used FLAML to get prediction probabilities of the winning lottery ticket model (loosely related, see <a href="https://arxiv.org/abs/1803.03635" target="_blank">this</a>):</p>
+<pre><code>gbm_hyperparameters = {: , : , : , : , : , : , : , : }
+
+starting_points = {: gbm_hyperparameters}
+ flaml  AutoML
+automl = AutoML(eval_method=)
+automl.fit(X, y, task=, metric=,time_budget=, starting_points=starting_points)
+
+y_pred_proba = automl.predict_proba(test)
+</code></pre>
+<p>Then, we averaged the prediction probabilities and finally converted the average into the final submission. We used a weight of 0.14 (our submission) and 0.86 (the winning lottery ticket model).</p>
+<h1>Details on Our Submission</h1>
+<p>For our own submissions, we used an offline evaluation setup to determine how to configure AutoGluon for a three-hour training run. </p>
+<h3>Early Stopping Metric</h3>
+<p>We started using log loss as an early stopping metric in AutoGluon very early on. Importantly, when doing this with the following code, our evaluation metric (i.e., accuracy) is still the selection metric and used for post hoc ensembling! </p>
+<pre><code> autogluon.tabular  TabularPredictor
+predictor = TabularPredictor(
+    label=,
+    eval_metric=,
+    problem_type=,
+    verbosity=,
+)
+
+predictor.fit(
+    time_limit=**,
+    train_data=train_data,
+    presets=,
+    dynamic_stacking=,
+    
+    ag_args_fit = {
+            : ,
+        }
+)
+predictor.fit_summary(verbosity=)
+</code></pre>
+<p>After we saw the notebook, which used ROC AUC instead of Log Loss, we also implemented and tested how it would perform. This, however, did not improve performance.   </p>
+<h3>Overview of Other Offline Evaluation Results</h3>
+<p>In our offline evaluation, we also came to the following conclusions:</p>
+<ul>
+<li>Treating ordinal features as numerical features is beneficial.</li>
+<li>Using original data is better for model performance (even with its distribution shift).</li>
+<li>Using sample weights does not help.</li>
+<li>Using repeated cross-validation is beneficial. </li>
+<li>Using transductive learning is beneficial. Yet, we did not use it in our submissions as we did not trust the results of our test. </li>
+<li>We verified that gradient-bosted decision trees (GBDTs) and neural networks (NNs) are both capable of solving this task. </li>
+</ul>
+<h3>Stacking</h3>
+<p>We noticed that NNs were much better than GBDTs among all stacking models. Based on our <a href="https://github.com/autogluon/autogluon/issues/2779" target="_blank">prior work on stacked overfitting</a>, we knew this pattern and thus opted not to use GBDTs as stacking models anymore, which further improved offline performance. </p>
+<pre><code> autogluon.tabular.configs.hyperparameter_configs  get_hyperparameter_config
+
+hyperparameters_raw = get_hyperparameter_config()
+
+hyperparameters_only_nn = {}
+hyperparameters_only_nn[] = hyperparameters_raw[]
+hyperparameters_only_nn[] = hyperparameters_raw[]
+
+hyperparameters = {
+    : hyperparameters_raw,
+    : hyperparameters_only_nn,
+}
+</code></pre>
+<h3>Feature Engineering</h3>
+<p>We used OpenFE to obtain new features, which improved our offline validation score. We do not know if it made our final submission worse, as the lottery ticket model did not use similar features. </p>
+<h3>EDA</h3>
+<p>We looked at the features with EDA, but nothing seemed off nor worthy of further manual investigation.</p>
+<hr>
+<p>Best regards,</p>
+<p>Lennart and Nick (@innixma), on behalf of the "AutoML Grandmasters"</p>
+<p>Prior Grand Prix Competition Write-ups: <a href="https://www.kaggle.com/competitions/playground-series-s4e5/discussion/500783" target="_blank">First AutoML Grand Prix Competition</a> </p>

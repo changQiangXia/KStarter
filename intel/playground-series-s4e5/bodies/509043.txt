@@ -1,0 +1,256 @@
+# https://www.kaggle.com/competitions/playground-series-s4e5/discussion/509043
+
+Topic #509043: #1st place solution
+  Author: aldparis
+  Posted: 2024-06-01 00:23:23.861000
+  Votes: 106  Comments: 58
+
+Thank's to Kaggle for organizing tabular competitions like this one. I learned a lot from those competitions. I learned a lot also from public notebooks and discussions, thank you everyone for sharing so much.
+
+Because this dataset contains a sum of Poisson distributions, the winner of this competition had to be from France. Thank you M. Simeon Denis Poisson for giving us such a tool, and thank you for giving me a extra motivation during this competition.
+
+Thank you to all competitors, you are really challenging, playing with you is a pleasure. Congrat's to @mdoroch (I will contact you, you were very impressive), @lashfire, @mattop , @tilii7 : your submissions during last days  stressed me so much !
+
+My solution is  :
+
+
+
+an ensemble ajusted with a ridge regression positive = False, fit_intercept = False.
+
+and ajusted with 3 repeated oof predictions of a variety of models produced with catboost, xgboost, lightgbm and 2 public notebooks
+
+
+Auto Gluon Starter by @mfmfmf3 available https://www.kaggle.com/code/mfmfmf3/autogluon-starter
+
+Flood Prediction LGBM by @igorvolianiuk https://www.kaggle.com/code/igorvolianiuk/flood-prediction-lgbm
+
+
+EDA helped me to understand that original dataset was completly different from train dataset. EDA helped me to understand that the sum of 16 of 17 orginal features was still a Poisson distribution in train dataset, but sum of 18, 19, and 20 original features was not (neither in test dataset). And EDA helped me to find interesting features, correlated to target (thank you @ambrosm for the most important feature)
+
+I took care for my own GBMs to feature selection :
+
+
+
+
+usefull features : sum of each lign, std of each lign, max of each lign, sorted original features (thank you @siukeitin for Sorting along the feature axis as "feature engineering"'s discussion, number of variables which have a value higher than 6, or than 7, or than 8 (count features) : 
+
+
+useless features : original features, skewness of each lign, kurtosis of each lign, redondant features. I dropped them.
+
+
+magic feature : because target could be seen as a discrete variable, I used a target encoder, and train.groupby("sum")["FloodProbability"].std() was an interesting feature (where train["sum"] = train[test.columns].sum(axis=1))
+
+
+I used permutation feature importance technique explained in scikit-learn or in Kaggle to detect useless features. I used backward technique too.
+
+
+Variety of models
+I trained more than 30 GBM's, with various sets of features : sometimes with sorted original features, or sometimes with count features "nb_inf4", "nb_inf3", "nb_inf2", "nb_sup6", "nb_sup7", "nb_sup8", sometimes with target encoder, sometimes without.
+I used also a target transformation sometimes : there was a strong signal (sum), and a noisy signal (deviance from sum). My transformed target was : 
+train["target_transf"] = train["FloodProbability"] - df[original_features].mean(axis=1) * 0.1
+or train["target_transf"] = (train["FloodProbability"]*400 - train[original_features].mean(axis=1) * 40).astype(np.int16)
+Thank's to @act18l for https://www.kaggle.com/competitions/playground-series-s4e5/discussion/499263#2787165
+
+During the first 10 days, I used only default parameters (with early stopming) and didn't optimize any GBM, concentrated on my features and my ensemble loop.
+After, hyperparameters were optimized with optuna by using only my kaggle quota of GPU. I optimized only the following hyper parameters (with max timeout = 5400 seconds, it's a lot) : 
+
+
+
+depth for catboost and xgboost, 
+
+num_leaves for lightgbm, 
+
+alpha, lambda, min_child_weight or min_child_samples for xgboost and ligntgbm 
+
+bagging_temperature, random_strength for catboost
+
+subsample, colsample_by_node for xgboost and lightgbm
+
+
+I used default grow_policy of each GBM method (xgboost, catboost and lightgbm have each a different default grow_policy value, it gives variety of predictions), I used default learning_rate or .1, I used early_stopping (od_wait in catboost) to fit n_iterations. 
+
+Ensemble
+During the first two weeks, I trained my ensemble with LinearRegression and positive = True and fit_intercept = False. Until I tried Ridge and positive = False (still fit_intercept = False) which gave me a little improvement. To have a robust ensemble, I trained all my models on 3 repeated kfold, and select by CV the features for my ensemble.
+
+At the end of week 2, I made a submssion with a blind blend using https://www.kaggle.com/code/mfmfmf3/autogluon-starter output. I had a .86939 public score better than .96934 my previous one. Few days later, I had a first complete oofs file from AutoGluon. Then I fitted carefully a new ensemble, and get .86941 score at the end of week 3.
+
+Then I decided to get 3 oofs AutoGluon files and to fit AutoGluon with some other features (3 more oofs). I trained in parallel autogluon here to get 6 oofs files. And then I fitted my final ensemble which score .86943 on public LB. 
+
+In conclusion, I have success by combining :
+
+
+
+EDA
+
+feature engineering
+
+variety of GBM
+
+AutoGluon
+
+a strong CV for my Ridge ensemble
+
+
+I'm proud to have made only 2 submissions between the 18th of may and the end, to win on public and private LB. My CV was highly reliable to public LB since the first day, I trusted my CV and didn't need to submit.
+
+My final ensemble is available here https://www.kaggle.com/code/adaubas/pss4e05-ensemble-with-ridge.
+
+I'm so happy ! Waouh
+
+Comments:
+├─ Vikram12301 (2024-06-12 05:51:22.693000) [+3]
+│  Hey, Can you explain how finding sum of the features as a single poisson distribution help you?
+├─ Krens (2024-06-06 12:06:51.463000) [+3]
+│  Congratulations on your 1st place win! Your detailed explanation and transparency about the process are incredibly valuable for the community.
+│  
+│  Your approach of using an ensemble adjusted with ridg...
+├─ Nick Erickson (2024-06-03 21:29:06.277000) [+3]
+│  Congrats @adaubas on the win, and welcome to the AutoGluon Hall of Fame!
+  ├─ aldparis (2024-06-04 20:35:14.047000) [+3]
+  │  Hi @innixma,
+  │  
+  │  Thank you for the link !  and the citation : it's you of course ? 😀
+  │  
+  │  Even if AutoGluon kept me busy the last 2 weeks (how to get oof predictions ?), and even if I admit that I am chan...
+├─ Tilii (2024-06-01 01:06:18.343000) [+3]
+│  Great job and thank you for a detailed explanation.
+│  
+│  I don't think it was Ridge or positive=True that were particularly important here. We are talking about miniscule differences on the 5th decimal...
+  ├─ aldparis (2024-06-01 04:39:29.940000) [+2]
+  │  Thank you @tilii7,
+  │  
+  │  I really got CV improvement by using Ridge instead of LinearRegression, by using positive = False instead of positive = True, in this competition for this dataset. I can't expla...
+├─ SSS (2024-06-01 00:53:39.953000) [+4]
+│  That's a lot of sweat, literally squeezed atoms.
+│  Fact check:  the man from France predicts floods 0.00007 (actually fits R2) more accurate than anybody else. :)
+  ├─ kartikey bartwal (2024-06-01 02:34:43.890000) [+1]
+  │  You're amazing too!!!
+  │  The best part is this healthy competition on Kaggle. The competition is tight (everyone competing to increase R2 by 0.002) but everyone is regardless are so heartwarming and c...
+    ├─ aldparis (2024-06-01 04:42:21.297000) [+0]
+    │  thank you @kartikeybartwal ,
+  ├─ aldparis (2024-06-01 04:40:42.867000) [+2]
+  │  Thank you @sergiosaharovskiy ,
+  │  
+  │  you are right ! about sweat and sqeezed atoms,
+├─ Ivan Radko (2024-07-07 08:47:46.480000) [+1]
+│  Hi, thank you very much for this post! I want to ask about Poisson distribution. How did you detect that sum of features have Poisson distribution? I used the Kolmogorov-Smirnov test and p-value &l...
+  ├─ aldparis (2024-07-07 08:53:28.573000) [+0]
+  │  Hi @ivanrad17 ,
+  │  
+  │  It was admitted since the beginning of the competition that columns looked like Poisson : https://www.kaggle.com/competitions/playground-series-s4e5/discussion/499244
+├─ Pran (2024-06-14 08:52:53.520000) [+1]
+│  Congrats!!!
+├─ Muhammad Azeem (2024-06-09 02:21:27.080000) [+1]
+│  Congratulations on your win @adaubas
+├─ Fatima Azfar Ziya (2024-06-09 00:17:06.790000) [+1]
+│  Congratulations! This writeup was very insightful and helpful.
+├─ Abdulaziz Ergashev (2024-06-08 07:14:10.707000) [+1]
+│  Congrats on your win @adaubas
+├─ Muhammad Azeem (2024-06-07 11:28:29.983000) [+1]
+│  Congratulations on your 1st place win! Your detailed breakdown of the process is incredibly insightful.
+│  
+│  Your strategy of using an ensemble adjusted with ridge regression, and combining models from...
+├─ sihe blu (2024-06-06 13:28:44.210000) [+1]
+│  Congratulations! 🎉🎉
+├─ George Papachristou (2024-06-04 15:00:04.933000) [+1]
+│  Congratulations🎉🏆 @adaubas!! Nice explaination!! I have a question about the following Few days later, I had a first complete oofs file from AutoGluon. Then I fitted carefully a new ensemble, and g...
+  ├─ aldparis (2024-06-04 16:45:26.287000) [+0]
+  │  Hi @mscgeorges 
+  │  I made public my autogluon notebook, I hope everything is explained inside : 
+  │  
+  │  https://www.kaggle.com/code/adaubas/pss4e05-copy-autogluon-starter
+├─ Willy Wang (2024-06-03 13:56:49.113000) [+1]
+│  I first learned about permutation feature importance. Thanks for sharing~~
+├─ Light_Shot (2024-06-03 05:55:58.483000) [+1]
+│  Very nice. Congratulations. It requires lots of efforts.
+├─ Mubashir Ahmed Siddiqui (2024-06-03 04:25:15.663000) [+1]
+│  congratulations!
+├─ sun9sun9 (2024-06-02 13:25:30.670000) [+1]
+│  Congratulations! Thank you for sharing your solution.  I believe your effort is enough to take first place.
+├─ Paulo Robinson Giaciani (pt-BR) (2024-06-02 02:11:53.683000) [+1]
+│  Congratulations! 👏🏻👏🏻👏🏻👏🏻
+├─ Muhammed Tausif (2024-06-01 21:35:41.907000) [+1]
+│  Congratulations indeed. @adaubas
+├─ Yan Teixeira (2024-06-01 15:18:55.983000) [+1]
+│  Congratulations, my friend! You were very strong throughout the competition. Thank you for the amazing wrap-up.
+  ├─ aldparis (2024-06-01 17:14:26.117000) [+1]
+  │  Thanks @yantxx for the compliment,
+├─ Mart Preusse (2024-06-01 13:24:21.723000) [+1]
+│  Thanks for sharing your solution in such detail, @adaubas . The victory is well earned.
+├─ bhaskar9221 (2024-06-01 12:06:04.643000) [+1]
+│  Congratuations for the win :) !
+│  I am currently a newbie in ML, and after participation in this competition was really helpful for me. I learned a lot from people like you sharing and discussing and...
+├─ turtle (2024-06-01 04:41:01.797000) [+1]
+│  @adaubas Congratulations for securing 1st! Thanks for sharing your solution.
+├─ Cristhian Ccala H. (2024-06-01 03:55:32.140000) [+1]
+│  Congratulations on your victory! Your dedication and focus on EDA and feature engineering are truly inspiring. Thank you for sharing your process; it will be very helpful to the community. Enjoy yo...
+  ├─ aldparis (2024-06-01 04:51:02.317000) [+4]
+  │  Thank you @cristhianccalah , happy that my words are inspiring, i'm really convinced,
+  │  
+  │  I'd rather spend my time on EDA and feature engineering and CV than waste time to try many several blind blend...
+├─ lash_fire (2024-06-01 03:12:39.730000) [+1]
+│  Firstly,Congratulations🥇!
+│  Thanks for this detailed and comprehensive solution. 
+│  I particularly love exploring the EDA and Feature Engineering parts; they were truly fascinating. I wish I had spent ...
+  ├─ aldparis (2024-06-01 04:55:55.183000) [+1]
+  │  thank you @lashfire 
+  │  
+  │  it was a pleasure too to compete against you, you and @mdoroch were really challenging !
+  │  
+  │  I hesitated to contact @mdoroch when he was looking for a teammate ! You two were a g...
+├─ kartikey bartwal (2024-06-01 02:32:24.590000) [+1]
+│  Woah. I always studied in machine learning books that one must follow this kind of a mindset to build models. However, I felt that this is way beyond my scope. 
+│  Your work gave me clarity and I feel...
+  ├─ aldparis (2024-06-01 05:17:10.723000) [+3]
+  │  Thank you again @kartikeybartwal 
+  │  
+  │  You know python, you read machine learning books : it's not beyond your scope ! 
+  │  You just need time, sweat and curiosity.
+  │  
+  │  My way to do statistical learning is in...
+├─ Matt OP (2024-06-01 01:42:12.113000) [+1]
+│  Because this dataset contains a sum of Poisson distributions, the winner of this competition had to be from France. 
+│  
+│  
+│  Haha, great work @adaubas, congratulations on 1st! Thanks for sharing your sol...
+├─ OMID BAGHCHEH SARAEI (2024-06-01 00:44:01.153000) [+1]
+│  All that hard work paid off! Huge congrats on your 1st place finish.
+  ├─ aldparis (2024-06-01 05:19:51.403000) [+1]
+  │  yes @omidbaghchehsaraei ,
+  │  i should be a little bit crazy to dig so deeply to obtain .000002 R2 improvement in my CV !
+├─ S Novi (2024-06-14 13:30:58.283000) [+2]
+│  Congratulations for getting !st Place in Kaggle Competitions @adaubas
+├─ [deleted] (2024-06-10 11:55:28.007000) [+2]
+│  [deleted]
+├─ [deleted] (2024-06-08 01:30:57.863000) [+2]
+│  [deleted]
+  ├─ [deleted] (2024-06-08 08:33:53.003000) [+6]
+  │  [deleted]
+    ├─ [deleted] (2024-06-09 02:09:38.533000) [+1]
+    │  [deleted]
+├─ [deleted] (2024-06-04 11:54:00.590000) [+2]
+│  [deleted]
+├─ [deleted] (2024-06-04 02:58:13.193000) [+2]
+│  [deleted]
+├─ [deleted] (2024-06-03 06:08:00.707000) [+2]
+│  [deleted]
+├─ [deleted] (2024-06-01 00:43:22.613000) [+2]
+│  [deleted]
+  ├─ [deleted] (2024-06-01 05:18:16.193000) [+1]
+  │  [deleted]
+├─ [deleted] (2024-07-24 16:04:13.090000) [+0]
+│  [deleted]
+├─ [deleted] (2024-07-06 14:01:33.597000) [+0]
+│  [deleted]
+├─ [deleted] (2024-07-01 22:33:22.843000) [+0]
+│  [deleted]
+├─ [deleted] (2024-06-17 15:32:46.900000) [+0]
+│  [deleted]
+├─ [deleted] (2024-06-17 02:46:33.223000) [+0]
+│  [deleted]
+├─ [deleted] (2024-06-09 08:52:49.100000) [+0]
+│  [deleted]
+├─ [deleted] (2024-06-04 13:32:30.783000) [+4]
+│  [deleted]
+├─ [deleted] (2024-06-03 20:50:07.700000) [+1]
+│  [deleted]

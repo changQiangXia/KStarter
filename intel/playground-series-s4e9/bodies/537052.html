@@ -1,0 +1,79 @@
+<p>Did I really made it to the top? I am still surprised and excited.</p>
+<p><strong>Way to the solution:</strong> I spent the first two weeks with reading the discussions, playing around with catboost and publishing an ensemble. The plan was to collect diverse models and ensemble them with Ridge, with the same pipeline I used in <a href="https://www.kaggle.com/code/martinapreusse/ps4e9-cat-svr-lgbm-nn-py" target="_blank">this notebook</a>. The final ensemble, which I chose as my first final submission, would have landed me on the second place and differed from the notebook in the following points:</p>
+<ul>
+<li>I used 20 cv folds</li>
+<li>I included original data in some of the models (even two times in LGBM)</li>
+<li>I did compute a SVR with a rbf kernel as suggested by <a href="https://www.kaggle.com/siukeitin" target="_blank">broccoli beef</a> in <a href="https://www.kaggle.com/competitions/playground-series-s4e9/discussion/532997" target="_blank">this discussion post</a> instead of the linear SVR.</li>
+<li>I included all categorical features additionally as target encoded to catboost, but I used the median, not the mean for target encoding. I did this leakfree, meaning that I recomputed the targetencoded columns in each fold. Moreover, I used Catboost as classifier, not as regressor. Catboost predicted the outlier prices (see function <code>bin_price</code>). The hyperparameters were found by optuna. The oof predictions were not used in the ensemble. They were used as an additional feature in a LGBM (or the NN for my second final submission).</li>
+</ul>
+<pre><code> ():
+    df = data.copy()
+    
+    Q1 = np.percentile(df[], )
+    Q3 = np.percentile(df[], )
+    IQR = Q3 - Q1
+
+    
+    lower_bound = Q1 -  * IQR
+    upper_bound = Q3 +  * IQR
+
+    
+    outliers = df[(df[] &gt; upper_bound)]
+    df[] = (df[] &lt; upper_bound).astype()
+
+     df
+
+cat_params2 = {
+    :,
+    : ,
+    :  ,
+    : cat_cols,
+    : , 
+    : , 
+    : , 
+    : , 
+    : , 
+    : , 
+     : , 
+    : 
+}
+</code></pre>
+<ul>
+<li>I included the catboost oof predictions as an additional feature for LGBM</li>
+<li>I used a second LGBM (LGBM5), where I label encoded all categorical data (rare categories summarized in a category "rare" as done with the NN in the notebook) and raised max_bin.</li>
+</ul>
+<pre><code>lgb_params = {
+     : -,
+    :,
+    :,
+    : , 
+    : ,
+}
+</code></pre>
+<ul>
+<li>I included fastai computations from Autogluon (with a nested cv over 20 folds to be 100% leakfree)</li>
+</ul>
+<pre><code> predictor = TabularPredictor(label=,
+                             eval_metric=,
+                             problem_type=).fit(X_train,
+                                                       pseudo_data = data_original, 
+                                                       num_bag_folds = ,
+                                                       num_bag_sets = ,
+                                                       time_limit=,
+                                                       included_model_types = [], 
+                                                       keep_only_best = ,
+                                                       presets=,
+                                                      )
+</code></pre>
+<p>I ended up with a crossvalidation score of 72300 and the following models (_st means that the catboost oofs are included):<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F14073668%2F2beee1d32de39748f1ad69cae183d39f%2FEnsemble_weights_final.png?generation=1727769577399049&amp;alt=media" alt=""><br>
+The crossvalidation scores of the individual models were:<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F14073668%2F7e4d7c1ba7e42a17a45adf8f8d26911d%2Fensemble_scores.png?generation=1727784075610370&amp;alt=media" alt=""></p>
+<p><strong>First place solution</strong>: I needed a second final submission and I decided spontanously on the last day to submit <a href="https://www.kaggle.com/code/yekenot/ps-s4-e9-deeptables-nn-starter" target="_blank">a forked notebook </a> from <a href="https://www.kaggle.com/yekenot" target="_blank">Vladimir Demidov</a>. I noticed that his NN is robust to changes, so I added four numerical features: the SVR oof predictions, the LGBM5 oof predictions, the CatboostClassifier oof predictions and XGB predictions (derived from publicy available hyperparameters, unfortunatly I forgot the source). The NN ensemble had a crossvalidation score of 72468, but in the end was better than the Ridge ensemble.</p>
+<p>My thanks obviously go to <a href="https://www.kaggle.com/yekenot" target="_blank">@yekenot</a> , <a href="https://www.kaggle.com/siukeitin" target="_blank">@siukeitin</a> , <a href="https://www.kaggle.com/noodl35" target="_blank">@noodl35</a> (LGBM hyperparameters), who directly provided parts of the code I used. I also provited strongly from the discussions, especially the AutoML solution threads and the posts from <a href="https://www.kaggle.com/tilii7" target="_blank">@tilii7</a> and <a href="https://www.kaggle.com/roberthatch" target="_blank">@roberthatch</a> where I got the idea for outlier classification and <a href="https://www.kaggle.com/cdeotte" target="_blank">@cdeotte</a> who made the entrance to NNs simple for me. I am also very grateful to all who are participating lively in the discussions so that learning is a fulfilling experience.</p>
+<p><strong>What did not work:</strong> I experimented with a lot of models, but most of them did not help me to get a better cross-validation score. Especially XGB did not work for me and although it is accidently included in my final submission I do not think that it was a crucial part of the ensemble.<br>
+Feature engineering was at least partly working, but all the amazing features introduced by Chris Deotte in <a href="https://www.kaggle.com/competitions/playground-series-s4e9/discussion/533961" target="_blank">this post</a> did not work for me.</p>
+<p>The corresponding crossvalidation - leaderboard scores in a scatterplot:<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F14073668%2Fe8c3e23e6b5633d467f41ba890981739%2Fcv_lb_scores.png?generation=1727855180706257&amp;alt=media" alt=""></p>
+<p><strong>Edit:</strong> I included the CatBoostClassifier, LGBM1_st and LGBM5_st in <a href="https://www.kaggle.com/code/martinapreusse/ps4e9-cat-svr-lgbm-nn-py" target="_blank">my notebook</a>. This notebook has a private score of 62957.83525 and would have reached a place within the top three.</p>
+<p><strong>Edit 2:</strong> Autogluon, when using <code>TabularPredictor.fit()</code>, is not using the original data. To use the original data, one has to call <code>TabularPredictor.fit_pseudolabel()</code>. So my Fastai - AutoGluon predictions were not using the original data. For a nice reference of how to use AutoGluon with original data and with a predefined stratification see this great <a href="https://www.kaggle.com/code/ravaghi/s04e10-loan-approval-prediction-autogluon/comments#3010042" target="_blank">notebook</a> of <a href="https://www.kaggle.com/ravaghi" target="_blank">Mahdi Ravaghi</a> for the next playground competition.</p>

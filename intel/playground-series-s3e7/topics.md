@@ -1,0 +1,46 @@
+# playground-series-s3e7 讨论区（按票数排序，共 44 条）
+
+- [1st place solution](https://www.kaggle.com/competitions/playground-series-s3e7/discussion/390976) — 57 票 / 16 评论 / 2023-02-28 **write-up?**
+- [Starter materials](https://www.kaggle.com/competitions/playground-series-s3e7/discussion/386628) — 44 票 / 22 评论 / 2023-02-14 
+- [Leaked data explotation](https://www.kaggle.com/competitions/playground-series-s3e7/discussion/388851) — 38 票 / 15 评论 / 2023-02-19 
+- [2nd Place Solution](https://www.kaggle.com/competitions/playground-series-s3e7/discussion/390956) — 34 票 / 9 评论 / 2023-02-28 **write-up?**
+- [Fix your date anomalies like a boss](https://www.kaggle.com/competitions/playground-series-s3e7/discussion/386655) — 29 票 / 15 评论 / 2023-02-14 
+- [3rd Place Solution](https://www.kaggle.com/competitions/playground-series-s3e7/discussion/390979) — 28 票 / 11 评论 / 2023-02-28 **write-up?**
+- [The Cancelation Cycles](https://www.kaggle.com/competitions/playground-series-s3e7/discussion/386647) — 26 票 / 4 评论 / 2023-02-14 
+- [🧐 Look out for weird data points 🧐](https://www.kaggle.com/competitions/playground-series-s3e7/discussion/386641) — 20 票 / 13 评论 / 2023-02-14 
+- [Collection of helpful ideas - S3E7](https://www.kaggle.com/competitions/playground-series-s3e7/discussion/388633) — 19 票 / 9 评论 / 2023-02-18 
+- [My experiment results and progression](https://www.kaggle.com/competitions/playground-series-s3e7/discussion/386687) — 17 票 / 12 评论 / 2023-02-14 
+- [Conflicting booking_status - duplicates strike again](https://www.kaggle.com/competitions/playground-series-s3e7/discussion/386686) — 16 票 / 11 评论 / 2023-02-14 
+- [4th Place Solution (Simple)](https://www.kaggle.com/competitions/playground-series-s3e7/discussion/390962) — 15 票 / 2 评论 / 2023-02-28 **write-up?**
+- [Use More Than Just the Original Dataset](https://www.kaggle.com/competitions/playground-series-s3e7/discussion/386788) — 15 票 / 5 评论 / 2023-02-14 
+- [9th Place Solution XGB stack](https://www.kaggle.com/competitions/playground-series-s3e7/discussion/390961) — 12 票 / 4 评论 / 2023-02-28 **write-up?**
+- [Bookings with Zero Nights Booked](https://www.kaggle.com/competitions/playground-series-s3e7/discussion/388049) — 12 票 / 4 评论 / 2023-02-15 
+- [5 model in R with very good performace (Best - 0.9127 with CatBoost)](https://www.kaggle.com/competitions/playground-series-s3e7/discussion/387886) — 11 票 / 1 评论 / 2023-02-15 
+- [Observations of my first 5 submission](https://www.kaggle.com/competitions/playground-series-s3e7/discussion/388492) — 11 票 / 5 评论 / 2023-02-17 
+- [Data Leak Code Snippet](https://www.kaggle.com/competitions/playground-series-s3e7/discussion/388992) — 11 票 / 3 评论 / 2023-02-20 
+- [Another Footprint of Human Behavior](https://www.kaggle.com/competitions/playground-series-s3e7/discussion/388086) — 10 票 / 3 评论 / 2023-02-15 
+- [low avg_price_per_room values... what to do with these reservartions?](https://www.kaggle.com/competitions/playground-series-s3e7/discussion/387962) — 9 票 / 10 评论 / 2023-02-15 
+- [Results as far.](https://www.kaggle.com/competitions/playground-series-s3e7/discussion/388574) — 8 票 / 0 评论 / 2023-02-18 
+- [Feature Description](https://www.kaggle.com/competitions/playground-series-s3e7/discussion/386629) — 8 票 / 1 评论 / 2023-02-14 
+- [Prior probability of cancellation](https://www.kaggle.com/competitions/playground-series-s3e7/discussion/388078) — 7 票 / 7 评论 / 2023-02-15 
+- [Partial Dependence Plot (PDP). PartialDependenceDisplay. ](https://www.kaggle.com/competitions/playground-series-s3e7/discussion/387876) — 7 票 / 2 评论 / 2023-02-15 
+- [15th place solution](https://www.kaggle.com/competitions/playground-series-s3e7/discussion/390977) — 7 票 / 0 评论 / 2023-02-28 **write-up?**
+- [Keras | DNN | Classification Steps](https://www.kaggle.com/competitions/playground-series-s3e7/discussion/388079) — 7 票 / 3 评论 / 2023-02-15 
+- [Last Minute Checklist!](https://www.kaggle.com/competitions/playground-series-s3e7/discussion/390911) — 6 票 / 1 评论 / 2023-02-27 
+- [New to Machine Learning or Kaggle?](https://www.kaggle.com/competitions/playground-series-s3e7/discussion/380699) — 5 票 / 1 评论 / 2023-01-23 
+- [Records with adults== 0 and children == 0 ?](https://www.kaggle.com/competitions/playground-series-s3e7/discussion/389264) — 5 票 / 2 评论 / 2023-02-21 
+- [All The Best Guys  👍](https://www.kaggle.com/competitions/playground-series-s3e7/discussion/390908) — 5 票 / 1 评论 / 2023-02-27 
+- [What Country Is this Hotel Based In?](https://www.kaggle.com/competitions/playground-series-s3e7/discussion/390292) — 4 票 / 5 评论 / 2023-02-24 
+- [I have used Azure Machine Learning Studio and Azure Auto ML for identifying the best result. The Best Model identified is XGBoost Classifier as the best Model. With the DataPipe Line Created](https://www.kaggle.com/competitions/playground-series-s3e7/discussion/389851) — 4 票 / 0 评论 / 2023-02-23 
+- [Model evaluation with pycaret](https://www.kaggle.com/competitions/playground-series-s3e7/discussion/388097) — 4 票 / 1 评论 / 2023-02-16 
+- [Some suggestions related to my approach](https://www.kaggle.com/competitions/playground-series-s3e7/discussion/388790) — 3 票 / 1 评论 / 2023-02-19 
+- [Found several valuable interactions. But the dates?](https://www.kaggle.com/competitions/playground-series-s3e7/discussion/388218) — 3 票 / 0 评论 / 2023-02-16 
+- [2018 was not a Leap year ](https://www.kaggle.com/competitions/playground-series-s3e7/discussion/386636) — 3 票 / 0 评论 / 2023-02-14 
+- [Secondary Research | Business Understanding](https://www.kaggle.com/competitions/playground-series-s3e7/discussion/390617) — 2 票 / 0 评论 / 2023-02-26 
+- [Feature Engineering Temporal Patterns](https://www.kaggle.com/competitions/playground-series-s3e7/discussion/389159) — 2 票 / 0 评论 / 2023-02-21 
+- [Need clarification on field values](https://www.kaggle.com/competitions/playground-series-s3e7/discussion/388812) — 1 票 / 1 评论 / 2023-02-19 
+- [Probability or predicted class?](https://www.kaggle.com/competitions/playground-series-s3e7/discussion/386850) — 1 票 / 1 评论 / 2023-02-14 
+- [Need help to resolve issues and improve the analysis and ML models](https://www.kaggle.com/competitions/playground-series-s3e7/discussion/390248) — 0 票 / 2 评论 / 2023-02-24 
+- [Avg room Price query](https://www.kaggle.com/competitions/playground-series-s3e7/discussion/389249) — 0 票 / 1 评论 / 2023-02-21 
+- [Kaggle Expert](https://www.kaggle.com/competitions/playground-series-s3e7/discussion/421232) — 0 票 / 0 评论 / 2023-07-04 
+- [Submission Question](https://www.kaggle.com/competitions/playground-series-s3e7/discussion/386650) — 0 票 / 1 评论 / 2023-02-14 

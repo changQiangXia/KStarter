@@ -1,0 +1,68 @@
+# playground-series-s3e18 讨论区（按票数排序，共 66 条）
+
+- [Starting materials and adjutant resources ](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/419645) — 52 票 / 24 评论 / 2023-06-27 
+- [Domain Knowledge Regarding the Data](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/419646) — 48 票 / 20 评论 / 2023-06-27 
+- [Mid summary: Everything you need to know for the second half of the competition](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/421462) — 41 票 / 2 评论 / 2023-07-05 
+- [Not "multi-label", but two competitions in one](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/420127) — 39 票 / 14 评论 / 2023-06-29 
+- [ Enzyme Promiscuity Prediction (EPP)](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/419659) — 33 票 / 5 评论 / 2023-06-27 
+- [Feature Engineering Ideas](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/420438) — 32 票 / 26 评论 / 2023-06-30 
+- [You won't guess my best single model for EC2](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/420822) — 30 票 / 24 评论 / 2023-07-02 
+- [11th place solution](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/423642) — 24 票 / 11 评论 / 2023-07-11 **write-up?**
+- [Implementing the metric optimally](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/421149) — 23 票 / 8 评论 / 2023-07-04 
+- [New to Machine Learning or Kaggle?](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/409893) — 13 票 / 26 评论 / 2023-05-13 
+- [Less is perhaps more for EC2](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/421210) — 13 票 / 7 评论 / 2023-07-04 
+- [1st Place Winning Solution](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/432011) — 11 票 / 3 评论 / 2023-08-15 **write-up?**
+- [@onurkoc83 , Congrats on Becoming NoteBook Master](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/421941) — 11 票 / 7 评论 / 2023-07-07 
+- [Multilabel Cross-Validation for Starters](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/419702) — 11 票 / 4 评论 / 2023-06-27 
+- [Tips, techniques  & how not to overfit.](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/419691) — 8 票 / 5 评论 / 2023-06-27 
+- [Fishing outliers](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/419999) — 8 票 / 7 评论 / 2023-06-28 
+- [Adversarial validation ensures it's okay to include the original dataset](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/419685) — 8 票 / 5 评论 / 2023-06-27 
+- [Did this happen to you?](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/423641) — 7 票 / 7 评论 / 2023-07-11 
+- [Lots of almost perfectly correlated features in train dataset](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/419914) — 7 票 / 7 评论 / 2023-06-28 
+- [There are values in fr_COO and fr_COO2 that appear in test data but NOT in training data](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/419651) — 7 票 / 7 评论 / 2023-06-27 
+- [Collection of helpful ideas - S3E18](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/421084) — 6 票 / 4 评论 / 2023-07-03 
+- [AUC Evaluation Strategies S3E18](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/420201) — 6 票 / 4 评论 / 2023-06-29 
+- [Using EC3-EC6 for predicting EC1 and EC2](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/419964) — 5 票 / 3 评论 / 2023-06-28 
+- [4 More Different Ways to Create Balanced Multi-Label Datasets ,Training & Evaluation With Code Samples](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/421366) — 5 票 / 1 评论 / 2023-07-05 
+- [Direction for improvement of EC2 score](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/421743) — 4 票 / 6 评论 / 2023-07-06 
+- [Postprocessing EC1, EC2 with KMeans clustering](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/421485) — 4 票 / 7 评论 / 2023-07-05 
+- [ 'EC3', 'EC4', 'EC5', 'EC6' in Train data and not in Test data](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/419721) — 4 票 / 2 评论 / 2023-06-27 
+- [Binary relevance method for multi-label classification problems](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/419650) — 3 票 / 2 评论 / 2023-06-27 
+- [Negative hydrogen count?](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/420455) — 3 票 / 9 评论 / 2023-06-30 
+- [Area Under ROC Curve TP S3E18](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/419781) — 3 票 / 3 评论 / 2023-06-27 
+- [How to submit the submission.csv file.](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/421158) — 3 票 / 4 评论 / 2023-07-04 
+- [Things To Remember Before Selecting Final Submissions](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/421520) — 3 票 / 0 评论 / 2023-07-05 
+- [Tips on getting top 5 results](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/421543) — 3 票 / 1 评论 / 2023-07-05 
+- [Strange pattern of deleted entries](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/423714) — 3 票 / 4 评论 / 2023-07-11 
+- [Late Submissions Disabled](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/454621) — 2 票 / 0 评论 / 2023-11-10 
+- [Predict [EC1,EC2] Using TSNE - Features! CV-64.12](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/420901) — 2 票 / 4 评论 / 2023-07-03 
+- [This competition does provide ranking?](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/420870) — 2 票 / 12 评论 / 2023-07-03 
+- [Feature Selection and outliers detection.](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/421395) — 2 票 / 5 评论 / 2023-07-05 
+- [E1 and E2 are true at the same time?](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/419813) — 2 票 / 3 评论 / 2023-06-27 
+- [Fast prototyping with automl](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/419876) — 2 票 / 0 评论 / 2023-06-28 
+- [How far can we go with conditional probabilities?](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/419864) — 2 票 / 0 评论 / 2023-06-28 
+- [How far did I get with automl and what was the overall experience?](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/423667) — 2 票 / 0 评论 / 2023-07-11 
+- [Log Transformation of Skewed Variables.](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/420044) — 1 票 / 8 评论 / 2023-06-29 
+- [Seeking Peer Review Please❤️](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/419973) — 1 票 / 13 评论 / 2023-06-28 
+- [Has anyone worked previously with Scikit-multilearn ???](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/419950) — 1 票 / 2 评论 / 2023-06-28 
+- [the results of filling out the outliers.](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/420242) — 1 票 / 8 评论 / 2023-06-29 
+- [Multi-label to Multi-class](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/419845) — 1 票 / 3 评论 / 2023-06-27 
+- [Problem Statement Understanding in easy words](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/419690) — 1 票 / 4 评论 / 2023-06-27 
+- [Is it a problem if you have different enzymes having different roc_auc score?](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/420150) — 1 票 / 8 评论 / 2023-06-29 
+- [How to proceed on multi column target ?](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/419858) — 1 票 / 14 评论 / 2023-06-28 
+- [Sequential Feature selection technique](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/421720) — 1 票 / 2 评论 / 2023-07-06 
+- [Will we get penalized due to EC2?](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/422095) — 1 票 / 0 评论 / 2023-07-08 
+- [I want more knowledge on how to reduce rmse of a model . Can someone share some tips or links for it](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/421675) — 1 票 / 3 评论 / 2023-07-06 
+- [Custom CV vs Kaggle LB](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/420649) — 0 票 / 1 评论 / 2023-07-01 
+- [How to use lightgbm classifier for multi-label target ?](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/420040) — 0 票 / 3 评论 / 2023-06-29 
+- [Balanced loss and covariate shift respect to test set](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/420839) — 0 票 / 3 评论 / 2023-07-02 
+- [Feature selection techniques.](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/421173) — 0 票 / 4 评论 / 2023-07-04 
+- [why squared_hinge make AUC 0.5](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/420978) — 0 票 / 7 评论 / 2023-07-03 
+- [How to get score close to  public 0.68?](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/420903) — 0 票 / 4 评论 / 2023-07-03 
+- [Evaluation Exception: The SSL connection could not be established, see inner exception.](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/420347) — 0 票 / 2 评论 / 2023-06-30 
+- [Feature Selection : using RFE or Backward Elimination?](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/420265) — 0 票 / 1 评论 / 2023-06-30 
+- [EC1 and EC2 best feature.](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/421876) — 0 票 / 4 评论 / 2023-07-07 
+- [Some data shows HeavyAtomMolWt far larger than ExactMolWt](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/421921) — 0 票 / 6 评论 / 2023-07-07 
+- [-666 Watch out for trains to hell!](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/419692) — 0 票 / 5 评论 / 2023-06-27 
+- [Competition strategies include feature engineering, model selection, and data cleaning.](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/423679) — 0 票 / 3 评论 / 2023-07-11 
+- [Hello , Can you please help me with this assignment i got , How do i get features from other skill column](https://www.kaggle.com/competitions/playground-series-s3e18/discussion/422054) — -5 票 / 6 评论 / 2023-07-08 

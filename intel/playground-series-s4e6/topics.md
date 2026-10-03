@@ -1,0 +1,82 @@
+# playground-series-s4e6 讨论区（按票数排序，共 80 条）
+
+- [Finding out whether two models in this competition are likely to ensemble well](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/512220) — 70 票 / 31 评论 / 2024-06-14 
+- [The two most important features](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/509073) — 61 票 / 20 评论 / 2024-06-01 
+- [6th Place Solution: Many model ensembles were detrimental?](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/515989) — 55 票 / 23 评论 / 2024-07-01 **write-up?**
+- [References - Playground episode 6](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/509053) — 38 票 / 6 评论 / 2024-06-01 
+- [[AutoML Grand Prix (Pt. 2)] Solution writeup](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/509642) — 36 票 / 21 评论 / 2024-06-03 **write-up?**
+- [Public Rank -> 333 and Private Rank -> 61 ](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/515976) — 35 票 / 10 评论 / 2024-07-01 
+- [Students Dropouts: effects, impact on their peers. Re-enrolling same field. Changing university and field.](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/509046) — 35 票 / 8 评论 / 2024-06-01 
+- [Blending/Weghted/Ensemble Public Submissions](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/510607) — 34 票 / 33 评论 / 2024-06-06 
+- [Outlier detection to boost the score](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/511076) — 34 票 / 20 评论 / 2024-06-09 
+- [[AutoML Grand Prix] June2024 Approach writeup - team ravi20076](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/509665) — 32 票 / 6 评论 / 2024-06-03 **write-up?**
+- [1st Place Second AutoML Grand Prix [Team AutoML Grandmasters] ](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/509631) — 32 票 / 30 评论 / 2024-06-03 **write-up?**
+- [3rd place solution: a single xgb model](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/515983) — 30 票 / 30 评论 / 2024-07-01 **write-up?**
+- [More abstract art by dimensionality reduction](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/510601) — 30 票 / 11 评论 / 2024-06-06 
+- [What about another Data-Centric Competition on Playground? Last one took place 10 months ago.](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/513364) — 29 票 / 11 评论 / 2024-06-19 
+- [Determining which features are *really* categorical](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/510808) — 28 票 / 23 评论 / 2024-06-07 
+- [The AutoML Grand Prix portion of this competition is over.](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/509794) — 26 票 / 20 评论 / 2024-06-03 
+- [The impact of random seeds](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/509949) — 25 票 / 13 评论 / 2024-06-04 
+- [10th Place Solution](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/515980) — 23 票 / 6 评论 / 2024-07-01 **write-up?**
+- [Not every Dropout is a Failure. Sometimes it leads to Success in another field. Elite education matters.](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/509567) — 23 票 / 2 评论 / 2024-06-03 
+- [How to get a better model from a good and not so good (bad?) model](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/514624) — 22 票 / 10 评论 / 2024-06-25 
+- [Auto Gluon || Install Error Solutions ](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/509399) — 21 票 / 7 评论 / 2024-06-02 **write-up?**
+- [Starting materials and references - AutoML episode 2](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/509041) — 20 票 / 1 评论 / 2024-06-01 
+- [See how neural network learns to classify the data](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/509814) — 20 票 / 3 评论 / 2024-06-03 
+- [Visualizing the churn](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/515978) — 19 票 / 4 评论 / 2024-07-01 
+- [And now, the end is near...](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/515441) — 19 票 / 17 评论 / 2024-06-28 
+- [You can go with "mode", but old-school ensembling works fine](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/513881) — 19 票 / 2 评论 / 2024-06-22 
+- [1st Place solution was ....](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/516282) — 18 票 / 12 评论 / 2024-07-02 **write-up?**
+- [Target distribution of the public LB](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/509330) — 18 票 / 5 评论 / 2024-06-02 
+- [Removing unnecessary feature by using permutation importance](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/511465) — 18 票 / 12 评论 / 2024-06-10 
+- [Can KNeighborsClassifier be competitive?](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/510016) — 18 票 / 3 评论 / 2024-06-04 
+- [What's the lesson here?](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/515974) — 17 票 / 8 评论 / 2024-07-01 
+- [[AutoML Grand Prix (Month 2)] Solution Write Up!](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/511712) — 17 票 / 11 评论 / 2024-06-11 **write-up?**
+- [UCI ML Original Dataset and some extra](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/509057) — 16 票 / 7 评论 / 2024-06-01 
+- [Blending for multiclass classification](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/509353) — 16 票 / 15 评论 / 2024-06-02 
+- [EDA & data prep : how to deal with low numbers ? (and maintain our agility)](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/509374) — 16 票 / 15 评论 / 2024-06-02 
+- [How far would automl have gone with subnmissions from the first 24 hours?](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/516009) — 16 票 / 6 评论 / 2024-07-01 
+- [How to control standard deviation of our CV Accuracy score ?](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/510991) — 15 票 / 20 评论 / 2024-06-08 
+- [Quick access to the original dataset](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/509065) — 15 票 / 4 评论 / 2024-06-01 
+- [17th place -- comparision of solutions](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/516047) — 15 票 / 6 评论 / 2024-07-01 **write-up?**
+- [[AutoML Grand Prix] 40th place solution ](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/509710) — 14 票 / 9 评论 / 2024-06-03 **write-up?**
+- [7th place solution](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/516097) — 14 票 / 7 评论 / 2024-07-01 **write-up?**
+- [The average jump upward in the top 10 was 517 spots](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/515966) — 13 票 / 11 评论 / 2024-07-01 
+- [OpenFE  name 'exit' is not defined issue fix ](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/511179) — 12 票 / 9 评论 / 2024-06-09 
+- [This competition is eligible for the AutoML Grand Prix!](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/508469) — 12 票 / 6 评论 / 2024-05-29 
+- [Do "This" Feature make sense ?](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/514496) — 11 票 / 8 评论 / 2024-06-24 
+- [Full fit or averaging test predictions during crossvalidation?](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/512715) — 11 票 / 15 评论 / 2024-06-16 
+- [AutoML 2nd Place gambling and getting some luck](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/509316) — 11 票 / 12 评论 / 2024-06-02 **write-up?**
+- [Columns Info](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/509111) — 10 票 / 3 评论 / 2024-06-01 
+- [Thanks guys for helping each other.](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/516010) — 10 票 / 4 评论 / 2024-07-01 
+- [High MI Features and Low Model Improvement](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/513050) — 10 票 / 19 评论 / 2024-06-18 
+- [Minimizing CV-LB Gap (XGBoost)](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/512578) — 9 票 / 4 评论 / 2024-06-15 
+- [[AutoML Grand Prix] 2nd place solution](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/510147) — 9 票 / 4 评论 / 2024-06-05 **write-up?**
+- [Autogluon installation error fix](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/509258) — 9 票 / 2 评论 / 2024-06-01 
+- [Can GDP be negative？](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/509099) — 8 票 / 4 评论 / 2024-06-01 
+- [For people searching good features with better MI scores ](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/515568) — 8 票 / 5 评论 / 2024-06-28 
+- [Top118 solution](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/515973) — 8 票 / 4 评论 / 2024-07-01 **write-up?**
+- [[AutoML Grand Prix] About the first 24 hours](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/509517) — 8 票 / 10 评论 / 2024-06-02 
+- [LightGBM stacker movie](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/515617) — 8 票 / 0 评论 / 2024-06-29 
+- [So many columns should be categoricals instead of integers](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/509179) — 7 票 / 0 评论 / 2024-06-01 
+- [Submission Guide (Output in Object format)](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/509084) — 7 票 / 10 评论 / 2024-06-01 
+- [Auto ML is too strong this time](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/509313) — 7 票 / 8 评论 / 2024-06-02 
+- [MLJAR AutoML notebook created in MLJAR Studio - Python notebooks for everyone [LB:083699]](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/511372) — 7 票 / 5 评论 / 2024-06-10 
+- [[AutoML Grand Prix] June,2024 Writeup - Team Data Sharks](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/510614) — 7 票 / 0 评论 / 2024-06-06 **write-up?**
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/509052) — 6 票 / 3 评论 / 2024-06-01 
+- [SMOTE or Not?](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/514538) — 6 票 / 14 评论 / 2024-06-24 
+- [Rank: 14th | Public LB | Achieved Score:  0.84140 |  Tried AutoGluon setting the training time to 2 hours, along with feature engineering.](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/514957) — 5 票 / 2 评论 / 2024-06-26 
+- [Question-Encouraging Ensemble Diversity: Penalizing Similar Outputs](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/515028) — 5 票 / 10 评论 / 2024-06-26 
+- [[AutoML Grand Prix] 5th place solution](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/509937) — 5 票 / 3 评论 / 2024-06-04 **write-up?**
+- [Pearson or Spearman ? Also Mutual Information](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/513099) — 4 票 / 12 评论 / 2024-06-18 
+- [The years from 2008 to 2017 are the corresponding years of inflation and unemployment rates.](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/514536) — 4 票 / 1 评论 / 2024-06-24 
+- [Results as far.](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/509441) — 4 票 / 0 评论 / 2024-06-02 
+- [Mother's and Father's Education - Discrepancy](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/510350) — 4 票 / 8 评论 / 2024-06-05 
+- [Why i am still unranked after the completion of  competition?](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/516334) — 4 票 / 3 评论 / 2024-07-02 
+- [[AutoML Grand Prix] 10th place solution](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/510409) — 4 票 / 0 评论 / 2024-06-06 **write-up?**
+- [Get started here!](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/487170) — 3 票 / 5 评论 / 2024-03-27 
+- [OUT liers ...](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/513568) — 3 票 / 6 评论 / 2024-06-20 
+- [feature engineer with only lgb(0.83895)](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/510154) — 3 票 / 2 评论 / 2024-06-05 
+- [🚧 Demographic Patterns in Enrollment: Insights from Academic Success Dataset ](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/509466) — 3 票 / 0 评论 / 2024-06-02 
+- [My EDA code for the 'first minute' of the game.](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/509432) — 2 票 / 1 评论 / 2024-06-02 
+- [Categories with many levels](https://www.kaggle.com/competitions/playground-series-s4e6/discussion/509232) — 2 票 / 1 评论 / 2024-06-01 

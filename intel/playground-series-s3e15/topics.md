@@ -1,0 +1,61 @@
+# playground-series-s3e15 讨论区（按票数排序，共 59 条）
+
+- [Onboarding materials and adjutant resources](https://www.kaggle.com/competitions/playground-series-s3e15/discussion/410613) — 52 票 / 11 评论 / 2023-05-16 
+- [Feature Imputation techniques with code sample for Heat Flux Dataset](https://www.kaggle.com/competitions/playground-series-s3e15/discussion/410645) — 47 票 / 13 评论 / 2023-05-16 
+- [Basic Feature Engineering and Imputation ideas](https://www.kaggle.com/competitions/playground-series-s3e15/discussion/411353) — 31 票 / 16 评论 / 2023-05-18 
+- [The Critical Heat Flux (CHF) and its Correlations.](https://www.kaggle.com/competitions/playground-series-s3e15/discussion/410793) — 29 票 / 29 评论 / 2023-05-16 
+- [2nd place solution explained: the power of original dataset](https://www.kaggle.com/competitions/playground-series-s3e15/discussion/413826) — 29 票 / 12 评论 / 2023-05-30 **write-up?**
+- [1st Place Solution | A Diverse Ensemble ](https://www.kaggle.com/competitions/playground-series-s3e15/discussion/414048) — 26 票 / 8 评论 / 2023-05-31 **write-up?**
+- [5th Place Solution | Imputation Without Any Imputers](https://www.kaggle.com/competitions/playground-series-s3e15/discussion/413742) — 26 票 / 16 评论 / 2023-05-30 **write-up?**
+- [Features dictionary](https://www.kaggle.com/competitions/playground-series-s3e15/discussion/410693) — 25 票 / 1 评论 / 2023-05-16 
+- [14th Place Solution: hillclimbers w/ negative weights](https://www.kaggle.com/competitions/playground-series-s3e15/discussion/413749) — 22 票 / 5 评论 / 2023-05-30 **write-up?**
+- [Peculiar Findings](https://www.kaggle.com/competitions/playground-series-s3e15/discussion/412509) — 21 票 / 13 评论 / 2023-05-24 
+- [A few thoughts on missing features imputation](https://www.kaggle.com/competitions/playground-series-s3e15/discussion/413293) — 20 票 / 6 评论 / 2023-05-27 
+- [Dataset Features Explained](https://www.kaggle.com/competitions/playground-series-s3e15/discussion/410790) — 19 票 / 6 评论 / 2023-05-16 
+- [Approaching This Competition as a Beginner](https://www.kaggle.com/competitions/playground-series-s3e15/discussion/410672) — 19 票 / 2 评论 / 2023-05-16 
+- [6th place solution](https://www.kaggle.com/competitions/playground-series-s3e15/discussion/413839) — 12 票 / 1 评论 / 2023-05-30 **write-up?**
+- [Collection of helpful ideas - S3E15](https://www.kaggle.com/competitions/playground-series-s3e15/discussion/412241) — 12 票 / 7 评论 / 2023-05-22 
+- [[Compilation] Good Starter Notebooks](https://www.kaggle.com/competitions/playground-series-s3e15/discussion/412138) — 12 票 / 11 评论 / 2023-05-22 
+- [Here's a little context to help with your understanding of why CHF is important](https://www.kaggle.com/competitions/playground-series-s3e15/discussion/411153) — 12 票 / 5 评论 / 2023-05-18 
+- [Imputation with {missRanger} Package. MissForest. Missingpy Library.](https://www.kaggle.com/competitions/playground-series-s3e15/discussion/411146) — 12 票 / 6 评论 / 2023-05-17 
+- [Digging More By Using Papers on Physics-informed, ML-aided framework 🚀🚀](https://www.kaggle.com/competitions/playground-series-s3e15/discussion/410682) — 11 票 / 3 评论 / 2023-05-16 
+- [How to get initial LB with ORANGE DATA MINING's imputation without doing exhaustive coding.](https://www.kaggle.com/competitions/playground-series-s3e15/discussion/411769) — 10 票 / 4 评论 / 2023-05-21 
+- [After many Kaggle PSeries with No Missing values. Let's check Kagglers previous Imputation code. ](https://www.kaggle.com/competitions/playground-series-s3e15/discussion/410899) — 10 票 / 2 评论 / 2023-05-16 
+- [Understanding the Competition and Domain Knowledge](https://www.kaggle.com/competitions/playground-series-s3e15/discussion/411034) — 10 票 / 2 评论 / 2023-05-17 
+- [3rd Place Solution | KNN Imputation + LightGBM/XGBoost Ensemble](https://www.kaggle.com/competitions/playground-series-s3e15/discussion/414027) — 9 票 / 4 评论 / 2023-05-31 **write-up?**
+- [9th place solution + Pseudo label + IterativeImputer + Multi AutoGluon](https://www.kaggle.com/competitions/playground-series-s3e15/discussion/413808) — 9 票 / 2 评论 / 2023-05-30 **write-up?**
+- [Try turning off Predictive Mean Matching](https://www.kaggle.com/competitions/playground-series-s3e15/discussion/412338) — 9 票 / 6 评论 / 2023-05-23 
+- [Paper related to the original dataset](https://www.kaggle.com/competitions/playground-series-s3e15/discussion/410678) — 8 票 / 3 评论 / 2023-05-16 
+- [Contents Of The Dataset !!](https://www.kaggle.com/competitions/playground-series-s3e15/discussion/410713) — 8 票 / 8 评论 / 2023-05-16 
+- [Adjutant concepts- types of missing values](https://www.kaggle.com/competitions/playground-series-s3e15/discussion/411668) — 6 票 / 0 评论 / 2023-05-20 
+- [Preprocessing Tips for XGBoost](https://www.kaggle.com/competitions/playground-series-s3e15/discussion/410915) — 5 票 / 3 评论 / 2023-05-17 
+- [New to Machine Learning or Kaggle?](https://www.kaggle.com/competitions/playground-series-s3e15/discussion/403220) — 4 票 / 4 评论 / 2023-04-21 
+- [imputation and correct values with original dataset](https://www.kaggle.com/competitions/playground-series-s3e15/discussion/410697) — 4 票 / 0 评论 / 2023-05-16 
+- [Someone just copied and published my entire notebook ](https://www.kaggle.com/competitions/playground-series-s3e15/discussion/412524) — 4 票 / 7 评论 / 2023-05-24 
+- [Original Dataset ? 🤔](https://www.kaggle.com/competitions/playground-series-s3e15/discussion/410699) — 3 票 / 0 评论 / 2023-05-16 
+- [Application of adversarial validation](https://www.kaggle.com/competitions/playground-series-s3e15/discussion/410714) — 3 票 / 0 评论 / 2023-05-16 
+- [Do you think it would be useful to use more advanced techniques like AutoEncoder as a model?](https://www.kaggle.com/competitions/playground-series-s3e15/discussion/410752) — 3 票 / 8 评论 / 2023-05-16 
+- [The correlation between missing values](https://www.kaggle.com/competitions/playground-series-s3e15/discussion/411008) — 3 票 / 1 评论 / 2023-05-17 
+- [Imputation. Literature request](https://www.kaggle.com/competitions/playground-series-s3e15/discussion/410850) — 2 票 / 4 评论 / 2023-05-16 
+- [Using CHF look-up-tables (LUT) in reverse](https://www.kaggle.com/competitions/playground-series-s3e15/discussion/411019) — 2 票 / 3 评论 / 2023-05-17 
+- [Feature importances - considering the competition as a regression problem](https://www.kaggle.com/competitions/playground-series-s3e15/discussion/411481) — 2 票 / 1 评论 / 2023-05-19 
+- [Things that worked for me which could help you too](https://www.kaggle.com/competitions/playground-series-s3e15/discussion/412075) — 2 票 / 2 评论 / 2023-05-22 
+- [Using the target as a feature solving the problem](https://www.kaggle.com/competitions/playground-series-s3e15/discussion/411899) — 2 票 / 3 评论 / 2023-05-21 
+- [From an engineering perspective, you would not want to use RMSE (the competition metric) for your real world application](https://www.kaggle.com/competitions/playground-series-s3e15/discussion/412470) — 2 票 / 3 评论 / 2023-05-23 
+- [11th AutoML is all you need](https://www.kaggle.com/competitions/playground-series-s3e15/discussion/413977) — 2 票 / 2 评论 / 2023-05-31 
+- [Dataset Explained](https://www.kaggle.com/competitions/playground-series-s3e15/discussion/412206) — 1 票 / 0 评论 / 2023-05-22 
+- [What to submit?](https://www.kaggle.com/competitions/playground-series-s3e15/discussion/412310) — 1 票 / 1 评论 / 2023-05-23 
+- [Leveraging Original Data with Generated Synthetic Data for Improved RMSE](https://www.kaggle.com/competitions/playground-series-s3e15/discussion/411113) — 1 票 / 1 评论 / 2023-05-17 
+- [Heat Flux Code using Gradient Boost Regressor](https://www.kaggle.com/competitions/playground-series-s3e15/discussion/413032) — 1 票 / 2 评论 / 2023-05-26 
+- [PyTorch + Optuna Optimization but no change in model](https://www.kaggle.com/competitions/playground-series-s3e15/discussion/411379) — 1 票 / 2 评论 / 2023-05-19 
+- [Team competitions](https://www.kaggle.com/competitions/playground-series-s3e15/discussion/413414) — 1 票 / 0 评论 / 2023-05-28 
+- [Error while submitting](https://www.kaggle.com/competitions/playground-series-s3e15/discussion/413680) — 1 票 / 2 评论 / 2023-05-29 
+- [AutoEncoder](https://www.kaggle.com/competitions/playground-series-s3e15/discussion/410877) — 1 票 / 2 评论 / 2023-05-16 
+- [Need some suggestion ](https://www.kaggle.com/competitions/playground-series-s3e15/discussion/412136) — 0 票 / 0 评论 / 2023-05-22 
+- [Please Help!!!!](https://www.kaggle.com/competitions/playground-series-s3e15/discussion/411642) — 0 票 / 4 评论 / 2023-05-20 
+- [Different types of Regressor that can be used here](https://www.kaggle.com/competitions/playground-series-s3e15/discussion/412219) — 0 票 / 0 评论 / 2023-05-22 
+- [Question about the two categorical columns](https://www.kaggle.com/competitions/playground-series-s3e15/discussion/412178) — 0 票 / 3 评论 / 2023-05-22 
+- [Need feedback about my notebook](https://www.kaggle.com/competitions/playground-series-s3e15/discussion/413580) — 0 票 / 0 评论 / 2023-05-29 
+- [Why my score are way to off ?](https://www.kaggle.com/competitions/playground-series-s3e15/discussion/411162) — 0 票 / 7 评论 / 2023-05-18 
+- [Hydraulic mean diameter and Diameter ](https://www.kaggle.com/competitions/playground-series-s3e15/discussion/413603) — 0 票 / 0 评论 / 2023-05-29 
+- [Finding the missing values using a regression approach?](https://www.kaggle.com/competitions/playground-series-s3e15/discussion/410879) — 0 票 / 3 评论 / 2023-05-16 

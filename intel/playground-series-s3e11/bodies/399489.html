@@ -1,0 +1,37 @@
+<p>Thanks Kaggle for hosting this Playground series. These synthetic datasets allow many different experiments to be performed quickly.</p>
+<p>My solution is basically a blending of a total of 5 LightGBM (2x), XGBoost (2x) and Catboost (1x) models.</p>
+<p><strong>Data</strong></p>
+<ul>
+<li>I added the original data to my cv-process. I used the original data for the training process of each fold, but validated exclusively on the synthetic competition data:<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2959383%2F3c45cb712d4cbab4f69e634eab1c2575%2Fvalidation.png?generation=1680600699632834&amp;alt=media" alt=""></li>
+<li>I therefore mark the original data with fold -1, so that it is not used as a validation dataset in any iteration</li>
+<li>I transformed the target variable with np.log(cost) and used rmse as objective</li>
+<li>I used a subset of the original variables: 'store_sqft', 'florist', 'salad_bar', 'prepared_food', 'coffee_bar', 'video_store', 'total_children', 'avg_cars_at home(approx).1', 'num_children_at_home'</li>
+</ul>
+<p><strong>Feature Engineering</strong></p>
+<ul>
+<li>I spent a lot of time on feature engineering. The most important feature was an overall score for the store-specific attributes:</li>
+<li><code>store_features= ['coffee_bar', 'video_store', 'salad_bar', 'prepared_food', 'florist']</code></li>
+<li><code>df['store_score'] = df[stores_features].sum(axis=1)</code></li>
+<li>I also calculated the ratio in relation to the store size:</li>
+<li><code>df['store_score_ratio'] = df['store_sqft'] / df['store_score']</code></li>
+<li>With these two features, I was able to train a single-lightgbm model, which alone had a public score of 0.2926 and a private score of 0.29326 (private leaderboard range from 9 to 37). The cv score was also much better:<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2959383%2Fbe36e8300fd30bd7588008fff846bc6d%2Fcv_scores.png?generation=1680601677451162&amp;alt=media" alt=""></li>
+<li>It was important to pass the new features to LGBM as categorical variables</li>
+<li>For XGBoost and Catboost, I was not able to get this significant improvement. I formed another feature for this and did not include the ratio:</li>
+<li><code>(df['florist']*3) + (df['food_proxy']*2) + df['coffee_bar'] + df['video_store']</code></li>
+<li>df['food_proxy'] is the sum of prepared food and salad bar and then captured at 1 and I have passed the feature as a numeric feature.</li>
+<li>The feature engineering was the biggest boost for me compared to the public solutions</li>
+</ul>
+<p><strong>Ensembling</strong></p>
+<ul>
+<li>Simple weighted blend optimized with Optuna</li>
+</ul>
+<p><strong>What didn't work</strong></p>
+<ul>
+<li>Blending with multiple models and different feature subsets</li>
+<li>Stacking was worse for me with each variant</li>
+<li>I tried to clean up the inconsistent values of the store features based on the original data, however the results got worse that way</li>
+<li>Models other than LGBM, XGB, and Catboost were significantly worse and didn't add value when blending either</li>
+</ul>
+<p>Thank you all for the interesting competition. I am looking forward to the next parts of the playground series.</p>

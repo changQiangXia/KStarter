@@ -1,0 +1,91 @@
+# https://www.kaggle.com/competitions/playground-series-s4e9/discussion/537202
+
+Topic #537202: 81st Place - Stack Regression over Classification 
+  Author: Chris Deotte
+  Posted: 2024-10-01 21:00:07.454000
+  Votes: 43  Comments: 13
+
+This was my first playground series competition and I enjoyed it. There were many great discussion sharing and code sharing. I learned some new techniques regarding feature engineering and AutoML. Thank you everyone. 
+
+Congrats to all teams in top positions who built solutions that scored well on private LB and survived the shakeup. I plan to enter some more playground comps in the future. l'm on vacation in October so maybe I'll join in November when I'm back.  
+
+I'm writing this post from my cell phone on vacation so I wont be able to include my usual pictures to help explain stuff. Also it's hard to add links.
+
+Clean OOF and Hill Climbing
+
+I tried hard to build a high performance single model but ensemble diverse models always beat my single models so my strategy was ensemble.
+
+The secret to ensemble is saving clean leak free OOF together with test predictions from every single model. Then we use hill climbing or a stage 2 meta model trained on OOF. Lastly we use the same model/technique on the test predictions.
+
+Two HC Starter Notebooks
+
+I published two hill climbing notebooks in 2 old comps, Melonoma prediction here and Novozyme theromstabilty prediction here. The former uses only positive weights and the latter uses both negative and positive weights.
+
+Public Models
+
+For ensemble, we want lots of diverse models. In addition to my own models, I forked the best public single models and added code to save clean OOF to disk. I ignored all blender public notebooks.
+
+For public AutoML notebooks, I added code to save the OOF to disk for all the single models (made by the AutoML) and saved test predictions for all single models.
+
+Private Models
+
+I acquired 110 OOF from public notebooks and then created 40 single models of my own. Half of mine were hand crafted and half were AutoML.
+
+Stack Regression over Classification
+
+My most interesting and diverse model was 5 Fold XGB then inside every fold, I created 5 new folds and trained a classification NN. The NN predicted 50 target price bins using multi classification loss. I then used those 50 probabilities as features for the second level XGB model. The XGB model used regression loss. The model and OOF were leak free since the five NN 5 fold was nested inside the XGB 5 fold. This model was diverse and boosted hill climbing CV and LB.
+
+Result
+
+I think I pushed hill climbing too much and overfitted a little. I could have achieved a better private LB score if I was less aggressive with hill climbing.
+
+I allowed negative weights and set tolerance to 1e-5. In retrospect, I think tolerance should be 1 because 1 is already the fifth significant digit (for this comp's metric). By using 1e-5, I was fitting to the tenth significant digit. 
+
+This means that the hill climbing algorithm keeps running when it should stop because it begins fitting and adding noise. We only want to add a new model if it boost CV 1 unit like improve CV from 72100 to 72099. We dont want to add a model that boost CV from 72100 to 72099.99999. In other comps the metric is like 0.72009 so 1e-5 makes sense but in this comp metric is like 72009 so maybe 1 makes more sense.
+
+Post Comp Analysis
+
+If I used tolerance 1, then public LB would be 71901 and private LB would be 63003 and CV 72209. With tolerance 1e-5, public LB is 71887 and private LB is 63057 and CV 72081.
+
+Using 1e-5 produced better CV score and better public LB score so it was hard to know what to do during the competition. Perhaps the clue that we are overfitting is that using 'tol=1e-5' vs 'tol=1' boost CV 72209 to 72081 but public LB only improved 71901 to 71887.
+
+The difference in private LB is only 00050 out of 63000 which is about 0.1% so it isn't a big deal but in a competition it changes rank from 5th to 81st.
+
+Comments:
+├─ Tilii (2024-10-02 01:58:11.700000) [+3]
+│  What, no pictures? 😜
+│  
+│  
+│    
+│  If I used tolerance 1, then public LB would be 71901 and private LB would be 63003 . With tolerance 1e-5, public LB is 71887 and private LB is 63057. I forget the two CV s...
+  ├─ Chris Deotte (2024-10-02 07:49:14.490000) [+3]
+  │  Thanks. Congratulations. Great job generalizing to private LB, avoiding overfitting, and achieving 4th place solo.
+  │  
+  │  I think you're right about using so many public OOF. With 188k rows in train.csv,...
+    ├─ Tilii (2024-10-02 20:14:23.923000) [+1]
+    │  With large data, i basically include everything. I include many more models and include all types of feature engineer. I say if it boost CV on 188k, then it is ok.
+    │  
+    │  
+    │  I generally agree with this, bu...
+    ├─ Robert Hatch (2024-10-05 20:07:17.257000) [+1]
+    │  In several of the AutoML competitions, we had a lot of variance in spite of a "large" amount of data. So after the outlier discussion spearheaded by @tilii7 , yeah, this one in many ways counts as ...
+    ├─ Robert Hatch (2024-10-05 20:12:17.410000) [+1]
+    │  We learned a little too much about the synthetic data in a couple playground competitions where the original data was 100% predictable. (Flood prediction and mushrooms). So it's added noise with fa...
+├─ Optimistix (2024-10-01 21:17:07.183000) [+3]
+│  Thanks for the interesting write up (the Stack Regression over Classification bit is especially cool), and all your contributions over the month! Looking forward to what you bring in November. Have...
+  ├─ Chris Deotte (2024-10-01 21:21:20.707000) [+3]
+  │  Thank you. Congratulations achieving 3rd. I was very impressed that you stayed high on both public and private. And I'm impressed that you won 1st last month. Keep up the good work!
+    ├─ Optimistix (2024-10-01 21:34:14.980000) [+4]
+    │  Thanks so much! I'm going to be on the wrong side of one of these 0.1% decisions sometime soon - but happy to keep the streak going until then.
+├─ Mart Preusse (2024-10-02 04:34:12.383000) [+4]
+│  Thanks for sharing your solution. I wondered what happened. The overfitting you explained makes sense and is understandable. I will take it as a warning if one day I am experimenting with an ensemb...
+  ├─ Chris Deotte (2024-10-02 07:52:17.007000) [+2]
+  │  Thanks Mart. Congratulations achieving 1st place solo!
+  │  
+  │  I enjoyed our discussions in this competition and I enjoyed reading your published code and published comments during the comp. You have many...
+  ├─ Dinesh Kottakota (2024-10-05 05:57:27.980000) [+1]
+  │  Understandable. Nice work
+├─ Riana Azad (2024-10-04 05:19:45.447000) [+5]
+│  Thanks for sharing the solution
+├─ MrSimple (2024-10-06 09:53:44.430000) [+1]
+│  Thanks for sharing your solution.

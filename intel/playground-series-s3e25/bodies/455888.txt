@@ -1,0 +1,157 @@
+# https://www.kaggle.com/competitions/playground-series-s3e25/discussion/455888
+
+Topic #455888: Don't forget to tune the sample weights!
+  Author: AmbrosM
+  Posted: 2023-11-16 22:31:46.643000
+  Votes: 74  Comments: 35
+
+What do you know about the competition metric MedAE? You know that it is the median of the absolute errors, but what does this mean for fitting a model?
+
+Let's assume we have a dataset of 10001 samples. If we train a model and then compute predictions and absolute errors for these 10001 samples, 5000 easy samples will have an absolute error below the MedAE and the other (hard) 5000 samples will have an absolute error above the MedAE. Does it matter how high the error of the 5000 hard samples is? No.
+
+If 5001 samples have absolute errors ≤ 0.4 and the other 5000 samples have absolute errors of ten million, the score will still be 0.4.
+
+A similar argument is possible for the easy samples: If the median absolute error is at 0.4, it doesn't matter whether the 5000 easy samples all have an error of 0.01 or an error of 0.39.
+
+We can use this observation to create better models: As the score depends only on a single sample (the one which has the median absolute error), we should fit the model only to those samples which could end up being the median. The very easy samples and the very hard samples are noise and can (almost) be neglected in training.
+
+As a proof of concept, I've fitted the same estimator first without sample weights and then with sample weights of 0.01 for samples with absolute errors ≤ 0.06 or ≥ 0.7. The cv score improved by 0.03.
+
+base_weight = 
+lower, upper = , 
+kf = KFold(shuffle=, random_state=)
+score_without, score_with = , 
+ fold, (idx_tr, idx_va)  (kf.split(train)):
+    X_tr = train.iloc[idx_tr].copy()
+    X_va = train.iloc[idx_va].copy()
+    y_tr = X_tr.pop()
+    y_va = X_va.pop()
+
+    
+    model = LGBMRegressor(objective=,
+                          learning_rate=,
+                          min_child_samples=,
+                          random_state=)
+    model.fit(X_tr, y_tr)
+    medae = median_absolute_error(y_va, model.predict(X_va))
+    score_without += medae
+
+    
+    
+    
+    y_tr_ae = np.(y_tr - model.predict(X_tr)) 
+    sample_weight_tr = base_weight + ((lower &lt; y_tr_ae) &amp; (y_tr_ae &lt; upper))
+
+    
+    model.fit(X_tr, y_tr, sample_weight=sample_weight_tr)
+    medae = median_absolute_error(y_va, model.predict(X_va))
+    score_with += medae
+
+(
+      
+      )
+
+
+
+
+
+Good luck!
+
+Comments:
+├─ Laurent Pourchot (2023-11-18 09:45:06.057000) [+15]
+│  ChatGPT won't replace @ambrosm  ! 😀
+├─ broccoli beef (2023-11-24 02:10:11.820000) [+5]
+│  Instead of lowering the weights of the tails of a distribution, a related approach is to simply discard the tails and re-fit to see if the score improves. 
+│  
+│  More formally, with a learning algorithm...
+  ├─ Thomas Meißner (2023-11-24 03:38:20.013000) [+1]
+  │  Really nice idea!
+  │  
+  │  I tried to transform the data in samples into data that describes the distribution of each feature and directly predicts the mean / shorter half. 
+  │  However that one did not work s...
+├─ Yan Teixeira (2023-11-17 00:38:13.190000) [+3]
+│  Amazing insight @ambrosm 
+│  
+│  I started some initial tests with this framework and the results are promising.
+│  
+│  I was wondering how to use several quantiles in a quantile regressor to gain deeper insig...
+├─ Riyad Mehdi (2023-11-20 15:02:03.877000) [+1]
+│  How did you determine the choice of giving a weight of 0.01 to samples with extreme absolute errors?
+  ├─ AmbrosM (2023-11-20 18:54:08.443000) [+1]
+  │  Hi @riyadmehdi Knowing that the weight had to be low, I found this value by trial and error. base_weight, lower and upper can certainly be tuned for better results.
+    ├─ Riyad Mehdi (2023-11-21 12:14:54.263000) [+0]
+    │  Thanks for clarifying
+├─ Sameer (2023-11-20 09:09:41.477000) [+1]
+│  it's very helpful to me thanks for sharing us @ambrosm
+├─ Jon Blanchard (2023-11-17 14:57:58.100000) [+1]
+│  Your insights are always very helpful, and presented in a clear and simple way that makes it easy to understand the topic.  Thank you.
+├─ Thomas Meißner (2023-11-17 05:06:43.640000) [+2]
+│  That is a great insight. Unfortunately that means even approaches like just predicting  a median work (example)
+  ├─ Yan Teixeira (2023-11-17 05:54:06.720000) [+3]
+  │  @thomasmeiner  Well, I think this explains the surprisingly low scores among the top 20. I initially thought it was a trick, but it's likely that everyone is experimenting with the median.
+  │  
+  │  Just on...
+    ├─ Thomas Meißner (2023-11-17 06:06:27.873000) [+2]
+    │  @yantxx 
+    │  
+    │  Yes it sounds like some people are probing. 
+    │  
+    │  I sacrificed some submissions to see in which direction someone would have to probe. The results:
+    │  
+    │  
+    │  
+    │  train median: public LB = 1
+    │  
+    │  train media...
+    ├─ Yan Teixeira (2023-11-17 06:13:14.153000) [+1]
+    │  wow! this is gold information for probing hahaha
+    │  
+    │  oh man.. I can't believe the direction this competition is heading.
+    ├─ Thomas Meißner (2023-11-17 06:55:09.563000) [+1]
+    │  I will not continue on that journey.  just felt inspired by @ambrosm 's post :D 
+    │  
+    │  However it is likely that some participants will squeeze that approach out
+    ├─ Iqbal Syah Akbar (2023-11-17 07:58:35.550000) [+2]
+    │  I was out only for a few days and I can't believe we have already reached this point lol
+    │  
+    │  Also @thomasmeisner we have 10407 rows for the whole test dataset, which means if the public test has even ...
+  ├─ broccoli beef (2023-11-17 08:42:31.070000) [+7]
+  │  If you were to submit a constant prediction \(\hat{y}\),then it would not be the median (nor the mean for that matter). You would want it to satisfy \(\hat{y}=\arg\min_y\mbox{median}\{|y_i-y|\}\), ...
+├─ Yuji Itadori (2023-12-04 08:05:53.837000) [+0]
+│  hi @ambrosm how did come up will this method can to explain this in details?
+├─ C4rl05/V (2023-11-25 03:11:38.300000) [+0]
+│  Hello @ambrosm, thanks for the information. and the explanations.
+├─ Catadanna (2023-11-22 14:39:36.967000) [+0]
+│  Thank you for the idea! One question: how did you decide for lower=0.06 and upper=0.7 ? Related to Q1 and Q3, or something like that ?
+  ├─ AmbrosM (2023-11-22 18:39:41.537000) [+0]
+  │  @catadanna Nothing sophisticated - you may call it grid search or trial and error. The only constraint is that the measured MedAE must lie between the two.
+    ├─ Catadanna (2023-11-25 08:06:01.980000) [+1]
+    │  Well I used Q1 and Q3 and it worked well -- until now.
+├─ Nembot Jules (2023-11-22 14:25:13.003000) [+0]
+│  Insightful!
+├─ Mandritsa Mikhail (2023-11-22 11:23:53.933000) [+0]
+│  Awesome hint! Tried to optimise my baseline of LGBM + optuna, but now alongside with upper and lower params. Even without using meta NN models after baseline, finally managed to get under 0.5 mae s...
+├─ BluePrint-Kaggle (2023-11-22 00:40:09.180000) [+0]
+│  that awesome. I wonder how you got this method.
+├─ VIKRAM MISHRA (2023-11-18 18:26:06.097000) [+0]
+│  I run the data and it's very helpful and amazing
+├─ Phong Nguyen (2023-11-18 18:01:35.497000) [+0]
+│  that's a very neat idea - thank you @ambrosm
+├─ Yunus Emre Göktürk (2023-11-18 13:09:05.680000) [+0]
+│  Thanks for your insight on this metric. @ambrosm
+├─ [deleted] (2023-11-17 22:00:01.960000) [+0]
+│  Very helpful!
+├─ [deleted] (2023-11-21 19:28:08.213000) [+1]
+│  [deleted]
+├─ [deleted] (2023-11-17 08:23:46.113000) [+1]
+│  [deleted]
+├─ Leon Kopitar (2023-11-23 09:16:20.840000) [+0]
+│  Thanks for that!
+├─ Matthew Hawthorn (2023-11-22 09:55:26.930000) [+0]
+│  Very helpful. Thank you.
+├─ EliasRight (2023-11-20 16:49:04.540000) [+0]
+│  Wow thanks, will definitely use this.
+├─ Firdavs Elomonov (2023-11-20 10:27:18.770000) [+0]
+│  thanks for insight
+├─ Daniel Popov (2023-11-20 07:26:57.823000) [+0]
+│  Very helpful! Thank you @ambrosm

@@ -1,0 +1,52 @@
+<p>It is safe to say that this competition has been very different from most other playground series competitions. It was also really tough. My second best submission was resubmitting the raw competition dataset. </p>
+<p>My best approach, outlined here, is based on censoring and reimputing data. Many variables had obviously erroneous data values, and by censoring these values and reimputing them, the hope was to get a more realistic looking dataset with which to train the model.</p>
+<h1>Context section</h1>
+<ul>
+<li><p>Business context: <a href="https://www.kaggle.com/competitions/playground-series-s3e21" target="_blank">https://www.kaggle.com/competitions/playground-series-s3e21</a></p></li>
+<li><p>Data context: <a href="https://www.kaggle.com/competitions/playground-series-s3e21/data" target="_blank">https://www.kaggle.com/competitions/playground-series-s3e21/data</a></p></li>
+</ul>
+<h1>Overview of the approach</h1>
+<p>Compared to the <a href="https://www.kaggle.com/datasets/vbmokin/dissolved-oxygen-prediction-in-river-water" target="_blank">original dataset</a>, we notice that there are a lot of strange looking data values in almost all columns. Some background research gives typical ranges of the variables. For example, <a href="https://en.wikipedia.org/wiki/Oxygenation_(environmental)" target="_blank">dissolved oxygen levels of freshwater</a> could typically range between 5-14 mgO2/cub. dm. Less than 4 is possible but not (ecologically) desirable, and zero is the absolute minimum of this variable. Dissolved oxygen levels can theoretically be larger than 14 temporarily, but open water will quickly lose any supersaturated oxygen to the atmosphere. So, a physically plausible range for the DO columns is 0–20. Similar research can provide typical ranges for the other variables. </p>
+<p>In light of this, one approach could be to remove rows where variables fall outside specified physically realistic ranges. A more automated machine-learning approach to this is to have the ranges of variables as hyperparameters of a (preprocessing) model.</p>
+<h1>Details of the submission</h1>
+<p>By incorporating the <a href="https://www.kaggle.com/competitions/playground-series-s3e21/discussion/433816" target="_blank">preprocessing steps in a pipeline</a>, different hyperparameters of the preprocessing can be tried out in a CV scheme. I wrote the following class to censor values in the dataset that lie outside ranges (specified as parameters to the transformer class):</p>
+<pre><code> sklearn.base  TransformerMixin, BaseEstimator
+ (TransformerMixin, BaseEstimator):
+     ():
+        self.good_range = good_range
+        self.keep_cols = keep_cols
+     ():
+         numpy  np
+        self.censor_cols = np.setdiff1d(X.columns, self.keep_cols)
+         self
+     ():
+        ix = [,]*X.shape[]
+         var  self.good_range:
+            ix = np.bitwise_or(ix, X[var] &lt; self.good_range[var][])
+            ix = np.bitwise_or(ix, X[var] &gt; self.good_range[var][])
+        ((ix))
+        X.loc[ix, self.censor_cols] = pd.NA
+         X
+
+</code></pre>
+<p>This is then incorporated into a <a href="https://www.kaggle.com/code/nnjjpp/pipelines-for-preprocessing-a-tutorial" target="_blank">pipeline</a> with an imputer and the final model:</p>
+<pre><code>from sklearn.pipeline import Pipeline
+from sklearn.experimental import enable_iterative_imputer
+from sklearn.impute import IterativeImputer
+
+pipe=),
+               ('impute', ),
+               ('model', model) # i.e. the RandomForestRegressor
+              ])
+
+pipe.fit(Xr, yr)
+</code></pre>
+<p>which can then be passed through to a CV parameter search function (I used <code>RandomizedSearchCV</code>). Specifying a distribution for the pipeline parameter 'censor__good_range' will then optimize the pass-through variable range in the <code>Censor</code> transformer.</p>
+<p>I was intending to specify ranges for all of the variables, but ended up just censoring the 'O2_1' column, which ended up with an optimized pass-through variable range of 4.5 to 14.3, which corresponds closely to the physically plausible range of this variable as discussed in the "overview" section above.</p>
+<p>I also considered censoring based on frequency of data values under the assumption that missing values get coded as dummy values rather than NaN. To extend this approach I would include other variables for censoring, and have different ranges for each type of variable (which should be possible using the <code>Censor</code> class above). In the end I wasn't sure this approach would work due to the difficulty of getting anything better on the public leaderboard than just submitting the raw competition data.</p>
+<h1>Sources</h1>
+<ul>
+<li><p><a href="https://en.wikipedia.org/wiki/Oxygen_saturation" target="_blank">wikipedia</a></p></li>
+<li><p><a href="https://www.epa.gov/national-aquatic-resource-surveys/indicators-dissolved-oxygen" target="_blank">US Environmental Protection Agency</a></p></li>
+<li><p>Other government and university sources on freshwater quality (google it!)</p></li>
+</ul>

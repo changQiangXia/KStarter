@@ -1,0 +1,69 @@
+# https://www.kaggle.com/competitions/playground-series-s3e7/discussion/390956
+
+Topic #390956: 2nd Place Solution
+  Author: Jose Cáliz
+  Posted: 2023-02-28 00:16:19.288000
+  Votes: 34  Comments: 9
+
+Hello all,
+
+This is the description on how I achieved the second place on this competition:
+
+CV
+
+My CV was done using booking date as the feature to stratify, I decided to use this column instead of target because there were month with few observations and all of them were assigned to the same fold.
+
+Some models I ensembled used 30 Folds and other 20 Folds just because computation was expensive. Original dataset was concated to each fold, i.e for a 20 Fold CV each fold had the entire original dataset + 95% of the train dataset.
+
+The Imputation
+
+Strange dates were imputed using last day of month.
+
+The Duplicates
+
+All duplicates came in pairs and always there was 1 positive label and one negative label. There were two leaks, most people figured out the first but the second was not disclosed. 
+
+
+
+For duplicates on test that were in train, the trick was to assign the unknown label to the opposite of the known label.
+
+For duplicates on test that were also in test, the trick is assign a score that maximizes oof. Explanation: if you have a pair of duplicates, any model will predict the same value for them, so any value close to 0 or 1 will hurt your model. Since AUC is a rank metric, and the positive is around 38%, then ideally, the best threshold should be in the  62nd  percentile of your predictions, this value can be used to overwrite the duplicates.
+
+
+Features
+
+I found that most of the out of box features worked well. Some additional features I used was is_generated and is_inconsistent, both features are indicators. Dayofyear features also was selected in some models when doing Sequential Feature Selection.
+
+The ensemble
+
+Final Ensemble had 16 models that were selected using Hill Climb Technique and the weights were optimized using Nelder-mead algorithm. I did not rank predictions. Most of the models were LGBM, a couple of XGBoost. Everything was trained using EarlyStopping and the test predictions were calculating using the mean of each fold-model.
+
+What didn't work
+
+Holidays features, day of month feature, an indicator column that is positive whether the day was inconsistent, more than 30 Folds.
+
+My CV was perfectly correlated with the leaderboard, I felt like if I had more time maybe I would had used some public notebooks to do a final ensemble.
+
+Comments:
+├─ Yue Sun (2023-02-28 02:23:34.667000) [+1]
+│  Good observation of the data.
+├─ Pardeep Singh (2023-03-02 04:29:00.150000) [+0]
+│  Great job getting to 2nd position in this competition @jcaliz . Thanks for sharing your solution writeup! 🙌🔥
+│  
+│  Can you please share a bit on Hill Climb Technique for model selection and the Nelder-m...
+├─ Pasquale (2023-02-28 06:49:30.967000) [+0]
+│  Congratulations, clever solution. Have you tried both assigning 0.5 and the 0.62 percentile to the duplicates in test set? Has the latter performed significantly better?
+  ├─ Jose Cáliz (2023-02-28 14:58:27.477000) [+1]
+  │  Choosing 0.5 is a good idea when your classifiers are well calibrated. Tree-based models are known for not being well calibrated on imbalaced datasets.
+  │  
+  │  Using a late submission these would have bee...
+    ├─ Pasquale (2023-03-01 06:27:12.667000) [+0]
+    │  There is not a huge difference, I think that your score is mainly the result of how well you prepared the data and built the model 😉
+├─ [deleted] (2023-02-28 01:23:28.747000) [+0]
+│  Congrats! Did you end up testing any of the other found datasets?
+  ├─ Jose Cáliz (2023-02-28 01:25:35.047000) [+1]
+  │  I didn't, the dataset was big enough and after seeing the direct correlation of CV and LB I suspected that faster iteration would be a key to find a good ensemble.
+├─ Jim Gruman (2023-02-28 00:18:58.270000) [+0]
+│  Congrats. Well done
+├─ [deleted] (2023-02-28 00:19:42.663000) [+0]
+│  [deleted]

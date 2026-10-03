@@ -1,0 +1,103 @@
+# https://www.kaggle.com/competitions/pii-detection-removal-from-educational-data/discussion/497185
+
+Topic #497185: *th Place Efficiency Solution: 0.955 in 8mins
+  Author: Stochoshi G
+  Posted: 2024-04-24 00:44:50.057000
+  Votes: 32  Comments: 14
+
+Stage 1: Select candidates 
+Stage 2: Score them.
+
+--
+
+Base Ensemble:
+v3-xsmall 256/512/1024/2048; v3-small 768; v3-base 1280; 
+mdeberta-v3-base 960
+
+nbroad &amp; mpware datasets, augmentations, START END and NEWLINE tags
+
+~0.964-0.972 3-fold CV
+
+--
+
+Stage 1 RNN
+deberta-v3-xsmall (embeddings, 384)
+ -&gt; RNN(384 -&gt; 64, bidirectional) -&gt; LayerNorm
+ -&gt; interleave fwd/bkwd -&gt; Conv(128, 128, k = 13, groups of 64) -&gt; Tanh 
+        -&gt; (add to rnn output) -&gt; LayerNorm
+-&gt; RNN(128 -&gt; 64, bidirectional) -&gt; LayerNorm -&gt; Linear(128, 13)
+
+very fast ~120k/s = ~2 mins
+
+~0.93 CV
+
+.
+
+Stage 2 Mini-Attn-Rnn
+~3% of tokens, based on a 1e-3 cutoff and ~2-16 token proximity
+
+deberta-v3-xsmall embeddings
+  -&gt; Attn(dim = 320, copied from v3-xs) 
+    -&gt; partial feed-forward, 
+  -&gt; GRU(384, 96, bidirectional) -&gt; [as above]
+        -&gt; Conv, [as above]
+  --&gt; GRU(192, 96), [as above]
+
+~15k/s - 25k/s, (&gt;500k/s effective speed) = &lt;1min
+
+~0.94 CV
+
+.
+
+Stage 3: V3-XS
+ ~3% tokens, as above
+deberta-v3-xsmall, 8 layers 
+~2k/s (&gt;60k/s effective speed) = 2-3mins
+
+~0.965 CV
+
+.
+
+All models were trained with distillation of base ensemble, annealing from softened logits to half-labels, half-logits.
+
+Out-of-fold 'filter probabilities' used to train the two filtered models.
+
+Seqlens of 256 for the RNN, 320 for the mini-attn, and 640 for the final model.
+
+Both stage 2 and stage 3 use SEP tags between token spans, and deberta-v2 was rebuilt with custom indexing to preserve the original positional indexes.
+
+Comments:
+├─ 🍀<->🍀 (2024-04-24 10:19:25.827000) [+1]
+│  Really impressive. So Fast and beat others by time inference
+├─ Shiner (2024-04-24 09:30:44.587000) [+1]
+│  Impressive speed! Cannot wait to see the inference code!
+├─ Valentin Werner (2024-04-24 05:06:16.023000) [+1]
+│  This is insanely fast. Amazing olutions, I didnt even think that the Kaggle CPUs are this fast on XS models (which is why I didnt even try) - Cheapeau for trying and making it happen! This is exact...
+  ├─ Zhongkai Shangguan (2024-04-24 06:12:24.233000) [+1]
+  │  I think this is because only 3% tokens are send to the XS model. I did try deserta-xs and I even modified it to 3layers with hidden_size=384, but it still takes approximately 20min inference on tes...
+    ├─ Stochoshi G (2024-04-24 06:25:33.227000) [+1]
+    │  Half-layer v3-xs (attention only) plus RNNs will do 0.938, with no filtering: 
+    │  
+    │  https://www.kaggle.com/code/stochoshi/pii-22-cpu/notebook
+    ├─ Valentin Werner (2024-04-24 06:33:16.143000) [+0]
+    │  This is super smart engineering. Great job!
+    ├─ Zhongkai Shangguan (2024-04-24 07:16:36.477000) [+1]
+    │  This is incredible work! Thanks for sharing!
+├─ Guanyu Chen (2024-04-24 00:56:02.280000) [+1]
+│  congratulation
+├─ Qishen Ha (2024-04-24 06:54:51.137000) [+2]
+│  This is the MVP of the competition! Really impressive.
+│  
+│  May I know how do you speed up the inference? Did you use ONNX?
+  ├─ Stochoshi G (2024-04-24 16:54:54.337000) [+1]
+  │  The primary speed-up is from tuning the architectures; and all token selection parameters.  All pure PyTorch.
+├─ william.wu (2024-04-24 00:57:57.590000) [+2]
+│  Congratulations and thanks for sharing! It would be great if you could share the code. I can't figure out how to build a custom model like you mentioned. Thanks
+├─ Zhongkai Shangguan (2024-04-24 02:27:52.893000) [+0]
+│  Congratulations! May I ask what you mean by "3% of tokens"? Is that 3% of the vocab_size? And is your final model a deberta-xsmall with hidden_size=384, num_hidden_layers=8, and vocab_size=128100*0...
+  ├─ Stochoshi G (2024-04-24 02:54:13.720000) [+2]
+  │  Out of eleven million test tokens, only 30k go through the final stages. 
+  │  
+  │  Both the RNN and mini-attn very easily have ~99.9% recall and the deberta with eight layers roughly matches a full ensembl...
+    ├─ Zhongkai Shangguan (2024-04-24 03:34:24.220000) [+1]
+    │  Oh I see, just to check if my understanding correct: you have RNN/mini-attn run as an initial filter since they run pretty fast to determine if a token should be send to 2nd stage, and only send 3%...

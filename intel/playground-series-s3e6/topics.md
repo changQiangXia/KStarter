@@ -1,0 +1,62 @@
+# playground-series-s3e6 讨论区（按票数排序，共 60 条）
+
+- [Initial thoughts, references and starter materials ](https://www.kaggle.com/competitions/playground-series-s3e6/discussion/384403) — 31 票 / 8 评论 / 2023-02-07 
+- [Discard 30 % of the data!](https://www.kaggle.com/competitions/playground-series-s3e6/discussion/384915) — 22 票 / 12 评论 / 2023-02-10 
+- [Collection of helpful ideas - S3E6](https://www.kaggle.com/competitions/playground-series-s3e6/discussion/386465) — 22 票 / 8 评论 / 2023-02-13 
+- [3rd place.](https://www.kaggle.com/competitions/playground-series-s3e6/discussion/389140) — 21 票 / 11 评论 / 2023-02-21 **write-up?**
+- [1st place public / 2nd place private leaderboard solution](https://www.kaggle.com/competitions/playground-series-s3e6/discussion/389391) — 21 票 / 6 评论 / 2023-02-21 **write-up?**
+- [Too many competitions (my personal opinion)](https://www.kaggle.com/competitions/playground-series-s3e6/discussion/386671) — 19 票 / 23 评论 / 2023-02-14 
+- [Quasi-duplicates in the data](https://www.kaggle.com/competitions/playground-series-s3e6/discussion/386116) — 17 票 / 6 评论 / 2023-02-11 
+- [Three types of realty were found => HIGH score as classification problem](https://www.kaggle.com/competitions/playground-series-s3e6/discussion/384412) — 16 票 / 5 评论 / 2023-02-07 
+- [Outlier Alert! Strange value for "made" in train dataset only.](https://www.kaggle.com/competitions/playground-series-s3e6/discussion/384251) — 16 票 / 16 评论 / 2023-02-07 
+- [Only 3 days to go, Stories upto today!!](https://www.kaggle.com/competitions/playground-series-s3e6/discussion/388545) — 15 票 / 9 评论 / 2023-02-18 
+- [EDA observations + note on the original data](https://www.kaggle.com/competitions/playground-series-s3e6/discussion/384229) — 13 票 / 7 评论 / 2023-02-07 
+- [Some feature engineering ideas with code 💡💡💡](https://www.kaggle.com/competitions/playground-series-s3e6/discussion/384679) — 13 票 / 8 评论 / 2023-02-08 
+- [Congrats to JohnG29 for a stable model!](https://www.kaggle.com/competitions/playground-series-s3e6/discussion/389141) — 11 票 / 8 评论 / 2023-02-21 
+- [Original data is quite different from the synthetic data](https://www.kaggle.com/competitions/playground-series-s3e6/discussion/384306) — 10 票 / 0 评论 / 2023-02-07 
+- [Feature Engineering ideas](https://www.kaggle.com/competitions/playground-series-s3e6/discussion/384754) — 10 票 / 2 评论 / 2023-02-09 
+- [cityCode is fake](https://www.kaggle.com/competitions/playground-series-s3e6/discussion/384676) — 10 票 / 10 评论 / 2023-02-08 
+- [Be prepared for a huge shakeup- choosing a final submission](https://www.kaggle.com/competitions/playground-series-s3e6/discussion/388726) — 10 票 / 6 评论 / 2023-02-19 
+- [#43 Explainable model almost without machine learning](https://www.kaggle.com/competitions/playground-series-s3e6/discussion/389155) — 10 票 / 1 评论 / 2023-02-21 
+- [Playground Series - Season 3, Ep.6 🎉 5th place 🎉](https://www.kaggle.com/competitions/playground-series-s3e6/discussion/389145) — 10 票 / 2 评论 / 2023-02-21 **write-up?**
+- [9th Place Solution](https://www.kaggle.com/competitions/playground-series-s3e6/discussion/389151) — 9 票 / 4 评论 / 2023-02-21 **write-up?**
+- [Look out for cityCode](https://www.kaggle.com/competitions/playground-series-s3e6/discussion/384427) — 9 票 / 7 评论 / 2023-02-07 
+- [Results I got until now.](https://www.kaggle.com/competitions/playground-series-s3e6/discussion/388569) — 8 票 / 7 评论 / 2023-02-18 
+- [Filling "squareMeters" outliers](https://www.kaggle.com/competitions/playground-series-s3e6/discussion/388297) — 8 票 / 3 评论 / 2023-02-16 
+- [[PSS3E6] Adversarial Validation ](https://www.kaggle.com/competitions/playground-series-s3e6/discussion/387933) — 8 票 / 6 评论 / 2023-02-15 
+- [Do not eliminate the original data set (tested)](https://www.kaggle.com/competitions/playground-series-s3e6/discussion/388361) — 7 票 / 4 评论 / 2023-02-17 
+- [Playground Series - S3E6: Rank 1!](https://www.kaggle.com/competitions/playground-series-s3e6/discussion/389276) — 7 票 / 1 评论 / 2023-02-21 
+- [Choosing a cross-validation scheme](https://www.kaggle.com/competitions/playground-series-s3e6/discussion/386348) — 7 票 / 4 评论 / 2023-02-12 
+- [8th place - Trust the CV - 409 jump in places on the private ds :)](https://www.kaggle.com/competitions/playground-series-s3e6/discussion/389139) — 7 票 / 7 评论 / 2023-02-21 **write-up?**
+- [New to Machine Learning or Kaggle?](https://www.kaggle.com/competitions/playground-series-s3e6/discussion/380698) — 7 票 / 5 评论 / 2023-01-23 
+- [Beware of negative prices in prediction](https://www.kaggle.com/competitions/playground-series-s3e6/discussion/386321) — 7 票 / 3 评论 / 2023-02-12 
+- [Some feature descriptions that may help you in engineering features](https://www.kaggle.com/competitions/playground-series-s3e6/discussion/384284) — 6 票 / 0 评论 / 2023-02-07 
+- [4th Place Solution](https://www.kaggle.com/competitions/playground-series-s3e6/discussion/389146) — 6 票 / 4 评论 / 2023-02-21 **write-up?**
+- [The Alpha in Ridge Regression.](https://www.kaggle.com/competitions/playground-series-s3e6/discussion/384596) — 6 票 / 2 评论 / 2023-02-08 
+- [I didn't expect a new episode today](https://www.kaggle.com/competitions/playground-series-s3e6/discussion/384260) — 5 票 / 2 评论 / 2023-02-07 
+- [Feature Ideas](https://www.kaggle.com/competitions/playground-series-s3e6/discussion/388174) — 5 票 / 7 评论 / 2023-02-16 
+- [Random forest with different columns and reducing errors.](https://www.kaggle.com/competitions/playground-series-s3e6/discussion/388296) — 5 票 / 2 评论 / 2023-02-16 
+- [OPTUNA not optimizing](https://www.kaggle.com/competitions/playground-series-s3e6/discussion/388464) — 4 票 / 5 评论 / 2023-02-17 
+- [The outliers can be really out](https://www.kaggle.com/competitions/playground-series-s3e6/discussion/384415) — 4 票 / 3 评论 / 2023-02-07 
+- [outlier detection and replacement proposal .](https://www.kaggle.com/competitions/playground-series-s3e6/discussion/384579) — 4 票 / 0 评论 / 2023-02-08 
+- [Interesting CityCode feature](https://www.kaggle.com/competitions/playground-series-s3e6/discussion/388060) — 4 票 / 5 评论 / 2023-02-15 
+- [Tired of colourful notebooks](https://www.kaggle.com/competitions/playground-series-s3e6/discussion/387946) — 4 票 / 3 评论 / 2023-02-15 
+- [Outlier Removal from Test Set](https://www.kaggle.com/competitions/playground-series-s3e6/discussion/388520) — 3 票 / 4 评论 / 2023-02-17 
+- [Outlier Removal](https://www.kaggle.com/competitions/playground-series-s3e6/discussion/388220) — 3 票 / 7 评论 / 2023-02-16 
+- [Different Result with different column order in XGBRegressor Model](https://www.kaggle.com/competitions/playground-series-s3e6/discussion/386314) — 3 票 / 6 评论 / 2023-02-12 
+- [Feature engineering library and more](https://www.kaggle.com/competitions/playground-series-s3e6/discussion/384765) — 3 票 / 1 评论 / 2023-02-09 
+- [Outlier detection with z-score](https://www.kaggle.com/competitions/playground-series-s3e6/discussion/384271) — 3 票 / 12 评论 / 2023-02-07 
+- [Late Submissions Disabled](https://www.kaggle.com/competitions/playground-series-s3e6/discussion/454616) — 2 票 / 0 评论 / 2023-11-10 
+- [Feature Importance](https://www.kaggle.com/competitions/playground-series-s3e6/discussion/384428) — 2 票 / 2 评论 / 2023-02-07 
+- [Is the "made" column correct?](https://www.kaggle.com/competitions/playground-series-s3e6/discussion/384945) — 2 票 / 2 评论 / 2023-02-10 
+- [Variation in Scores in TPS S3_06](https://www.kaggle.com/competitions/playground-series-s3e6/discussion/386407) — 2 票 / 1 评论 / 2023-02-12 
+- [🎉Good luck guys!!🎉](https://www.kaggle.com/competitions/playground-series-s3e6/discussion/389059) — 2 票 / 1 评论 / 2023-02-20 
+- [attempts + experiments so far, potential future attempts ](https://www.kaggle.com/competitions/playground-series-s3e6/discussion/388595) — 1 票 / 3 评论 / 2023-02-18 
+- [Square Meteres Feature ](https://www.kaggle.com/competitions/playground-series-s3e6/discussion/386177) — 1 票 / 4 评论 / 2023-02-11 
+- [What exactly 'floors' means?](https://www.kaggle.com/competitions/playground-series-s3e6/discussion/386096) — 1 票 / 6 评论 / 2023-02-11 
+- [KMeans Clustering Feature](https://www.kaggle.com/competitions/playground-series-s3e6/discussion/388320) — 1 票 / 0 评论 / 2023-02-16 
+- [Any thoughts on the distribution of the Target variable? It isn't following Gaussian ](https://www.kaggle.com/competitions/playground-series-s3e6/discussion/386098) — 1 票 / 0 评论 / 2023-02-11 
+- [Got 90th position with simple baseline ensemble, with no feature engineering or outlier resolution.](https://www.kaggle.com/competitions/playground-series-s3e6/discussion/389208) — 1 票 / 0 评论 / 2023-02-21 **write-up?**
+- [Playground Series - S3E6: Rank 6 (Simplest approach)!](https://www.kaggle.com/competitions/playground-series-s3e6/discussion/389294) — 1 票 / 0 评论 / 2023-02-21 
+- [Clarification about RandomizedSearchCV](https://www.kaggle.com/competitions/playground-series-s3e6/discussion/386332) — 0 票 / 0 评论 / 2023-02-12 
+- [I'm interested about the solution of JohnG29 (1st Public, 2nd Private)](https://www.kaggle.com/competitions/playground-series-s3e6/discussion/389315) — 0 票 / 3 评论 / 2023-02-21 **write-up?**

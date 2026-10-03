@@ -1,0 +1,186 @@
+# https://www.kaggle.com/competitions/playground-series-s3e9/discussion/394592
+
+Topic #394592: #1 Solution: Cross-validation and diversity win
+  Author: AmbrosM
+  Posted: 2023-03-14 04:25:18.928000
+  Votes: 89  Comments: 50
+
+My final solution differs only slightly from what I published in my EDA which makes sense. It is based on a few principles:
+
+
+
+Optimize the cv score and don't look at the public leaderboard! The cv score is based on 5407 samples while the public leaderboard is based on only 721 samples. In a Kaggle competition, a 5407-sample average is a measurement - a 721-sample average is random variable. If you want to test the quality of a dice, you better throw it eight times rather than only once. This rule has a few consequences:
+
+
+You don't need more than two submissions because you can't gain any information from your public leaderboard score. Ok, I used seven submissions because I was curious.
+
+Don't copy code from high-scoring public notebooks unless the quality of that code shows up in a good cross-validation score. The best-scoring public notebooks are at the top of the list only because they overfit the public leaderboard. 
+
+Cross-validate correctly: An ordinary KFold is enough for this competition. A train_test_split is not.
+
+Implement a diverse ensemble!
+
+
+Everybody uses gradient boosting, but you need to find good hyperparameters. Optuna doesn't. Just run Optuna and then change the seed of the KFold. You'll see that the Optuna-found hyperparameters don't survive the change of seed. I optimized the LGBM hyperparameters manually.
+
+Using more than one gradient boosting implementation adds diversity to the ensemble. I used LightGBM and GradientBoostingRegressor.
+
+Random forests are simple to optimize: The most important hyperparameter is min_samples_leaf.
+
+Whereas the tree-based algorithms don't need much feature engineering, linear regression does. After the partial dependence plots of the EDA showed the nonlinearity of the game, I spent quite some time creating features. It is important to not just add features and hope for the best - in the same process you have to drop the features which don't improve the cross-validation score. 
+
+Remember not to optimize your ensemble against the public leaderboard. Optimize the cv score.
+
+AgeInDays has only a few different values and its relationship to the target is highly nonlinear and not monotone. I treated it as a categorical value and target-encoded it, replacing the feature values by the corresponding average target values. This target encoding even helped for some of the tree models.
+
+
+
+
+Source code is here.
+
+Comments:
+├─ Tariq Mahmood (2023-03-21 04:20:48.867000) [+5]
+│  Hi Dear @ambrosm,
+│  Congratulations on your winning solution! Your approach to focusing on cross-validation and diversity is a great reminder of the importance of optimizing for a reliable measure of...
+├─ Siddharth Kumar (2023-03-16 05:01:36.937000) [+6]
+│  Great work on developing a robust solution by focusing on optimising the CV score and maintaining diversity in the ensemble. Your emphasis on cross-validation, manual hyperparameter optimisation, a...
+├─ AKR (2023-03-15 03:50:54.243000) [+4]
+│  Congrats!! @ambrosm 
+│  
+│  
+│    
+│  I optimized the LGBM hyperparameters manually.
+│  
+│  
+│  Manually in the sense you used grid search or tried values one by one to see change. Also for GradientBoostingRegressor ho...
+  ├─ AmbrosM (2023-03-15 05:09:02.043000) [+3]
+  │  Hi @raj401 Manually in the sense that I looked at every single result - either one by one or with a for loop. Grid search in two dimensions can be visualized; it's difficult to visualize in more th...
+    ├─ AKR (2023-03-15 05:50:21.543000) [+1]
+    │  Ok thanks, I generally use Optuna. 
+    │  My understanding is, let say we are using xgboost model and we are tuning 7 hyperparameters. 
+    │  I know with experience people understand which features are more im...
+    ├─ AmbrosM (2023-03-15 18:16:51.483000) [+2]
+    │  @raj401 Optuna's understanding of hyperparameters isn't perfect, either: It just selects a hundred points in a seven-dimensional space and evaluates them with a randomized algorithm. You can hope t...
+├─ Sharov Anton (2023-03-14 10:15:59.513000) [+4]
+│  Thank you very much as usual!
+│  
+│  Few questions:
+│  
+│  1)Can you explain this statement:
+│  
+│  
+│    
+│  Cross-validate correctly: An ordinary KFold is enough for this competition. A train_test_split is not.
+│  
+│  
+│  Isn't ...
+  ├─ AmbrosM (2023-03-14 11:18:08.337000) [+4]
+  │  Hi @sharovanton 
+  │  
+  │  
+  │  
+  │  Yes, KFold is always better than train_test_split (except that it takes more time). I mentioned this point only because the authors of some public notebooks seem not to know.
+  │  
+  │  M...
+├─ Kosh (2023-03-15 03:35:24.987000) [+1]
+│  That point you made about optuna could not be more correct! My top submission was one where I manually tuned hyperparameters for an xgboost model, and my second highest one was the one where I just...
+├─ Manav (2023-03-14 18:35:52.057000) [+1]
+│  Thank you @ambrosm 
+│  Would you suggest not to bet on public leaderboard in general or just in this case due to sample size ?
+  ├─ AmbrosM (2023-03-14 18:47:22.490000) [+2]
+  │  @manavd22 In general, I'd not look at the public leaderboard unless there is a good reason to do so. Time series competitions are an example: If the training dataset consists of the years 2000 - 20...
+├─ Mahmood Bayeshi (2023-03-14 16:00:22.063000) [+1]
+│  Thanks, Ensembling different models is a pretty good idea
+├─ mLiammm (2023-03-14 15:22:27.560000) [+1]
+│  Congrats! @ambrosm. Thanks for sharing :)
+├─ RostislavBer (2023-03-14 12:22:28.270000) [+1]
+│  Hello @ambrosm, congrats on 1st place! When I've trying to solve this problem, I've guiding your solution to divers ensemble and taked several boostings models, so thank you). Best regards!
+├─ Ashvanth s (2023-03-14 11:39:12.497000) [+1]
+│  Would really love to know how to trust your CV scores , i had almost 220 place jump in the private lb yet i do find it difficult to understand where i went right and were i went wrong . It would be...
+├─ Timur Talikbayev (2023-03-14 10:38:31.620000) [+1]
+│  Thanks for the solution and your comments to it. Very helpful. Best regards
+├─ Tevfik Erkut (2023-03-14 10:30:52.267000) [+1]
+│  Hey @ambrosm , congrats on your 1st place! Got a quick question, you said you manually tuned your parameters. I think you did that by looking at different seeds, right?. My question is : why didn't...
+  ├─ AmbrosM (2023-03-14 18:25:06.770000) [+2]
+  │  Hi @peridon It's not about the seeds. I changed the hyperparameters manually and tried to understand the effect of every change. It takes more time than Optuna, but Optuna just gives you a set of s...
+    ├─ Camilla (2023-03-14 19:52:42.060000) [+0]
+    │  Do you start off with the default values? How do you decide which hyperparameters to tune for a model with a large set of hyperparameters? Thanks!
+    ├─ @kaggleqrdl (2023-03-14 20:08:33.420000) [+2]
+    │  I'd like to agree and disagree here.  I agree it's important to manually tune hyper parameters, but using Optuna has always worked for me - just not as the final step.   
+    │  
+    │  I also find I can always ...
+    ├─ AmbrosM (2023-03-15 05:22:54.657000) [+1]
+    │  Hi @kaggleqrdl Probably my view is biased by having seen too many notebooks which run Optuna for a few iterations in an excessively large search space and then accept whatever local minimum the too...
+    ├─ AmbrosM (2023-03-15 18:24:29.437000) [+0]
+    │  @camillagretschel Yes, I start with the default values. After a few experiments, you'll get to know which hyperparameters are important, for instance min_samples_leaf for random forests or max_dept...
+├─ Ravi Shah (2023-03-15 21:04:39.863000) [+2]
+│  Congrats @ambrosm! Very interesting solution, thanks for sharing!
+├─ Lucy (2023-03-14 13:47:53.153000) [+2]
+│  Thank you for your solid advice! I made huge mistakes in this competition exactly like what you said in #1 and #4. #5 is an interesting one. Why and when will you decide a feature not a numerical b...
+  ├─ AmbrosM (2023-03-14 17:49:54.277000) [+2]
+  │  Hi @qiaoningchen, when I thought about the problem, target encoding came to my mind first. Maybe a nonlinear regression model would have been better. Only a cross-validation experiment can tell…
+├─ Raihan Zaki (2023-03-14 11:52:56.800000) [+2]
+│  Thanks @ambrosm. I have learned many valuable lessons here
+├─ Pasquale (2023-03-14 08:09:34.437000) [+2]
+│  First of all congratulations and thanks because your post are always very informative and useful. I've also noticed how the optuna results are not always reliable, specially when there are a lot of...
+├─ RomainBdt (2023-03-14 06:20:24.337000) [+2]
+│  Congratulations for this new win!! 
+│  Just 2 questions, do you think RepeatedKFold can do the job for hyper parameter tuning with Optuna?
+│  Why you did not used the original dataset?
+  ├─ AmbrosM (2023-03-14 07:26:06.470000) [+3]
+  │  @romainbdt RepeatedKFold can help Optuna. You can check the Optuna result for plausibility by slightly perturbing the hyperparameters found by Optuna. If a small perturbation of the hyperparameters...
+    ├─ @kaggleqrdl (2023-03-14 20:15:36.630000) [+3]
+    │  You can also check the visualization plots that come with Optuna which graphically show the point above.
+├─ Davis Nyagami (2023-03-14 06:17:44.470000) [+2]
+│  I would never have thought about encoding the age variable. That's smart.
+├─ Dolapo Adebo (2023-03-14 06:06:42.393000) [+2]
+│  I had a discussion with a friend of mine about the age column, I said it feels more like a categorical column than a numerical column. Thanks for the info, will definitely implement them in my next...
+  ├─ AmbrosM (2023-03-14 07:13:03.080000) [+1]
+  │  Sure, @dolapoadebo, I add the same features to the train and the test data. See this line in the code:
+  │  
+  │  for df in [train, test]:
+  │     ...
+├─ Andrew Schleiss (2023-03-14 05:05:17.360000) [+2]
+│  Fantastic write up thank you @ambrosm 
+│  
+│  I wonder if the AgeInDays encoding pushed you into first place. Very interesting take and congratulations
+├─ Sergey Gusev (2023-06-02 15:05:09.507000) [+0]
+│  Thank you! I am a beginner and it is very helpful!
+├─ Lucy (2023-03-31 14:02:19.997000) [+0]
+│  Hi @ambrosm,
+│  
+│  This is the question for the newest episode: Media Cost. I am asking here because I want some helps with target encoding.  The target encoding object will be 'store_sales'.  After app...
+  ├─ AmbrosM (2023-03-31 16:04:32.607000) [+1]
+  │  Hi @qiaoningchen, MEstimateEncoder has a fit() and a transform() method. You can do it like this:
+  │  
+  │  encoder = MEstimateEncoder(cols=['store_sqft'])
+  │  X_tr = encoder.fit_transform(train[features], trai...
+    ├─ Lucy (2023-03-31 16:17:00.147000) [+1]
+    │  Thank you for the quick response! I see, that is how test data is being encoded. Thanks again!
+├─ Iqbal Syah Akbar (2023-03-21 11:40:31.143000) [+0]
+│  Thanks for sharing! I noticed that you said parameter optimizer like Optuna won't survive the change of seed. Is there any way to find the optimal seed? Because it seems to be the most random out o...
+  ├─ AmbrosM (2023-03-21 16:11:29.933000) [+1]
+  │  @iqbalsyahakbar There is no optimal seed. If the seed is good for cross-validation, it won't be good for the public lb. If it is good for the public lb, it won't be good for the private one. We hav...
+    ├─ Iqbal Syah Akbar (2023-03-22 07:28:14.890000) [+0]
+    │  I see, so finding the "optimal seed" is just a fruitless effort. Thanks for the answer! The topic you posted there is also very great!
+    │  
+    │  Also one more thing. It seems that you do parameter tuning ma...
+├─ issuebombom (2023-03-20 06:01:58.477000) [+0]
+│  I would never have thought about encoding the age variable
+├─ Daragh Thomas (2023-03-15 15:45:47.973000) [+0]
+│  As a beginner this is very useful thank you, I'm going to bookmark this
+├─ Rattlesnake (2023-03-15 14:21:23.290000) [+0]
+│  My experience is the same with optuna. My first 3 models "hand-optimized" using grid search overperformed all the later ones including ensembles which I tuned with optuna.
+├─ Timur Talikbayev (2023-03-15 10:03:21.953000) [+0]
+│  Thanks for your solution. Please let me know, how do you know that model_1 etc… isn't overfitted or underfitted. and why did you choose theese models to your ensemble?
+  ├─ AmbrosM (2023-03-15 18:05:32.567000) [+0]
+  │  Hi @timurtalikbayev That's what cross-validation is for: As soon as you have done whatever it takes to optimize the cross-validation score, you know that the model is good enough. I tested several ...
+    ├─ Timur Talikbayev (2023-03-16 03:32:48.143000) [+0]
+    │  Do you mean that using crossvalidation techniques I almoust never overfit XGB or GBR? or it may be possible?
+    │  For example I have XGB model, then using GridSearchCV performed search for best paramete...
+├─ Arun Purakkatt (2023-03-15 04:53:46.057000) [+0]
+│  @ambrosm Congratulations for the 1 Place win !! Yes #1 is something everyone will look in as soon as joining the competition…. at least a glance to public leaderboard or best score will bias our mo...
+├─ Adarsh (2023-03-14 13:38:20.253000) [+1]
+│  thanks @ambrosm !!!
+├─ [deleted] (2023-03-14 06:00:46.120000) [+1]
+│  [deleted]

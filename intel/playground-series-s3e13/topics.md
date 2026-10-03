@@ -1,0 +1,82 @@
+# playground-series-s3e13 讨论区（按票数排序，共 80 条）
+
+- [Here we go, cheating](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/405480) — 47 票 / 53 评论 / 2023-04-27 
+- [MAP@3 explained](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/402411) — 47 票 / 15 评论 / 2023-04-18 
+- [#5 Solution](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/406313) — 36 票 / 11 评论 / 2023-05-02 **write-up?**
+- [Collection of helpful ideas - S3E13](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/403399) — 36 票 / 8 评论 / 2023-04-22 
+- [DO NOT use medical knowledge on this data!](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/403728) — 35 票 / 24 评论 / 2023-04-24 
+- [Medical approach to FE in this competition](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/402933) — 34 票 / 14 评论 / 2023-04-20 
+- [Surprisingly #1, Public LB: 0.37196 | Private LB: 0.53179](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/406433) — 32 票 / 18 评论 / 2023-05-02 
+- [Revealing the target variable distribution of the public LB](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/404766) — 30 票 / 11 评论 / 2023-04-24 
+- [Is that Private LB true? My best result ever. I'm gonna print and frame it.](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/406338) — 26 票 / 14 评论 / 2023-05-02 
+- [Feature Engineering from Exploratory Data Analysis!](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/404958) — 25 票 / 9 评论 / 2023-04-25 
+- [How tight the leaderboard is](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/402789) — 23 票 / 7 评论 / 2023-04-19 
+- [Multi-Class Classification Metrics 🔢](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/402355) — 22 票 / 5 评论 / 2023-04-18 
+- [Which features are most important for predicting each disease?](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/402558) — 22 票 / 8 评论 / 2023-04-18 
+- [LDA to the rescue... a simple but strong baseline LB = 0.41501](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/405435) — 21 票 / 7 评论 / 2023-04-27 
+- [Symptoms Clustering ](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/402383) — 20 票 / 0 评论 / 2023-04-18 
+- [#3 solution ](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/406409) — 19 票 / 3 评论 / 2023-05-02 **write-up?**
+- [📊 Feature Engineering For The Cure 🔬](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/402351) — 18 票 / 10 评论 / 2023-04-18 
+- [Get The Domian Knowledge On  Provided Vector Borne Diseases](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/402353) — 15 票 / 3 评论 / 2023-04-18 
+- [It Is Time for Simple Models to Shine Again](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/402612) — 14 票 / 12 评论 / 2023-04-19 
+- [Concatenating the original dataset](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/402666) — 14 票 / 11 评论 / 2023-04-19 
+- [#2 solution 0.52521](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/407829) — 13 票 / 5 评论 / 2023-05-08 **write-up?**
+- [New to Machine Learning or Kaggle?](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/393078) — 11 票 / 14 评论 / 2023-03-07 
+- [Starter materials and references](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/402339) — 11 票 / 3 评论 / 2023-04-18 
+- [Numpy array implementation of map@3](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/402389) — 11 票 / 3 评论 / 2023-04-18 
+- [It's Ben's. Always Ben Hamner Codes/Metrics helping me. And I hope you too.](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/402457) — 11 票 / 0 评论 / 2023-04-18 
+- [#4 solution - simple model WITHOUT CV ;-)](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/406812) — 10 票 / 5 评论 / 2023-05-03 **write-up?**
+- [MAP@3 Confusion Matrix](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/403154) — 10 票 / 2 评论 / 2023-04-21 
+- [Comparison of dimensional compression techniques and their addition as features](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/402752) — 10 票 / 3 评论 / 2023-04-19 
+- [[Compilation]Good beginner friendly notebooks](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/403649) — 10 票 / 6 评论 / 2023-04-24 
+- [MAP@3 explained in a novice way](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/402448) — 10 票 / 0 评论 / 2023-04-18 
+- [Try to Decompose Your Dataset!](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/405562) — 10 票 / 1 评论 / 2023-04-28 
+- [Disease Overview: A Brief Summary of Target Diseases](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/402492) — 9 票 / 5 评论 / 2023-04-18 
+- [Someone is trying so hard to improve his/her public lb score](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/405420) — 9 票 / 13 评论 / 2023-04-27 
+- [#58 solution: CV = 0.475, Public LB = 0.43, Private LB = 0.492](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/406396) — 9 票 / 1 评论 / 2023-05-02 **write-up?**
+- [Shakeup, scary!](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/406299) — 9 票 / 19 评论 / 2023-05-02 
+- [31th Place Solution | Using NLP for tabular data!](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/405616) — 8 票 / 3 评论 / 2023-05-02 **write-up?**
+- [Initial look at symptoms across diseases](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/402363) — 8 票 / 1 评论 / 2023-04-18 
+- [Using AutoEncoders to reduce dimensionality](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/404951) — 8 票 / 7 评论 / 2023-04-25 
+- [All the best- choose your final submissions with care and caution!](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/406260) — 8 票 / 0 评论 / 2023-05-01 
+- [MAPK Submission's Ensemble](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/406041) — 8 票 / 7 评论 / 2023-04-30 
+- [Voting Ensemble for @k Problems](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/402794) — 7 票 / 3 评论 / 2023-04-19 
+- [Question from the new guy: Why not DNN?](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/403337) — 7 票 / 10 评论 / 2023-04-22 
+- [What is happening in this competition?](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/405470) — 6 票 / 11 评论 / 2023-04-27 
+- [Is metric implementation wrong?](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/404965) — 6 票 / 6 评论 / 2023-04-25 
+- [When Kaggle used to be funnier. Shakeup Memes selection (four years ago).](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/406513) — 6 票 / 4 评论 / 2023-05-02 
+- [#15 with original data](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/406395) — 6 票 / 6 评论 / 2023-05-02 
+- [Have anyone tried ranker models?](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/403125) — 6 票 / 5 评论 / 2023-04-21 
+- [Intro to the Competition](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/402338) — 5 票 / 4 评论 / 2023-04-18 
+- [How to Cross Validate](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/403171) — 5 票 / 7 评论 / 2023-04-21 
+- [Top 29 Using Baseline](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/406366) — 5 票 / 0 评论 / 2023-05-02 
+- [Googling symptoms of each disease (FE idea)](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/402800) — 5 票 / 5 评论 / 2023-04-19 
+- [Mutual Information Score and Feature selection](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/403493) — 5 票 / 7 评论 / 2023-04-23 
+- [Identical Results with Different Random States: LightGBM, XGBoost, CatBoost, and RandomForest](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/402569) — 4 票 / 4 评论 / 2023-04-18 
+- [Some of the known Multi Class Classification Algorithms](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/402815) — 4 票 / 1 评论 / 2023-04-19 
+- [A brief description of various symptoms i.e. features](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/402494) — 4 票 / 2 评论 / 2023-04-18 
+- [Precision, Recall, F1, and MAP](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/402352) — 4 票 / 1 评论 / 2023-04-18 
+- [Feature Engineering Pipeline 🔩](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/403229) — 4 票 / 0 评论 / 2023-04-21 
+- [Unveiling the Secrets of Symptom-Disease Relationships](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/402460) — 4 票 / 0 评论 / 2023-04-18 
+- [Are Cv scores to be trusted?](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/403209) — 4 票 / 15 评论 / 2023-04-21 
+- [Feature Transformation idea](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/405806) — 4 票 / 2 评论 / 2023-04-29 
+- [Is anyone having success in augumentation?](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/405642) — 4 票 / 4 评论 / 2023-04-28 
+- [Has anyone tried using Neural Network? ](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/405744) — 4 票 / 6 评论 / 2023-04-29 
+- [Determining symptoms based on the data (Without googling)](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/405091) — 3 票 / 4 评论 / 2023-04-26 
+- [Only "save and run all (commit)" generates output for submissions? Why?](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/402980) — 3 票 / 0 评论 / 2023-04-20 
+- [Calculating MAP@3 in Python?](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/402529) — 3 票 / 4 评论 / 2023-04-18 
+- [Overfitting due to large number of features?](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/402551) — 3 票 / 5 评论 / 2023-04-18 
+- [Id has sth to do with the prediction?](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/402893) — 2 票 / 9 评论 / 2023-04-20 
+- [Cluster analysis insights](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/405284) — 2 票 / 0 评论 / 2023-04-26 
+- [Should we use stacking to ensemble?](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/405386) — 2 票 / 1 评论 / 2023-04-27 
+- [Is the original dataset worth using?](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/404962) — 2 票 / 3 评论 / 2023-04-25 
+- [Overfitting and final score predictions](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/405340) — 2 票 / 6 评论 / 2023-04-27 
+- [Any ideas about accurate CV?](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/402897) — 2 票 / 4 评论 / 2023-04-20 
+- [Is leaderboard cross-validated?](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/406416) — 2 票 / 0 评论 / 2023-05-02 
+- [#77 Solution](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/406325) — 2 票 / 2 评论 / 2023-05-02 **write-up?**
+- [Scoring Metrics and Submission Formatting](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/402735) — 2 票 / 0 评论 / 2023-04-19 
+- [Getting top 3 predictions from `XGBClassifier` to use with `mapk` scoring function](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/402499) — 2 票 / 1 评论 / 2023-04-18 
+- [Different feature subsets working for different models](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/403569) — 1 票 / 0 评论 / 2023-04-23 
+- [Solution #35 : Whoa woke up to a massive jump in rankings!](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/406337) — 1 票 / 0 评论 / 2023-05-02 **write-up?**
+- [Clarification on calculation of MAP@K in pinned notebook](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/406221) — 1 票 / 6 评论 / 2023-05-01 
+- [Solution and Reflections](https://www.kaggle.com/competitions/playground-series-s3e13/discussion/406519) — 1 票 / 0 评论 / 2023-05-02 **write-up?**

@@ -1,0 +1,288 @@
+# https://www.kaggle.com/competitions/pii-detection-removal-from-educational-data/discussion/497374
+
+Topic #497374: 1st place solution - Ensemble of diverse Deberta architectures and postprocessing
+  Author: Geremie Yeo
+  Posted: 2024-04-24 12:12:59.954000
+  Votes: 99  Comments: 38
+
+First of all, thanks to Kaggle and The Learning Agency Lab from hosting this fun and very real-world applicable competition!
+
+Thanks @gauravbrills @ympaik @drpatrickchan @evgeniimaslov2 for the wonderful collaboration!
+
+Inference code: https://www.kaggle.com/code/yeoyunsianggeremie/pii-1st-place-solution
+
+Full code: https://github.com/bogoconic1/pii-detection-1st-place
+
+Context
+
+Business context: https://www.kaggle.com/competitions/pii-detection-removal-from-educational-data
+Data context: https://www.kaggle.com/competitions/pii-detection-removal-from-educational-data/data
+
+Overview of the approach
+
+
+
+Datasets
+@nbroad https://www.kaggle.com/datasets/nbroad/pii-dd-mistral-generated (by far the most useful!)
+@mpware https://www.kaggle.com/datasets/mpware/pii-mixtral8x7b-generated-essays
+With the help of this notebook by @minhsienweng, we also created our own dataset of 2k samples and used it for some training runs. Our created external dataset is available here (external_data_v8.json - note this includes nbroad dataset)
+
+Modelling
+Each experiment was trained on 4 folds (document % 4) then 1 or 2 times full-fit. 
+
+
+
+13 labels were used for all the training runs. 
+
+The models are trained on a max length of between 1600-2048 for 3-4 epochs.
+
+LR 1e-5
+
+No downsampling of essays with no PII
+
+o_weight = 0.05
+
+
+We tried various models as well as architectures, as Deberta was fast in inference and good at both LB and CV we included variations of Deberta architecture in our ensemble. Some variations we tried.
+
+Multi-Sample Dropout Custom Model: Helped to train with a better-fitted train curve and less of spikes we saw with training compared to just a normal model.
+Bilstm layer Custom Model: This introduces a bilstm layer just before the classifier which was tried by some public notebooks. This helped in diversity and was smoother in training and the scores correlated well with LB and CV. Bilstm we did have issues when training with Nan loss. So initializing the layer and also saving with save_safetensors=False, helped there. 
+Knowledge Distillation: As we had some models trained on disparate datasets we thought of an idea to try to use them as teachers for a student trained on different datasets with the same validation folds. This worked great and and improved CV and LB by about 0.005-0.01. We also tried to have multiple teacher models but in the end, were bit short on time. 
+Augmentation: We tried to train one run with this for ensembling. For some essays, swap the first and last names before training the model (e.g. document 7779 where Leroy can both be a B-NAME_STUDENT and an I-NAME_STUDENT)
+
+Credits to @gauravbrills for points 2 and 3 above, these improved diversity of our ensembles.
+
+For the Knowledge Distillation task, the loss function looked like
+
+ ():
+         ():
+            ().__init__(*args, **kwargs)
+            self.class_weights = class_weights
+            self.teacher_model = teacher_model.to(self.args.device)
+            self.temperature = 
+            self.alpha = 
+
+         ():
+            labels = inputs.pop().to(self.args.device)
+            inputs = {name: tensor.to(self.args.device)  name, tensor  inputs.items()}
+            outputs = model(**inputs)
+            
+             torch.no_grad():
+                teacher_outputs = self.teacher_model(**inputs)
+
+            teacher_logits = teacher_outputs.logits
+            logits = outputs.logits
+            loss_fct = torch.nn.CrossEntropyLoss(weight=self.class_weights.to(self.args.device))
+
+            loss_student = loss_fct(logits.view(-, self.model.config.num_labels), labels.view(-))
+            distillation_loss = torch.nn.KLDivLoss()(F.log_softmax(logits/ self.temperature , dim=-),
+                                                    F.softmax(teacher_logits/ self.temperature , dim=-)) * self.temperature**
+            loss =loss_student*self.alpha+ distillation_loss*(-self.alpha)
+
+             (loss, outputs)  return_outputs  loss
+
+
+Postprocessing
+This was the key towards improving our CV and LB. We used the following steps, mostly derived from patterns observed from mistakes in the OOF predictions:
+
+
+
+Using different thresholds for each PII label, rather than using the same threshold for all 13 PII labels
+
+Removed all NAME_STUDENT predictions that are not title-cased, or contain a digit/underscore
+
+If a token X in a document is predicted as NAME_STUDENT, all tokens X in the same document will be turned into NAME_STUDENT. (e.g. document 2722 'Saman')
+
+If there exists a PHONE_NUM prediction that is a number with 9 or more digits, turn it into ID_NUM
+
+Repairing the missed "\n" tokens in STREET_ADDRESS
+
+If there are 3 consecutive tokens being predicted as B-USERNAME and the 2nd one is a hyphen or a dot, turn the 2nd and 3rd token to I-USERNAME
+
+Removing ID_NUM predictions with &lt;4 characters, or &gt;25 characters
+
+Removing URL_PERSONAL predictions with &lt;10 characters
+
+Removing EMAIL predictions which don't have @
+
+Finally, after doing all the steps above, we repaired the span for NAME_STUDENT and ID_NUM tokens, and added on regex predictions if the models missed them
+
+
+Details of the submission
+
+
+
+We used a weighted voting ensemble method, using 7 groups and 10 models. The weights of different groups and the voting threshold are tuned via Optuna on the out-of-fold cross validation
+
+Each group contains 1-2 models, and both fold/full-fit models are used to improve the diversity
+
+All 3 submissions were ensembles, with different models and different weights. We selected 2 submissions with the full postprocessing and 1 submission with more conservative postprocessing, in the case if the postprocessing overfits
+
+
+What didn’t work
+
+
+
+MLM pretraining
+
+Freezing layers
+
+Trying to repair I-URL_PERSONAL predictions
+
+CausalLM inference, too slow
+
+Training/Inference with Stride
+
+Longformer/LLM models
+
+Label specific model (i.e. train a model with only NAME_STUDENT labels while the other PII labels are turned to O)
+
+Augment the dataset with rare/multinational names
+
+Pseudo-labelling the test data
+
+Comments:
+├─ Shiner (2024-04-25 06:24:41.510000) [+4]
+│  Congrats! Multi-Sample Dropout new knowledge learned! BTW, I wanna know how much did this technique affect your model performce?
+  ├─ Geremie Yeo (2024-04-25 06:26:31.837000) [+5]
+  │  Same score on the public LB, but the private LB was +0.004
+  │  
+  │  The distillation (I.e. training first on MPWARE/our created dataset then train 2nd time on Nick + comp) was the magic model for us on bot...
+    ├─ Shiner (2024-04-25 06:46:56.573000) [+2]
+    │  Yep, I see your Distillation learning is like:
+    │  
+    │   models trained  disparate datasets we thought  an idea    use them  teachers  a student trained  different datasets   same validation folds
+    │  
+    │  
+    │  May I ...
+    ├─ Gaurav Rawat (2024-04-25 10:18:55.530000) [+3]
+    │  mainly started with 0.5 to test how it worked and then slowly reduced it .
+├─ william.wu (2024-04-26 05:56:49.627000) [+1]
+│  Congrats @yeoyunsianggeremie! Thanks for sharing in such a detailed way. Super fantastic resources for me to learn from.
+├─ Sohaib (2024-04-25 23:25:19.330000) [+1]
+│  Thanks for sharing all the tricks. Can I ask which trick contributed to success in score the most?
+  ├─ Geremie Yeo (2024-04-26 05:52:48.290000) [+2]
+  │  Post-processing by far was the most important. That alone, boosted a single model performance by +0.01 on the public LB.
+  │  Given the noisy nature of the data, it makes sense, using hard rules for pre...
+├─ Pushkar K.G (2024-04-25 06:52:47.457000) [+1]
+│  Bilstm we did have issues when training with Nan loss
+│  
+│  
+│  What type of issues? what was the fix?
+  ├─ Gaurav Rawat (2024-04-25 10:17:16.620000) [+2]
+  │  the gradient was Nan and Loss was zero , the fix I have already described above was to initialize the lstm layer as below 
+  │  
+  │  def initialize:
+  │           name, param  lstm_layer.named:
+  │               'wei...
+├─ sinchir0 (2024-04-27 06:03:10.213000) [+2]
+│  Thanks for the great solution! 
+│  Why did you decide to use voting_thr? Is there a problem with simple probability averages?(my team used it.)
+  ├─ Geremie Yeo (2024-04-27 06:54:02.590000) [+2]
+  │  To ensemble different models with different thresholds. 
+  │  
+  │  For example, it cannot be assumed that every model has an optimal threshold of 0.9. Some models, from our experiments, do not need such a h...
+    ├─ sinchir0 (2024-04-27 08:47:24.387000) [+0]
+    │  I understood it well. Thanks a lot!
+├─ Sohaib (2024-04-25 21:53:40.583000) [+2]
+│  Can you please elaborate the preds_final and threshold. I think there is some mistake:
+│  Lets take a simple example of only three labels and single prediction:
+│  
+│  indexes = {: , : , : }
+│  
+│  thresholds = {...
+  ├─ Geremie Yeo (2024-04-26 05:56:28.783000) [+1]
+  │  pred_softmax = [,,,]
+  │  
+  │  
+  │  The code first does the argmax() function, which first will select the label that has the highest probability, before performing any label modification based on thresholds. I...
+├─ Minh Tri Phan (2024-04-24 17:16:31.700000) [+2]
+│  Huge congrats! Hope to have a chance to work with you in future competitions!
+  ├─ Gaurav Rawat (2024-04-24 17:45:40.770000) [+1]
+  │  Hi @shinomoriaoshi thanks and congrats for a nice finish to you also considering your work commitments. Hope to work with you in the near future 😀
+├─ RB (2024-04-24 12:41:47.707000) [+2]
+│  Congratulations on the 1st prize ! How did you determine threshold for each of the PII labels ?
+  ├─ Geremie Yeo (2024-04-24 12:45:43.437000) [+4]
+  │  We defined a list of thresholds, and for each label, ran the model on the list to determine the best one. Different models have different optimal thresholds.
+  │  
+  │  global_thresholds = 
+  │  
+  │  ans = 
+  │  
+  │  
+  │  
+  │   thres...
+├─ Pavan Sabnis (2024-11-11 05:56:39.433000) [+0]
+│  Congrats! Multi-Sample Dropout new knowledge learned!
+├─ Guilherme P Oliveira (2024-05-28 19:11:55.213000) [+0]
+│  Congratulations on first place!
+│  
+│  Honestly it's a little advanced for me haha
+│  But in the future it will definitely be of great value.
+│  
+│  Thank you very much for sharing your solution!!
+├─ Geremie Yeo (2024-05-05 07:17:54.230000) [+0]
+│  Updated the post with
+│  
+│  
+│  
+│  GitHub repo to our training code
+│  
+│  Link to the external dataset we created for training
+│  
+│  Added a diagram of our approach
+├─ Yuvaraj Bhinge (2024-04-27 14:21:58.793000) [+0]
+│  Congratulations !!!
+├─ Daniya Sohail (2024-04-26 14:47:30.273000) [+0]
+│  Congrats! Looks Amazing!
+├─ Rohannmm (2024-04-25 13:17:03.743000) [+0]
+│  Great solution! Congrats!!
+├─ Earth (2024-04-25 07:49:51.583000) [+0]
+│  Could you also provide the code snippets of custom model with multisample and bilstm?
+│  I'm not sure I did correctly. Thank you
+├─ C R Suthikshn Kumar (2024-04-25 06:35:35.577000) [+0]
+│  Congratulations on achieving top position in this competition. Thanks for sharing details of your solution.
+├─ Sajan Gohil (2024-04-24 17:58:34.237000) [+0]
+│  Congrats! Any clue why label specific models didn't work? I thought this approach would help when some sources don't have annotated entities.
+  ├─ Ritesh Bhalerao (2024-04-24 19:25:00.223000) [+0]
+  │  Actually, they worked decent enough for me with minimal effort.
+  ├─ Maksym Dolgikh (2024-04-24 20:30:26.997000) [+3]
+  │  One reason could be this:
+  │  
+  │  Suppose you classify names and usernames seperately. Then your "name" model doesn't know the concept of a username. So it can sometimes confuse a username for a name.
+  │  
+  │  On...
+    ├─ Geremie Yeo (2024-04-25 02:35:02.617000) [+1]
+    │  We didn’t have this issue when analysing the OOF predictions for the label-specific NAME_STUDENT model, but it ended up missing similar difficult names compared to the ones trained on all labels (e...
+├─ Miles Morales (2024-04-24 16:52:39.957000) [+0]
+│  Good competition. At the end public models came out to be overfitted and I should've expected it. ;-)
+├─ Pardeep Singh (2024-04-24 14:49:06.767000) [+0]
+│  Congrats @yeoyunsianggeremie and team for securing the 1st place. Thanks for sharing this writeup! 👏
+├─ Ravi Ramakrishnan (2024-04-24 14:09:23.907000) [+0]
+│  @yeoyunsianggeremie and team, hearty congratulations for the win! Fantastic solution and well deserved result!
+├─ TheItCrow (2024-04-24 14:08:56.067000) [+0]
+│  Congratz on the win!
+│  
+│  Might I ask: how exactly did you use and train Deberta? As in: classify this sentence/chunk of text into the PII labels?
+├─ Enes Koşar (2024-04-24 13:48:06.877000) [+0]
+│  thank you for the solution @yeoyunsianggeremie
+├─ preferenceforxlh (2024-04-24 13:43:48.877000) [+0]
+│  Congratulations on the win! But could you please provide the training code? I find it difficult to convert such brilliant ideas into code.Thank you very much for sharing.
+├─ Ritesh Bhalerao (2024-04-24 13:17:55.150000) [+0]
+│  Hello, congratulations on the win! Could you please share the code for - We used a weighted voting ensemble method, using 7 groups and 10 models. The weights of different groups and the voting thre...
+  ├─ Geremie Yeo (2024-04-24 13:23:10.550000) [+2]
+  │  weights = {
+  │      :  ,
+  │      : , 
+  │      : ,
+  │      : ,
+  │      : ,
+  │      : , 
+  │      : , 
+  │  }
+  │  
+  │  voting_thr = 
+  │  
+  │  
+  │  This was the weights for our best private LB selected submission
+  │  For each Optuna trial, a weight (float) o...

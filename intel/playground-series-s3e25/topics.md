@@ -1,0 +1,76 @@
+# playground-series-s3e25 讨论区（按票数排序，共 74 条）
+
+- [Don't forget to tune the sample weights!](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/455888) — 74 票 / 35 评论 / 2023-11-16 
+- [Interesting fact about data categorization](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/457631) — 54 票 / 42 评论 / 2023-11-25 
+- [Starting references ](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/455241) — 43 票 / 13 评论 / 2023-11-14 
+- [Not a mention](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/458154) — 40 票 / 19 评论 / 2023-11-28 
+- [Jocelyn Dumlao recently won a Kaggle Swag. Now on this Comp her Dataset : Well-done J. Dumlao!](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/455244) — 35 票 / 11 评论 / 2023-11-14 
+- [Explanation for Median Absolute Error](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/455251) — 32 票 / 4 评论 / 2023-11-14 
+- [Kaggle Hardness is all. Scales, Mohs and Median Absolute Error (MedAE)](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/455671) — 30 票 / 6 评论 / 2023-11-15 
+- [Reminder to setup a good CV strategy to be able to trust it](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/457338) — 26 票 / 5 评论 / 2023-11-24 
+- [Data cleaning and model tips](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/455273) — 24 票 / 8 评论 / 2023-11-14 
+- [Error with submission](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/456076) — 24 票 / 36 评论 / 2023-11-18 
+- [Personal thoughts about Median Absolute Error in THIS competition](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/455945) — 22 票 / 20 评论 / 2023-11-17 
+- [Leaderboard dynamics](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/459381) — 21 票 / 2 评论 / 2023-12-05 
+- [What is a baseline?](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/455312) — 20 票 / 5 评论 / 2023-11-14 
+- [Be wary of edge cases and quasi-duplicates across the datasets](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/455519) — 17 票 / 1 评论 / 2023-11-15 
+- [A decent baseline: Least Absolute Deviation Stacker => LB = 0.49737](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/455289) — 17 票 / 9 评论 / 2023-11-14 
+- [Collection of helpful ideas - S3E25](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/456820) — 15 票 / 8 评论 / 2023-11-21 
+- [📚🔮✔Good Resources to refer for this competition✔🔮📚](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/455283) — 14 票 / 2 评论 / 2023-11-14 
+- [Shake and bake](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/458985) — 13 票 / 20 评论 / 2023-12-02 
+- [Playground Series Datasets: Contributors/theme/votes](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/455533) — 12 票 / 6 评论 / 2023-11-15 
+- [Gated Adaptive Network for Deep Automated Learning of Features (GANDALF)](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/456728) — 12 票 / 7 评论 / 2023-11-21 
+- [Good Strategies: Insights from the Best Notebooks](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/457586) — 11 票 / 10 评论 / 2023-11-25 
+- [Nearest Neighbors for creating features](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/455448) — 11 票 / 3 评论 / 2023-11-14 
+- [🐱‍👤 I'm Assembling a team, everyone is welcomed](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/455549) — 11 票 / 8 评论 / 2023-11-15 
+- [Interesting Findings! ](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/457835) — 11 票 / 18 评论 / 2023-11-27 
+- [Submission Errors - Should be resolved](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/456255) — 10 票 / 4 评论 / 2023-11-19 
+- [Why is neural networks so good?](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/456417) — 9 票 / 7 评论 / 2023-11-20 
+- [Will we achieve a zero score?](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/456380) — 9 票 / 25 评论 / 2023-11-19 
+- [Unshakeable and unbakeable](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/459382) — 8 票 / 19 评论 / 2023-12-05 
+- [New to Machine Learning or Kaggle?](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/440711) — 7 票 / 4 评论 / 2023-09-16 
+- ["Evaluation metric raised an unexpected error"](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/456072) — 7 票 / 8 评论 / 2023-11-17 
+- [Installing requisite versions of packages in kernels without multiple .whl files](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/458754) — 7 票 / 5 评论 / 2023-12-01 
+- [Research Publications on prediction of  Mohs Hardness using ML techniques](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/455264) — 7 票 / 3 评论 / 2023-11-14 
+- [On the overfitting problem of neural networks](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/456885) — 7 票 / 10 评论 / 2023-11-22 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/455252) — 6 票 / 7 评论 / 2023-11-14 
+- [How was the synethic data generated? How would one even train a "deep learning model" on the original dataset? It is quite small.](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/455245) — 6 票 / 3 评论 / 2023-11-14 
+- [Which features should be selected?](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/455744) — 6 票 / 0 评论 / 2023-11-16 
+- [Tensorflow customized loss function](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/456099) — 6 票 / 0 评论 / 2023-11-18 
+- [Still dreaming of Kaggle merchandise](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/459426) — 6 票 / 0 评论 / 2023-12-05 
+- [Results as far s3 e25.](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/456976) — 6 票 / 8 评论 / 2023-11-22 
+- [Feature selection](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/457588) — 6 票 / 15 评论 / 2023-11-25 
+- [What lies ahead?](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/458263) — 5 票 / 4 评论 / 2023-11-29 
+- [Evaluation metric raised an unexpected error](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/456095) — 5 票 / 3 评论 / 2023-11-18 
+- [Results from more than 1000 experiments](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/456512) — 4 票 / 4 评论 / 2023-11-20 
+- [The importance of being 0](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/458162) — 4 票 / 0 评论 / 2023-11-28 
+- [More than 200 submissions with a score of 0.25!](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/459308) — 4 票 / 4 评论 / 2023-12-04 
+- [Not able to submit](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/459242) — 3 票 / 3 评论 / 2023-12-04 
+- [Why  Classification gives better result](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/457465) — 3 票 / 9 评论 / 2023-11-24 
+- [Setting a Good Cross Validation](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/459419) — 3 票 / 4 评论 / 2023-12-05 
+- [Question: In simple Terms what is Probing? Also your thoughts on Shakeup and MedAE concept.](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/456485) — 3 票 / 4 评论 / 2023-11-20 
+- [Interesting turnout](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/459151) — 3 票 / 11 评论 / 2023-12-03 
+- [375 more features | OpenFE generated](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/456145) — 3 票 / 6 评论 / 2023-11-18 
+- [Issue about NN model convergence](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/456094) — 3 票 / 8 评论 / 2023-11-18 
+- [Need advice for elevating scores with Mohs Hardness Dataset !!](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/473650) — 3 票 / 2 评论 / 2024-02-05 
+- [new on kaggle try this code for completion  ](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/457743) — 2 票 / 1 评论 / 2023-11-26 
+- [How to proceeds feature engineering](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/456950) — 2 票 / 5 评论 / 2023-11-22 
+- [How to evaluate the predicted results?](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/456939) — 2 票 / 1 评论 / 2023-11-22 
+- [!pip install auto-sklearn fails with an error in kaggle. ](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/456227) — 2 票 / 6 评论 / 2023-11-18 
+- [How do I assign a notebook to the solution column on the leaderboard?](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/460423) — 2 票 / 2 评论 / 2023-12-09 **write-up?**
+- [Blending vs. Voting](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/456362) — 2 票 / 0 评论 / 2023-11-19 
+- [Feature and target distributions with the original dataset seem close](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/455891) — 2 票 / 1 评论 / 2023-11-16 
+- [I am new to Kaggle and machine learning.](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/457897) — 1 票 / 1 评论 / 2023-11-27 
+- [Reduce the medAE score?](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/458052) — 1 票 / 2 评论 / 2023-11-28 
+- [NN with feature from LGBM tuned](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/458934) — 1 票 / 2 评论 / 2023-12-02 
+- [how well can tree based regression models can perform in this competition](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/456721) — 1 票 / 7 评论 / 2023-11-21 **write-up?**
+- [Has Anyone tried with extratreeregressor and randomforest](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/456739) — 1 票 / 1 评论 / 2023-11-21 
+- [I got a public score of 0.64, can anyone please tell, if this is too bad or not? I am a beginner and I have attached my .ipynb file here](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/466405) — 1 票 / 0 评论 / 2024-01-08 
+- [Same score on top 20 or so leader board entries](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/458156) — 1 票 / 7 评论 / 2023-11-28 
+- [Feature Engineering ](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/457254) — 0 票 / 3 评论 / 2023-11-23 
+- [Mohs Hardness](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/457463) — 0 票 / 2 评论 / 2023-11-24 
+- [Trying Agglomerative Clustering](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/458583) — 0 票 / 0 评论 / 2023-11-30 
+- [Model With no preprocessing Accuracy](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/456861) — 0 票 / 0 评论 / 2023-11-22 
+- [trouble with data](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/456585) — 0 票 / 1 评论 / 2023-11-20 
+- [So, I know I'm a bit late, but... what about the 0s?](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/462805) — 0 票 / 0 评论 / 2023-12-21 
+- [Summary of my experience!](https://www.kaggle.com/competitions/playground-series-s3e25/discussion/458983) — 0 票 / 1 评论 / 2023-12-02 

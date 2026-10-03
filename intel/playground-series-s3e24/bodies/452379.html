@@ -1,0 +1,104 @@
+<p>Neither the train/test set nor the <a href="https://www.kaggle.com/datasets/gauravduttakiit/smoker-status-prediction-using-biosignals" target="_blank">"original" dataset</a> contains a <code>gender</code> column. However, <code>gender</code> is an important latent feature. We can access it for the original data using <a href="https://www.kaggle.com/datasets/kukuroo3/body-signal-of-smoking/" target="_blank">another kaggle dataset</a>.</p>
+<pre><code>smoking = pd.read_csv(,index_col=)
+
+ sklearn.feature_selection  mutual_info_classif
+ sklearn.utils.parallel  Parallel, delayed
+ sklearn.preprocessing  OrdinalEncoder
+
+ ():
+    X = np.array(x).reshape((-,))
+    y = np.array(y)
+     X.dtype == :
+        X = OrdinalEncoder().fit_transform(X)
+    scores = Parallel(n_jobs=)(delayed(mutual_info_classif)(X,y,random_state=+i)  i  (n_iter))
+     np.array([np.mean(scores), np.std(scores)])
+
+ ():
+    ()
+    e = mi(train[target],train[target])[]
+     c  train.columns:
+         c != target:
+            mu, sigma = mi(train[c],train[target])/e*
+            ()
+
+theil_u(smoking,target=,comment=)
+</code></pre>
+<pre><code>*** U(y|x) in % (Original data) ***
+gender: 24.53 ± 0.28
+age: 2.61 ± 0.29
+height(cm): 14.33 ± 0.26
+weight(kg): 7.91 ± 0.15
+waist(cm): 4.88 ± 0.16
+eyesight(left): 1.05 ± 0.26
+eyesight(right): 1.21 ± 0.35
+hearing(left): 0.97 ± 0.41
+hearing(right): 1.00 ± 0.39
+systolic: 1.02 ± 0.28
+relaxation: 1.30 ± 0.16
+fasting blood sugar: 0.84 ± 0.25
+Cholesterol: 0.06 ± 0.10
+triglyceride: 5.53 ± 0.39
+HDL: 2.96 ± 0.36
+LDL: 0.42 ± 0.28
+hemoglobin: 15.65 ± 0.28
+Urine protein: 1.03 ± 0.31
+serum creatinine: 6.81 ± 0.19
+AST: 1.17 ± 0.16
+ALT: 3.26 ± 0.46
+Gtp: 11.39 ± 0.13
+oral: 0.22 ± 0.12
+dental caries: 0.90 ± 0.30
+tartar: 1.70 ± 0.28
+</code></pre>
+<p>So we see that, at least for the original data, <code>gender</code> has the highest mutual information. Can we make a <code>gender</code> feature for the synthesized train and test set? First, let's see if we can make a good model of <code>gender</code> from the original data.</p>
+<pre><code> sklearn.model_selection  RepeatedStratifiedKFold, cross_validate
+
+kfold = RepeatedStratifiedKFold(n_splits=,n_repeats=)
+X_0 = smoking.drop([,,,],axis=)
+y_0 = smoking[].({:,:})
+
+results = cross_validate(XGBClassifier(n_jobs=,random_state=),
+                         X_0,y_0,
+                         scoring=,
+                         cv=kfold,n_jobs=,
+                         return_estimator=)
+
+results[].mean(), results[].std()
+</code></pre>
+<pre><code>(0.997362669108412, 0.0004826820746908834)
+</code></pre>
+<p>It looks like we can predict <code>gender</code> from the rest of the features (without <code>oral</code>, <code>tartar</code> and <code>smoking</code>) pretty well, at least in the original dataset. Now let's try to make a <code>gender</code> feature for the train/test set using the predictions of the classifiers built from the original data. This <code>gender</code> feature differs from the original <code>gender</code> in that it is a probability of being male, not a binary <code>M</code>/<code>F</code>.</p>
+<pre><code>train[] = 
+cols = (test.columns)
+
+ clf  results[]:
+    train[] += clf.predict_proba(train[cols])[:,]
+train[] /= (results[])
+theil_u(train,target=,comment=)
+</code></pre>
+<pre><code>*** U(y|x) in % (train) ***
+age: 4.16 ± 0.08
+height(cm): 18.27 ± 0.23
+weight(kg): 11.49 ± 0.17
+waist(cm): 6.53 ± 0.10
+eyesight(left): 1.85 ± 0.15
+eyesight(right): 1.93 ± 0.08
+hearing(left): 2.41 ± 0.26
+hearing(right): 2.45 ± 0.24
+systolic: 1.72 ± 0.17
+relaxation: 1.67 ± 0.21
+fasting blood sugar: 1.78 ± 0.18
+Cholesterol: 1.08 ± 0.17
+triglyceride: 9.03 ± 0.17
+HDL: 5.86 ± 0.15
+LDL: 1.22 ± 0.16
+hemoglobin: 19.10 ± 0.18
+Urine protein: 2.34 ± 0.25
+serum creatinine: 9.06 ± 0.11
+AST: 1.18 ± 0.31
+ALT: 3.78 ± 0.28
+Gtp: 10.22 ± 0.16
+dental caries: 1.11 ± 0.22
+gender: 25.22 ± 0.07
+</code></pre>
+<p>The new feature <code>gender</code> now has the highest mutual information.</p>

@@ -1,0 +1,91 @@
+# https://www.kaggle.com/competitions/playground-series-s3e6/discussion/389391
+
+Topic #389391: 1st place public / 2nd place private leaderboard solution
+  Author: JohnG29
+  Posted: 2023-02-21 17:06:27.769000
+  Votes: 21  Comments: 6
+
+Thanks for the congratulations on building a stable model for this competition! Tbh, I was shocked it was as stable as it was. As I am seeing a number of requests for an explanation of what I did, I described my process below:
+
+There were 5 core parts of what I did to the data to get to my results: Data Preparation, Initial Regression Modeling, Classification using XGBoost and SMOTE, Price per Square Meter Modeling, and then what I called Price Adjusting. 
+
+Data Preparation
+
+
+
+Drop 'cityCode' attribute
+
+Use the Test data frame to determine what data points from the training data were outliers. Anything that had an attribute value higher than the max value in the Test data frame, I dropped. Essentially, I tried as best as possible to make the training data look like the test data.
+
+Split the data into training and test data (I used 20% test)
+
+Normalize the data using MinMax scaler
+
+
+Initial Regression Modeling
+
+
+
+Train an XGBoost Regressor and a Random Forest Regressor
+
+Use the average of the two regressor's predictions to predict the test data
+
+
+This gave me an initial public score of 110001. The next steps I took were to adjust these prices predictions to lower that score.
+
+Classification using XGBoost and SMOTE
+
+This was based off of the findings from this discussion post: https://www.kaggle.com/competitions/playground-series-s3e6/discussion/384412
+
+Essentially, I categorized each data point by the price per square meter. The three categories were $10/square_m, $100/square_m, and $1000/square_m. 
+
+
+
+Add labels to the training data using the above measures
+
+Use SMOTE to balance the data for each classification (the data was VERY imbalanced toward the $100/square_m category).
+
+Train an XGBoost Classifier using the data from SMOTE
+
+Predict the classification of the test data
+
+
+In previous submissions I had tried to use this classification as a feature in the regression model, but the results were subpar. It turned out that even 1% misclassification would massively increase the error. Therefore, as you will see below, I used this classification very conservatively. 
+
+Price per Square Meter Regression
+
+
+
+Using the training data, train 3 different linear regression models on square meter v.s price: one for $10/square_m, one for $100/square_m, and one for $1000/square_m.
+
+
+Price Adjusting
+
+This was the part that really boosted the score. 
+
+I used a combination of the classification with the predicted price from the initial regression model in order to adjust the regression price predictions. Because I knew that all price predictions should be around the 10, 100, 1000 price per square meter lines I used the below algorithm to fix the initial regression predictions on the test data:
+
+
+
+If the price per square meter (from the initial regression model) was over $110 and the classification was for $1000, then I predicted the price using the $1000/square_m linear regression model. Else, I used the $100 linear regression model. 
+
+If the price per square meter was less than $50, then I just fit it all to the $10 linear regression model. 
+
+If the price per square meter was greater than $50 and less than $110, I just fit it using the $100 regression model. 
+
+
+Applying this last step of price adjustment took my public score from a 110001, with just using the Initial Regression model, to a 77494.
+
+Comments:
+├─ Leandro Destefani (2023-02-24 20:45:30.063000) [+1]
+│  First time I've seen an actual improvement from SMOTE usage. Good job bro!
+  ├─ mateuszgrzyb.pl (2023-03-02 09:24:18.997000) [+1]
+  │  Hahaha! This is funny and true at the same time ;-)
+├─ Saswat Behera (2023-02-22 10:23:38.887000) [+1]
+│  Good job on using SMOTE!!
+├─ George Papachristou (2023-02-21 18:52:43.817000) [+1]
+│  Great idea @johng29 !!! Really interesting approach, and I really like how stable your solution was between the two boards. Great job!!
+├─ mateuszgrzyb.pl (2023-03-02 09:29:32.257000) [+0]
+│  "If the price per square meter (from the initial regression model) was over $110 and the classification was for $1000, then I predicted the price using the $1000/square_m linear regression model. E...
+├─ Pardeep Singh (2023-03-01 01:38:50.660000) [+0]
+│  Great stuff and congrats on 2nd position in this competition @johng29, If possible would love to see a notebook of this approach!

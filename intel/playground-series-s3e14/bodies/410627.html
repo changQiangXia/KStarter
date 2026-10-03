@@ -1,0 +1,73 @@
+<p>Hi,</p>
+<p>I would like to express my deepest gratitude to the organizers, winners and the community who made this competition.</p>
+<h1><strong>Introduction:</strong></h1>
+<p>The competition attracted a record number of participants.<br>
+The community was extremely active. The discussions were fruitful creating a collaborative environment that fostered learning and rapid score improvement. The number of gold/silver notebooks and discussions speaks for itself.</p>
+<p>It was not an easy journey for me. It took me almost 5 months of polishing tabular competition pipelines. Few times I was first on the public leaderboard and did not survive shakeups. Few more times I chose the wrong submissions. It burned my fingers but it made me understand: "if the approach is solid you don't need to submit 5 times a day.</p>
+<h1><strong>The solution:</strong></h1>
+<h2><strong>Context:</strong></h2>
+<p>From the very beginning of the competition, I found out that the models will be limited in performance by looking at one of the most important features. I <a href="https://www.kaggle.com/competitions/playground-series-s3e14/discussion/409417" target="_blank">posted</a> the discussion here, showing how much variance was synthesized from the original dataset. No matter how good the ensemble was going to be, it would not give a winning edge I got.</p>
+<h2><strong>Early discovery:</strong></h2>
+<p>At a very early stage of model validation, I found that the model struggled with some obvious predictions.<br>
+Most of the common error was <code>yield</code> == <strong>1945.53061</strong>. You will see it in the <a href="https://www.kaggle.com/code/sergiosaharovskiy/ps-s3e14-2023-first-place-winning-solution" target="_blank">attached work</a>.<br>
+I noticed that the values for <code>fruitset</code> and <code>fruitmass</code> <strong>0.335339    0.233554</strong> which were the same for the train and origin were always <code>1945.53061</code> no matter what. So I assigned <code>1945.53061</code> to those predictions and saw how oof behaved. As you can assume they did fantastic.</p>
+<p>Then I found a couple more examples, you will see them in the first phase of correction in the notebook.</p>
+<h2><strong>Automating the process:</strong></h2>
+<p>I figured out that the manual search was not scalable, so I came up with the whole script which ran through common <code>fruitset</code> and <code>fruitmass</code> values for both origin, train and test. <strong>2073</strong> total samples in test.<br>
+But what values should have I assigned? Well, easy enough, I ran through all unique <code>yields</code> <strong>776</strong> iteratively and saw which one were better. Though it improved the oof, it did not perform well on the leaderboard, so I assigned the value from the original dataset and it was a nuke bomb (further I continue on this analogy).<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F6259210%2Fa8f1bd1022e9492f9b4194253a8fc130%2FPS%20S3E14%202023%20First%20place%20winning%20solution%201945.png?generation=1684246805675469&amp;alt=media" alt=""></p>
+<h2><strong>Strategy:</strong></h2>
+<p>I decided to play slow. The phase 2 postprocessing included waterfall of different submissions in terms of risk.<br>
+I named them according to this <a href="https://en.wikipedia.org/wiki/International_Nuclear_Event_Scale" target="_blank">classification</a> where <strong>anomaly</strong> was just correction of <strong>1945.53061</strong>.<br>
+Then you can go deeper with these lines of code:</p>
+<pre><code> (dsp_train) &gt;   (dsp_test) &gt; :
+      dsp_origin.empty:
+        orig_value = dsp_origin[].values[]
+        tr_idx = train.loc[train.fruitset.eq(txt[]) &amp; train.fruitmass.eq(txt[]), ].index.tolist()
+        te_idx = test.loc[test.fruitset.eq(txt[]) &amp; test.fruitmass.eq(txt[]), ].index.tolist()
+</code></pre>
+<p><code>len(dsp_train) &gt; 2 and len(dsp_test) &gt; 1</code>: means there should be at least more than <strong>two common records</strong> in <strong>train</strong>, <strong>one</strong> in <strong>test</strong> and <strong>one</strong> in <strong>origin</strong>.</p>
+<p><strong>Serious Incident</strong> : &gt; 4 &gt; 3<br>
+<strong>Zone With consequences</strong>:  &gt; 3 &gt; 2<br>
+<strong>Dangerous Zone</strong>:  &gt; 2 &gt; 1<br>
+<strong>Ground Zero</strong>:  &gt; 1 &gt; 0 (not submitted)</p>
+<p>The risk was great to fail terribly on the private leaderboard that's why you will see _suffix <strong>_private_600</strong> in the submissions screenshot later on.</p>
+<h2><strong>@adaubas helped the strategy:</strong></h2>
+<p>One submission and the second place, what a shot, right! It was <a href="https://www.kaggle.com/adaubas" target="_blank">@adaubas</a> who generously shared the config and the <a href="https://www.kaggle.com/code/adaubas/ps-s3e14-stacking-leastabsolutedeviation-reg" target="_blank">work</a> later on.</p>
+<p>How did it help? Well, it could have seemed natural that I jumped to the second place right after the discussion once the config got into the trends.<br>
+So I even posted the teaser with my close result config with almost the same parameters (sneaky me…).</p>
+<h2><strong>Stacking Masterclass:</strong></h2>
+<p>1st level models included 8 different oofs. They could be found <a href="https://www.kaggle.com/datasets/sergiosaharovskiy/s3e14-oofs" target="_blank"><strong>in this dataset</strong></a>.</p>
+<p>Here is the model pipeline and works of those who helped the winning solution:<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F6259210%2Fbaffd1f2af5e86c03059695ae0894ab9%2FS3E14%20model_pipeline%20v2.png?generation=1684284893749293&amp;alt=media" alt=""></p>
+<p><a href="https://monosnap.com/file/8D0U5butFrJnQhKEio4kCUfv4LZGkp" target="_blank">high resolution</a> or <code>ctrl + scroll up</code> to zoom in.</p>
+<h2><strong>LAD vs scipy.minimize</strong>:</h2>
+<p>It was nice to learn about LAD from <a href="https://www.kaggle.com/adaubas" target="_blank">@adaubas</a>.<br>
+What I found out is that I used the same backend with very similar results.<br>
+But for the sake of code simpicity and slightly better performance I chose LAD.<br>
+Here is the comparison:</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F6259210%2F8b22b3c9ab85657a553538ac5f502cfa%2FSCIPY%20vs%20LAD.png?generation=1684248505626417&amp;alt=media" alt=""></p>
+<h2><strong>Validation:</strong></h2>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F6259210%2Fb5e15ca8fb5156edb9cbef721baa812e%2Ferrors_before_after.png?generation=1684247270627844&amp;alt=media" alt=""></p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F6259210%2F34d465f99602548ea9157366cdeaf81d%2Fregplot.png?generation=1684249055983199&amp;alt=media" alt=""></p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F6259210%2F1cadabc5c827b5523a71df6387aa8bce%2Fdistances.png?generation=1684247307848574&amp;alt=media" alt=""></p>
+<h1><strong>Outro:</strong></h1>
+<h2><strong>Tribute to <a href="https://www.kaggle.com/naganohikaru" target="_blank">@naganohikaru</a></strong>:</h2>
+<p>The effect of the above postprocessing was immense. Various model blendings gave floating point improvement when at the same time the postprocessing above gave an integer sometimes.<br>
+You saw me jumping on the leaderboard. I waited the next move of <a href="https://www.kaggle.com/naganohikaru" target="_blank">@naganohikaru</a> and send the bomb understanding the risk.</p>
+<p>I stopped at the <strong>Dangerous Zone</strong> since I did not see any improvement from my opponent anymore, mitigating the already high risks on the private leaderboard.</p>
+<h2><strong>Taking the risks with submissions</strong>:</h2>
+<p>I chose two best public scoring submissions (they happened to be my best private). The motivation was simple, I realized that the portion of Alex models in the final stack was not big, and the only way I could win was to take the full risk. Otherwise, I would compete against hundreds of the same variety of ensembles.</p>
+<h2><strong>Acknowledgements</strong>:</h2>
+<p>p1         <a href="https://www.kaggle.com/zhukovoleksiy" target="_blank">@zhukovoleksiy</a> <a href="https://www.kaggle.com/code/zhukovoleksiy/ps-s3e14-simple-eda-ensemble" target="_blank">notebook link</a><br>
+p2, p5   <a href="https://www.kaggle.com/paddykb" target="_blank">@paddykb</a>       <a href="https://www.kaggle.com/code/paddykb/ps-s3e14-flaml-bfi-be-bop-a-blueberry-do-dah" target="_blank">notebook link</a> <br>
+p3, p6   <a href="https://www.kaggle.com/yzokulu" target="_blank">@yzokulu</a>       <a href="https://www.kaggle.com/code/yzokulu/ps3e14-simple-lightgbm-regressor-with-cv" target="_blank">notebook link</a> <br>
+p4         <a href="https://www.kaggle.com/tetsutani" target="_blank">@tetsutani</a>     <a href="https://www.kaggle.com/code/tetsutani/ps3e14-eda-various-models-ensemble-baseline" target="_blank">notebook link</a> <br>
+p7/p8/p9 <a href="https://www.kaggle.com/adaubas" target="_blank">@adaubas</a>       <a href="https://www.kaggle.com/code/adaubas/ps-s3e14-stacking-leastabsolutedeviation-reg" target="_blank">notebook link</a> <br>
+<a href="https://www.kaggle.com/mattop" target="_blank">@mattop</a> <a href="https://www.kaggle.com/competitions/playground-series-s3e14/discussion/40732" target="_blank">post_processing</a></p>
+<h2><strong>Icing on the cake</strong>:</h2>
+<p>What would be my last move if my opponent above found some miracle in the end?</p>
+<p>You are right - the <strong>ground zero</strong> submission, here you go:<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F6259210%2Fc0775cbf15a14b1469e09d80c33b5616%2FGround%20zero%20highlighted.png?generation=1684247718548759&amp;alt=media" alt=""></p>
+<h2><a href="https://www.kaggle.com/code/sergiosaharovskiy/ps-s3e14-2023-first-place-winning-solution" target="_blank"><strong>The winning solution code</strong></a>.</h2>
+<h2><a href="https://www.kaggle.com/datasets/sergiosaharovskiy/s3e14-oofs" target="_blank"><strong>Dataset</strong></a>.</h2>

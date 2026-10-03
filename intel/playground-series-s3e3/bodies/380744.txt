@@ -1,0 +1,49 @@
+# https://www.kaggle.com/competitions/playground-series-s3e3/discussion/380744
+
+Topic #380744: 54th Place + Lessons Learned
+  Author: Craig Thomas
+  Posted: 2023-01-24 01:09:21.724000
+  Votes: 13  Comments: 5
+
+Hi Everyone! Thanks again for another great Playground Series Episode! I spent a lot of time this episode looking into whether or not differences in the original dataset vs the competition dataset would warrant excluding the original data from any models that were being trained. In the end, I submitted two models to the competition - one built on the original dataset alone, and another that incorporated the original data. As it turns out, incorporating the original dataset resulted in an advancement of 126 places to 54th, while using only the competition dataset would have resulted in landing somewhere around 407th place. In this case, it turns out having more learning opportunities with somewhat similar datasets resulted in a much better set of models when compared to  just using the competition data alone. However, some great ideas came up - with one in particular thanks to both  @kaggleqrdl and @thedevastator - to use adversarial validation. This I ran out of time attempting to implement this solution for this competition, but will definitely look forward to it in the future.
+
+The trick to this competition for me was to find an AUC score that had good local metrics, had good metrics on the public LB, had agreement in direction between local metrics and the public LB, and minimized the gap between local metrics and public LB score. The issue of course is that public LB metrics are a tricky thing to use - with only 20% of the testing data available for the public LB score, and with such a small dataset to begin with, changes in composition between the public LB and private LB data composition will have such a huge impact on the overall performance of any given model once we see the entire playing field. 
+
+In the end, I built 2,385 models of varying types (XGBoost, CatBoost, LGB, Neural Nets, Ridge Classifiers), and stacked to different depths in different configurations, using a combination of rank blending, and Ridge classifiers. All models were built with 10-fold cross-validation and made using OOF predictions using a custom framework that I wrote to abstract away the model-building mechanics (in other words, I don't have to worry about writing LightGBM or XGBoost code models - I can just tell the framework to construct a series of models using XGBoost, tell it to search hyper-parameter space, save all results along the way, and let it run for 300 trials). In the end, the model that won 54th was comprised of the following 7 models:
+
+
+
+10% CatBoost model built using Leave One Out Encoding
+
+45% XBoost model built using Leave One Out Encoding
+
+15% CatBoost model built using Leave One Out Encoding
+
+5% CatBoost model built using Leave One Out Encoding
+
+10% CatBoost model built using Leave One Out Encoding and 3-dimensional UMAP reduction as additional features
+
+5% XGBoost model built using Leave One Out Encoding and 3-dimensional UMAP reduction as additional features
+
+10% CatBoost model built using Leave One Out Encoding and 3-dimensional UMAP reduction as additional features
+
+
+Each model was built with vastly different hyper-parameters, thus each one gave a different fit to the data. The final ensemble was a rank-blend of the models above. The final numbers gave a local score of 0.870972, a public LB score of 0.9393, and a private LB score of 0.89706. 
+
+Unsurprisingly, my best scoring model was a single XGBoost model using both the competition data and the original data, with Leave One Out Encoding. This single model had a local score of 0.865681, a public LB score of 0.92712, and a private LB score of 0.8981, and would have put me in the final standings somewhere around 40th place. This model is again one that I simply would not have chosen, mostly based on my local metrics. However, as in the previous competition before it, the single model performance worked better than any blend. Had I had another final submission to burn, I likely would have chosen it, but I was hedging bets that competition data was going to be better than original data instead. Next time, perhaps adversarial validation will help eliminate that as a possibility, thereby freeing up a final submission to try out on a single model instead.
+
+Thanks again for another round of awesome discussions and great notebooks!
+
+Comments:
+├─ Tilii (2023-01-24 01:33:07.317000) [+6]
+│  Good summary, thanks!
+│  
+│  I had almost the same experience as yours. My best model was a single LightGBM, using both train datasets and without any feature engineering. That would have landed me at #5...
+  ├─ Craig Thomas (2023-01-24 02:06:31.160000) [+1]
+  │  @tilii7 thank you! That is the most concise explanation I've heard! Very much appreciated!
+├─ Matt OP (2023-01-24 03:29:22.210000) [+1]
+│  Very nice solution and explanation @craigmthomas, simple models reigned supreme! I will also have to take a look at using adversarial validation.
+  ├─ Edouard (2023-01-24 09:00:24.063000) [+0]
+  │  I used adversarial validation in this simple notebook and it worked well, dropping three features to finish with less differences between the generated and the original data (by the way I also used...
+├─ Kevin Morgado (2023-01-24 01:17:45.710000) [+1]
+│  Thanks for your comment @craigmthomas. You are right, sometimes one single model performs better than the ensemble of multiple ones, especially the XGBoost performs very well in prediction.

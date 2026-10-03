@@ -1,0 +1,31 @@
+<p><strong>(A) Solution Distilled:</strong></p>
+<p>ML Theory constructed based on equality of train and test data distribution unless we use transfer learning! After base modeling i decided to follow the strategy of injecting  more diversity to the final ensemble model,  so i used original data for some models too and select initial features by ks-test (<em><a href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.ks_2samp.html" target="_blank">scipy.stats.ks_2samp</a></em>) . in summary:</p>
+<p><strong>A1.</strong>Applying <a href="https://towardsdatascience.com/comparing-sample-distributions-with-the-kolmogorov-smirnov-ks-test-a2292ad6fee5" target="_blank">KS-Test</a> [train, test] , [train+original , test] ,  on max extracted features and the subsets, borrowed from <a href="https://www.kaggle.com/nanomathias" target="_blank">@nanomathias</a> <a href="https://www.kaggle.com/code/nanomathias/distribution-of-test-vs-training-data" target="_blank">notebook</a>. <br>
+some features like sales_per_area removed in this stage.</p>
+<p><strong>A2.</strong>  Used <a href="https://github.com/aerdem4/lofo-importance" target="_blank">LOFO</a> importance feature selection for each model (with tuned parameters) . So the features passed to LGB , XGB ,  CatBoost and HistGradientBoosting , were different. </p>
+<blockquote>
+  <p><em>Sample XGB LOFO on competition train data(cv=5, frac=.7, scorer:mean_squared_log_error):</em><br>
+  <img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F761104%2F19ea3e53653a028bfe5c18daec718836%2Fxgbfeats.png?generation=1680620994787627&amp;alt=media" alt="*XGBoost LOFO*"><br>
+  <em>LGB LOFO on competition train data , same feature set(cv=5, frac=.7, scorer:mean_squared_log_error):</em><br>
+  '<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F761104%2Fb9e26243c95263b8a9385cdb8d1b60f4%2Flgb_lofo.png?generation=1680631632391929&amp;alt=media" alt="*lgb_lofo*"><br>
+  This is because lgb and xgb are essentially different in structural behavior . The fundamental difference between the two frameworks is :  <em>"In XGBoost, trees grow depth-wise while in LightGBM, trees grow leaf-wise" .</em>'</p>
+</blockquote>
+<p><strong>A3.</strong>Testing stacking and blending(One level stacking didn't boost the performance). </p>
+<blockquote>
+  <p>My code for stacking for lgb, xgb and NN:<br>
+  <img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F761104%2F476d4be3cf00c8947e05f3413dc43ec4%2Fstack.png?generation=1680732410242746&amp;alt=media" alt="stack"></p>
+</blockquote>
+<p>we save oof pred in cv and pred for test of each model before stacking</p>
+<p><strong>A4.</strong>During the last hours of the competition i decided to test <a href="https://www.analyticsvidhya.com/blog/2017/09/pseudo-labelling-semi-supervised-learning-technique/" target="_blank">pseudo labeling</a> on some models. This technique boosted the performance and moved me up to the 3rd place. </p>
+<p><strong>(B) Diversity items</strong> : </p>
+<ul>
+<li>Objective and boosting type of XGB and LGB models</li>
+<li>Kfold : 5 , 7, 10, 15</li>
+<li>Different features for different models based on LOFO and best models parameters(by adding original data to some models)</li>
+<li>Target transformation : log, log1p , box-cox</li>
+<li>Used <a href="https://www.kaggle.com/code/arashnic/cats-on-a-hot-tin-roof-cats-encoding-methods" target="_blank">frequency encoding</a> for some features and models</li>
+</ul>
+<p>I developed 23 models and blend step by step by Optuna tuning(borrowed from  <a href="https://www.kaggle.com/tetsutani" target="_blank">@tetsutani</a> <a href="https://www.kaggle.com/code/tetsutani/ps3e11-eda-xgb-lgbm-cat-ensemble-lb-0-29267" target="_blank">notebook</a>) </p>
+<p><strong>(C) Wrap up:</strong><br>
+I think this part of code from <a href="https://www.kaggle.com/ambrosm" target="_blank">@ambrosm</a> is very effective to develop a winning solution , eliminating noises and results to robust models:</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F761104%2Ffb4c64d46582dcd3f82a7c39e5b0c96f%2Fgrouped.png?generation=1680677574640476&amp;alt=media" alt="grouped"> </p>

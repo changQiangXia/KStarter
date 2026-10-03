@@ -1,0 +1,70 @@
+# https://www.kaggle.com/competitions/playground-series-s3e11/discussion/399571
+
+Topic #399571: # 3 Solution : KS-Test, LOFO, Ensembling, Pseudo Labeling
+  Author: Möbius
+  Posted: 2023-04-04 15:38:12.194000
+  Votes: 17  Comments: 5
+
+(A) Solution Distilled:
+
+ML Theory constructed based on equality of train and test data distribution unless we use transfer learning! After base modeling i decided to follow the strategy of injecting  more diversity to the final ensemble model,  so i used original data for some models too and select initial features by ks-test (scipy.stats.ks_2samp) . in summary:
+
+A1.Applying KS-Test [train, test] , [train+original , test] ,  on max extracted features and the subsets, borrowed from @nanomathias notebook. 
+some features like sales_per_area removed in this stage.
+
+A2.  Used LOFO importance feature selection for each model (with tuned parameters) . So the features passed to LGB , XGB ,  CatBoost and HistGradientBoosting , were different. 
+
+
+  
+Sample XGB LOFO on competition train data(cv=5, frac=.7, scorer:mean_squared_log_error):
+  
+  LGB LOFO on competition train data , same feature set(cv=5, frac=.7, scorer:mean_squared_log_error):
+  '
+  This is because lgb and xgb are essentially different in structural behavior . The fundamental difference between the two frameworks is :  "In XGBoost, trees grow depth-wise while in LightGBM, trees grow leaf-wise" .'
+
+
+A3.Testing stacking and blending(One level stacking didn't boost the performance). 
+
+
+  
+My code for stacking for lgb, xgb and NN:
+  
+
+
+we save oof pred in cv and pred for test of each model before stacking
+
+A4.During the last hours of the competition i decided to test pseudo labeling on some models. This technique boosted the performance and moved me up to the 3rd place. 
+
+(B) Diversity items : 
+
+
+
+Objective and boosting type of XGB and LGB models
+
+Kfold : 5 , 7, 10, 15
+
+Different features for different models based on LOFO and best models parameters(by adding original data to some models)
+
+Target transformation : log, log1p , box-cox
+
+Used frequency encoding for some features and models
+
+
+I developed 23 models and blend step by step by Optuna tuning(borrowed from  @tetsutani notebook) 
+
+(C) Wrap up:
+I think this part of code from @ambrosm is very effective to develop a winning solution , eliminating noises and results to robust models:
+
+Comments:
+├─ Raheem Nasirudeen (2023-04-07 12:30:43.593000) [+1]
+│  A wonderful approach and big congratulations on your winning.
+├─ JEANMPIA (2023-04-04 23:17:20.823000) [+1]
+│  First time hearing about the LOFO and the KS-Test, I'm going to learn about it.
+│  How big was your boost in score using pseudo-labeling ?
+  ├─ Möbius (2023-04-05 04:53:35.747000) [+0]
+  │  Actually not so big but from 7th place to 3rd : .29261 to .29260 and no bias. In fact it depends on finding optimum sample rate during augmentation and tuning model parameters. You can refer to thi...
+├─ Ravi Ramakrishnan (2023-04-04 16:33:11.500000) [+1]
+│  Congrats @arashnic, the amazing and diverse approaches we use in Kaggle on the same data is the real lesson for all of us. 
+│  Hearty congratulations! Best regards and happy learning!
+  ├─ Möbius (2023-04-04 16:37:09.677000) [+0]
+  │  I do appreciate Ravi, Happy Kaggling and learning …

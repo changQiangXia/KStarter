@@ -1,0 +1,33 @@
+<p><strong>Feature Engineering</strong><br>
+Although all of the data was numeric, a look at the data description revealed that the features type_of_meal_plan, room_type_reserved, and market_segment_type were actually categorical in nature. I handled these variables in 3 different ways:</p>
+<ol>
+<li>Leaving them as is</li>
+<li>One-hot encoding them</li>
+<li>Marking them as categorical features (used for LGBM)</li>
+</ol>
+<p>I played around with creating additional features, but I didn't find anything that improved my CV significantly. </p>
+<p><strong>Data Leakage</strong><br>
+Within the train and test set, there were 1531 pairs of records that were duplicates if you dropped booking status. </p>
+<ol>
+<li>562 of those pairs were in the train set, and upon closer inspection, each of those pairs had opposite booking statuses. </li>
+<li>253 of those pairs were in the test set. </li>
+<li>The remaining 716 pairs included 1 record in the train set and 1 record in the test set. </li>
+</ol>
+<p>Out of curiosity, I tried modifying a submission by setting the predictions for those 716 records in the test set to the opposite of their corresponding record in the train set, and got a boost of +.014 to my leaderboard score. I naively hoped to keep this secret to myself, but it was <a href="https://www.kaggle.com/competitions/playground-series-s3e7/discussion/388851" target="_blank">quickly discovered</a> by the rest of the community 😅 However, I do have to thank <a href="https://www.kaggle.com/siukeitin" target="_blank">@siukeitin</a> for their suggestion to predict .5 for the 253 pairs of duplicates in the test set. This boosted my score by +.003, and I don't believe this trick was as well-known.</p>
+<p>Additionally, I removed from the train set the 562 duplicate pairs, plus the 716 records that had a duplicate in the test set, as I found that doing so improved my score on a holdout set I constructed to test this. I think this only resulted in a minor increase in my private score though. However, I do think that perhaps removing the train duplicate pairs helped make my CV more reliable.</p>
+<p><strong>Data Cleaning</strong></p>
+<p>When running adversarial validation between the train and original datasets, I plotted for the original dataset the predicted probability of belonging to the train set and got a bimodal distribution like this:<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F420768%2F8ad2eebb761d4c40e7198e5a458e1826%2Fdownload.png?generation=1677547386972093&amp;alt=media" alt=""></p>
+<p>This led me to experiment with removing the chunk of the original dataset that looked the least like the train set. I ended up using models that both included the entire original dataset and models that removed ~17% of the original dataset that looked the least like the train set.</p>
+<p>I also played around with things like fixing dates, but didn't see significant improvement in CV score from doing so.</p>
+<p><strong>Modeling</strong><br>
+My CV setup was a stratified 3-fold with 3 repeats. For creating submissions, predictions from each fold were averaged. When tuning hyperparameters, one thing I noticed was that increased tree expressiveness seemed to improve performance to a much greater degree than what I had been used to. This meant using XGBoost with the 'exact' algorithm instead of 'hist' and max_depths around 12-13, and using LGBM with larger max_leaves and max_bin values.</p>
+<p>My winning submission was an average of the following 4 XGB submissions and 2 LGBM submissions:</p>
+<ul>
+<li>XGB</li>
+<li>XGB with categorical variables one-hot-encoded</li>
+<li>XGB with reduced original dataset</li>
+<li>XGB with categorical variables one-hot-encoded and reduced original dataset</li>
+<li>LGBM with reduced original dataset</li>
+<li>LGBM with categorical features and reduced original dataset</li>
+</ul>

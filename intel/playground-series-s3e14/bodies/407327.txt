@@ -1,0 +1,75 @@
+# https://www.kaggle.com/competitions/playground-series-s3e14/discussion/407327
+
+Topic #407327: Post-processing trick to improve CV & LB score
+  Author: Matt OP
+  Posted: 2023-05-06 05:07:16.302000
+  Votes: 80  Comments: 18
+
+When first approaching this dataset and taking a look at the evaluation metric, it seems pretty clear that we should use regression models to attempt to make our predictions. However, this is not an ordinary regression problem. @siukeitin (congratulations on reaching master btw!) pointed out very early in the competition that despite there being 15289 training samples, there are only 776 unique target values. Another important piece of information for the following trick is that the R² score of a tuned XGBoost model is 0.831 (reported by @sergiosaharovskiy in this notebook). This essentially means that the model is a good fit for the data and we can be fairly confident about the predictions it outputs.
+
+Now for the trick (I am only calling this a trick because it is only really applicable in a competition setting)
+
+First we need to store all of the unique targets in an array:
+
+ = np.unique(train[])
+
+
+Once we are done making our predictions on the train &amp; test data:
+
+oof_preds = model(X_val)
+test_preds += model(test) / n_splits
+
+
+We can round our predictions to the nearest unique target value:
+
+oof_preds = [(unique_targets,  =  x: (x - ))    oof_preds]
+test_preds = [(unique_targets,  =  x: (x - ))    test_preds]
+
+
+I have personally seen a ~0.3 improvement for MAE in both CV and LB scores using this method. Nothing groundbreaking but as I've experienced in past Kaggle competitions, a small improvement like this could be the difference between placing in the top 10 vs. placing in the top 50.
+
+Comments:
+├─ broccoli beef (2023-05-06 07:14:53.830000) [+6]
+│  @mattop Thanks, I suspect it is the end of line for me. 🙂
+│  
+│  We know that in the train set, samples with identical features could have different target values. Ideally, an \(\ell^1\) regressor would ...
+  ├─ Matt OP (2023-05-06 17:50:10.570000) [+3]
+  │  Go for GM @siukeitin! I really appreciate your insightful comments and always enjoy seeing your use of math notation.
+├─ paddykb (2023-05-06 08:54:41.140000) [+3]
+│  Very nice. That gives a ~0.12 improvement on the public LB (338.15 -&gt; 338.03). I need to circle back and add it into the CV calculation.
+│  
+│  EDIT: I added the post processing here to show the impac...
+  ├─ Matt OP (2023-05-06 17:50:44.653000) [+2]
+  │  Wow, that was a big jump @paddykb! No worries, you were pretty much at the top of the LB this whole time anyways. I've been messing around a lot with AutoGluon in this competition but FLAML really ...
+├─ Aisuluu Ulan kyzy (2023-05-13 03:45:56.550000) [+1]
+│  seems very interesting, i need to try it, ill leave feedback later
+├─ Mateusz Wolowicz (2023-05-11 20:43:51.173000) [+1]
+│  That's clever! For a solution that simple any score reduction is great, good job :D
+├─ Xiekem Quoryc (2023-05-11 04:13:40.313000) [+1]
+│  That's pretty interesting. I might try this out later. Thanks for pointing this out!
+├─ Rusiek (2023-05-10 09:55:47.983000) [+1]
+│  A little surprised as the data was generated from a deep learning model trained on the original model, but it really works.
+  ├─ Matt OP (2023-05-11 16:11:45.637000) [+1]
+  │  Even though the data is generated from a deep learning model on the original dataset, in recent Playground competitions there seems to be some additional post-processing on the synthetic dataset co...
+├─ Phong Nguyen (2023-05-09 18:26:49.083000) [+1]
+│  @mattop That's neat! I applied the same technique for the last regression playground (Media Campaign) which has about 300 values but didn't work. Thank you.
+  ├─ Matt OP (2023-05-11 16:06:05.440000) [+2]
+  │  Thanks @phongnguyen1. I also tried this idea in previous regression competitions but did not observe this result.
+├─ Paul John Cronin (2023-05-08 13:24:07.573000) [+1]
+│  Excellent insight.  This makes it somewhat more like a classification problem, rather than a regression problem.
+  ├─ Matt OP (2023-05-08 18:37:08.470000) [+7]
+  │  Indeed @khronous, thank you for the comment. To expand a little bit on how I came up with this idea, I would like to share this visualization:
+  │  
+  │  
+  │  
+  │  I set the nbins for both histograms to len(train["y...
+├─ Björn (2023-05-07 10:49:35.893000) [+1]
+│  In case anyone wants the R code to do that, I've added that to this notebook.
+  ├─ Matt OP (2023-05-07 17:10:02.760000) [+1]
+  │  Thank you for the contribution @bjoernholzhauer. It will definitely be helpful for the people using R.
+├─ Sohail Ahmed (2023-05-14 07:57:35.117000) [+0]
+│  The trade-off between accuracy and interpretability when using machine learning models is something I have been increasingly thinking about recently. However, It’s definitely a clever approach, and...
+├─ Mykhailo Savchenko (2023-05-13 17:15:44.190000) [+1]
+│  Thanks for sharing the trick 🔥
+├─ Beubeu4L (2023-05-10 11:39:39.660000) [+1]
+│  thanks :)

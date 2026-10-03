@@ -1,0 +1,107 @@
+# https://www.kaggle.com/competitions/playground-series-s4e2/discussion/481062
+
+Topic #481062: 2nd solution write-up
+  Author: tdoh86
+  Posted: 2024-03-01 22:57:56.494000
+  Votes: 12  Comments: 10
+
+This is the first time my solution falls in top positions. 
+
+Here are my general observations:
+
+
+
+
+Normally, CV performance is positively correlated with the LB performance. However, at some point, CV performance gets improved, but the LB performance just goes down, which is the point of overfitting. At this point, to improve the LB performance, ensembling is necessary.
+
+
+The dataset for this competition is small, hence large shake-ups are expected similar to other playground competitions. My best notebook does not have very high public LB score, but a high private LB score.
+
+
+Here are what worked and didn't work in terms of CV, public LB and private LB. (Note that for notebooks with different datasets, we cannot compare their CV performances).
+
+1. What worked:
+Data
+
+
+
+Adding original dataset: As usual, adding original dataset to the generated train dataset improves the performance. My best solution actually adds the original dataset four times.
+
+CV folds: I did HPO for 5 folds, and use these hyper-params for the final notebook with 20 folds. 
+
+
+Model
+
+
+
+Basic feature encoding with standard scaler (z score) and one-hot encoding
+
+Only two models, i.e. xgb and lgbm, are used in my best notebook. HPO is done with optuna on this basic feature encoding.
+
+Probability thresholding: Kudo to this notebook  from @KULDEEP RATHORE . I applied this trick with CV and used the averaged weights.
+
+
+2. What didn't work:
+Data
+
+
+
+Pseudo-label: For this competition, it didn't bring a better LB performance for me.
+
+
+Model
+
+
+
+
+AutoML: I tried autogluon, flaml, auto-sklearn. Flaml gave me decent performance (both public and private) and it's the best of three, but still lower than the simple ensembling of xgb and lgbm. In the last competition, autogluon performs very well, but it is not the case for this competition, perhaps because of the small volume of data. Auto-sklearn gave the lowest performance of three.
+
+
+Feature engineering: For this competition, feature engineering didn't work at all, even with a simple BMI feature. With extra engineered features, I could get better CV performance, but when I submitted the solution, the public LB performance was always worse. Eventually, I ended up using basic feature encoding only.
+
+
+I also tried ordinal encoding as seen in other high-score notebooks, but the public LB performance went down
+
+
+Stacking: Stacking ensembling (sklearn) didn't bring an improvement for this competition.
+
+
+Weighted ensemble: Tried weighted ensemble with optuna for xgb, lgbm, hgb, gb, rf, etc using their probability outputs. The CV performance was improved, but the pubic LB performance was worse.
+
+Comments:
+├─ Sam (2024-03-06 05:03:06.100000) [+1]
+│  Hi @tdoh86, 
+│  
+│  I am really happy to see that threshold optimization lead to the 2nd place.
+│  
+│  Can you help me understand what was the privateLB result of the same model, without the threshold optimiza...
+  ├─ tdoh86 (2024-03-06 13:14:26.403000) [+1]
+  │  Hi @Sam,
+  │  I didn't know that you introduced the thresholding idea, a quite interesting one.
+  │  I just checked my submissions, it turns out that:
+  │  
+  │  
+  │  
+  │  Using the thresholding trick, the CV performance and ...
+    ├─ Sam (2024-03-06 14:14:45.473000) [+1]
+    │  Yes these inputs help. Thank you
+    ├─ Sam (2024-03-07 06:51:20.153000) [+0]
+    │  HI @tdoh86 
+    │  
+    │  My motivation for this approach was from ordinal classification, where you use regression to predict the target.
+    │  The regression will give you an output in integers 0 to 8 for classes. ...
+├─ sunny77 (2024-03-02 10:34:54.503000) [+1]
+│  Hi! What was the reason to use 20 folds?
+  ├─ tdoh86 (2024-03-02 17:58:42.260000) [+1]
+  │  That's the practice many people use. I guess the idea is to have multiple models seeing data from different perspectives, hence it can help reduce overfitting.
+├─ Jeremy H (2024-03-01 23:13:16.777000) [+1]
+│  Congratulations on 2nd place and thanks for sharing your approach!  Do you have any insights into why adding the original data 4 times helped?  I usually think of removing duplicates rather than ad...
+  ├─ tdoh86 (2024-03-02 10:36:01.150000) [+2]
+  │  That's the trick I learned from the January competition. For this competition, adding 1,2,3 times works, and 4 is the best. More than 4 reduces the performance. 
+  │  Not sure why, but I think the joint...
+    ├─ [deleted] (2024-03-06 04:45:41.687000) [+0]
+    │  [deleted]
+  ├─ Sam (2024-03-06 04:46:18.460000) [+1]
+  │  Hi @jeremyhaakenson , 
+  │  
+  │  If you look at these two notebooks you will be able to observe experiments I had done with the multiplier. Even My experiments gave 4 as the best multiplier for LGBM, and 1 ...

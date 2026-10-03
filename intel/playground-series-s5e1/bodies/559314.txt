@@ -1,0 +1,192 @@
+# https://www.kaggle.com/competitions/playground-series-s5e1/discussion/559314
+
+Topic #559314: Transformer Achieves LB=0.052 Without Feature Engineering!
+  Author: Chris Deotte
+  Posted: 2025-01-24 16:04:03.152000
+  Votes: 80  Comments: 55
+
+Deep learning continues to amaze me! Before 2010, both computer vision and natural language processing needed humans to engineer features. These features were then input into ML models (like SVM or logistic regression). In the mid 2010's we started witnessing DL (neural network like CNN and Transformer) models doing the feature engineering for us and achieving better accuracy than human feature engineering could achieve.
+
+Transformer Starter - No Feature Engineering
+
+I would like to share a competitive deep learning solution to Kaggle's sticker playground competition. Using no feature engineering, the transformer starter here achieves an amazing LB = 0.052, wow! And this model can be improved further to achieve LB = 0.04X!
+
+How Time Series DL Works
+
+Time series DL (deep learning) uses 3 common blocks: RNN block, CNN block, and Transformer block. These blocks accept a time series as input with shape (batch size, sequence length, in_features) and output a new time series with engineered features, (batch size, sequence length, out_features). 
+
+So we can input a sequence of about 3 years (sequence length = 1440 days) with 1 feature (num_sold) into a RNN or CNN or Transformer block. And the block outputs a sequence of length 3 years with K features where we choose K. So we can pick K=64 as shown in image below and get 64 engineered features!
+
+
+
+Time Series Model
+
+We build a time series DL model by assembling layers of blocks. So shape (batch_size, sequence_length, 1) goes into 1st layer and out comes (batch_size, sequence_length, 64). Then we input that into 2nd layer and out comes (batch_size, sequence_length, 64) again (or any number of features other than K=64 if we want). Each time the engineered features are getting better! We can repeat this as much as we want. 
+
+We add a positional encoding sequence to our input sequence to help the transformer understand time. And the final block of our model (with all it's engineered features) feeds into a head (global pooling layer and dense 32 layer) to predict the future time series. 
+
+We can improve the head by building a decoder. Then our model would be an encoder-decoder like a sequence to sequence transformer. Right now our model is an encoder with a 32 output regression head (to predict 32 future days of num_sold).
+
+
+
+Autoregression
+
+There are many ways to predict future sequences. This starter uses autoregression. We input a sequence of 1440 days which is about 3 years and the model outputs 32 days which is about 1 month. To get the second month. We concatenate our 1st prediction with 2 years 11 months of most recent train data. Then we take those 3 years and input that into the model to get the second month. We use for-loop and repeatedly predict output and use the prediction as input (plus some months of train data) 35 times to get 3 years of predictions.
+
+EDA of Predictions
+
+In this competition, we predict 90 time series. There are 5 products, 6 countries, and 3 stores. For each pair of product, country, store we predict a time series of length 3 years. The first 2 years are for the public LB and the last 1 year is for private LB. Below are some predictions from the Transformer starter model. We see that they look good!
+
+
+
+
+
+
+
+Enjoy! Have fun!
+
+For more info about DL time series, read my previous solution writeup here with code here
+
+Comments:
+├─ Spiritmilk (2025-01-25 03:40:00.447000) [+6]
+│  Masterpiece! I've learned a lot from it! 
+│  
+│  I always thought that simple models would have an advantage in this competition, such as @zgrdenizelik 's simpler neural network, @kdmitrie 's multiplicat...
+  ├─ Özgür Deniz Çelik (2025-01-25 11:35:44.220000) [+2]
+  │  I agree. What I did not mentioned in my notebook was I tried models with more layers or more width it just did not work. It makes sense but what do you mean bu operating frequency domain.
+    ├─ Spiritmilk (2025-01-25 12:49:57.187000) [+2]
+    │  It's actually quite simple, just use the FFT to shift to the frequency domain.
+    ├─ Fabian Henning (2025-01-27 08:23:45.007000) [+1]
+    │  interesting @act18l! what do you mean by FFT? can you share the model definition?
+    │  
+    │  edit: 
+    │  https://en.wikipedia.org/wiki/Fast_Fourier_transform :
+    │  
+    │  
+    │  still interested in how exactly you approached thi...
+    ├─ Spiritmilk (2025-01-27 14:39:57.993000) [+2]
+    │  Hey @crustacean , thanks for your attention.
+    │  As I mentioned earlier, this is only a semi-finished product, and the specific neural network structure has not been finalized. Therefore, I can not sha...
+    ├─ Fabian Henning (2025-01-28 04:56:50.880000) [+1]
+    │  All the windows exhibit strong Fourier components at consistent positions. For instance, in a 1440-length window, there are prominent Fourier components at positions 206, 411, and 617.
+    │    
+    │  
+    │  
+    │  excitin...
+    ├─ Chris Deotte (2025-01-28 11:49:55.440000) [+3]
+    │  I am still pondering about the pooling. I wonder if the head can account for long-range dependencies after pooling. It may be possible to encode them in the features, but to do so and then derive t...
+    ├─ Fabian Henning (2025-01-28 12:25:22.097000) [+2]
+    │  Thank you very much! This clears up my misunderstanding.
+    │  
+    │  
+    │    
+    │  loss back propagates through global mean pooling which is taking the average of engineered features per day.
+    │  
+    │  
+    │  I thought we were poolin...
+    ├─ Spiritmilk (2025-01-28 12:34:39.017000) [+3]
+    │  @crustacean I understand that you believe the subsequent pooling layers could disrupt the learned long-range dependencies. 
+    │  I think this issue is not critical, as you will also use multiple Dense l...
+    ├─ Chris Deotte (2025-01-28 12:38:56.223000) [+3]
+    │  We are pooling over time and removing time. Before pooling, the shape is (batch_size, sequence length, number of engineered features) which for us is (64, 1440, 64). The global pooling takes mean o...
+    ├─ Fabian Henning (2025-01-28 13:45:37.700000) [+1]
+    │  I see. It really works that way. Amazing! Thanks again!
+├─ [deleted] (2025-01-27 06:47:58.353000) [+3]
+│  That's truly incredible and mind-blowing
+├─ Fabian Henning (2025-01-24 16:47:54.173000) [+3]
+│  Thank you! I enjoyed reading your detailed explanations a lot. It's interesting to see, that we are pooling our features globally along the time axis in the head. Could it be beneficial to retain s...
+  ├─ Chris Deotte (2025-01-24 16:57:45.163000) [+3]
+  │  Even though we are global pooling and removing time, the model has already been putting sequential features (about patterns in time) into the individual day features. Therefore the global pooling w...
+├─ Daniel Paredes (2025-01-31 23:03:54.530000) [+1]
+│  Thanks a lot! I really liked the detailed explanation
+├─ Dark_Pheonix (2025-01-31 16:04:28.047000) [+1]
+│  Thank you! I really enjoyed the detailed explanation and visuals—they were very informative.
+├─ Geremie Yeo (2025-01-31 02:31:17.657000) [+1]
+│  Hi Chris, for your submission_v1.csv which scores 0.052, did you apply any multiplier on top of the model prediction? For example, multiplying the result by 1.06 for all rows in the test set
+  ├─ Chris Deotte (2025-01-31 02:39:01.333000) [+3]
+  │  There are no multipliers. The file submission_v1.csv was created by running my exact public notebook code 5 time with PROD=0,1,2,3,4. And in the code we see that there are no multipliers, no post p...
+├─ HimanshuBhumbla3114 (2025-01-30 13:52:07.137000) [+1]
+│  This was some great work
+├─ İsmail Uğuz (2025-01-29 18:57:27.263000) [+1]
+│  Thank you for your amazing work , really impressed by visuals.
+├─ Navdeep singh sidhu (2025-01-29 16:54:36.020000) [+1]
+│  Thank you! I really enjoyed the detailed explanation and visuals—they were very informative.
+├─ [deleted] (2025-01-29 04:16:42.900000) [+1]
+│  Dear grandmaster, please tell me - does a hybrid solution exist, at all - can it be built? Do you mean - a person with feature engineering, and a machine, as in your solution and example NN?
+  ├─ Chris Deotte (2025-01-29 13:48:37.917000) [+6]
+  │  Yes, my current LB 0.04490 is a hybrid between myself and my transformer. My transformer finds patterns that i do not and I find patterns that my transformer does not. My current best solution pred...
+    ├─ [deleted] (2025-01-30 08:15:09.723000) [+1]
+    │  Grandmaster, thank you for the clarification! Your work is high-tech. We will be happy to watch it further. And learn from it too. Thanks again!
+├─ Samith Chimminiyan (2025-01-28 19:04:45.707000) [+1]
+│  @cdeotte Thank you !!! Very informative. Enjoyed reading the detailed explanation and visuals.
+├─ Sumit_08 (2025-01-28 13:11:17.873000) [+1]
+│  This is really an amazing work @cdeotte thanks for this no feature engineering method…
+├─ Matin Mahmoudi ✨ (2025-01-27 19:52:44.610000) [+1]
+│  Wow, really interesting. well done dear Chris.
+├─ [deleted] (2025-01-27 14:36:00.753000) [+1]
+│  nice work really exciting and impressive
+├─ [deleted] (2025-01-27 14:28:47.823000) [+1]
+│  Nice work  very impressive
+├─ Polaris1209 (2025-01-25 18:00:05.423000) [+1]
+│  That Great!!
+├─ Saurabh Tiwari (2025-01-24 19:07:13.973000) [+1]
+│  Thanks for your guidance,  but i want add new features in my ML model.
+├─ Saurabh Tiwari (2025-01-24 18:33:52.967000) [+1]
+│  Can you guide me some ways to do feature engineering.
+  ├─ Chris Deotte (2025-01-24 18:36:22) [+3]
+  │  Are you asking about feature engineering for GBDT models? This transformer does not need feature engineering. The NN layers of the model perform feature engineering for us. Our job is to design the...
+├─ [deleted] (2025-01-29 07:53:20.207000) [+2]
+│  Thank you! I really enjoyed the detailed explanation and visuals—they were very informative.
+├─ LuminousC (2025-01-28 11:38:13.770000) [+2]
+│  Great sharing, Chris. I've learned a lot from your post.
+│  From the prediction curve shared in the post, we could see the model has ability to catch the seasonal pattern. In the modeling training, wo...
+├─ Optimistix (2025-01-26 23:37:56.010000) [+2]
+│  Very impressive! Thanks for sharing the code, and explaining it. A small question - 1440 days is 4 years (minus one day, since there's got to be a leap year somewhere in between). I do see 1095 in ...
+  ├─ Chris Deotte (2025-01-27 01:04:26.110000) [+3]
+  │  Hi, thanks. The number 1095 is the length of the test predictions (after predicting 32 for 35 times) which are 3 years. The model takes input of 1440 which is about 4 years.
+  ├─ Chris Deotte (2025-01-27 01:07:07.697000) [+3]
+  │  The first layers of model are in code cell #13:
+  │  
+  │   ():
+  │      
+  │      inp = tf.keras.(shape=(,))
+  │  
+  │  
+  │  and LEN is defined as 1440 in code cell #1
+    ├─ Optimistix (2025-01-27 02:22:17.867000) [+1]
+    │  Thanks for the explanation!
+├─ Stephen Hageman (2025-01-26 16:53:50.597000) [+2]
+│  Nice work! It would be interesting to see how some of the pretrained time series foundational models compare to this.
+├─ Muhammad Izhar (2025-01-31 05:59:04.347000) [+0]
+│  This is a fantastic @cdeotte showcase of the power of Transformer models in time series forecasting! I'm genuinely impressed by how the Transformer achieves such a low LB score of 0.052 without any...
+├─ Geremie Yeo (2025-01-25 13:03:36.263000) [+2]
+│  Nice share! May I ask what is the CV of this model? I am using year 2016 for validation for the models which I "trained" and the correlation is totally off lol 😅 especially the threshold part is tr...
+  ├─ Chris Deotte (2025-01-25 13:27:43.617000) [+6]
+  │  To be honest, I am just using the public LB (and common sense about generalize ability) to evaluate changes in my model. 
+  │  
+  │  It is very difficult to do a proper time series validation (because we onl...
+├─ [deleted] (2025-01-27 17:49:48.663000) [+2]
+│  [deleted]
+  ├─ paddykb (2025-01-27 17:56:52.790000) [+4]
+  │  @yxshee You copied the text 
+  │  LLM malfunction? You also have a couple of followers upvoting all of your comments…
+├─ [deleted] (2025-01-25 04:35:38.717000) [+1]
+│  [deleted]
+  ├─ Chris Deotte (2025-01-25 13:30:42.603000) [+2]
+  │  If we train in batches then we control how much VRAM we need to train
+├─ [deleted] (2025-01-25 00:43:55.770000) [+0]
+│  [deleted]
+├─ Ankan Debnath (2025-01-31 18:27:36.067000) [+1]
+│  Very informative!
+├─ Nickzz (2025-01-30 18:20:17.827000) [+1]
+│  Thank you.
+├─ [deleted] (2025-01-29 22:20:16.457000) [+1]
+│  [deleted]
+├─ [deleted] (2025-01-29 19:04:22.903000) [+1]
+│  [deleted]
+├─ [deleted] (2025-01-29 16:26:54.997000) [+1]
+│  [deleted]
+├─ [deleted] (2025-01-29 02:19:05.837000) [+1]
+│  [deleted]
+├─ [deleted] (2025-01-29 20:52:33.260000) [+1]
+│  [deleted]

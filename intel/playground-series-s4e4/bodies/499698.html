@@ -1,0 +1,82 @@
+<p>Heyho everyone, thanks for hosting <a href="https://www.kaggle.com/competitions/playground-series-s4e4" target="_blank">the competition</a>, and shoutouts to the <a href="https://www.kaggle.com/competitions/playground-series-s4e4/discussion" target="_blank">active community</a>! </p>
+<h2>Context for My Submissions</h2>
+<p>I entered the competition close to the deadline to test my automated machine learning (AutoML) workflow, which I intended to use for the <a href="https://www.kaggle.com/automl-grand-prix" target="_blank">AutoML Grand Prix </a> that started right after this competition ended. </p>
+<p>As it turns out, and to my surprise, my AutoML workflow performed really well without adjustments in this competition. In fact, it <a href="https://www.kaggle.com/competitions/playground-series-s4e5/discussion/499482" target="_blank">worked much better here than on the actual first Grand Prix Dataset</a> because this dataset actually benefited from automated feature engineering. </p>
+<p>I will write up and share the code for the major parts of my workflow as part of my write-up for the Grand Prix. If possible, I will link my write-up here or post it as a comment later. <strong>EDIT</strong>: <a href="https://www.kaggle.com/competitions/playground-series-s4e5/discussion/500783" target="_blank">here</a> is the write-up. </p>
+<h1>Summary of the AutoML Workflow</h1>
+<ol>
+<li>Automated Two-Sample Tests For Training Data</li>
+<li>Automated Feature Engineering (OpenFE + AutoGluon)</li>
+<li>Automated Model Selection (Customzied AutoGluon)</li>
+</ol>
+<h2>1. Automated Two-Sample Tests To Optimize Training Data</h2>
+<p>Since I am rather new to actively participating in Kaggle competitions, I found the concept of having an additional potentially unreliable data source quite interesting. Thus, to determine whether I wanted to include the original data in my training data, I created several two-sample tests for original data, training from the competition, and test data from the competition. These tests are supposed to determine if a distribution shift exists. If any shift exists, including the original data in the training data might be harmful.</p>
+<p>I used AutoGluon to predict whether it can detect which dataset a sample is from and used a Mann-Whitney U Test to determine significance. </p>
+<p>I tested:</p>
+<ul>
+<li>(Kaggle+Original) Train Data - (Kaggle) Test Data</li>
+<li>(Kaggle) Train Data - (Original) Train Data</li>
+<li>(Kaggle) Train Data - (Kaggle) Test Data</li>
+<li>(Original) Train Data - (Kaggle) Test Data</li>
+</ul>
+<p>Based on my observations from these tests, I included the original data. I still need to formalize a way of automatically deciding this. The setup can be improved, and I want to improve it in the future by including tests assessing whether including data is estimated to improve performance. </p>
+<h2>2. &nbsp;Automated Feature Engineering (OpenFE + AutoGluon)</h2>
+<p>I suspect this part was by far the most important in obtaining second place in this submission. In essence, what I did was: A) run a customized&nbsp;version of <a href="https://github.com/IIIS-Li-Group/OpenFE" target="_blank">OpenFE</a>, and then B) use <a href="https://github.com/autogluon/autogluon/blob/master/core/src/autogluon/core/utils/feature_selection.py#L154" target="_blank">AutoGluon's feature selection</a> to prune features.</p>
+<p>I played around with B) and used a LightGBM model as a proxy. </p>
+<p>For A), I first selected the potential feature candidates by hand to control what might be searched over by OpenFE and added a new type of feature generator. Then, I ran OpenFE with default settings, which got me to ca. 200 features. Finally, I automatically pruned them down using B) with a time limit of 1 hour. </p>
+<p>Sadly, I do not have all the details for the final feature generators, as my pipeline did not log their generator function. Moreover, while trying to make automated feature engineering work for the first AutoML Grand Prix dataset (spoiler: it was not worth the effort), my code base got a bit too messy to trace back my steps. </p>
+<p>I used the following code to control the feature generators: </p>
+<pre><code>all_features = (train_data.columns)
+soft_ordinal = [f  f  all_features  (train_data[f].nunique() &lt;= )  (f   ordinal_columns)]
+numerical_features = [f  f  all_features  f   categorical_columns]
+candidate_features = get_candidate_features(
+    numerical_features=numerical_features,
+    categorical_features=categorical_columns,
+    ordinal_features=ordinal_columns + soft_ordinal,
+    order=,  
+)
+
+
+candidate_features = [
+    f
+     f  candidate_features
+     f.name
+     [
+        
+        
+        
+        
+        
+        , -&gt; 
+        ,
+        ,
+        
+        
+        
+        
+        ,
+        ,
+        
+        
+        
+        ,
+        ,
+        
+        ,
+        ,
+        ,
+        
+        
+         ,  
+    ,   
+    ,
+    ,
+    ]
+]
+</code></pre>
+<h2>3. Automated Model Selection (Customzied AutoGluon)</h2>
+<p>Finally, I used a "tuned" version of AutoGluon to select the final model. I will share all the details in my write-up for the AutoML Grand Prix. <strong>EDIT</strong>: <a href="https://www.kaggle.com/competitions/playground-series-s4e5/discussion/500783" target="_blank">here</a> is the write-up. </p>
+<p>Of importance here was that I noticed that stacking worked really well for this dataset (with code related to <a href="https://github.com/autogluon/autogluon/pull/3616" target="_blank">dynamic stacking</a>). Thus, I set AutoGluon to fit up to 6 Layers for Stacking. In the end, it used 5 Layers, but looking at the final&nbsp;scores of my submissions, I got the same score with only 3 layers, but layer 5 did not overfit either! </p>
+<p>I hope this (and the more detailed future write-up) provides a good overview of my solution. Moreover, I hope you are as excited for more and better automated feature engineering as I am ;) </p>
+<p>Best,<br>
+Lennart </p>

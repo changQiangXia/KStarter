@@ -1,0 +1,151 @@
+# https://www.kaggle.com/competitions/playground-series-s4e7/discussion/516413
+
+Topic #516413: [AutoML Grand Prix 23rd place solution] Learnt the art of effective resource and time management
+  Author: Ravi Ramakrishnan
+  Posted: 2024-07-02 12:33:37.319000
+  Votes: 35  Comments: 7
+
+Hello all,
+
+I wish to posit my key takeaways from my tryst with the 3rd episode of the AutoML series. Although I did not finish in the top 10, I learnt a lot about effective time management and resource usage and wish to share my learnings for collective benefit- 
+
+Preliminary work
+
+
+
+I started off with my usual baseline routine with a simple EDA and boosted tree models. Considering the size of the data and the potential time and memory constraints to train these models, I restricted myself to Kaggle CPUs and released my EDA component yesterday and trained models locally. I found that XgBoost took lesser time than other options with similar results and decided to work on this model through the day
+
+I was sure that I would not be able to complete too many experiments considering my work schedule and the time to train models with resources at my disposal. Hence, I decided to work on a single model and developed LAMA kernels for the rest. I decided to ensemble them and submit at the end of the day. I released a LAMA kernel yesterday and trained 3 more with different model combinations, with a very similar 5-fold CV score (0.8804 - 0.8809) all on Kaggle CPU
+
+For my private experiments with XgBoost, I compressed the data and released the kernel yesterday. Shrinking the data and using parquet files largely helps in such cases 
+
+
+XgBoost experiments
+
+I executed 4 XgBoost models with 4 enablers, all with the original data in the training 
+
+
+
+
+My baseline pipeline with parameters from another large dataset competition. I learnt from there that one needed to increase max bins for larger data. This was accidently in line with the idea expressed here. We had used max bins = 1200 in the other competition, so I stuck to similar numbers here as well (working better here would have given me a better score for sure)
+
+
+AutoGluon -&gt; tabular XgBoost model with zeroshot parameters and 5-fold CV
+
+
+LAMA xgb_tuned model 
+
+
+FLAML XgBoost model 6 hour run-time with 5 fold CV 
+
+
+I also tuned an XgBoost model on my local GPU with 5 trials and 5 fold CV scheme with higher max bins but never thought of providing large numbers like the reference kernel
+
+
+All of these experiments scored around 0.8816 -&gt; 0.8821 on the CV folds. I was now sure that my chances of making it to the top 10 were slim. I tried to blend the XgBoost models with my 4 LAMA results (lgb_tuned, cb_tuned) 2 hours before the deadline and received my best score of 0.88269. 
+
+
+I tried a quick Optuna blend, Hill climb and generalization and received very similar scores. I can opine with confidence that we have a decent CV-LB connection here. 
+
+
+Key takeaways
+
+
+
+My idea of using a single model was perhaps better than trying to build an ensemble. I probably managed my time well to conjure a solution within 6-7 hours of disposable time after work
+
+I should have experimented better with XgBoost parameters. I am sure that using a better value for max bins and n_estimators would have put me in contention for a top 10 finish. Nevertheless, I am happy to be in line with the same line of thought as a topper candidate and shall use these learnings going ahead, perhaps with a better result in times to come. 
+
+
+Some tips for handling a relatively large dataset
+
+
+
+Using Polars lazyframe, PySpark, DataTable and CuDF is better than using pandas with CPU for such datasets. I am using Polars a lot these days and find it much faster than pandas for a lot of commonplace tasks
+
+One may submit using parquet files too. They occupy lesser disk space and take almost the same time to score as a .csv submission
+
+Using one's resources to full use is key. We have 30-hours of Kaggle GPU and up to 5 CPU kernels available at our disposal. Using them to good use is key this month. 
+
+We can hope that we will have a lesser extent of churn this time given the CV-LB relation and the large size of the data
+
+One may avoid CPU intensive work with a GPU, if resources are limited. EDA, data preprocessing, visuals, etc. may be effectuated on a separate kernel with a CPU and GPU based steps may be performed on a GPU kernel to optimize resources. 
+
+One may consider training the model and perhaps predicting on the test set on 2 separate kernels to avoid any potential OOM issues. Also, predicting in batches on the test set is also an option. Please peruse my code from another competition where I effectuate this as below. This can be modified to meet the needs for this assignment if needed- 
+
+
+ :
+    ;
+
+     ():
+        ;
+        (style + color + text + Style.RESET_ALL);
+
+     ()-&gt; :
+        ;
+         roc_auc_score(ytrue, ypred);
+
+     ():
+        ;
+
+        collect();
+        libc.malloc_trim();
+        pid        = getpid();
+        py         = Process(pid);
+        memory_use = py.memory_info()[] /  ** ;
+         ;
+
+     ()-&gt; np.array:
+        ;
+
+        num_samples = (X);
+        num_batches = (np.ceil(num_samples / batch_size));
+        preds       = np.zeros((num_samples,));
+
+         batch_idx  (num_batches):
+            self.PrintColor(, color = Fore.CYAN);
+
+            start_idx = batch_idx * batch_size;
+            end_idx   = ((batch_idx + ) * batch_size, num_samples);
+            X_batch   = X.iloc[start_idx : end_idx];
+
+             prd_proba_req == :
+                batch_probs = model.predict_proba(X_batch)[:, ];
+            :
+                batch_probs = model.predict(X_batch).data.squeeze();
+
+            preds[start_idx: end_idx] = batch_probs;
+            _ = self.CleanMemory();
+
+         preds;
+
+Utils = Utility();
+
+
+
+
+Lastly, one may save fitted models to a dataset/ folder using joblib/ dill/ booster.txt files and perhaps reuse them to good effect for subsequent submissions. This may be of use in cases where resources are limited 
+
+
+Wishing one and all the best for the month's playground episode and happy learning!
+Regards.
+
+Comments:
+├─ Optimistix (2024-07-02 19:23:35.157000) [+1]
+│  Congratulations! And thanks for the tips and code to manage the data size.
+├─ Thomas Meißner (2024-07-02 14:31:27.173000) [+1]
+│  Max_bin was the joker here. I tested it today and it elevated my public LB to 0.888.
+  ├─ Ravi Ramakrishnan (2024-07-02 14:33:07.860000) [+1]
+  │  True @thomasmeiner I knew that this needed to be increased for large datasets and did increase it too, but the level expressed in the 4th place solution was beyond my imagination @thomasmeiner 
+  │  Doe...
+    ├─ Thomas Meißner (2024-07-02 17:13:27) [+2]
+    │  In the next version max_bin will be part of the tuning process
+    ├─ Thomas Meißner (2024-07-03 06:15:11.003000) [+1]
+    │  Maybe a note to add here… Generally I try to tst hyperparameter changes strongly. For that I run BlueCast against all 59 datasets in this competition from @lucasmorin 
+    │  
+    │  Just from one competition i ...
+    ├─ Ravi Ramakrishnan (2024-07-03 07:39:46.683000) [+1]
+    │  This is very true @thomasmeiner 
+    │  I agree to the set of tuning parameters too. I have never tuned max_bin anytime before and haven't seen this as a major tuning one as well. Perhaps, this could be a...
+├─ Md. Ismiel Hossen Abir (2024-07-02 13:30:53.260000) [+1]
+│  Thanks for sharing @ravi20076

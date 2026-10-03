@@ -1,0 +1,37 @@
+<p>Hello colleagues,</p>
+<p>Let me share with you <strong>3rd place solution, the “LightAutoML testers” team solution for the 3rd phase of AutoML Grand Prix</strong> - it was 24 hours of fun with the amazing 11.5 mln rows dataset.</p>
+<h2>Useful Links</h2>
+<ul>
+<li><a href="https://www.kaggle.com/code/simakov/3d-place-automl-grand-prix-lightautoml-inference/notebook" target="_blank"><strong>Inference kernel</strong> with our final score 0.89375</a></li>
+<li><a href="https://www.kaggle.com/datasets/alexryzhkov/tps-july-2024-nn-models" target="_blank">Dataset with pretrained models and OOFs (<strong>contains more models than used in final sub</strong>)</a></li>
+<li><a href="https://github.com/sb-ai-lab/LightAutoML_testers_solution_tps_jul_24" target="_blank"><strong>GitHub repo with training notebooks</strong> to reproduce the necessary models for the final sub</a></li>
+</ul>
+<hr>
+<h2>Full solution scheme</h2>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F19099%2Fc66d266cf61d2c8187a37e696241c544%2Ffull_schema.png?generation=1720038815979049&amp;alt=media"></p>
+<h2>Solution description</h2>
+<p>As a starting point, we have trained a straightforward TabularAutoML model on the full train dataset to figure out all the important points of the task. Below you can see both variants of the feature importances calculation (fast - based on the number of splits by each feature, permutation - permutation importances on holdout):</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F19099%2Fa615ca83bf68cd97a839cbf4e0a06a7c%2Ffeature_importnaces.png?generation=1720039179937595&amp;alt=media" alt="drawing"></p>
+<p>As we can see, the best 2 features in both variants are the same (<code>Previously_Insured</code> and <code>Vehicle_Damage</code>) and <strong>both of these features are binary</strong>. So we have tested training separate models for each variant below using LightAutoML:</p>
+<ul>
+<li>1 LGBM model for the whole train dataset</li>
+<li>2 LGBM models for the <code>0</code> and <code>1</code> subsets based on <code>Previously_Insured</code> feature</li>
+<li>2 LGBM models for the <code>Yes</code>  and <code>No</code> subsets based on <code>Vehicle_Damage</code> feature</li>
+<li>4 LGBM models for the train dataset subsets based on the unique combinations of Previously_Insured and Vehicle_Damage</li>
+</ul>
+<p>This 9 LGBMs were used to create so called <code>LGBM_composition_1</code> - the first weighted blend.</p>
+<p>After that we have trained <strong>7 tabular NNs using LightAutoML</strong> based on 4 different NN architectures:</p>
+<ul>
+<li>3 DenseLight nets</li>
+<li>2 ResNet nets</li>
+<li>1 AutoInt net</li>
+<li>1 FT-Transformer </li>
+</ul>
+<p>We have tuned all the hyperparams for these nets including activation functions, hidden and embedding sizes, SWA (stochastic weighted averaging) and early stopping params etc - this helps us to receive pretty high-performance NNs (for example we received <strong>0.89232 AUC using single DenseLight model</strong> - <a href="https://www.kaggle.com/code/simakov/lightautoml-denselight" target="_blank">the proof-kernel is here</a>). </p>
+<p>Out-of-Fold predictions (OOFs) from 4 of these NNs (2 DenseLight, 1 ResNet and  1 FT-Transformer) <strong>were used as new features to train another 9 LightAutoML LGBM models</strong> (in the same manner as previously using full train dataset and separated segments). These stacking models were used to create <code>LGBM_composition_2</code> - the second weighted blend.</p>
+<p><strong>The final submission</strong> was created using both LGBM weighted blend and 4 best tabular NNs - this helps us to receive 0.89375 AUC and secure the 3rd place.</p>
+<p>That's all!</p>
+<hr>
+<p>Once again, it was amazing 24 hours run and I would like to congratulate organisers and other contestants for that.</p>
+<p>All the best,<br>
+"LightAutoML testers" team</p>

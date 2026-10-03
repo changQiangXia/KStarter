@@ -1,0 +1,37 @@
+# phase-ii-widsdatathon2022 讨论区（按票数排序，共 35 条）
+
+- [Top Resources for Getting Started](https://www.kaggle.com/competitions/phase-ii-widsdatathon2022/discussion/311836) — 16 票 / 8 评论 / 2022-03-09 
+- [Analysis of gas consumption in France](https://www.kaggle.com/competitions/phase-ii-widsdatathon2022/discussion/311930) — 12 票 / 4 评论 / 2022-03-09 
+- [Looking for Team members](https://www.kaggle.com/competitions/phase-ii-widsdatathon2022/discussion/311837) — 8 票 / 4 评论 / 2022-03-09 
+- [Analytics Competition](https://www.kaggle.com/competitions/phase-ii-widsdatathon2022/discussion/311833) — 6 票 / 5 评论 / 2022-03-09 
+- [🌞❄🌊Some Excellent Resources for this Competition on Climate Change🔥💧](https://www.kaggle.com/competitions/phase-ii-widsdatathon2022/discussion/312249) — 6 票 / 3 评论 / 2022-03-11 
+- [Missing notebook in CCAI](https://www.kaggle.com/competitions/phase-ii-widsdatathon2022/discussion/313736) — 6 票 / 0 评论 / 2022-03-18 
+- [Excellence in Research Award (Phase II) Kick-off call Recording](https://www.kaggle.com/competitions/phase-ii-widsdatathon2022/discussion/313768) — 5 票 / 0 评论 / 2022-03-18 
+- [Phase II Office Hours with EPA, Recording #2](https://www.kaggle.com/competitions/phase-ii-widsdatathon2022/discussion/326218) — 4 票 / 2 评论 / 2022-05-20 
+- [Excellence in Research Award (Phase II) Milestone #2 Office Hours, Recording](https://www.kaggle.com/competitions/phase-ii-widsdatathon2022/discussion/324852) — 4 票 / 0 评论 / 2022-05-13 
+- [Phase II Office Hours with CCAI, Recording](https://www.kaggle.com/competitions/phase-ii-widsdatathon2022/discussion/322583) — 4 票 / 0 评论 / 2022-05-03 
+- [WiDS Datathon Phase II Office Hours, with CCAI | April 29th](https://www.kaggle.com/competitions/phase-ii-widsdatathon2022/discussion/321764) — 4 票 / 0 评论 / 2022-04-28 
+- [Query related to MIT critical data starter dataset](https://www.kaggle.com/competitions/phase-ii-widsdatathon2022/discussion/312012) — 4 票 / 3 评论 / 2022-03-10 
+- [Paper submissions, due this Thursday June 30th @ 11:59pm PST](https://www.kaggle.com/competitions/phase-ii-widsdatathon2022/discussion/333677) — 3 票 / 3 评论 / 2022-06-27 
+- [Final office hours recordings](https://www.kaggle.com/competitions/phase-ii-widsdatathon2022/discussion/331564) — 3 票 / 0 评论 / 2022-06-17 
+- [[Track 3: CCAI] What is alt_prec?](https://www.kaggle.com/competitions/phase-ii-widsdatathon2022/discussion/313830) — 3 票 / 0 评论 / 2022-03-19 
+- [Congratulations WiDS Datathon Excellence in Research Award Winners!](https://www.kaggle.com/competitions/phase-ii-widsdatathon2022/discussion/347115) — 2 票 / 0 评论 / 2022-08-22 
+- [WiDS Datathon Phase II Office Hours, with EPA | April 22, May 20, June 17](https://www.kaggle.com/competitions/phase-ii-widsdatathon2022/discussion/320031) — 2 票 / 0 评论 / 2022-04-19 
+- [Excellence in Research Award (Phase II) Office Hours Recording](https://www.kaggle.com/competitions/phase-ii-widsdatathon2022/discussion/319340) — 2 票 / 0 评论 / 2022-04-16 
+- [WiDS Milestone Office Hours April 15th](https://www.kaggle.com/competitions/phase-ii-widsdatathon2022/discussion/318310) — 2 票 / 1 评论 / 2022-04-11 
+- [Phase II Office Hours with MIT Critical Data, Recording](https://www.kaggle.com/competitions/phase-ii-widsdatathon2022/discussion/315173) — 2 票 / 0 评论 / 2022-03-26 
+- [WiDS Datathon Phase II Office Hours, with MIT Critical Data | March 26th](https://www.kaggle.com/competitions/phase-ii-widsdatathon2022/discussion/314242) — 2 票 / 0 评论 / 2022-03-21 
+- [Research Paper](https://www.kaggle.com/competitions/phase-ii-widsdatathon2022/discussion/312110) — 2 票 / 1 评论 / 2022-03-10 
+- [Results of competition ](https://www.kaggle.com/competitions/phase-ii-widsdatathon2022/discussion/343163) — 1 票 / 1 评论 / 2022-08-10 
+- [The importance of features ](https://www.kaggle.com/competitions/phase-ii-widsdatathon2022/discussion/342928) — 1 票 / 1 评论 / 2022-08-09 
+- [Covid Team member](https://www.kaggle.com/competitions/phase-ii-widsdatathon2022/discussion/329129) — 1 票 / 2 评论 / 2022-06-05 
+- [Phase II Milestone Office Hour: Building Basic Models](https://www.kaggle.com/competitions/phase-ii-widsdatathon2022/discussion/323965) — 1 票 / 3 评论 / 2022-05-09 
+- [Can we use other s/w like Tableau etc for data visualization](https://www.kaggle.com/competitions/phase-ii-widsdatathon2022/discussion/321664) — 1 票 / 2 评论 / 2022-04-28 
+- [Phase II Office Hours with EPA, Recording](https://www.kaggle.com/competitions/phase-ii-widsdatathon2022/discussion/320783) — 1 票 / 0 评论 / 2022-04-23 
+- [dsadasdasdasdsadsadlkwjanlaj sjdn;Ạ F:Noạn'lkej nádasdasd](https://www.kaggle.com/competitions/phase-ii-widsdatathon2022/discussion/319677) — 1 票 / 0 评论 / 2022-04-18 
+- [Team Search](https://www.kaggle.com/competitions/phase-ii-widsdatathon2022/discussion/313062) — 1 票 / 2 评论 / 2022-03-15 
+- [List of suggested research questions for MIT critical data](https://www.kaggle.com/competitions/phase-ii-widsdatathon2022/discussion/312011) — 1 票 / 1 评论 / 2022-03-10 
+- [Last chance, paper submissions due today @ 11:59pm PST](https://www.kaggle.com/competitions/phase-ii-widsdatathon2022/discussion/334299) — 0 票 / 0 评论 / 2022-06-30 
+- [Number of page](https://www.kaggle.com/competitions/phase-ii-widsdatathon2022/discussion/334287) — 0 票 / 3 评论 / 2022-06-30 
+- [Participation](https://www.kaggle.com/competitions/phase-ii-widsdatathon2022/discussion/328683) — 0 票 / 1 评论 / 2022-06-02 
+- [Why the 'Submit button is disabled](https://www.kaggle.com/competitions/phase-ii-widsdatathon2022/discussion/323936) — 0 票 / 1 评论 / 2022-05-09 

@@ -1,0 +1,82 @@
+# playground-series-s3e22 讨论区（按票数排序，共 80 条）
+
+- [Onboarding materials and references](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/438603) — 62 票 / 28 评论 / 2023-09-12 
+- [Fun Fact: Some Horses Have Died More Than Once](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/441284) — 50 票 / 26 评论 / 2023-09-18 
+- [Inferring the LB shakeup](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/444654) — 36 票 / 11 评论 / 2023-10-03 
+- [AI Predicting Survivability in Horses with Colic. Postoperative Survival Modelling.](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/438620) — 32 票 / 4 评论 / 2023-09-12 
+- [Beware of the public LB! ](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/438637) — 29 票 / 11 评论 / 2023-09-12 
+- [# 14 Solution](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/444642) — 26 票 / 15 评论 / 2023-10-03 **write-up?**
+- [ Revealing the target variable distribution of the public LB with one submission](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/438889) — 25 票 / 5 评论 / 2023-09-12 
+- [About the rectal_temp feature (FE suggestion)](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/438680) — 25 票 / 5 评论 / 2023-09-12 
+- [Leaderboard: What I learned from Previous Playgrounds](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/438691) — 24 票 / 9 评论 / 2023-09-12 
+- [Feature Engineering: Splitting lesion into different categorical variables?](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/440919) — 23 票 / 12 评论 / 2023-09-16 
+- [Seems Like We're Having A Mass Downvoter in Playground Series](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/440205) — 21 票 / 14 评论 / 2023-09-14 
+- [New to Machine Learning or Kaggle?](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/431774) — 13 票 / 4 评论 / 2023-08-14 
+- [Make sure to evaluate your models with the requisite metric!](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/439151) — 12 票 / 8 评论 / 2023-09-13 
+- [CV vs LB score relationship](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/440601) — 11 票 / 6 评论 / 2023-09-15 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/438812) — 10 票 / 0 评论 / 2023-09-12 
+- [Issue Regarding Categorical Features](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/438740) — 10 票 / 5 评论 / 2023-09-12 
+- [How do I choose between OneHot encoding and a label encoding？](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/438713) — 10 票 / 10 评论 / 2023-09-12 
+- [Using different classifiers for total_protein < 40 and total_protein >= 40](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/441807) — 10 票 / 7 评论 / 2023-09-20 
+- [What a shakeup!](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/444626) — 9 票 / 5 评论 / 2023-10-03 
+- [Hospital Number - the Same Horses Die Multiple Times! (I think)](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/438825) — 7 票 / 2 评论 / 2023-09-12 
+- [Lesion variables ](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/440345) — 7 票 / 6 评论 / 2023-09-14 
+- [Here are a few of my feature engineering ideas.](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/439049) — 7 票 / 4 评论 / 2023-09-13 
+- [Results as far](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/441965) — 7 票 / 12 评论 / 2023-09-20 
+- [There Is Only One Unique Value for lesion_3 in Test Dataset](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/438615) — 7 票 / 1 评论 / 2023-09-12 
+- [Share Analysis on 'Shakeup'](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/445026) — 6 票 / 2 评论 / 2023-10-04 
+- [Private leaderboard is aligned with the CV](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/444641) — 6 票 / 1 评论 / 2023-10-03 
+- [How far got automl in this shakeup fiesta? (with just ~20 lines of code)](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/444670) — 5 票 / 1 评论 / 2023-10-03 
+- [Shakeup? What are your predictions?](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/444624) — 5 票 / 0 评论 / 2023-10-02 
+- [Note: The competition metric “micro-f1-score” is simply the accuracy of the classification!](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/440333) — 4 票 / 0 评论 / 2023-09-14 
+- [Be careful when using the original dataset for training!](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/441019) — 4 票 / 3 评论 / 2023-09-17 
+- [Question On LabelEncoding Numbering Order](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/441215) — 4 票 / 5 评论 / 2023-09-18 
+- [Rookie doubt : Why don't I see train and test splits? Also, Adding train data with test data confuses me.](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/441026) — 4 票 / 14 评论 / 2023-09-17 
+- [Don't write off AutoML (Tip for novices)](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/441974) — 4 票 / 3 评论 / 2023-09-20 
+- [what to do with hospital_number](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/441876) — 4 票 / 15 评论 / 2023-09-20 
+- [A slight improvements in CV(0.74062->0.74234) and LB(0.81097->0.82317)](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/443738) — 4 票 / 2 评论 / 2023-09-28 
+- [NN vs. Ensemble](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/443121) — 3 票 / 19 评论 / 2023-09-25 
+- [Math on machine learning](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/452983) — 3 票 / 1 评论 / 2023-11-04 
+- [Made-Up Values in Synthetic Data](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/440699) — 3 票 / 2 评论 / 2023-09-15 
+- [The mistake improved the result 🤔](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/444487) — 3 票 / 3 评论 / 2023-10-02 
+- [the use of  exploratory data analysis](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/442290) — 3 票 / 3 评论 / 2023-09-22 
+- [Removing Outliers?](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/440985) — 3 票 / 6 评论 / 2023-09-17 
+- [Feature Engineering: Does anyone know why normalization or standardization leads to worse scores?](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/441099) — 3 票 / 4 评论 / 2023-09-17 
+- [🔥Related Papers for this Competition](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/438848) — 2 票 / 1 评论 / 2023-09-12 
+- [Filling NAs](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/439088) — 2 票 / 5 评论 / 2023-09-13 
+- [Engineering Variables](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/443197) — 2 票 / 1 评论 / 2023-09-26 
+- [Problem_to_Submit_cvs/result -> Evaluation metric raised an unexpected error](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/444601) — 2 票 / 2 评论 / 2023-10-02 
+- [lesion_1 variable value](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/441452) — 2 票 / 3 评论 / 2023-09-18 
+- [Is the winning model released or not?](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/444892) — 2 票 / 0 评论 / 2023-10-04 **write-up?**
+- [Submission guidance versus sample](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/442655) — 2 票 / 2 评论 / 2023-09-23 
+- [Cant remove 'Id' Column it keep say "not found on axis"](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/441517) — 2 票 / 8 评论 / 2023-09-19 
+- [Out of the top 11 teams, 7 of them made only 1 or 2 submissions!](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/444630) — 2 票 / 0 评论 / 2023-10-03 
+- [Is it best effort to optimize the weights of the predictions for each model in the ensemble?](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/444000) — 2 票 / 8 评论 / 2023-09-29 
+- [Problem during submitting predictions](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/440781) — 2 票 / 7 评论 / 2023-09-16 
+- [Categorical Features Analysis: Differences in Values Between Train and Test](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/441977) — 2 票 / 1 评论 / 2023-09-20 
+- [Temporal features to predict severity of health condition](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/440471) — 1 票 / 0 评论 / 2023-09-15 
+- [nasogastric_reflux: none vs. None](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/439008) — 1 票 / 2 评论 / 2023-09-13 
+- [How to learn Machine Learning ?](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/440875) — 1 票 / 4 评论 / 2023-09-16 
+- [مشاركة حول ماتعلمته](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/444393) — 1 票 / 5 评论 / 2023-10-01 
+- [LB Data Visualization](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/444807) — 1 票 / 0 评论 / 2023-10-03 
+- [Submission failed](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/444419) — 1 票 / 8 评论 / 2023-10-02 
+- [Way to minimizing churn in the private LB score](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/444637) — 1 票 / 0 评论 / 2023-10-03 
+- [Feature selection](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/442083) — 1 票 / 1 评论 / 2023-09-21 
+- [Problem related Dataset](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/442491) — 1 票 / 2 评论 / 2023-09-22 
+- [Should null values be imputed?](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/444211) — 1 票 / 4 评论 / 2023-09-30 
+- [What is cp_data?](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/441884) — 1 票 / 6 评论 / 2023-09-20 
+- [Why NN is not work?](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/443039) — 1 票 / 10 评论 / 2023-09-25 
+- [How should imputers be fitted and evaluated?](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/444291) — 1 票 / 3 评论 / 2023-10-01 
+- [Missing Values ](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/443747) — 1 票 / 0 评论 / 2023-09-28 
+- [Does Hospital Number Throw Off Correlation Between Columns?](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/443807) — 1 票 / 2 评论 / 2023-09-28 
+- [How do I show score of my notebook?](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/443183) — 1 票 / 4 评论 / 2023-09-25 
+- [mkaing the evaluation function](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/443105) — 0 票 / 2 评论 / 2023-09-25 
+- [new to kaggle .having problem in modeling ](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/443242) — 0 票 / 3 评论 / 2023-09-26 
+- [Features selection method](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/443866) — 0 票 / 3 评论 / 2023-09-29 
+- [My Notebook does unexpected things! F1 score increased to >99% Closed - I found the user-error](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/444217) — 0 票 / 6 评论 / 2023-09-30 
+- [What is mean "3133" in the lesion_1?](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/444057) — 0 票 / 0 评论 / 2023-09-30 
+- [EDA using ydata_profiling](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/439037) — 0 票 / 0 评论 / 2023-09-13 
+- [Is the given test set the full test set, or only the public test set?](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/438805) — 0 票 / 1 评论 / 2023-09-12 
+- [a new base line and eda model](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/444369) — -1 票 / 2 评论 / 2023-10-01 
+- [Previous Kaggle Competitions with Tabular Data for Binary Classification:](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/441583) — -2 票 / 4 评论 / 2023-09-19 
+- [got stuck in doing one hot encoding new to the field](https://www.kaggle.com/competitions/playground-series-s3e22/discussion/443413) — -2 票 / 0 评论 / 2023-09-27 

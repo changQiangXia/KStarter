@@ -1,0 +1,86 @@
+<p>Hi Kaggle community,</p>
+<p>The solution is a stack ensemble of 10 base models. All base models are tree models. I did log transformation of the targets for 9 of 10 of the base models and the meta model. I didn't do much feature engineering except target encoding for the categorical features. For this dataset, I found out treating some numerical features as categorical with target encoding improve the score a lot. Except for catboost, I don't apply any target encoding but simply set those columns as categorical features since catboost creates different types of target statistics for categorical features out of box. In my experiment, it greatly improved the ensemble score. I think this is somewhat similar from what <a href="https://www.kaggle.com/cdeotte" target="_blank">@cdeotte</a> found out in his top-1 solution where he explicitly combined categorical columns and created different target encodings. There is one special base model which is a classification model. I chunked the targets to three classes, x &lt;= 500, 500 &lt; x &lt;= 2000 and x &gt; 2000. So this model outputed the probabilities of each class to the oofs. It slightly improve the ensemble LB score from 1.02355 to 1.02337. The meta model is also a xgboost trained on top of the original features + oofs of the base models.</p>
+<p>The details of models are listed below:<br>
+Regarding the model tag, the differences between "fe1" till "fe9" are simply different categorical sets. For example, <code>["Property Type", "Policy Type", "Customer Feedback", "Occupation", "Gender", "Exercise Frequency", "Smoking Status", "Marital Status", "Education Level", "Location"]</code> are the categorical features in "fe1", while in "fe9", we add <code>"Health Score"</code> to the list.  And "tc" in the tag means we apply target mean encoding.  </p>
+<table>
+<thead>
+<tr>
+<th>base model tag</th>
+<th>cv</th>
+<th>LB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>lgb-fe1</td>
+<td>1.0456</td>
+<td>1.04479</td>
+</tr>
+<tr>
+<td>xgb-fe2-tc</td>
+<td>1.0459</td>
+<td></td>
+</tr>
+<tr>
+<td>xgb-fe3-tc</td>
+<td>1.0564</td>
+<td></td>
+</tr>
+<tr>
+<td>xgb-fe4-tc</td>
+<td>1.0431</td>
+<td></td>
+</tr>
+<tr>
+<td>xgb-fe5-tc</td>
+<td>1.0528</td>
+<td></td>
+</tr>
+<tr>
+<td>lgb-fe6</td>
+<td>1.0457</td>
+<td></td>
+</tr>
+<tr>
+<td>xgb-fe7-tc</td>
+<td>1.0549</td>
+<td></td>
+</tr>
+<tr>
+<td>xgb-fe8-tc</td>
+<td>1.0416</td>
+<td></td>
+</tr>
+<tr>
+<td>cb-fe9</td>
+<td>1.0395</td>
+<td>1.03691</td>
+</tr>
+<tr>
+<td>xgb-fe1-clf</td>
+<td>NA</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<table>
+<thead>
+<tr>
+<th>ensemble tag</th>
+<th>cv</th>
+<th>LB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>xgb-fe9-tc</td>
+<td>1.0262</td>
+<td>1.02337</td>
+</tr>
+</tbody>
+</table>
+<p><br><br>
+Some fun fact in the end.<br>
+When I try out different categorical feature sets, I found out making <code>"Heath Score"</code> as the categorical is the key. My journey to realize the importance of categorical feature encoding is more like by luck. From <a href="https://www.kaggle.com/backpaker" target="_blank">@backpaker</a>'s public notebook, he/she makes all columns as categorical and uses MSE loss to train a catboost as a base model. At first I thought MSE was the key but I couldn't get the same performance by lightgbm or xgboost. Then I went to the catboost paper and realized they did a bunch of target statistics. That's how I started to use target encoding and try out different categorical sets.</p>
+<p>Happy new year everyone! Wish everyone achieve top places in the coming competitions!</p>

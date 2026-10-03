@@ -1,0 +1,175 @@
+# https://www.kaggle.com/competitions/playground-series-s3e24/discussion/452379
+
+Topic #452379: Making a "gender" feature
+  Author: broccoli beef
+  Posted: 2023-11-02 02:47:28.838000
+  Votes: 42  Comments: 21
+
+Neither the train/test set nor the "original" dataset contains a gender column. However, gender is an important latent feature. We can access it for the original data using another kaggle dataset.
+
+smoking = pd.read_csv(,index_col=)
+
+ sklearn.feature_selection  mutual_info_classif
+ sklearn.utils.parallel  Parallel, delayed
+ sklearn.preprocessing  OrdinalEncoder
+
+ ():
+    X = np.array(x).reshape((-,))
+    y = np.array(y)
+     X.dtype == :
+        X = OrdinalEncoder().fit_transform(X)
+    scores = Parallel(n_jobs=)(delayed(mutual_info_classif)(X,y,random_state=+i)  i  (n_iter))
+     np.array([np.mean(scores), np.std(scores)])
+
+ ():
+    ()
+    e = mi(train[target],train[target])[]
+     c  train.columns:
+         c != target:
+            mu, sigma = mi(train[c],train[target])/e*
+            ()
+
+theil_u(smoking,target=,comment=)
+
+
+*** U(y|x) in % (Original data) ***
+gender: 24.53 ± 0.28
+age: 2.61 ± 0.29
+height(cm): 14.33 ± 0.26
+weight(kg): 7.91 ± 0.15
+waist(cm): 4.88 ± 0.16
+eyesight(left): 1.05 ± 0.26
+eyesight(right): 1.21 ± 0.35
+hearing(left): 0.97 ± 0.41
+hearing(right): 1.00 ± 0.39
+systolic: 1.02 ± 0.28
+relaxation: 1.30 ± 0.16
+fasting blood sugar: 0.84 ± 0.25
+Cholesterol: 0.06 ± 0.10
+triglyceride: 5.53 ± 0.39
+HDL: 2.96 ± 0.36
+LDL: 0.42 ± 0.28
+hemoglobin: 15.65 ± 0.28
+Urine protein: 1.03 ± 0.31
+serum creatinine: 6.81 ± 0.19
+AST: 1.17 ± 0.16
+ALT: 3.26 ± 0.46
+Gtp: 11.39 ± 0.13
+oral: 0.22 ± 0.12
+dental caries: 0.90 ± 0.30
+tartar: 1.70 ± 0.28
+
+
+So we see that, at least for the original data, gender has the highest mutual information. Can we make a gender feature for the synthesized train and test set? First, let's see if we can make a good model of gender from the original data.
+
+ sklearn.model_selection  RepeatedStratifiedKFold, cross_validate
+
+kfold = RepeatedStratifiedKFold(n_splits=,n_repeats=)
+X_0 = smoking.drop([,,,],axis=)
+y_0 = smoking[].({:,:})
+
+results = cross_validate(XGBClassifier(n_jobs=,random_state=),
+                         X_0,y_0,
+                         scoring=,
+                         cv=kfold,n_jobs=,
+                         return_estimator=)
+
+results[].mean(), results[].std()
+
+
+(0.997362669108412, 0.0004826820746908834)
+
+
+It looks like we can predict gender from the rest of the features (without oral, tartar and smoking) pretty well, at least in the original dataset. Now let's try to make a gender feature for the train/test set using the predictions of the classifiers built from the original data. This gender feature differs from the original gender in that it is a probability of being male, not a binary M/F.
+
+train[] = 
+cols = (test.columns)
+
+ clf  results[]:
+    train[] += clf.predict_proba(train[cols])[:,]
+train[] /= (results[])
+theil_u(train,target=,comment=)
+
+
+*** U(y|x) in % (train) ***
+age: 4.16 ± 0.08
+height(cm): 18.27 ± 0.23
+weight(kg): 11.49 ± 0.17
+waist(cm): 6.53 ± 0.10
+eyesight(left): 1.85 ± 0.15
+eyesight(right): 1.93 ± 0.08
+hearing(left): 2.41 ± 0.26
+hearing(right): 2.45 ± 0.24
+systolic: 1.72 ± 0.17
+relaxation: 1.67 ± 0.21
+fasting blood sugar: 1.78 ± 0.18
+Cholesterol: 1.08 ± 0.17
+triglyceride: 9.03 ± 0.17
+HDL: 5.86 ± 0.15
+LDL: 1.22 ± 0.16
+hemoglobin: 19.10 ± 0.18
+Urine protein: 2.34 ± 0.25
+serum creatinine: 9.06 ± 0.11
+AST: 1.18 ± 0.31
+ALT: 3.78 ± 0.28
+Gtp: 10.22 ± 0.16
+dental caries: 1.11 ± 0.22
+gender: 25.22 ± 0.07
+
+
+The new feature gender now has the highest mutual information.
+
+Comments:
+├─ Abdullah Arean (2023-11-08 00:52:25.050000) [+1]
+│  Clear and Interesting approach!
+├─ Shane Simon (2023-11-05 13:48:11.167000) [+1]
+│  Has anyone implemented this yet?
+  ├─ paddykb (2023-11-05 15:05:22.367000) [+4]
+  │  Gender becomes (by far) the most important feature,  followed by Gtp, Triglycerides, &amp; age.
+  │  
+  │  @siukeitin's work encodes gender on a continuum. Check out the shape of the gender partial dependenc...
+    ├─ Shane Simon (2023-11-07 17:24:43.440000) [+1]
+    │  Thanks for this. Didn't reply right away because I was reading up on what SHAP is. Do you always use SHAP when trying to determine whether or not a new feature you added is worthwhile? 
+    │  Sincerely,
+    │  ...
+    ├─ paddykb (2023-11-07 18:20:28.387000) [+2]
+    │  Only the CV score matters for prediction, but I visualise the shapes of relationships to check if they make sense.
+    │  
+    │  Usually, I fit a GAM like here: https://www.kaggle.com/code/paddykb/ps-s3e10-gam-...
+    ├─ broccoli beef (2023-11-07 22:04:39.083000) [+5]
+    │  @paddykb It is an interesting question whether adding derived features (i.e., no really "new" information) with high relevance would help the performance of a fully trained classifier. After all, i...
+    ├─ Maher el Ouahabi (2023-11-11 16:46:44.600000) [+1]
+    │  Thank you for sharing this insight @siukeitin . I have a few questions that I'd love to hear your thoughts on:
+    │  
+    │  
+    │  
+    │  
+    │  To what extent do you believe feature engineering is more valuable than increasing...
+    ├─ broccoli beef (2023-11-12 01:02:13.350000) [+1]
+    │  @maherelouahabi I don't really have answers to big questions like these. Although I started this thread on feature engineering, feature engineering is usually not the first thing I think about. Ide...
+    ├─ Maher el Ouahabi (2023-11-12 16:45:16.123000) [+1]
+    │  @siukeitin Thank you very much for your response.
+├─ Rocco Incardona (2023-11-04 17:28:53.967000) [+1]
+│  Thank you very much for this. Adding gender, I slightly improved the performance of my ensamble.
+├─ Ashish Kumar (2023-11-04 15:00:07.213000) [+1]
+│  Can you share the feature importance for the model trained on features including gender? It'll be easy to visualise
+├─ PadjusRain (2023-11-03 19:32:03.827000) [+1]
+│  Very interesting !
+├─ Shane Simon (2023-11-03 18:54:24.720000) [+1]
+│  I was thinking having gender would make it possible to make some other interesting features too. Neat! I’ll try to implement it
+├─ Adam Michalak (2023-11-02 17:49:23.947000) [+1]
+│  good one, thanx
+├─ Yurnero (2023-11-02 08:39:07.250000) [+1]
+│  Some real data analysis here!
+├─ Phong Nguyen (2023-11-02 22:38:22.757000) [+2]
+│  @siukeitin that's interesting. So the process is to build a model predicting gender using another dataset that includes gender. Then use that model to generate a pseudo gender?
+  ├─ rss_1011 (2023-11-03 14:21:20.470000) [+1]
+  │  Did you try implementing this? generating gender predictions for the dataset used in this competition?
+├─ Robin Lord (2023-11-08 17:38:04.890000) [+0]
+│  Thanks for sharing this! Great, different approach
+├─ Pragun77 (2023-11-07 17:48:22.313000) [+1]
+│  very interesting, thanks!
+├─ Jon Blanchard (2023-11-03 15:42:00.180000) [+1]
+│  This was helpful.  Thank you.
+├─ Steve Simons (2023-11-02 12:43:36.553000) [+1]
+│  Thank you. Nice one.

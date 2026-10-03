@@ -1,0 +1,74 @@
+# https://www.kaggle.com/competitions/playground-series-s3e16/discussion/416766
+
+Topic #416766: #1 Solution - Experimenting with the data generation model
+  Author: epikt
+  Posted: 2023-06-13 01:16:13.891000
+  Votes: 24  Comments: 21
+
+This was a fun competition. To make a long story short, the selected entry that got first place was a "safe" ensemble that simply averaged previous models made using different approaches (described below). The goal was to have something that would anchor me somewhere in the top 10 in case of a big shakeup, and it seemed to succeed. My second submission was a more experimental - at least for me - ensemble where I used Optuna to try to find the best weight to give to the predictions of a bunch of models, using the out-of-fold predictions and Optuna to find the best weight coefficients for each. This worked somewhat, but was too rushed and the final MAE was a bit higher (1.33566). The main reason I ended up selecting two ensembles as final submissions is that I found some of the data to be a bit random, so I thought it was the safest approach.
+
+To go into more detail, the submissions of the first two days were just baselines, both with regular models and automl ones (mainly MLJar, which had really good results, and Autogluon).
+
+The next few submissions were experiments with models trained on additional data. I generated a lot of data and trained on over two million rows, but it didn't improve the results much. Since that didn't work, I tried to understand the data generation model better and found that a development version of the library used for this competition had a function to impute missing data. I thought the competition was over, and posted about it, but after trying it a bit more, the results were too random at high temperatures, and didn't match the targets enough at low ones. Since that didn't work, I switched to trying the sampling function of the same library. Basically, it converts the dataframe rows into randomly permuted sentences ending with "Age is" to then get the target as the next word prediction. I let this run for maybe two days, but the data generation model still didn't give me anything close enough to the real targets.
+
+I then moved on to loading the data generation model into the HuggingFace Transformers library to explore it a bit more. I tried taking the logits of the different target tokens, averaging them, and then training on them Pytorch Tabular, Tab Transformer and Catboost on them. The results were ok, but not great, so I moved on to fine-tuning the data generation model as a sequence classification model - still using the Transformers library, with the targets as the different classes - and in retrospect, that particular submission would have been my best if I had trusted it a bit more (1.33383).
+
+So mostly it was a lot of experimenting, trying to trust my CV a bit, the public LB a bit, and averaging things in the end to play it safe and prevent too big a drop. Catboost pretty consistently gave me the best results. My whole process was a bit messy, and most of my notebooks are all over the place; at one point, I was training on over 130 features. Maybe other solutions will be more interesting or detailed, but if anyone has any questions, I'd still be happy to try to answer them, if not, thank you to the organizers, I learned a lot in this competition and the last few ones I participated in, this was fun!
+
+Comments:
+├─ John Ngugi Mwangi (2023-06-14 15:56:15.027000) [+1]
+│  Cogratulations for the milestone.
+├─ Rafay Qayyum (2023-06-14 10:37:01.887000) [+1]
+│  Congratulations
+├─ Ifeanyichukwu Nwobodo (2023-06-14 08:14:01.320000) [+1]
+│  Congratulations!! 🎉 🎉
+│  
+│  Your creativity is on another level.
+│  
+│  If I was to ask anything, I'd end up asking everything.
+├─ El Conde de Ñáñaño (2023-06-13 11:42:10.077000) [+1]
+│  What a solution!  I was intrigued by the following statement:
+│  
+│  ... I moved   fine-tuning the data generation model  a  classification model - still  the Transformers ,  the targets  the different c...
+  ├─ epikt (2023-06-13 13:09:36.083000) [+2]
+  │  I borrowed a bit from this notebook for the basic setup https://www.kaggle.com/code/baekseungyun/gpt-2-with-huggingface-pytorch and, according to my code, from this for how to use the trainer https...
+    ├─ El Conde de Ñáñaño (2023-06-14 13:15:03.193000) [+1]
+    │  Truly appreciate it dude.  Thanks!
+├─ Robert Trypuz (2023-06-13 08:56:15.780000) [+1]
+│  Congrats, @epiktistes! You were already great in the Prediction of Wild Blueberry Yield competition, but this shot was awesome! 🎉 You've used many interesting "tricks", so I do not even know what t...
+├─ Mayank akash singh (2023-06-13 05:01:44.863000) [+1]
+│  Congrats! You totally deserve it
+├─ Ravi Ramakrishnan (2023-06-13 04:58:19.897000) [+1]
+│  Hearty congratulations for the unconventional approach and it's result @epiktistes 
+│  All the best!!
+├─ Mykhailo Savchenko (2023-06-13 04:22:07.957000) [+1]
+│  @epiktistes  congratulations on well-deserved win! It's nice to see that the 1st place went to someone who was the most active during the competition!
+├─ Dhruv Tiwari (2023-06-13 01:39:02.303000) [+1]
+│  Congrats! I started the competition as a beginner and learned many things from the community notebooks, discussions which helped me improve my score.
+  ├─ epikt (2023-06-13 02:13:03.940000) [+1]
+  │  Same, and congratulations as well. These competitions are great opportunities to learn and try to develop some intuition about what has chances to work and what likely won't (although it's of cours...
+├─ xiaohu2200 (2023-06-13 01:34:29.220000) [+1]
+│  Amazing work!!! Especially the part of transforming the data generation model to classification. However, I'm so curious about feature engineering, what feature did you create to get that high score?
+  ├─ epikt (2023-06-13 01:55:16.257000) [+2]
+  │  My largest dataframe had 136 features and contained :
+  │  
+  │  
+  │  
+  │  The logit of each target token when the row was imputed as a prompt to the model, averaged over 41 permutations per row (I had described thi...
+    ├─ xiaohu2200 (2023-06-13 02:26:45.483000) [+1]
+    │  You really did some outstanding things. I learn a lot from your word.
+    ├─ Ifeanyichukwu Nwobodo (2023-06-14 08:15:15.320000) [+1]
+    │  The link is directing to a 404 error
+    ├─ epikt (2023-06-14 16:21:01.107000) [+0]
+    │  Sorry about that, it was including the ")" in the link. Fixed now, thank you.
+├─ Fourat Rachid (2023-06-14 21:59:14.920000) [+2]
+│  You did an amazing wor. I really congratulate you on that. @epiktistes
+├─ Yan Teixeira (2023-06-13 02:30:55.870000) [+2]
+│  Congrats! You were very engaged throughout the entire competition. Truly deserved.
+├─ Priyanshu54200 (2024-02-03 05:10:54.847000) [+0]
+│  You did an amazing work . Thanks for help
+├─ Somesh88 (2023-10-19 09:29:17.753000) [+0]
+│  I tried  understand  data generation model better  found that  development    library used  this competition had  
+│  
+│  
+│  Can you please tell which library have you used ( development version )

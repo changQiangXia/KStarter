@@ -1,0 +1,82 @@
+# playground-series-s4e9 讨论区（按票数排序，共 80 条）
+
+- [# 1 solution - stacked NN](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/537052) — 95 票 / 92 评论 / 2024-10-09 **write-up?**
+- [Which Features Interact? and How To Leak Free Target Encode with RAPIDS!](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/533961) — 63 票 / 39 评论 / 2024-09-14 
+- [Warning: Average Fold RMSE <not equal> Overall CV RMSE](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/534070) — 63 票 / 27 评论 / 2024-09-14 
+- [Features, features on the wall, which one is the fairest of them all?](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/531723) — 59 票 / 33 评论 / 2024-09-02 
+- [Visualize - Price vs. Model_Year and Price vs. Milage](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/532952) — 54 票 / 7 评论 / 2024-09-08 
+- [[AutoML Grand Prix] 1st Place Solution Team LightAutoML testers ](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/531884) — 53 票 / 28 评论 / 2024-09-03 **write-up?**
+- [Decoding engine into new features](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/531434) — 51 票 / 13 评论 / 2024-09-01 
+- [NN Starter, LB=72300, CV=72800](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/532965) — 48 票 / 22 评论 / 2024-09-09 
+- [81st Place - Stack Regression over Classification ](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/537202) — 43 票 / 13 评论 / 2024-10-02 **write-up?**
+- [#4 solution | Beating a dead horse: blending works, but "blending" doesn't](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/536973) — 39 票 / 41 评论 / 2024-10-01 **write-up?**
+- [Congrats to Team LightAutoML and Robert Hatch!](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/531541) — 35 票 / 35 评论 / 2024-09-02 
+- [[AutoML GrandPrix] 3rd Place Solution Write Up.](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/532758) — 34 票 / 18 评论 / 2024-09-08 **write-up?**
+- [First they pull apart, then come together!](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/531555) — 33 票 / 4 评论 / 2024-09-02 
+- [Features for -150 RMSE](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/531532) — 33 票 / 12 评论 / 2024-09-01 
+- [kNN is competitive on this dataset](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/532329) — 30 票 / 1 评论 / 2024-09-05 
+- [The Original Dataset](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/531333) — 28 票 / 11 评论 / 2024-09-01 
+- [The AutoML Grand Prix for September](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/531971) — 26 票 / 17 评论 / 2024-09-03 
+- [3rd Place Solution: An Open Secret - Gather, Ridge, Repeat](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/537029) — 25 票 / 44 评论 / 2024-10-01 **write-up?**
+- [Support vector regression can work in this competition](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/532997) — 25 票 / 16 评论 / 2024-09-09 
+- [Less Feature Engineering == Good Score ](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/531766) — 25 票 / 20 评论 / 2024-09-03 
+- [A note about AutoGluon's ensembling and individual models](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/536980) — 23 票 / 24 评论 / 2024-10-01 
+- [References and starter materials](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/531331) — 22 票 / 3 评论 / 2024-09-01 
+- [Questionable behaviour in the top 10](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/536926) — 22 票 / 16 评论 / 2024-09-30 
+- [#2 Position | Just FE and AutoML ](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/537349) — 21 票 / 10 评论 / 2024-10-02 
+- [Beware of target_type in sklearn's TargetEncoder](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/531350) — 21 票 / 2 评论 / 2024-09-01 
+- [[AutoML GP Retrospective] Were AutoML frameworks the key to success?](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/531743) — 21 票 / 18 评论 / 2024-09-02 
+- [Feature Extraction](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/531616) — 20 票 / 5 评论 / 2024-09-02 
+- [There will be overfitting - with apologies to PT Anderson](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/531968) — 20 票 / 10 评论 / 2024-09-03 
+- [[AutoML Grand Prix] 2nd Place Solution](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/532028) — 19 票 / 13 评论 / 2024-09-04 **write-up?**
+- [Get started here!](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/497511) — 17 票 / 7 评论 / 2024-04-24 
+- [What was your takeaway from the AutoML Grand Prix?](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/534030) — 17 票 / 10 评论 / 2024-09-14 
+- [The Data is Dirty - Pricing is Off](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/531859) — 17 票 / 21 评论 / 2024-09-03 
+- [[AutoML Grand Prix Write-Up AutoML Grandmasters] AutoGluon + a hack to use TabPFNV2 for 200k data points](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/532635) — 17 票 / 12 评论 / 2024-09-07 **write-up?**
+- [Loss of signal -> gain of noise](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/532193) — 16 票 / 6 评论 / 2024-09-05 
+- [Quite an astounding shakeup!](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/536969) — 16 票 / 32 评论 / 2024-10-01 
+- [This competition is eligible for the AutoML Grand Prix!](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/512203) — 15 票 / 1 评论 / 2024-06-13 
+- [[AutoML Grand Prix] 4th Place Solution - Team SAS.](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/532419) — 15 票 / 4 评论 / 2024-09-06 **write-up?**
+- [Simulating the chaos](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/532536) — 15 票 / 6 评论 / 2024-09-06 
+- [External Color - Feature Extraction](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/531698) — 15 票 / 8 评论 / 2024-09-02 
+- [Viewing the churn](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/536975) — 15 票 / 1 评论 / 2024-10-01 
+- [[AutoML GP Sept 7th Place Solution] Team Oxygen - 4th Overall ](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/532706) — 14 票 / 2 评论 / 2024-09-07 **write-up?**
+- [AutoGP5 Quick hits](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/531547) — 14 票 / 18 评论 / 2024-09-02 
+- [AutoML Grand Prix 5th place solution](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/532038) — 13 票 / 4 评论 / 2024-09-04 **write-up?**
+- [Tesla use Gasoline](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/531433) — 13 票 / 7 评论 / 2024-09-01 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/531955) — 12 票 / 4 评论 / 2024-09-03 
+- [[AutoML Grand Prix Write-Up Liomar] 10th Place AG/H2O/LAMA/DensLight](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/532668) — 12 票 / 8 评论 / 2024-09-07 **write-up?**
+- [#5 Solution | 🚀 AutoGluon submission 1 on day 1](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/537173) — 12 票 / 3 评论 / 2024-10-01 **write-up?**
+- [What are private scores telling us?](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/536997) — 12 票 / 11 评论 / 2024-10-01 
+- [AutoML Grand Prix Winners](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/531563) — 12 票 / 0 评论 / 2024-09-02 
+- [Model and brand mismatches](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/531478) — 11 票 / 1 评论 / 2024-09-01 
+- [Fuel Type is incorrect for some entries](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/531462) — 11 票 / 0 评论 / 2024-09-01 
+- [Similar Dataset From KaggleX Skill Assessment Challenge 2024](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/531367) — 11 票 / 5 评论 / 2024-09-01 
+- [Best way to ensemble this dataset?](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/537224) — 11 票 / 6 评论 / 2024-10-02 
+- [Potential #5 solution, but I didn't choose it](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/536972) — 11 票 / 2 评论 / 2024-10-01 **write-up?**
+- [Feature Extraction from Engine and Transmission data](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/531566) — 10 票 / 2 评论 / 2024-09-02 
+- [Second Hand Vehicles Prices ML: Different results. Jobs approach: Same Model. New car.](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/531507) — 10 票 / 4 评论 / 2024-09-01 
+- [AutoML episode references ](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/531337) — 10 票 / 3 评论 / 2024-09-01 
+- [How to train Large Ensemble Learning Models ?](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/534173) — 9 票 / 15 评论 / 2024-09-15 
+- [Lessons from Used Car Price Regression](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/536456) — 9 票 / 13 评论 / 2024-09-27 
+- [New features Horsepower and Engine Displacement from engine column ](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/531346) — 8 票 / 2 评论 / 2024-09-01 
+- [Exotic Vehicles' Slope != Typical Vehicles' Slope ](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/531827) — 8 票 / 2 评论 / 2024-09-03 
+- [The only 8 cars that matter?](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/531957) — 8 票 / 3 评论 / 2024-09-03 
+- [Do you think blending will still maintain good results on the private leaderboard?](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/535810) — 8 票 / 18 评论 / 2024-09-24 
+- [Top solutions of the regression playground competitions in last one year linked.](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/531381) — 7 票 / 1 评论 / 2024-09-01 **write-up?**
+- [Are there no variables that have a significantly strong absolute impact on the target variable?](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/531498) — 7 票 / 5 评论 / 2024-09-01 
+- [Top 100 Beginner Solution & a sincere thank you](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/537081) — 7 票 / 3 评论 / 2024-10-01 **write-up?**
+- [What types of models worked best?](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/537000) — 7 票 / 6 评论 / 2024-10-01 
+- [Extensive Feature Extraction from 'engine' column](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/531895) — 7 票 / 4 评论 / 2024-09-03 
+- [Why Blending other people's results](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/536175) — 7 票 / 12 评论 / 2024-09-26 
+- [Tip- Beware of inherent heterogeneity in the data](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/531419) — 6 票 / 0 评论 / 2024-09-01 
+- [Comparison of 12 basic models](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/531619) — 6 票 / 2 评论 / 2024-09-02 
+- [ Using Neural Networks For Car Price Prediction](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/532680) — 6 票 / 18 评论 / 2024-09-07 
+- [EDA and Data Cleaning for Used Car Price Prediction](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/531483) — 6 票 / 1 评论 / 2024-09-01 
+- [Postprocessing Ideas](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/533840) — 6 票 / 18 评论 / 2024-09-13 
+- [Maybe kaggle will listen to this](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/534939) — 6 票 / 19 评论 / 2024-09-19 
+- [AutoGluon CPU vs GPUs (T4x2 vs P100)  ](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/534067) — 6 票 / 0 评论 / 2024-09-14 
+- [How Will Blending Perform on the Final LB?](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/536917) — 6 票 / 3 评论 / 2024-09-30 
+- [How can I check the performance of my models before submitting?](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/532167) — 6 票 / 10 评论 / 2024-09-04 
+- [Top 8% (247th place) write-up](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/537047) — 6 票 / 0 评论 / 2024-10-01 **write-up?**
+- [Huge disparity between the CV and LB score.](https://www.kaggle.com/competitions/playground-series-s4e9/discussion/532855) — 6 票 / 29 评论 / 2024-09-08 

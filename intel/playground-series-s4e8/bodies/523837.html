@@ -1,0 +1,104 @@
+<p>[Update: FINISHED!]</p>
+<h1>Acknowledgements</h1>
+<ul>
+<li>AndrosM: <a href="https://www.kaggle.com/code/ambrosm/pss4e8-eda-which-makes-sense" target="_blank">public stacking notebook</a> with fast runtime of multiple models to modify and extract oof preds from. </li>
+<li>motono0223's <a href="https://www.kaggle.com/code/motono0223/automl-baseline-inference" target="_blank">0.98508 AutoGluon</a></li>
+<li>Ganesh Sharma's <a href="https://www.kaggle.com/code/ganeshstemx/pss4e8-poisonous-mushrooms-chapter-one" target="_blank">0.98446 LGBM</a></li>
+<li>AC: <a href="https://www.kaggle.com/code/ahsuna123/original-dataset-synthetic-dataset" target="_blank">Orig data Notebook</a> (for orig trick)</li>
+</ul>
+<h1>List of models and techniques used</h1>
+<h3>Preprocessing and feature engineering</h3>
+<ul>
+<li>Data Cleaning: handled NaN, values found in only one dataset but not both, noisy values</li>
+<li>Per row (per mushroom) label counts (+25 columns)</li>
+<li>Numeric columns as both numeric AND as categorical (+3 columns)</li>
+<li>Total 48 columns including 20 categorical.</li>
+</ul>
+<h3>Personal Base Models</h3>
+<ul>
+<li>Catboost. Lots of catboost. Close to default with max_ctr_complexity 3 and a few other params.</li>
+<li>LGBM with custom nested target encoding of all categoricals. 2 depth so all columns and all combinations of each. Only 4 fold due to compute limitations.</li>
+<li>Catboost augmented with pseudo labeled test data. Rejected due to poor score, but that meant to definitely try the opposite idea…</li>
+<li>(Only in second ensemble 0.98513): Catboost with very reduced weighting of really confident oof predictions (from a prior model). Basically you probably don't want to drop the data but you want to tell the model. HEY! Pay attention to the hard ones, that actually affect my score!</li>
+<li>(Only in final blend): Another Catboost subsample single fold (with 7 folds aka smaller valid set) and a couple param tweaks. It scored even better in testing with ensemble selection on the single fold.</li>
+</ul>
+<h3>Public Base Models (usually with tweaks)</h3>
+<ul>
+<li>Base models from <a href="https://www.kaggle.com/code/roberthatch/automl-8-folds-ambrosm-s-eda-which-makes-sense" target="_blank">8 fold AndrosM stacking notebook</a>: LGB, LGB-Dart, XGB, 2 layer MLP. Dropped HGB. 8 folds. Didn't refit with full data on test preds. Today I found it got 0.98496 with single fold and the stacker (which I didn't use in my subs. Only the base models).</li>
+<li><a href="https://www.kaggle.com/code/roberthatch/autogp4-pub-improved-poisonous-mushrooms" target="_blank">Public LGBM 0.98446. 0.98453 with keep all features</a></li>
+<li><a href="https://www.kaggle.com/code/motono0223/automl-baseline-inference" target="_blank">0.98508 AutoGluon</a>. Blend with test preds only. Didn't have oof preds so couldn't stack or ensemble except blindly blend at the end.</li>
+</ul>
+<h3>Ensemble variants</h3>
+<ul>
+<li>Greedy ensemble selection (GES)</li>
+<li>Catboost Stacker, with a bit of the sub-weighting technique as well. (0.4 weight to .99 / 0.01, vs 0.25 for the base model)</li>
+<li>Final sub: Blend: GES (89513) * 0.3, public AutoGluon (89508) * 0.4, catboost sinsubweight (89503) * 0.1, catboost stacker (89513) * 0.2 -&gt; 89525</li>
+</ul>
+<h1>Detailed Breakdown</h1>
+<h3>Preprocessing</h3>
+<p>Categorical NaN is very simple. Just make it one of the categories. The only reason "how to fill nan?" is a question is when you have numeric values and one categorical aka NaN. THEN you have to decide whether to fill as a unique value, fill as mode, fill as mean, etc. There weren't many like that, so I didn't spend much time on numeric, just filling as column mode based on quick EDA inspection.</p>
+<p>Much more interesting was the noise. With any data, but doubly with Kaggle Playground synthetic data, you don't merely want to clean up the data, but you ALSO want to maintain fidelity as much as possible. It's dangerous to drop data! (Aside: as it turns out, it's triply important in this competition, since it's another one where the original data is 100% predictable. So this noisy weird stuff could be your only signal!)</p>
+<p>I tried to strike a balance, and might do slightly different if doing again. The main things were the NaN mentioned already, and then if train's not in test, or test's not in train, obviously you can't use that data, but maybe test not in train will have the same properties as train not in test, so set them both to 'out'. Additionally, when inspecting, there were really tiny counts of many labels, and that including really weird labels like 'x y', where x or y could be a letter, but could also be a column name etc. Basically a bunch of hallucination labels that arguably are the same phenomenon as the train not in test or test not in train. In the end, I just did like this:</p>
+<p>One way where I tried to keep all labels that did NOT have a space, and another way where I only kept single letter labels and my special labels ('n-n' and 'out'). I assigned all the labels I dropped to 'out' (but now I think I should've tested assigning to 'drop' too and seen which did better, or ensembled both). For either of those, I added a bunch of columns that were the counts of all labels I kept (25 or 43 I think it was).</p>
+<p>Oh, the other weird thing I did was I added all the 'x y' cases to the counts! So if it was 'f g' then the column it would be 'out' label eventually, but before that transform, I would still say that this row found an 'f' in the 'f' feature column. I just went with it though and didn't take the time to add a binary switch, so I never went back and tested if it helped or hurt me(!).</p>
+<p>Finally, I tested combining all super infrequent labels under 150 instances into a single label 'out'. But it didn't score as well. And keeping just the single char labels tested better, so after about 4 hours or so I finalized my preprocessing and never came back to it.</p>
+<p>Oh, numeric: for numeric I cloned to categorical just as paranoia based on last time. Even though inspection didn't look like last time, there was still enough ups and downs I thought both might be useful for the model. Once I created numeric as categorical, I also had to handle a lot of test labels not in train. For this case, I looked for the closest train label higher than the test label.</p>
+<h3>Catboost</h3>
+<p>Mostly didn't do hyperparam tuning this time around, but a lot of that was a belief that catboost would be the best model type and has really strong defaults. I used GPU which has a huge impact on those defaults, and seemed like 50x faster not just 4x faster, so early on I was leaning towards spending most or all of my GPU hours on only Catboost. LR 0.02, early stopping 200, eval metric Logloss. Minimal tuning of these hyperparams, and rest defaults. For many the tuning was checking other cases and coming back to my personal default, denoted with 'always X': Depth almost always 9 and later did 10 with higher regularization, max_ctr_complexity always 3, permutation_count always 3, random_strength and l2_leaf_reg varied, but I think I only used either 0 and 0.5, or 0.2 and 2.0.</p>
+<h3>LGB with Target Encoding</h3>
+<p>I developed my own version of target encoding on the last competition, and (on that comp) was able to get 5-fold 4000 iteration LGB to around 0.89450 vs Catboost 5-fold similar number of iterations and time spent around 0.89480. So it still was technically worse than "Catboost is all you need" approach, but close enough to ensemble in. So I was really happy to have it available, but with 20 categorical columns instead of 10 that I could reduce down a little, and 3 million rows, I couldn't do as many nested folds or column combos. With prior comp, I did up to 3 feature combos PLUS always combined the 2 important binary features that competition. This time I only did 2 depth features so base feature and every pair of cat features. And still had to fight memory requirements so did only 3 fold nested encoding. In the end this model barely made my final ensemble at all, but probably did make it in at under 1%. I'll check when updating my code.</p>
+<p>LGB I did with CPU.</p>
+<h3>Target Encoding algorithm itself</h3>
+<ul>
+<li>Nested encoding</li>
+<li>Add a constant to numerator and denominator to 'soften' predictions with minimal observations</li>
+<li>Fill missing (0/0) with the avg target score on train</li>
+</ul>
+<p>Nested encoding the key I found wasn't the nested encoding itself, which is pretty straight forward. The key was doing a couple things to maximize the predictive power. Challenge #1: you want every label to always 'look like itself'. The extreme example is you have only 2 rows with label 'a'. One is target = 1 (in encoding fold 2), the other is target = 0 (in encoding fold 0). You do nested folds to avoid leaking itself, but now in one fold it looks like a100 (which sees the target =1, but actually has target=0) and in another fold it looks like a0 (but actually is target=1), and in a third fold with both values visible to the encoder then any 'a' in test or outer CV validation sets looks like a50. a100 looks completely different from a0 or a50. The solution is predict outer CV oof prediction and test prediction with the train that contain a100 and a0, but predict valid and test multiple times. Fold0 predict test data has a100, fold1 predict test data has a50, fold2 predict test data has a0. Same model predicting against different variations of test (and same thing for holdout valid set for oof preds). This works great - EXCEPT for early stopping.</p>
+<p>Challenge 2: early stopping with 3 or more valid sets. For that you take the average values, of your n-fold valid sets and n-fold test sets. So in the example you have a=(a100+a50+a0)/3. This works well enough for early stopping, and then you predict on the individual valid and test sets and seem to consistently get a small score boost.</p>
+<p>Catboost algorithm is more powerful and probably much more efficient as well. But I suspect there's actually some significant advantages to this approach mainly around wanting train and test to be able to tell that a=a while still getting the benefits of target encoding allowing efficient binary tree splits of categorical data.</p>
+<p>To be clear, though, this algorithm didn't really help on this dataset, at least with how I approached things.</p>
+<h3>Catboost subsampling</h3>
+<p>I just took my first catboost model's oof preds, and if &gt;0.99 or &lt;0.01 (the vast majority of the data!), I set the catboost sample weight to 0.25. And later for the stacker set to 0.4. I also tried &gt;0.9 or &lt;0.1 with sample weight 0.1(?) or something like that and it seemed to do worse.</p>
+<h3>Public LGBM</h3>
+<p>I just removed the removal of some columns. Based on strong dislike of ever throwing away any data, and the discussion thread on the topic. Newer addition to that thread questions the conclusion though. Seemed to improve the score when checking today. Although +0.00007 is small enough it could be random noise from changing the seed. Still other than longer training time, very very limited consequences to keeping extra rows for tree models (not for NNs though).</p>
+<h3>AndrosM models</h3>
+<p>LGB, LGB-Dart, XGB, 2 layer MLP. Dropped HGB. 8 folds. Didn't refit with full data on test preds. Today I found it got 0.98496 with single fold and the stacker (which I didn't use in my own subs). It was a bit discouraging to see his models fill out the majority of my greedy ensemble selection (GES), though I was still happy to have the single best model and thought I was in good shape until I got my first score of 89512 back. I also hoped that my one change to 8 fold was a big benefit. (Little did I know that perhaps it was an insurmountable benefit? What beats 8 folds? 15 fold * 1000 CPUs!!!).</p>
+<p>I never used his stacker. I was more familiar with my own and went with plug and play since I didn't think ensemble vs stack vs LR vs all of the above was going to make the difference. Especially when I saw how far I was from top 3. Focused more on moon shot ideas. My best guess is that it would've gotten about the same 0.89513 as my catboost or my GES got.</p>
+<h3>Greedy Ensemble Selection</h3>
+<p>Got 0.89512 and then 0.89513 with the base models above, second run added the sub-weighted model which was my highest scoring single model in CV. But got a lot less improvement on test. Whether that was overfitting or just that there was less overall room for improvement when all the models were ensembles of themselves instead of single runs.</p>
+<h3>Catboost Stacker</h3>
+<p>Not much special about it. Kept all original features still. Used the 0.4 weighting of easy rows. And added 11 columns from 9 models. 8 models = 8 columns. 9th model was my LGB target encoded model. For that one I added 3 columns: the a_avg preds; the mean pred of (a100,a50,a0) preds; and the mean pred of all four preds. Needs more testing but so far I believe that I can just keep the mean pred of (a100,a50,a0) preds.</p>
+<h3>Public AutoGluon 0.98508 Model</h3>
+<p>I couldn't get much higher score on my own, and I couldn't get the train preds. So I needed a moon shot and this was it! Time to add this to a blind blend ensemble in true public LB Kaggle fashion!</p>
+<h3>Blend</h3>
+<p>At the time, I knew I had an 89513 model that seemed to underperform compared with offline expectations. I tried merging with (no accessible oof preds to my understanding) public 89508 AutoGluon model. 0.6 mine and 0.4 public. This got a surprising and critical boost to 0.98521!</p>
+<p>Next I had two last submissions, and a new catboost model (only 2 folds) and a new catboost stacker model (7 of 9 folds). These models I didn't have scores for at the time. Today found that 2 fold subweighted catboost model got 98503 by itself which seems great. And the stacker 7/9 fold model got 98513 (same as my ensemble) while I was hoping for more even by itself. I had an idea of the ideal weights to try, but then no matter what the score I wouldn't know how to change the model for the last pred. So instead i thought I'd try heavy on the new, and then lighter on the new. Heavy on new (513 ens x 0.25 + 508 public AG x 0.15 + new_catboost x 0.12 + catboost stacker x 0.48) scored same score (and worse when sorting by score). So my final model went back even more than I originally planned to more of the old, especially the public sub that seemed so helpful. And that public sub wasn't represented in my stacker, so 0.15 was just plain a mistake. Maybe 0.3 would've been okay.</p>
+<p>Anyways, I settled on (513 ens x 0.3 + 508 public AG x 0.4 + new_catboost x 0.1 + catboost stacker x 0.2) good for 98525 and losing the 6th digit battle vs 3rd place team. </p>
+<h3>Metrics</h3>
+<p>I wasn't consistent by model, and used either Logloss (catboost) or AUC (LGB) for early stopping. I used mcc for manual hyperparam comparison and GES ensembling. </p>
+<h1>Kaggle Notebooks</h1>
+<ul>
+<li><a href="https://www.kaggle.com/code/roberthatch/automl4-fe-plus-preprocessing" target="_blank">FE and Preprocessing Notebook</a></li>
+<li><a href="https://www.kaggle.com/code/roberthatch/automl-0-98525-4th-lgb-cat-ensemble-blend" target="_blank">Main Notebook!</a></li>
+<li><a href="https://www.kaggle.com/code/roberthatch/automl4-the-orig-match-and-swap-trick" target="_blank">Orig match/swap trick</a></li>
+</ul>
+<h3>Precomputed Datasets</h3>
+<ul>
+<li><a href="https://www.kaggle.com/datasets/roberthatch/automl-pub-autogluon-ensemble" target="_blank">Public AutoGluon test preds</a></li>
+<li><a href="https://www.kaggle.com/datasets/roberthatch/automl4-merge-predictions" target="_blank">Base model predictions</a></li>
+</ul>
+<h3>Public Notebooks cloned from others (originals linked in acknowledgements)</h3>
+<ul>
+<li><a href="https://www.kaggle.com/code/roberthatch/automl-8-folds-ambrosm-s-eda-which-makes-sense" target="_blank">8fold set of AmbrosM models</a></li>
+<li><a href="https://www.kaggle.com/code/roberthatch/autogp4-pub-improved-poisonous-mushrooms" target="_blank">Public LGBM 0.98446/0.98453</a></li>
+<li><a href="https://www.kaggle.com/code/motono0223/automl-baseline-inference" target="_blank">AutoGluon</a> plus replace the appropriate cell with:</li>
+</ul>
+<pre><code>df_test[] = predictor.predict_proba(test_data, as_pandas=, as_multiclass=)
+
+df_test = df_test[[c  c  df_test.columns  c.startswith()]]
+
+df_test.to_csv(, index=)
+()
+display(df_test[[]])
+</code></pre>

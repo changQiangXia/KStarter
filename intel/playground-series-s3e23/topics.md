@@ -1,0 +1,66 @@
+# playground-series-s3e23 讨论区（按票数排序，共 64 条）
+
+- [Instructions for winning the competition](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/445245) — 117 票 / 49 评论 / 2023-10-06 **write-up?**
+- [#2 Solution | 8 Models Ensemble](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/450315) — 95 票 / 42 评论 / 2023-10-24 **write-up?**
+- [Data explanation ](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/444627) — 49 票 / 16 评论 / 2023-10-03 
+- [Boost Your Ensemble with Hill Climbing Ensemble](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/444784) — 48 票 / 19 评论 / 2023-10-03 
+- [Onboarding materials and references](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/444629) — 43 票 / 14 评论 / 2023-10-03 
+- [The McCabe/Halstead Measures - Operators and Operands.](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/444685) — 32 票 / 11 评论 / 2023-10-03 
+- [Visualizing the shakeup](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/450320) — 27 票 / 2 评论 / 2023-10-24 
+- [Hint: log-transform the data!](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/445015) — 27 票 / 8 评论 / 2023-10-04 
+- [xgboost 2.0.0 runs significantly faster on CPU](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/445637) — 24 票 / 8 评论 / 2023-10-08 
+- [Use predict_proba Instead of predict](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/444690) — 20 票 / 2 评论 / 2023-10-03 
+- [AUC score explained](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/444719) — 18 票 / 2 评论 / 2023-10-03 
+- [Ensemble weights lead to implementation priorities](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/447672) — 18 票 / 16 评论 / 2023-10-16 
+- [A comparison of hyperparameter settings for ExtraTreesClassifier](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/446078) — 18 票 / 22 评论 / 2023-10-10 
+- [Quasi-duplicated observations in the train and test datasets](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/444988) — 13 票 / 2 评论 / 2023-10-04 
+- [Some tips for beginners](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/444890) — 13 票 / 8 评论 / 2023-10-04 
+- [Important information regarding features](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/445196) — 13 票 / 4 评论 / 2023-10-05 
+- [Debunking the McCabe metrics and Halstead measures - How these 21 features are computed and why?](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/445536) — 13 票 / 4 评论 / 2023-10-07 
+- [Sometimes more is better... well a bit better](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/446606) — 13 票 / 7 评论 / 2023-10-12 
+- [Collection of helpful ideas - S3E23](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/446210) — 12 票 / 10 评论 / 2023-10-10 
+- [How far did I get with automl and ChatGPT? (one was good, one was bad)](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/450347) — 11 票 / 2 评论 / 2023-10-24 
+- [About feature importance](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/444835) — 10 票 / 4 评论 / 2023-10-03 
+- [Preprocessing Original Dataset](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/444640) — 9 票 / 6 评论 / 2023-10-03 
+- [Unexpected behavior of n_jobs=-1 in xgboost](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/448846) — 9 票 / 5 评论 / 2023-10-21 
+- [Brace for impact](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/449070) — 9 票 / 11 评论 / 2023-10-23 
+- [A comparison of hyperparameter settings for XGBoost](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/447695) — 7 票 / 1 评论 / 2023-10-16 
+- [New to Machine Learning or Kaggle?](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/440709) — 7 票 / 6 评论 / 2023-09-16 
+- [Perfectly Correlated Features in Datasets](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/445099) — 7 票 / 1 评论 / 2023-10-05 
+- [Results as far.](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/445090) — 6 票 / 2 评论 / 2023-10-05 
+- [PCA on these data](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/447431) — 5 票 / 16 评论 / 2023-10-15 
+- [Why XGBoostRegressor outperforms XGBoostClassifier](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/447380) — 4 票 / 8 评论 / 2023-10-15 
+- [What is the next after finding highly correlated features?](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/447304) — 4 票 / 2 评论 / 2023-10-15 
+- [A simple logger for experiments](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/447018) — 4 票 / 1 评论 / 2023-10-14 
+- [Explanation software defect dataset for BC in PS - S3E23](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/444647) — 4 票 / 0 评论 / 2023-10-03 
+- [Sometimes it's about the travel and not the destination](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/450307) — 4 票 / 2 评论 / 2023-10-23 
+- [Late Submissions Disabled](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/454623) — 3 票 / 0 评论 / 2023-11-10 
+- [Some questions on HPO](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/448837) — 3 票 / 5 评论 / 2023-10-21 
+- [What I am doing wrong ? ](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/450463) — 3 票 / 3 评论 / 2023-10-24 
+- [Question on the efficiency and reliability of the Halstead measures, especially for the "Program Length", l](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/445542) — 3 票 / 2 评论 / 2023-10-07 
+- [About Up sampling](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/445467) — 3 票 / 7 评论 / 2023-10-07 
+- [Out of forcast for Origin dataset(software-defect-prediction)](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/445676) — 3 票 / 4 评论 / 2023-10-08 
+- [Looking for team to join](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/447060) — 2 票 / 4 评论 / 2023-10-14 
+- [CV scores on training data and testing score are too different](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/447678) — 2 票 / 6 评论 / 2023-10-16 
+- [A Stacked Ensemble](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/448378) — 2 票 / 2 评论 / 2023-10-19 
+- [Single Neuron Calculation](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/447057) — 2 票 / 7 评论 / 2023-10-14 
+- [What will be a good number of folds to tune and cross validate the models?](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/448795) — 2 票 / 3 评论 / 2023-10-21 
+- [Help me on Gradient Boosting](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/445635) — 2 票 / 6 评论 / 2023-10-08 
+- [How far can we get with simple conditional probabilities?](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/445805) — 2 票 / 2 评论 / 2023-10-09 
+- [Auto ML - Model Comparison and Top 5 Blend Model](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/444650) — 1 票 / 1 评论 / 2023-10-03 
+- [Does everyone have '?' values? ](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/444841) — 1 票 / 2 评论 / 2023-10-03 
+- [Feature Descriptions and Plots](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/445554) — 1 票 / 0 评论 / 2023-10-07 
+- [Submission after deadline: Submissions have been disabled for this competition.](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/454341) — 1 票 / 1 评论 / 2023-11-09 
+- [Medals for playground series?](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/445953) — 1 票 / 10 评论 / 2023-10-09 
+- [Halstead derived columns ](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/446857) — 1 票 / 1 评论 / 2023-10-13 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/445419) — 1 票 / 3 评论 / 2023-10-06 
+- [Naive bayes on imbalance dataset!](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/447303) — 1 票 / 2 评论 / 2023-10-15 
+- [Question On Model Selection](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/445775) — 0 票 / 3 评论 / 2023-10-08 
+- [looking for a team to join ](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/446452) — 0 票 / 1 评论 / 2023-10-11 
+- [I am new to Kaggle competition. ](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/457181) — 0 票 / 3 评论 / 2023-11-23 
+- [Submission File not Found !!](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/447440) — 0 票 / 7 评论 / 2023-10-15 
+- [RanfomForest Classifier versus Regressor. Why is Regressor better???](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/446372) — 0 票 / 7 评论 / 2023-10-11 
+- [Correlating data](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/445339) — 0 票 / 0 评论 / 2023-10-06 
+- [questions about dataset](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/445234) — 0 票 / 0 评论 / 2023-10-06 
+- [Error: Evaluation metric raised an unexpected error](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/446719) — 0 票 / 9 评论 / 2023-10-12 
+- [Scraping and Saving to CSV in kaggle Problematic](https://www.kaggle.com/competitions/playground-series-s3e23/discussion/444770) — -3 票 / 3 评论 / 2023-10-03 

@@ -1,0 +1,73 @@
+# playground-series-s3e14 讨论区（按票数排序，共 71 条）
+
+- [1# Winning solution](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/410627) — 133 票 / 57 评论 / 2023-05-17 **write-up?**
+- [Post-processing trick to improve CV & LB score](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/407327) — 80 票 / 18 评论 / 2023-05-06 
+- [Some tricks for a 337 score on Public LB ](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/409242) — 69 票 / 48 评论 / 2023-05-10 
+- [Fast Feature Engineering ideas](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/406448) — 60 票 / 28 评论 / 2023-05-02 
+- [#7 Private #3 Public approach| Simple ensemble with post-processing](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/410666) — 53 票 / 13 评论 / 2023-05-16 
+- [4th Place Solution: Introducing hillclimbers](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/410639) — 50 票 / 16 评论 / 2023-05-16 **write-up?**
+- [Starter resources and onboarding materials](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/406305) — 42 票 / 13 评论 / 2023-05-02 
+- [Random feature comparison](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/406984) — 29 票 / 5 评论 / 2023-05-04 
+- [Bees, Max Temperature Range, Raining Days, Clone Size as predictor variables subset.](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/406612) — 27 票 / 12 评论 / 2023-05-03 
+- [The Trouble with Synthetic Data: Exploring the Limitations of Generated Datasets](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/409417) — 24 票 / 4 评论 / 2023-05-10 
+- [🐝 Bees and Blueberries🫐](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/406359) — 22 票 / 1 评论 / 2023-05-02 
+- [Should we really use all of the columns (after dropping multicolinear ones)?](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/406873) — 22 票 / 12 评论 / 2023-05-04 
+- [#13th place solution](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/410652) — 21 票 / 17 评论 / 2023-05-16 **write-up?**
+- [numeric or categorical features?](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/406330) — 19 票 / 8 评论 / 2023-05-02 
+- [GradientBoosting + Random Forest = 338.995](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/409621) — 16 票 / 10 评论 / 2023-05-11 
+- [Stacking predictions with Least Absolute Deviation Regression](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/409937) — 16 票 / 12 评论 / 2023-05-13 
+- [AttributeError: Can only use .dt accessor with datetimelike values](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/411277) — 16 票 / 6 评论 / 2023-05-18 
+- [More Feature Engineering idea⚙️](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/407174) — 16 票 / 2 评论 / 2023-05-05 
+- [Train / Test Duplicates: Target Exploit](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/406332) — 15 票 / 15 评论 / 2023-05-02 
+- [My Approach for this problem](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/408069) — 14 票 / 4 评论 / 2023-05-09 
+- [Recent Playground Regression competition approaches](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/406318) — 13 票 / 0 评论 / 2023-05-02 
+- [MAE scores on various models](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/406523) — 12 票 / 8 评论 / 2023-05-02 
+- [A Lot of Duplicate Features Based on Correlation Matrix](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/406327) — 12 票 / 10 评论 / 2023-05-02 
+- [Explanation about the competition from a glance](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/406308) — 12 票 / 1 评论 / 2023-05-02 
+- [XGBoost performing significantly worse than CatBoost and LightGBM, why?](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/407076) — 12 票 / 15 评论 / 2023-05-05 
+- [#3 solution](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/410787) — 12 票 / 5 评论 / 2023-05-16 **write-up?**
+- [Comparison Between Baseline Models](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/406361) — 11 票 / 3 评论 / 2023-05-02 
+- [Choose Spearman Correlation to Measure Features Correlation!](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/407747) — 11 票 / 6 评论 / 2023-05-08 
+- [(Score: 338.92632) Ensemble Machine Learning Techniques Using Computer Simulation Data for Wild Blueberry Yield Prediction](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/407172) — 11 票 / 5 评论 / 2023-05-05 
+- [Using correlation as distance metric (for hierarchical clustering)](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/406785) — 11 票 / 3 评论 / 2023-05-03 
+- [Collection of helpful ideas - S3E14](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/409575) — 11 票 / 11 评论 / 2023-05-11 
+- [New to Machine Learning or Kaggle?](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/403222) — 10 票 / 10 评论 / 2023-04-21 
+- [#189 place solution](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/410700) — 10 票 / 0 评论 / 2023-05-16 **write-up?**
+- [Shake-ups before the end of the competition??? What's going on???](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/410567) — 8 票 / 5 评论 / 2023-05-15 
+- [How to get rid of duplicated feature](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/406344) — 8 票 / 9 评论 / 2023-05-02 
+- [The Synthetization Messes Up the Dataset](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/406498) — 6 票 / 2 评论 / 2023-05-02 
+- [Beginner's diary part1: wild raspberry yield](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/410232) — 6 票 / 8 评论 / 2023-05-14 
+- [#193: Best Playground Result Despite Failing to Get 10%](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/410664) — 6 票 / 0 评论 / 2023-05-16 
+- [🫐 Blueberry clones](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/406486) — 6 票 / 3 评论 / 2023-05-02 
+- [How to treat Bees](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/409485) — 5 票 / 6 评论 / 2023-05-11 
+- [Does domain knowledge help in a synthesized dataset?](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/406813) — 5 票 / 4 评论 / 2023-05-03 
+- [Transforming the target variable?](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/406755) — 5 票 / 4 评论 / 2023-05-03 
+- [The relationship between clonesize and honeybee density](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/407673) — 5 票 / 3 评论 / 2023-05-07 
+- [Feature engineering idea: use the multicolinear columns!](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/406450) — 4 票 / 4 评论 / 2023-05-02 
+- [How much do you think the private LB would change?](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/410236) — 4 票 / 4 评论 / 2023-05-14 
+- [Ways to handle Unseen categories](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/409267) — 4 票 / 0 评论 / 2023-05-10 
+- [How to find the value of k in cross validation](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/407580) — 4 票 / 5 评论 / 2023-05-07 
+- [Simple Feature Engineering that improve my score](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/407612) — 4 票 / 0 评论 / 2023-05-07 
+- [Results as far.](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/407378) — 4 票 / 0 评论 / 2023-05-06 
+- [Additional Data for Training](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/406759) — 4 票 / 7 评论 / 2023-05-03 
+- [How many episodes left in season 3 ](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/409822) — 3 票 / 1 评论 / 2023-05-12 
+- [Indirect target improve my LB & CV score.](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/409759) — 3 票 / 1 评论 / 2023-05-12 
+- [Hybrid-like Model idea](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/406952) — 3 票 / 4 评论 / 2023-05-04 
+- [Some Inspiration for Features Engineering](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/407324) — 3 票 / 0 评论 / 2023-05-06 
+- [weird jump in validation accuracy](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/406561) — 2 票 / 2 评论 / 2023-05-02 
+- [From whence these magic numbers came?](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/407024) — 2 票 / 2 评论 / 2023-05-04 
+- [Data Leakage ](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/407844) — 2 票 / 0 评论 / 2023-05-08 
+- [What are the best models](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/406579) — 2 票 / 25 评论 / 2023-05-02 
+- [Questions on removing correlated variables](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/410254) — 2 票 / 8 评论 / 2023-05-14 
+- [Dealing with multicollinearity?](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/407217) — 1 票 / 4 评论 / 2023-05-05 
+- [Votting Regressor  - Simple but effective](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/409210) — 1 票 / 0 评论 / 2023-05-10 
+- [How do we know perfect correlation of features will persist in the full dataset?](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/407296) — 1 票 / 2 评论 / 2023-05-05 
+- [Animated plot as GIF: Ridge coefficients as a function of the regularization](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/407946) — 1 票 / 2 评论 / 2023-05-08 
+- [Why so many late submissions?](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/410510) — 1 票 / 3 评论 / 2023-05-15 
+- [Silly question](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/406985) — 1 票 / 1 评论 / 2023-05-04 
+- [Research On Bees vs. Yield - Feature Selection & Feature Engineering](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/407818) — 0 票 / 0 评论 / 2023-05-08 
+- [Multi-class classification](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/409550) — 0 票 / 2 评论 / 2023-05-11 
+- [FeatureEngineering problem](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/407167) — 0 票 / 4 评论 / 2023-05-05 
+- [Kaggle notebook error?](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/407421) — 0 票 / 0 评论 / 2023-05-06 
+- [the  unilization ratio of GPU is 0!?](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/410273) — 0 票 / 6 评论 / 2023-05-14 
+- [Scikit Learn behaviour with different models](https://www.kaggle.com/competitions/playground-series-s3e14/discussion/410803) — -7 票 / 0 评论 / 2023-05-16 

@@ -1,0 +1,23 @@
+<p>This was my first playground series competition and I enjoyed it. There were many great discussion sharing and code sharing. I learned some new techniques regarding feature engineering and AutoML. Thank you everyone. </p>
+<p>Congrats to all teams in top positions who built solutions that scored well on private LB and survived the shakeup. I plan to enter some more playground comps in the future. l'm on vacation in October so maybe I'll join in November when I'm back.  </p>
+<p>I'm writing this post from my cell phone on vacation so I wont be able to include my usual pictures to help explain stuff. Also it's hard to add links.</p>
+<h1>Clean OOF and Hill Climbing</h1>
+<p>I tried hard to build a high performance single model but ensemble diverse models always beat my single models so my strategy was ensemble.</p>
+<p>The secret to ensemble is saving clean leak free OOF together with test predictions from every single model. Then we use hill climbing or a stage 2 meta model trained on OOF. Lastly we use the same model/technique on the test predictions.</p>
+<h1>Two HC Starter Notebooks</h1>
+<p>I published two hill climbing notebooks in 2 old comps, Melonoma prediction <a href="https://www.kaggle.com/cdeotte/forward-selection-oof-ensemble-0-942-private" target="_blank">here</a> and Novozyme theromstabilty prediction <a href="https://www.kaggle.com/code/cdeotte/public-lb-1st-place-solution/notebook" target="_blank">here</a>. The former uses only positive weights and the latter uses both negative and positive weights.</p>
+<h1>Public Models</h1>
+<p>For ensemble, we want lots of diverse models. In addition to my own models, I forked the best public single models and added code to save clean OOF to disk. I ignored all blender public notebooks.</p>
+<p>For public AutoML notebooks, I added code to save the OOF to disk for all the single models (made by the AutoML) and saved test predictions for all single models.</p>
+<h1>Private Models</h1>
+<p>I acquired 110 OOF from public notebooks and then created 40 single models of my own. Half of mine were hand crafted and half were AutoML.</p>
+<h1>Stack Regression over Classification</h1>
+<p>My most interesting and diverse model was 5 Fold XGB then inside every fold, I created 5 new folds and trained a classification NN. The NN predicted 50 target price bins using multi classification loss. I then used those 50 probabilities as features for the second level XGB model. The XGB model used regression loss. The model and OOF were leak free since the five NN 5 fold was nested inside the XGB 5 fold. This model was diverse and boosted hill climbing CV and LB.</p>
+<h1>Result</h1>
+<p>I think I pushed hill climbing too much and overfitted a little. I could have achieved a better private LB score if I was less aggressive with hill climbing.</p>
+<p>I allowed negative weights and set tolerance to 1e-5. In retrospect, I think tolerance should be 1 because 1 is already the fifth significant digit (for this comp's metric). By using 1e-5, I was fitting to the tenth significant digit. </p>
+<p>This means that the hill climbing algorithm keeps running when it should stop because it begins fitting and adding noise. We only want to add a new model if it boost CV 1 unit like improve CV from 72100 to 72099. We dont want to add a model that boost CV from 72100 to 72099.99999. In other comps the metric is like 0.72009 so 1e-5 makes sense but in this comp metric is like 72009 so maybe 1 makes more sense.</p>
+<h1>Post Comp Analysis</h1>
+<p>If I used tolerance 1, then public LB would be 71901 and private LB would be 63003 and CV 72209. With tolerance 1e-5, public LB is 71887 and private LB is 63057 and CV 72081.</p>
+<p>Using 1e-5 produced better CV score and better public LB score so it was hard to know what to do during the competition. Perhaps the clue that we are overfitting is that using 'tol=1e-5' vs 'tol=1' boost CV 72209 to 72081 but public LB only improved 71901 to 71887.</p>
+<p>The difference in private LB is only 00050 out of 63000 which is about 0.1% so it isn't a big deal but in a competition it changes rank from 5th to 81st. </p>
