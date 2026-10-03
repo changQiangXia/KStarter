@@ -1,0 +1,296 @@
+# 比赛摘要总目录
+
+> 共 264 场；已完成摘要 264 场。本文件由 `scripts/build_index.py` 生成。
+
+## 按主题
+
+### 表格 / 时序（106/106）
+
+- ✅ `amex-default-prediction` — Featured · 2022-08-24 · 4874 队 · `notes/tabular/amex-default-prediction.md`
+- ✅ `asl-signs` — Research · 2023-05-01 · 1165 队 · `notes/tabular/asl-signs.md`
+- ✅ `child-mind-institute-detect-sleep-states` — Featured · 2023-12-05 · 1877 队 · `notes/tabular/child-mind-institute-detect-sleep-states.md`
+- ✅ `child-mind-institute-problematic-internet-use` — Featured · 2024-12-19 · 3559 队 · `notes/tabular/child-mind-institute-problematic-internet-use.md`
+- ✅ `cmi-detect-behavior-with-sensor-data` — Featured · 2025-09-02 · 2657 队 · `notes/tabular/cmi-detect-behavior-with-sensor-data.md`
+- ✅ `foursquare-location-matching` — Featured · 2022-07-07 · 1079 队 · `notes/tabular/foursquare-location-matching.md`
+- ✅ `g-research-crypto-forecasting` — Featured · 2022-05-03 · 1946 队 · `notes/tabular/g-research-crypto-forecasting.md`
+- ✅ `godaddy-microbusiness-density-forecasting` — Featured · 2023-06-16 · 3547 队 · `notes/tabular/godaddy-microbusiness-density-forecasting.md`
+- ✅ `h-and-m-personalized-fashion-recommendations` — Featured · 2022-05-09 · 2952 队 · `notes/tabular/h-and-m-personalized-fashion-recommendations.md`
+- ✅ `hms-harmful-brain-activity-classification` — Research · 2024-04-08 · 2767 队 · `notes/tabular/hms-harmful-brain-activity-classification.md`
+- ✅ `home-credit-credit-risk-model-stability` — Featured · 2024-05-27 · 3856 队 · `notes/tabular/home-credit-credit-risk-model-stability.md`
+- ✅ `hull-tactical-market-prediction` — Featured · 2026-06-25 · 3677 队 · `notes/tabular/hull-tactical-market-prediction.md`
+- ✅ `icr-identify-age-related-conditions` — Featured · 2023-08-10 · 6430 队 · `notes/tabular/icr-identify-age-related-conditions.md`
+- ✅ `jane-street-real-time-market-data-forecasting` — Featured · 2025-07-12 · 3757 队 · `notes/tabular/jane-street-real-time-market-data-forecasting.md`
+- ✅ `jpx-tokyo-stock-exchange-prediction` — Featured · 2022-10-07 · 2033 队 · `notes/tabular/jpx-tokyo-stock-exchange-prediction.md`
+- ✅ `learning-equality-curriculum-recommendations` — Featured · 2023-03-14 · 1057 队 · `notes/tabular/learning-equality-curriculum-recommendations.md`
+- ✅ `march-machine-learning-mania-2023` — Featured · 2023-04-04 · 1033 队 · `notes/tabular/march-machine-learning-mania-2023.md`
+- ✅ `march-machine-learning-mania-2024` — Featured · 2024-04-09 · 820 队 · `notes/tabular/march-machine-learning-mania-2024.md`
+- ✅ `march-machine-learning-mania-2025` — Featured · 2025-04-08 · 1727 队 · `notes/tabular/march-machine-learning-mania-2025.md`
+- ✅ `march-machine-learning-mania-2026` — Featured · 2026-04-07 · 3462 队 · `notes/tabular/march-machine-learning-mania-2026.md`
+- ✅ `mens-march-mania-2022` — Featured · 2022-04-05 · 930 队 · `notes/tabular/mens-march-mania-2022.md`
+- ✅ `mitsui-commodity-prediction-challenge` — Featured · 2026-01-16 · 1711 队 · `notes/tabular/mitsui-commodity-prediction-challenge.md`
+- ✅ `optiver-realized-volatility-prediction` — Featured · 2022-01-10 · 3852 队 · `notes/tabular/optiver-realized-volatility-prediction.md`
+- ✅ `optiver-trading-at-the-close` — Featured · 2024-03-22 · 4436 队 · `notes/tabular/optiver-trading-at-the-close.md`
+- ✅ `otto-recommender-system` — Featured · 2023-01-31 · 2574 队 · `notes/tabular/otto-recommender-system.md`
+- ✅ `playground-series-s3e1` — Playground · 2023-01-09 · 689 队 · `notes/tabular/playground-series-s3e1.md`
+- ✅ `playground-series-s3e10` — Playground · 2023-03-20 · 807 队 · `notes/tabular/playground-series-s3e10.md`
+- ✅ `playground-series-s3e11` — Playground · 2023-04-03 · 952 队 · `notes/tabular/playground-series-s3e11.md`
+- ✅ `playground-series-s3e12` — Playground · 2023-04-17 · 1088 队 · `notes/tabular/playground-series-s3e12.md`
+- ✅ `playground-series-s3e13` — Playground · 2023-05-01 · 934 队 · `notes/tabular/playground-series-s3e13.md`
+- ✅ `playground-series-s3e14` — Playground · 2023-05-15 · 1875 队 · `notes/tabular/playground-series-s3e14.md`
+- ✅ `playground-series-s3e15` — Playground · 2023-05-29 · 693 队 · `notes/tabular/playground-series-s3e15.md`
+- ✅ `playground-series-s3e16` — Playground · 2023-06-12 · 1429 队 · `notes/tabular/playground-series-s3e16.md`
+- ✅ `playground-series-s3e17` — Playground · 2023-06-26 · 1502 队 · `notes/tabular/playground-series-s3e17.md`
+- ✅ `playground-series-s3e18` — Playground · 2023-07-10 · 1047 队 · `notes/tabular/playground-series-s3e18.md`
+- ✅ `playground-series-s3e19` — Playground · 2023-07-31 · 1172 队 · `notes/tabular/playground-series-s3e19.md`
+- ✅ `playground-series-s3e2` — Playground · 2023-01-16 · 770 队 · `notes/tabular/playground-series-s3e2.md`
+- ✅ `playground-series-s3e20` — Playground · 2023-08-21 · 1440 队 · `notes/tabular/playground-series-s3e20.md`
+- ✅ `playground-series-s3e21` — Playground · 2023-09-11 · 955 队 · `notes/tabular/playground-series-s3e21.md`
+- ✅ `playground-series-s3e22` — Playground · 2023-10-02 · 1541 队 · `notes/tabular/playground-series-s3e22.md`
+- ✅ `playground-series-s3e23` — Playground · 2023-10-23 · 1702 队 · `notes/tabular/playground-series-s3e23.md`
+- ✅ `playground-series-s3e24` — Playground · 2023-11-13 · 1908 队 · `notes/tabular/playground-series-s3e24.md`
+- ✅ `playground-series-s3e25` — Playground · 2023-12-04 · 1632 队 · `notes/tabular/playground-series-s3e25.md`
+- ✅ `playground-series-s3e26` — Playground · 2024-01-01 · 1661 队 · `notes/tabular/playground-series-s3e26.md`
+- ✅ `playground-series-s3e3` — Playground · 2023-01-23 · 665 队 · `notes/tabular/playground-series-s3e3.md`
+- ✅ `playground-series-s3e4` — Playground · 2023-01-30 · 641 队 · `notes/tabular/playground-series-s3e4.md`
+- ✅ `playground-series-s3e5` — Playground · 2023-02-13 · 901 队 · `notes/tabular/playground-series-s3e5.md`
+- ✅ `playground-series-s3e6` — Playground · 2023-02-20 · 703 队 · `notes/tabular/playground-series-s3e6.md`
+- ✅ `playground-series-s3e7` — Playground · 2023-02-27 · 678 队 · `notes/tabular/playground-series-s3e7.md`
+- ✅ `playground-series-s3e8` — Playground · 2023-03-06 · 734 队 · `notes/tabular/playground-series-s3e8.md`
+- ✅ `playground-series-s3e9` — Playground · 2023-03-13 · 765 队 · `notes/tabular/playground-series-s3e9.md`
+- ✅ `playground-series-s4e1` — Playground · 2024-01-31 · 3632 队 · `notes/tabular/playground-series-s4e1.md`
+- ✅ `playground-series-s4e10` — Playground · 2024-10-31 · 3858 队 · `notes/tabular/playground-series-s4e10.md`
+- ✅ `playground-series-s4e11` — Playground · 2024-11-30 · 2685 队 · `notes/tabular/playground-series-s4e11.md`
+- ✅ `playground-series-s4e12` — Playground · 2024-12-31 · 2390 队 · `notes/tabular/playground-series-s4e12.md`
+- ✅ `playground-series-s4e2` — Playground · 2024-02-29 · 3587 队 · `notes/tabular/playground-series-s4e2.md`
+- ✅ `playground-series-s4e3` — Playground · 2024-03-31 · 2199 队 · `notes/tabular/playground-series-s4e3.md`
+- ✅ `playground-series-s4e4` — Playground · 2024-04-30 · 2606 队 · `notes/tabular/playground-series-s4e4.md`
+- ✅ `playground-series-s4e5` — Playground · 2024-05-31 · 2788 队 · `notes/tabular/playground-series-s4e5.md`
+- ✅ `playground-series-s4e6` — Playground · 2024-06-30 · 2684 队 · `notes/tabular/playground-series-s4e6.md`
+- ✅ `playground-series-s4e7` — Playground · 2024-07-31 · 2234 队 · `notes/tabular/playground-series-s4e7.md`
+- ✅ `playground-series-s4e8` — Playground · 2024-08-31 · 2422 队 · `notes/tabular/playground-series-s4e8.md`
+- ✅ `playground-series-s4e9` — Playground · 2024-09-30 · 3066 队 · `notes/tabular/playground-series-s4e9.md`
+- ✅ `playground-series-s5e1` — Playground · 2025-01-31 · 2722 队 · `notes/tabular/playground-series-s5e1.md`
+- ✅ `playground-series-s5e10` — Playground · 2025-10-31 · 4082 队 · `notes/tabular/playground-series-s5e10.md`
+- ✅ `playground-series-s5e11` — Playground · 2025-11-30 · 3724 队 · `notes/tabular/playground-series-s5e11.md`
+- ✅ `playground-series-s5e12` — Playground · 2025-12-31 · 4206 队 · `notes/tabular/playground-series-s5e12.md`
+- ✅ `playground-series-s5e2` — Playground · 2025-02-28 · 3393 队 · `notes/tabular/playground-series-s5e2.md`
+- ✅ `playground-series-s5e3` — Playground · 2025-03-31 · 4381 队 · `notes/tabular/playground-series-s5e3.md`
+- ✅ `playground-series-s5e4` — Playground · 2025-04-30 · 3310 队 · `notes/tabular/playground-series-s5e4.md`
+- ✅ `playground-series-s5e5` — Playground · 2025-05-31 · 4316 队 · `notes/tabular/playground-series-s5e5.md`
+- ✅ `playground-series-s5e6` — Playground · 2025-06-30 · 2648 队 · `notes/tabular/playground-series-s5e6.md`
+- ✅ `playground-series-s5e7` — Playground · 2025-07-31 · 4329 队 · `notes/tabular/playground-series-s5e7.md`
+- ✅ `playground-series-s5e8` — Playground · 2025-08-31 · 3365 队 · `notes/tabular/playground-series-s5e8.md`
+- ✅ `playground-series-s5e9` — Playground · 2025-09-30 · 2581 队 · `notes/tabular/playground-series-s5e9.md`
+- ✅ `playground-series-s6e1` — Playground · 2026-01-31 · 4317 队 · `notes/tabular/playground-series-s6e1.md`
+- ✅ `playground-series-s6e2` — Playground · 2026-02-28 · 4370 队 · `notes/tabular/playground-series-s6e2.md`
+- ✅ `playground-series-s6e3` — Playground · 2026-03-31 · 4142 队 · `notes/tabular/playground-series-s6e3.md`
+- ✅ `playground-series-s6e4` — Playground · 2026-04-30 · 4315 队 · `notes/tabular/playground-series-s6e4.md`
+- ✅ `playground-series-s6e5` — Playground · 2026-05-31 · 3022 队 · `notes/tabular/playground-series-s6e5.md`
+- ✅ `playground-series-s6e6` — Playground · 2026-06-30 · 2816 队 · `notes/tabular/playground-series-s6e6.md`
+- ✅ `playground-series-s6e7` — Playground · 2026-07-31 · 3355 队 · `notes/tabular/playground-series-s6e7.md`
+- ✅ `playground-series-s6e8` — Playground · 2026-08-31 · 3531 队 · `notes/tabular/playground-series-s6e8.md`
+- ✅ `playground-series-s6e9` — Playground · 2026-09-30 · 3575 队 · `notes/tabular/playground-series-s6e9.md`
+- ✅ `predict-energy-behavior-of-prosumers` — Featured · 2024-04-30 · 2731 队 · `notes/tabular/predict-energy-behavior-of-prosumers.md`
+- ✅ `predict-student-performance-from-game-play` — Featured · 2023-06-28 · 2051 队 · `notes/tabular/predict-student-performance-from-game-play.md`
+- ✅ `scrabble-player-rating` — Playground · 2022-12-15 · 301 队 · `notes/tabular/scrabble-player-rating.md`
+- ✅ `smartphone-decimeter-2022` — Research · 2022-07-29 · 573 队 · `notes/tabular/smartphone-decimeter-2022.md`
+- ✅ `tabular-playground-series-apr-2022` — Playground · 2022-04-30 · 816 队 · `notes/tabular/tabular-playground-series-apr-2022.md`
+- ✅ `tabular-playground-series-aug-2022` — Playground · 2022-08-31 · 1888 队 · `notes/tabular/tabular-playground-series-aug-2022.md`
+- ✅ `tabular-playground-series-dec-2021` — Playground · 2021-12-31 · 1188 队 · `notes/tabular/tabular-playground-series-dec-2021.md`
+- ✅ `tabular-playground-series-feb-2022` — Playground · 2022-02-28 · 1255 队 · `notes/tabular/tabular-playground-series-feb-2022.md`
+- ✅ `tabular-playground-series-jan-2022` — Playground · 2022-01-31 · 1591 队 · `notes/tabular/tabular-playground-series-jan-2022.md`
+- ✅ `tabular-playground-series-jul-2022` — Playground · 2022-07-31 · 1253 队 · `notes/tabular/tabular-playground-series-jul-2022.md`
+- ✅ `tabular-playground-series-jun-2022` — Playground · 2022-06-30 · 844 队 · `notes/tabular/tabular-playground-series-jun-2022.md`
+- ✅ `tabular-playground-series-mar-2022` — Playground · 2022-03-31 · 956 队 · `notes/tabular/tabular-playground-series-mar-2022.md`
+- ✅ `tabular-playground-series-may-2022` — Playground · 2022-05-31 · 1151 队 · `notes/tabular/tabular-playground-series-may-2022.md`
+- ✅ `tabular-playground-series-nov-2021` — Playground · 2021-11-30 · 1362 队 · `notes/tabular/tabular-playground-series-nov-2021.md`
+- ✅ `tabular-playground-series-nov-2022` — Playground · 2022-11-30 · 689 队 · `notes/tabular/tabular-playground-series-nov-2022.md`
+- ✅ `tabular-playground-series-oct-2021` — Playground · 2021-10-31 · 1089 队 · `notes/tabular/tabular-playground-series-oct-2021.md`
+- ✅ `tabular-playground-series-oct-2022` — Playground · 2022-10-31 · 463 队 · `notes/tabular/tabular-playground-series-oct-2022.md`
+- ✅ `tabular-playground-series-sep-2022` — Playground · 2022-09-30 · 1381 队 · `notes/tabular/tabular-playground-series-sep-2022.md`
+- ✅ `tlvmc-parkinsons-freezing-gait-prediction` — Research · 2023-06-08 · 1379 队 · `notes/tabular/tlvmc-parkinsons-freezing-gait-prediction.md`
+- ✅ `ubiquant-market-prediction` — Featured · 2022-07-19 · 2893 队 · `notes/tabular/ubiquant-market-prediction.md`
+- ✅ `um-game-playing-strength-of-mcts-variants` — Research · 2024-12-02 · 1608 队 · `notes/tabular/um-game-playing-strength-of-mcts-variants.md`
+- ✅ `womens-march-mania-2022` — Featured · 2022-04-04 · 651 队 · `notes/tabular/womens-march-mania-2022.md`
+
+### 计算机视觉（49/49）
+
+- ✅ `UBC-OCEAN` — Research · 2024-01-03 · 1326 队 · `notes/cv/UBC-OCEAN.md`
+- ✅ `asl-fingerspelling` — Research · 2023-08-24 · 1314 队 · `notes/cv/asl-fingerspelling.md`
+- ✅ `benetech-making-graphs-accessible` — Featured · 2023-06-19 · 608 队 · `notes/cv/benetech-making-graphs-accessible.md`
+- ✅ `biohub-cell-tracking-during-development` — Research · 2026-09-29 · 3947 队 · `notes/cv/biohub-cell-tracking-during-development.md`
+- ✅ `blood-vessel-segmentation` — Research · 2024-02-06 · 1149 队 · `notes/cv/blood-vessel-segmentation.md`
+- ✅ `byu-locating-bacterial-flagellar-motors-2025` — Research · 2025-06-04 · 1136 队 · `notes/cv/byu-locating-bacterial-flagellar-motors-2025.md`
+- ✅ `czii-cryo-et-object-identification` — Featured · 2025-02-05 · 931 队 · `notes/cv/czii-cryo-et-object-identification.md`
+- ✅ `dfl-bundesliga-data-shootout` — Featured · 2022-12-20 · 530 队 · `notes/cv/dfl-bundesliga-data-shootout.md`
+- ✅ `fathomnet-out-of-sample-detection` — Research · 2023-05-23 · 69 队 · `notes/cv/fathomnet-out-of-sample-detection.md`
+- ✅ `gan-getting-started` — Getting Started · 2026-06-30 · 0 队 · `notes/cv/gan-getting-started.md`
+- ✅ `geolifeclef-2022-lifeclef-2022-fgvc9` — Research · 2022-05-24 · 52 队 · `notes/cv/geolifeclef-2022-lifeclef-2022-fgvc9.md`
+- ✅ `geolifeclef-2024` — Research · 2024-05-24 · 51 队 · `notes/cv/geolifeclef-2024.md`
+- ✅ `google-research-identify-contrails-reduce-global-warming` — Research · 2023-08-09 · 954 队 · `notes/cv/google-research-identify-contrails-reduce-global-warming.md`
+- ✅ `google-universal-image-embedding` — Research · 2022-10-10 · 1022 队 · `notes/cv/google-universal-image-embedding.md`
+- ✅ `happy-whale-and-dolphin` — Research · 2022-04-18 · 1588 队 · `notes/cv/happy-whale-and-dolphin.md`
+- ✅ `herbarium-2022-fgvc9` — Research · 2022-05-30 · 134 队 · `notes/cv/herbarium-2022-fgvc9.md`
+- ✅ `hotel-id-to-combat-human-trafficking-2022-fgvc9` — Research · 2022-05-30 · 82 队 · `notes/cv/hotel-id-to-combat-human-trafficking-2022-fgvc9.md`
+- ✅ `hubmap-hacking-the-human-vasculature` — Research · 2023-07-31 · 1021 队 · `notes/cv/hubmap-hacking-the-human-vasculature.md`
+- ✅ `hubmap-organ-segmentation` — Research · 2022-09-22 · 1174 队 · `notes/cv/hubmap-organ-segmentation.md`
+- ✅ `image-matching-challenge-2022` — Research · 2022-06-02 · 642 队 · `notes/cv/image-matching-challenge-2022.md`
+- ✅ `image-matching-challenge-2023` — Research · 2023-06-12 · 494 队 · `notes/cv/image-matching-challenge-2023.md`
+- ✅ `image-matching-challenge-2024` — Research · 2024-06-03 · 929 队 · `notes/cv/image-matching-challenge-2024.md`
+- ✅ `image-matching-challenge-2025` — Research · 2025-06-02 · 943 队 · `notes/cv/image-matching-challenge-2025.md`
+- ✅ `isic-2024-challenge` — Research · 2024-09-06 · 2739 队 · `notes/cv/isic-2024-challenge.md`
+- ✅ `iwildcam2022-fgvc9` — Research · 2022-05-30 · 24 队 · `notes/cv/iwildcam2022-fgvc9.md`
+- ✅ `mayo-clinic-strip-ai` — Research · 2022-10-05 · 888 队 · `notes/cv/mayo-clinic-strip-ai.md`
+- ✅ `neurips-2023-machine-unlearning` — Research · 2023-11-29 · 1188 队 · `notes/cv/neurips-2023-machine-unlearning.md`
+- ✅ `nfl-big-data-bowl-2025` — Community · 2025-01-06 · 0 队 · `notes/cv/nfl-big-data-bowl-2025.md`
+- ✅ `nfl-big-data-bowl-2026-prediction` — Featured · 2026-01-06 · 1899 队 · `notes/cv/nfl-big-data-bowl-2026-prediction.md`
+- ✅ `nfl-health-and-safety-helmet-assignment` — Featured · 2021-11-02 · 825 队 · `notes/cv/nfl-health-and-safety-helmet-assignment.md`
+- ✅ `nfl-player-contact-detection` — Featured · 2023-03-01 · 939 队 · `notes/cv/nfl-player-contact-detection.md`
+- ✅ `petfinder-pawpularity-score` — Research · 2022-01-14 · 3537 队 · `notes/cv/petfinder-pawpularity-score.md`
+- ✅ `physionet-ecg-image-digitization` — Research · 2026-01-22 · 1424 队 · `notes/cv/physionet-ecg-image-digitization.md`
+- ✅ `planttraits2024` — Research · 2024-06-02 · 398 队 · `notes/cv/planttraits2024.md`
+- ✅ `recodai-luc-scientific-image-forgery-detection` — Research · 2026-04-22 · 1564 队 · `notes/cv/recodai-luc-scientific-image-forgery-detection.md`
+- ✅ `rsna-2022-cervical-spine-fracture-detection` — Featured · 2022-10-27 · 883 队 · `notes/cv/rsna-2022-cervical-spine-fracture-detection.md`
+- ✅ `rsna-2023-abdominal-trauma-detection` — Featured · 2023-10-15 · 1125 队 · `notes/cv/rsna-2023-abdominal-trauma-detection.md`
+- ✅ `rsna-2024-lumbar-spine-degenerative-classification` — Featured · 2024-10-08 · 1874 队 · `notes/cv/rsna-2024-lumbar-spine-degenerative-classification.md`
+- ✅ `rsna-breast-cancer-detection` — Featured · 2023-02-27 · 1687 队 · `notes/cv/rsna-breast-cancer-detection.md`
+- ✅ `rsna-intracranial-aneurysm-detection` — Featured · 2025-10-14 · 1147 队 · `notes/cv/rsna-intracranial-aneurysm-detection.md`
+- ✅ `rsna-miccai-brain-tumor-radiogenomic-classification` — Featured · 2021-10-15 · 1555 队 · `notes/cv/rsna-miccai-brain-tumor-radiogenomic-classification.md`
+- ✅ `sartorius-cell-instance-segmentation` — Featured · 2021-12-30 · 1505 队 · `notes/cv/sartorius-cell-instance-segmentation.md`
+- ✅ `sorghum-id-fgvc-9` — Research · 2022-05-30 · 252 队 · `notes/cv/sorghum-id-fgvc-9.md`
+- ✅ `stable-diffusion-image-to-prompts` — Featured · 2023-05-15 · 1231 队 · `notes/cv/stable-diffusion-image-to-prompts.md`
+- ✅ `tensorflow-great-barrier-reef` — Research · 2022-02-14 · 2025 队 · `notes/cv/tensorflow-great-barrier-reef.md`
+- ✅ `uw-madison-gi-tract-image-segmentation` — Research · 2022-07-14 · 1548 队 · `notes/cv/uw-madison-gi-tract-image-segmentation.md`
+- ✅ `vesuvius-challenge-ink-detection` — Featured · 2023-06-14 · 1249 队 · `notes/cv/vesuvius-challenge-ink-detection.md`
+- ✅ `vesuvius-challenge-surface-detection` — Research · 2026-02-27 · 1391 队 · `notes/cv/vesuvius-challenge-surface-detection.md`
+- ✅ `wikipedia-image-caption` — Playground · 2021-12-09 · 105 队 · `notes/cv/wikipedia-image-caption.md`
+
+### NLP / LLM（35/35）
+
+- ✅ `AI4Code` — Featured · 2022-11-10 · 1135 队 · `notes/nlp/AI4Code.md`
+- ✅ `ai-agent-security-multi-step-tool-attacks` — Featured · 2026-09-01 · 4186 队 · `notes/nlp/ai-agent-security-multi-step-tool-attacks.md`
+- ✅ `ai-mathematical-olympiad-prize` — Featured · 2024-06-27 · 1161 队 · `notes/nlp/ai-mathematical-olympiad-prize.md`
+- ✅ `ai-mathematical-olympiad-progress-prize-2` — Featured · 2025-04-01 · 2212 队 · `notes/nlp/ai-mathematical-olympiad-progress-prize-2.md`
+- ✅ `ai-mathematical-olympiad-progress-prize-3` — Featured · 2026-04-15 · 4138 队 · `notes/nlp/ai-mathematical-olympiad-progress-prize-3.md`
+- ✅ `arc-prize-2024` — Featured · 2024-11-10 · 1427 队 · `notes/nlp/arc-prize-2024.md`
+- ✅ `arc-prize-2025` — Featured · 2025-11-03 · 1455 队 · `notes/nlp/arc-prize-2025.md`
+- ✅ `chaii-hindi-and-tamil-question-answering` — Research · 2021-11-15 · 943 队 · `notes/nlp/chaii-hindi-and-tamil-question-answering.md`
+- ✅ `commonlit-evaluate-student-summaries` — Featured · 2023-10-11 · 2064 队 · `notes/nlp/commonlit-evaluate-student-summaries.md`
+- ✅ `deep-past-initiative-machine-translation` — Featured · 2026-03-23 · 2674 队 · `notes/nlp/deep-past-initiative-machine-translation.md`
+- ✅ `drawing-with-llms` — Featured · 2025-05-27 · 1309 队 · `notes/nlp/drawing-with-llms.md`
+- ✅ `eedi-mining-misconceptions-in-mathematics` — Featured · 2024-12-12 · 1446 队 · `notes/nlp/eedi-mining-misconceptions-in-mathematics.md`
+- ✅ `feedback-prize-2021` — Featured · 2022-03-15 · 2058 队 · `notes/nlp/feedback-prize-2021.md`
+- ✅ `feedback-prize-effectiveness` — Featured · 2022-08-23 · 1557 队 · `notes/nlp/feedback-prize-effectiveness.md`
+- ✅ `feedback-prize-english-language-learning` — Featured · 2022-11-29 · 2654 队 · `notes/nlp/feedback-prize-english-language-learning.md`
+- ✅ `gemma-4-good-hackathon` — Featured · 2026-05-18 · 1606 队 · `notes/other/gemma-4-good-hackathon.md`
+- ✅ `jigsaw-agile-community-rules` — Featured · 2025-10-23 · 2445 队 · `notes/nlp/jigsaw-agile-community-rules.md`
+- ✅ `jigsaw-toxic-severity-rating` — Featured · 2022-02-07 · 2301 队 · `notes/nlp/jigsaw-toxic-severity-rating.md`
+- ✅ `kaggle-llm-science-exam` — Featured · 2023-10-10 · 2664 队 · `notes/nlp/kaggle-llm-science-exam.md`
+- ✅ `konwinski-prize` — Featured · 2025-07-23 · 617 队 · `notes/nlp/konwinski-prize.md`
+- ✅ `learning-agency-lab-automated-essay-scoring-2` — Featured · 2024-07-02 · 2706 队 · `notes/nlp/learning-agency-lab-automated-essay-scoring-2.md`
+- ✅ `linking-writing-processes-to-writing-quality` — Featured · 2024-01-09 · 1876 队 · `notes/nlp/linking-writing-processes-to-writing-quality.md`
+- ✅ `llm-20-questions` — Featured · 2024-08-29 · 832 队 · `notes/nlp/llm-20-questions.md`
+- ✅ `llm-detect-ai-generated-text` — Featured · 2024-01-22 · 4358 队 · `notes/nlp/llm-detect-ai-generated-text.md`
+- ✅ `llm-prompt-recovery` — Featured · 2024-04-16 · 2175 队 · `notes/nlp/llm-prompt-recovery.md`
+- ✅ `llms-you-cant-please-them-all` — Featured · 2025-03-04 · 1692 队 · `notes/nlp/llms-you-cant-please-them-all.md`
+- ✅ `lmsys-chatbot-arena` — Research · 2024-08-12 · 1849 队 · `notes/nlp/lmsys-chatbot-arena.md`
+- ✅ `make-data-count-finding-data-references` — Research · 2025-09-09 · 1282 队 · `notes/nlp/make-data-count-finding-data-references.md`
+- ✅ `map-charting-student-math-misunderstandings` — Featured · 2025-10-15 · 1857 队 · `notes/nlp/map-charting-student-math-misunderstandings.md`
+- ✅ `nbme-score-clinical-patient-notes` — Featured · 2022-05-03 · 1471 队 · `notes/nlp/nbme-score-clinical-patient-notes.md`
+- ✅ `nvidia-nemotron-model-reasoning-challenge` — Featured · 2026-06-15 · 4185 队 · `notes/nlp/nvidia-nemotron-model-reasoning-challenge.md`
+- ✅ `pii-detection-removal-from-educational-data` — Featured · 2024-04-23 · 2048 队 · `notes/nlp/pii-detection-removal-from-educational-data.md`
+- ✅ `us-patent-phrase-to-phrase-matching` — Featured · 2022-06-20 · 1889 队 · `notes/nlp/us-patent-phrase-to-phrase-matching.md`
+- ✅ `uspto-explainable-ai` — Featured · 2024-07-24 · 571 队 · `notes/nlp/uspto-explainable-ai.md`
+- ✅ `wsdm-cup-multilingual-chatbot-arena` — Featured · 2025-03-10 · 950 队 · `notes/nlp/wsdm-cup-multilingual-chatbot-arena.md`
+
+### 科学计算（23/23）
+
+- ✅ `MABe-mouse-behavior-detection` — Research · 2025-12-15 · 1412 队 · `notes/science/MABe-mouse-behavior-detection.md`
+- ✅ `amp-parkinsons-disease-progression-prediction` — Featured · 2023-05-18 · 1805 队 · `notes/science/amp-parkinsons-disease-progression-prediction.md`
+- ✅ `ariel-data-challenge-2024` — Featured · 2024-10-31 · 1151 队 · `notes/science/ariel-data-challenge-2024.md`
+- ✅ `ariel-data-challenge-2025` — Featured · 2025-09-24 · 860 队 · `notes/science/ariel-data-challenge-2025.md`
+- ✅ `cafa-5-protein-function-prediction` — Research · 2023-12-20 · 1625 队 · `notes/science/cafa-5-protein-function-prediction.md`
+- ✅ `cafa-6-protein-function-prediction` — Research · 2026-06-01 · 2259 队 · `notes/science/cafa-6-protein-function-prediction.md`
+- ✅ `csiro-biomass` — Research · 2026-01-28 · 3805 队 · `notes/science/csiro-biomass.md`
+- ✅ `equity-post-HCT-survival-predictions` — Research · 2025-03-05 · 3325 队 · `notes/science/equity-post-HCT-survival-predictions.md`
+- ✅ `g2net-detecting-continuous-gravitational-waves` — Research · 2023-01-03 · 936 队 · `notes/science/g2net-detecting-continuous-gravitational-waves.md`
+- ✅ `icecube-neutrinos-in-deep-ice` — Research · 2023-04-19 · 812 队 · `notes/science/icecube-neutrinos-in-deep-ice.md`
+- ✅ `leap-atmospheric-physics-ai-climsim` — Research · 2024-07-15 · 693 队 · `notes/science/leap-atmospheric-physics-ai-climsim.md`
+- ✅ `leash-BELKA` — Featured · 2024-07-08 · 1950 队 · `notes/science/leash-BELKA.md`
+- ✅ `neurips-open-polymer-prediction-2025` — Featured · 2025-09-15 · 2240 队 · `notes/science/neurips-open-polymer-prediction-2025.md`
+- ✅ `novozymes-enzyme-stability-prediction` — Featured · 2023-01-03 · 2482 队 · `notes/science/novozymes-enzyme-stability-prediction.md`
+- ✅ `open-problems-multimodal` — Featured · 2022-11-15 · 1220 队 · `notes/science/open-problems-multimodal.md`
+- ✅ `open-problems-single-cell-perturbations` — Featured · 2023-11-30 · 1097 队 · `notes/science/open-problems-single-cell-perturbations.md`
+- ✅ `phase-ii-widsdatathon2022` — Community · 2022-07-01 · 0 队 · `notes/science/phase-ii-widsdatathon2022.md`
+- ✅ `rogii-wellbore-geology-prediction` — Featured · 2026-08-05 · 6125 队 · `notes/science/rogii-wellbore-geology-prediction.md`
+- ✅ `stanford-ribonanza-rna-folding` — Research · 2023-12-07 · 755 队 · `notes/science/stanford-ribonanza-rna-folding.md`
+- ✅ `stanford-rna-3d-folding` — Featured · 2025-09-24 · 1516 队 · `notes/science/stanford-rna-3d-folding.md`
+- ✅ `stanford-rna-3d-folding-2` — Featured · 2026-03-25 · 1867 队 · `notes/science/stanford-rna-3d-folding-2.md`
+- ✅ `ventilator-pressure-prediction` — Research · 2021-11-03 · 2605 队 · `notes/science/ventilator-pressure-prediction.md`
+- ✅ `waveform-inversion` — Research · 2025-06-30 · 1365 队 · `notes/science/waveform-inversion.md`
+
+### 优化博弈 / Agent（22/22）
+
+- ✅ `ai-village-capture-the-flag-defcon31` — Featured · 2023-11-09 · 1344 队 · `notes/sim-agent/ai-village-capture-the-flag-defcon31.md`
+- ✅ `ai-village-ctf` — Research · 2022-09-12 · 668 队 · `notes/sim-agent/ai-village-ctf.md`
+- ✅ `autonomous-agent-prediction-beta` — Playground · 2026-08-06 · 570 队 · `notes/sim-agent/autonomous-agent-prediction-beta.md`
+- ✅ `fide-google-efficiency-chess-ai-challenge` — Featured · 2025-03-06 · 1120 队 · `notes/sim-agent/fide-google-efficiency-chess-ai-challenge.md`
+- ✅ `google-code-golf-2025` — Research · 2025-10-30 · 1142 队 · `notes/sim-agent/google-code-golf-2025.md`
+- ✅ `kore-2022` — Featured · 2022-07-26 · 469 队 · `notes/sim-agent/kore-2022.md`
+- ✅ `kore-2022-beta` — Playground · 2022-04-07 · 58 队 · `notes/sim-agent/kore-2022-beta.md`
+- ✅ `lux-ai-2021` — Featured · 2021-12-20 · 1178 队 · `notes/sim-agent/lux-ai-2021.md`
+- ✅ `lux-ai-2022-beta` — Playground · 2022-12-22 · 44 队 · `notes/sim-agent/lux-ai-2022-beta.md`
+- ✅ `lux-ai-season-2` — Featured · 2023-05-08 · 646 队 · `notes/sim-agent/lux-ai-season-2.md`
+- ✅ `lux-ai-season-2-neurips-stage-2` — Featured · 2023-11-28 · 64 队 · `notes/sim-agent/lux-ai-season-2-neurips-stage-2.md`
+- ✅ `lux-ai-season-3` — Featured · 2025-03-24 · 701 队 · `notes/sim-agent/lux-ai-season-3.md`
+- ✅ `maze-crawler` — Playground · 2026-06-30 · 459 队 · `notes/sim-agent/maze-crawler.md`
+- ✅ `neurogolf-2026` — Research · 2026-07-15 · 2963 队 · `notes/sim-agent/neurogolf-2026.md`
+- ✅ `orbit-wars` — Featured · 2026-07-07 · 4729 队 · `notes/sim-agent/orbit-wars.md`
+- ✅ `pokemon-tcg-ai-battle` — Featured · 2026-08-31 · 6807 队 · `notes/sim-agent/pokemon-tcg-ai-battle.md`
+- ✅ `pokemon-tcg-ai-battle-challenge-strategy` — Featured · 2026-09-13 · 939 队 · `notes/sim-agent/pokemon-tcg-ai-battle-challenge-strategy.md`
+- ✅ `santa-2021` — Featured · 2022-01-12 · 867 队 · `notes/sim-agent/santa-2021.md`
+- ✅ `santa-2022` — Featured · 2023-01-17 · 874 队 · `notes/sim-agent/santa-2022.md`
+- ✅ `santa-2023` — Featured · 2024-01-31 · 1054 队 · `notes/sim-agent/santa-2023.md`
+- ✅ `santa-2024` — Featured · 2025-01-31 · 1514 队 · `notes/sim-agent/santa-2024.md`
+- ✅ `santa-2025` — Featured · 2026-01-30 · 3357 队 · `notes/sim-agent/santa-2025.md`
+
+### 音频（6/6）
+
+- ✅ `bengaliai-speech` — Research · 2023-10-17 · 744 队 · `notes/audio/bengaliai-speech.md`
+- ✅ `birdclef-2022` — Research · 2022-05-24 · 801 队 · `notes/audio/birdclef-2022.md`
+- ✅ `birdclef-2023` — Research · 2023-05-24 · 1189 队 · `notes/audio/birdclef-2023.md`
+- ✅ `birdclef-2024` — Research · 2024-06-10 · 974 队 · `notes/audio/birdclef-2024.md`
+- ✅ `birdclef-2025` — Research · 2025-06-05 · 2031 队 · `notes/audio/birdclef-2025.md`
+- ✅ `birdclef-2026` — Research · 2026-06-03 · 4094 队 · `notes/audio/birdclef-2026.md`
+
+### 其他 / 元类（23/23）
+
+- ✅ `2023-kaggle-ai-report` — Community · 2023-07-16 · 220 队 · `notes/other/2023-kaggle-ai-report.md`
+- ✅ `5-day-ai-agents-intensive-vibecoding-course-with-google` — Featured · 2026-06-19 · 0 队 · `notes/other/5-day-ai-agents-intensive-vibecoding-course-with-google.md`
+- ✅ `big-data-derby-2022` — Community · 2022-11-10 · 0 队 · `notes/other/big-data-derby-2022.md`
+- ✅ `bigquery-ai-hackathon` — Featured · 2025-09-22 · 276 队 · `notes/other/bigquery-ai-hackathon.md`
+- ✅ `data-assistants-with-gemma` — Community · 2024-04-14 · 0 队 · `notes/other/data-assistants-with-gemma.md`
+- ✅ `gemini-3` — Featured · 2025-12-12 · 4083 队 · `notes/other/gemini-3.md`
+- ✅ `gemini-long-context` — Community · 2024-12-01 · 0 队 · `notes/other/gemini-long-context.md`
+- ✅ `gemma-language-tuning` — Community · 2025-01-15 · 0 队 · `notes/nlp/gemma-language-tuning.md`
+- ✅ `google-gemma-3n-hackathon` — Featured · 2025-08-06 · 599 队 · `notes/other/google-gemma-3n-hackathon.md`
+- ✅ `google-tunix-hackathon` — Featured · 2026-01-12 · 319 队 · `notes/other/google-tunix-hackathon.md`
+- ✅ `kaggle-measuring-agi` — Featured · 2026-04-16 · 1063 队 · `notes/other/kaggle-measuring-agi.md`
+- ✅ `kaggle-survey-2021` — Community · 2021-11-28 · 0 队 · `notes/other/kaggle-survey-2021.md`
+- ✅ `kaggle-survey-2022` — Community · 2022-11-27 · 0 队 · `notes/other/kaggle-survey-2022.md`
+- ✅ `llm-prompting-with-makersuite` — Community · 2023-11-06 · 0 队 · `notes/other/llm-prompting-with-makersuite.md`
+- ✅ `med-gemma-impact-challenge` — Featured · 2026-02-24 · 872 队 · `notes/other/med-gemma-impact-challenge.md`
+- ✅ `meta-kaggle-hackathon` — Featured · 2025-07-21 · 118 队 · `notes/other/meta-kaggle-hackathon.md`
+- ✅ `nfl-big-data-bowl-2022` — Community · 2022-01-06 · 0 队 · `notes/other/nfl-big-data-bowl-2022.md`
+- ✅ `nfl-big-data-bowl-2023` — Community · 2023-01-09 · 0 队 · `notes/other/nfl-big-data-bowl-2023.md`
+- ✅ `nfl-big-data-bowl-2024` — Community · 2024-01-08 · 0 队 · `notes/other/nfl-big-data-bowl-2024.md`
+- ✅ `nfl-big-data-bowl-2026-analytics` — Featured · 2025-12-17 · 277 队 · `notes/other/nfl-big-data-bowl-2026-analytics.md`
+- ✅ `openai-gpt-oss-20b-red-teaming` — Featured · 2025-08-26 · 601 队 · `notes/other/openai-gpt-oss-20b-red-teaming.md`
+- ✅ `openai-to-z-challenge` — Featured · 2025-06-29 · 225 队 · `notes/other/openai-to-z-challenge.md`
+- ✅ `predict-ai-model-runtime` — Research · 2023-11-17 · 616 队 · `notes/other/predict-ai-model-runtime.md`
+
+## 说明
+
+- ✅ = 已完成结构化摘要；⏳ = 已采集待写，或尚未采集。
+- 结论汇总见 `playbook/`（六册）与 `LEARNING_PATH.md`。
+- 原始材料在 `intel/<slug>/`（讨论区索引 + 正文 + 图片）。
