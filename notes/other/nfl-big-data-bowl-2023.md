@@ -21,6 +21,17 @@
 - 官方给的三赛道设置暗示了评审口味：Metric（指标创新）、Undergrad（学术规范）、Coaching（实践可用性）——投稿前先想清楚评委是谁。
 - 起步建议：先用官方 demo notebook 学会"把一回合画成动画"，再谈建模——追踪数据不可视化几乎无法 debug。
 
+## 轻读结论（2026-10 补）
+
+- **规模与赛道**：近 300 份提交 / 400+ 参与者（记录）；Metric / Undergrad / **Coaching（新增）** 三赛道，8 finalist（2/2/4）+ 9 HM，Combine 现场决赛、额外 $20,000 奖金（382941）。
+- **数据/主题**：2021 赛季 Weeks 1–8 的 dropback pass plays（snap→出手）+ PFF scouting；官方 demo（edge rusher get-off）明确"不是提交模板"；21 票选题清单给了 20+ 进攻/防守方向（365497 / 360659 / 359079）。
+- **口径问题**：`pff_positionLinedUp`、`pff_passCoverage*`、screen pass 是否排除、frame 长度、周数据缺失（369849 / 373948 / 364365）。
+- **争议**：bias concerns（18 评论）与"不公平竞赛"公开信（12 评论）指向数据范围/参与公平性（359200 / 366229）。
+
+## 图表证据
+
+本场 0 张归档图（0/0），**图证缺口已登记**（官方 demo 的 play GIF 未归档）。
+
 ## 出处
 
 - 官方欢迎帖（数据范围与赛道设置）：https://www.kaggle.com/competitions/nfl-big-data-bowl-2023/discussion/359079
@@ -29,3 +40,5 @@
 - 官方潜在选题清单：https://www.kaggle.com/competitions/nfl-big-data-bowl-2023/discussion/365497
 - 历届获奖作品档案：https://www.kaggle.com/competitions/nfl-big-data-bowl-2023/discussion/361175
 - 录像复盘（与 Kevin Boothe）：https://www.kaggle.com/competitions/nfl-big-data-bowl-2023/discussion/362714
+- bias concerns 讨论：https://www.kaggle.com/competitions/nfl-big-data-bowl-2023/discussion/359200
+- PFF 字段口径：https://www.kaggle.com/competitions/nfl-big-data-bowl-2023/discussion/369849

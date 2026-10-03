@@ -27,8 +27,23 @@ Kore 2022 的 Beta 阶段：四人/两人房间中控制舰队采矿、建造船
 - 小规模 beta 赛是低竞争试验场；正式版规则变化时策略再迭代。
 - RL 不是 agent 赛的默认答案（与 Kore 正式版、Orbit Wars 的预算判断一致）。
 
+## 轻读结论（2026-10 补）
+
+- **1st（规则型，58 票）**：七模块顺序——船坞防御（算清最小补兵/从最近船坞调兵）、船坞进攻、直接拦截、相邻攻击（牺牲换 2–3 倍伤害）、扩张、按 kore/turn 选矿线、爆兵；最终开源代码（317737）。
+- **DQN tf.js 基线**：输入 2×8 全局摘要（kore/船数/船坞数/阶段标志），输出 4 个宏动作（do nothing/mine/build ship/build shipyard）交规则执行；MLP 16→100→100→4 = 12,204 参数；稳定到 400 回合、偶尔胜简单 bot（317289）。
+- **社区反思**：Q-learning 完全没打出成绩，分数主要来自改官方示例；延迟奖励（返航才结算 kore）是 RL 难点（317955）。
+- **赛制**：beta 无奖励、4p→2p、延期一周；50+ 队只有 1 个公开 notebook，榜首疑似官方基线（313582 / 316993 / 315572 / 315962）。
+
+## 图表证据
+
+本场 0 张归档图（0/0），**图证缺口已登记**（1st 的示意图为站外图床）。
+
 ## 出处
 
 - 1st：规则模块全拆解：https://www.kaggle.com/competitions/kore-2022-beta/discussion/317737
 - 社区反思：从 q-learning 到"官方示例微改"：https://www.kaggle.com/competitions/kore-2022-beta/discussion/317955
 - DQN tf.js 基线分享：https://www.kaggle.com/competitions/kore-2022-beta/discussion/317289
+- 官方欢迎（无奖励 beta 定位）：https://www.kaggle.com/competitions/kore-2022-beta/discussion/313582
+- 4p→2p 调整：https://www.kaggle.com/competitions/kore-2022-beta/discussion/316993
+- beta 延期一周：https://www.kaggle.com/competitions/kore-2022-beta/discussion/315572
+- 公开分享率讨论：https://www.kaggle.com/competitions/kore-2022-beta/discussion/315962
