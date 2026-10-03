@@ -42,7 +42,28 @@
 - 时间序列的验证不是随机切，而是"测试前一周"这类结构对齐。
 - 特征选择可以顺带把"训练数据该切哪块"一起搜出来。
 
-## 7. 出处
+## 8. 轻读结论（2026-10 补）
+
+**一句话**：交通拥堵时空预测的朴素基线极强：**按（时间×地点）取历史中位数，不做任何 ML 就有 LB 4.967**，RF/ExtraTrees/Huber 全打不过；1st 用**似然编码 + 多窗口滞后 + Optuna 特征与训练子集搜索**的单 LGBM 夺冠，但私榜大洗牌（前 20 名普遍跳 300+ 位），作者自认运气。
+
+- 基线（310642，68 票）：先跑聚合基线；时间序列要用"其他行"（早晨预测下午）。
+- 1st（316271）：单 LGBM 无后处理；似然编码（hour-minute × 地点）+ 方向组合的多窗口滞后（3/5/10 天 + 扩展）；Optuna 300 trial 做特征开关 + "只用 day 0/同时刻"训练切片；验证=测试前一周对齐。
+- 3rd（317661）：TimeSeriesSplit + 7/14 天滞后 + fastai tabular（8 epoch、lr 0.005677、[1066,931]、batch 256）。
+- 其他：Spark RF 5.320（313882）；新手汇编含无代码均值基线、GroupTimeSeriesSplit、TFT、SARIMA（312463）。
+- 社区：公私榜位移（316245）、中位数 fold 集成（313420）、循环特征（310407）。
+
+**裁决**：时空题先跑"时间×地点"聚合基线；特征是滞后 + 分组似然编码；把训练切片当超参；MAE 用中位数聚合折预测；对洗牌留冗余。
+
+**悬案**：2nd/4th–10th 未收录；1st 编码未做防泄漏（作者自承）；本场 0 图。
+
+## 9. 图表证据
+
+无可用图证（本场归档 0 图，图证缺口已登记）。
+
+## 10. 出处
 
 - 1st：Disbelief（lag/似然编码 + Optuna）：https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/316271
 - 能多简单就多简单（中位数基线）：https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/310642
+- 3rd：TimeSeriesSplit + fastai：https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/317661
+- 新手汇编（31 票）：https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/312463
+- 中位数 fold 集成（5 票）：https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/313420
