@@ -3,7 +3,7 @@
 > 选取规则：材料密度（正文数/方案帖数/机制帖数/图片数）× 系列重要性 × 主题平衡。
 > 计分明细见 `analysis/_tier_a_scored.csv`（票数项已封顶）。
 > 状态：⬜ 未开始 ｜ 🔄 进行中 ｜ ✅ 完成（深读 + 笔记回写 + 图证内嵌）
-> 进度：Batch 1 ✅ 10/10 ｜ Batch 2 ✅ 10/10 ｜ Batch 3 ✅ 10/10 ｜ Batch 4 🔄 6/10 ｜ 总计 **36/60**（2026-10-03）
+> 进度：Batch 1 ✅ 10/10 ｜ Batch 2 ✅ 10/10 ｜ Batch 3 ✅ 10/10 ｜ Batch 4 🔄 7/10 ｜ 总计 **37/60**（2026-10-03）
 
 ## 批次 1（10）
 
@@ -60,7 +60,7 @@
 | 34 | `rsna-2022-cervical-spine-fracture-detection` | cv | 两阶段+分割辅助 | ✅ |
 | 35 | `uw-madison-gi-tract-image-segmentation` | cv | 部分标注 masked loss | ✅ |
 | 36 | `open-problems-multimodal` | science | IR 方法迁移到单细胞 | ✅ |
-| 37 | `open-problems-single-cell-perturbations` | science | 度量学习/对抗验证 | ⬜ |
+| 37 | `open-problems-single-cell-perturbations` | science | 度量学习/对抗验证 | ✅ |
 | 38 | `neurips-open-polymer-prediction-2025` | science | 外部数据偏移 20°C；伪标签预训练 | ⬜ |
 | 39 | `stanford-ribonanza-rna-folding` | science | 结构相似度指标 | ⬜ |
 | 40 | `waveform-inversion` | science | 物理约束 + 领域解释帖 | ⬜ |
@@ -99,6 +99,6 @@
 
 ## 进度小结
 
-- Tier A 完成：**36/60**；Batch 1–3 收官（30 场），Batch 4：**#31 isic-2024** ✅、**#32 hubmap-vasculature** ✅、**#33 rsna-2024-lumbar** ✅、**#34 rsna-2022-cervical** ✅、**#35 uw-madison-gi-tract** ✅、**#36 open-problems-multimodal** ✅（表示工程+榜单污染案例，图证 6 张）
-- Batch 4 待办：#37 open-problems-single-cell-perturbations → #40 waveform-inversion（共 4 场）
-- 图证样板：rsna-2024、rsna-2022-cervical（标签工程）、uw-madison-gi-tract（数据分层）、open-problems-multimodal（表示链+双空间训练）、isic-2024、hubmap-vasculature、UBC-OCEAN
+- Tier A 完成：**37/60**；Batch 1–3 收官（30 场），Batch 4 已完成 7 场：#31 isic-2024、#32 hubmap-vasculature、#33 rsna-2024-lumbar、#34 rsna-2022-cervical、#35 uw-madison-gi-tract、#36 open-problems-multimodal、#37 single-cell-perturbations（弱输入富集+多目标+榜单哲学，图证 6 张）
+- Batch 4 待办：#38 neurips-open-polymer → #40 waveform-inversion（共 3 场）
+- 图证样板：rsna-2024、rsna-2022-cervical、uw-madison-gi-tract、open-problems-multimodal（表示链+双空间）、single-cell-perturbations（折间难度+数据量曲线）、isic-2024、hubmap-vasculature、UBC-OCEAN
