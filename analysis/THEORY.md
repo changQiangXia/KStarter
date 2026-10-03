@@ -1,7 +1,7 @@
 # THEORY：跨场可证伪规律手册
 
-> v0.3（Batch 1–3，42 条 + 12 组张力）｜ 目标：≥25 条（已达成；Tier A 60 场完成后冻结）
-> 来源：30 篇 Tier A 深读（Batch 1：nov2022、feb2022、s5e12、jigsaw、hms、amex、optiver、petfinder、orbit-wars、rogii；Batch 2：lmsys、feedback-prize-2021、feedback-ell、otto、h&m、ubiquant、rsna-breast、vesuvius、ventilator、santa-2025；Batch 3：map-charting、llm-detect、llm-prompt-recovery、jigsaw-acrc、ai-agent-security、cmi-sleep-states、cmi-piu、cmi-behavior、psp-game-play、godaddy），每条附证据场次与数字。
+> v0.4（Batch 1–4，58 条 + 17 组张力）｜ 目标：≥25 条（已达成；Tier A 60 场完成后冻结）
+> 来源：40 篇 Tier A 深读（Batch 1–3 见 v0.3；Batch 4：isic-2024、hubmap-vasculature、rsna-2024-lumbar、rsna-2022-cervical、uw-madison-gi-tract、open-problems-multimodal、single-cell-perturbations、neurips-open-polymer-2025、stanford-ribonanza、waveform-inversion），每条附证据场次与数字。
 > 写法：命题 → 机制 → 适用范围 → 反例/张力 → 证据。
 
 ## A. 数据生成与泄漏
@@ -196,7 +196,72 @@
 - **机制**：SMAPE/相对误差指标 → 预测比值/年化率再连乘还原（消除实体水平与趋势）；比率型目标的分母口径变化（census 换版）会造成全榜系统性偏移，必须先对齐口径。
 - **证据**：godaddy（3rd 倍率+GRU 后处理 12th→3rd；Last Value 未修 census 3.2776→修正 1.4631；SMAPE 单县月贡献 ~0.0638；小县分流 last value）。
 
-**待续（Batch 4+ 补充）**：IL vs 从零自对弈的上限、联赛/PFSP 配方、量化预算算术（NF4 98.5 MiB≤100 MiB）、二次模型信任校准（rogii 7th）、合成数据"教技能"三态、更多"选择即分数"案例、Batch 4 各场新规律。
+### L43｜级联系统误差 → 训练分布增强
+- **机制**：两阶段系统中第一阶段误差不可避免（rsna-2024 层面 ±0 仅 71%）；按误差分布对中间产物做随机位移（±2 层）让第二阶段见过错位输入，把"系统误差"变成数据增强；替代方案：伪标签覆盖（rsna-2022 3rd）、坐标/尺度归一化（4th）。
+- **证据**：rsna-2024 1st（instance_number ±2，作者称 crucial）、rsna-2022（87 掩码→全量伪标→结构级标签）、polymer（外部数据偏移校正）。
+- **边界**：适用于显式两级流水线；端到端单阶段不适用（rsna-2024 7th 标题留反例，见 T13）。
+
+### L44｜按标注语义拆子模型 + 条件特异融合
+- **机制**：多部位/多条件的视角与标签语义不同（scs→sagT2+axial、nfn→sagT1、ss→axial）；统一多头会互相干扰；拆开后按条件专用融合恢复相关性。
+- **证据**：rsna-2024 4/4（1st 三类 severity、3rd Center/Side、2nd 逐目标、4th condition-separated pooling + nfn 拼接 scs/ss 输入）；uw-madison 按目标分别建模。
+
+### L45｜OOF 预测当特征必须去乐观
+- **机制**：用验证集早停/选模产生 OOF 预测时，预测携带验证集信息；直接当训练特征会让下一层过拟合 CV。修法：per-model 标准化/rank、加高斯噪声（去置信）、独立划分重算。
+- **证据**：isic-2024 1st（σ=0.1，0.02–0.12 探针扫描）、12th（加噪）；各场 stacking 的通用纪律。
+
+### L46｜实体/患者内相对特征
+- **机制**：医学/经济筛查的判别线索是"该样本对实体是否异常"；把绝对特征转成实体内相对量（z-score / LOF / KNN 距离 / 比值）比绝对值更接近指标胃口。
+- **证据**：isic-2024（LOF、KNN(k=5)、患者内标准化三队）；hubmap（椎骨体积比）；godaddy 的县规模分流为同族。
+
+### L47｜脏数据两段用法：预训练学表示、净数据学决策
+- **机制**：噪声大数据适合高 LR/轻增广/低分辨率预训练（学表示与尺度先验），干净数据用于低 LR/重增广微调（重建决策边界）；直接混训让噪声污染边界。
+- **证据**：hubmap 3rd（ds2 预训练→ds1 微调，LB +4–6%）；isic 预训练式有效 vs 混训失败（域分类器 AUC 0.99）；multimodal 同向。
+
+### L48｜后处理增益方向 = 训练数据偏差试纸
+- **机制**：某后处理（dilation/常数偏移）的增益来源可能是训练标注的系统偏差；换训练子集看增益方向是否反转即可诊断；修正数据后"红利"消失。
+- **证据**：hubmap（ds1-only dilation 有害 vs 含 ds2 有益；9th 重标 ds2 后红利消失）；polymer Tg 偏移（方向诊断 + 结构性单位变换优先）。
+
+### L49｜粗标签传播三段式
+- **机制**：小掩码子集训分割 → 伪标签覆盖全量 → 用掩码/可见性把 study 级标签传播到结构级（切片/椎骨）→ 序列模型聚合成列。
+- **证据**：rsna-2022 4/4（1st 14k 椎骨样本、3rd 体积比×骨折、5th 可见性×overall、6th CAS 伪标）；rsna-2024 的坐标传播同构。
+
+### L50｜聚合列需专门建模与校准
+- **机制**：patient_overall 等聚合目标不等于子目标 max/any；列 log-loss 需要校准的联合概率；用 mean/min/max 等聚合统计直接优化指标（metric-aware 后段）或联合输入建模。
+- **证据**：rsna-2022 5th 的 stage3 融合 +2–3 LB；1st type2（105 图联合）；6th 三路 Transformer 融合。
+
+### L51｜部分标注分层三处理
+- **机制**：部分标注有三类污染——缺失（≠空）、错误、语义模糊区；把数据子集与模型角色配对（anno-only 训精细模型、全量训鲁棒模型、模糊区规则排除）。
+- **证据**：uw-madison 1st 三分层（图证）+ 排除肠末端 5 层；3rd 只用正样本；isic 2nd 的 OOF 高损失剔除（|Δ|≥0.8，+1%）。
+
+### L52｜指标变更先改选模协议，不是改损失
+- **机制**：竞赛指标中途变化（如加 3D Hausdorff）时，旧指标选模会系统偏向"内部填满但边界粗糙"的模型；不可导/离群敏感的新指标直接当损失往往失败；优先改选模指标与后处理。
+- **证据**：uw-madison MONAI（旧 Dice 0.9108 vs 新 0.8933；换新指标选模后 LB 0.860→0.872）；3rd 的 Hausdorff loss 失败。
+
+### L53｜弱输入富集优先级：目标编码 ≥ 通用预训练表示 > 手工先验
+- **机制**：输入只有类别关键词时，先从数据学类别统计（目标编码），再引入预训练通用表示（SMILES/ChemBERTa/ModernBERT/CodeBERT）；手工领域先验受覆盖与批次效应拖累，收益不稳定。
+- **证据**：single-cell-perturbations（one-hot 在非目标编码中最优；通路/PPI 弱；Wikipedia 描述 0.656 vs ChemBERTa 0.614）；polymer（通用 0.0584 vs 化学专用 0.0634 / polyBERT 0.592）。
+
+### L54｜小样本：CV 与提交准备解耦（固定 epoch + almost-entire 重训）
+- **机制**：样本极小时早停浪费数据；CV 阶段定超参与 epoch 数，提交阶段固定预算在多个"几乎全量"子集上重训并平均——同时获得数据量与 bagging 方差削减。
+- **证据**：single-cell-perturbations #13（boostings 0.584→0.577、MLP 0.580+→0.570+；1st 数据量曲线 25%→100%：0.946→0.719）。
+
+### L55｜仿真器在环：增强器 + 自监督 + 先验
+- **机制**：已知且可快速/可微的物理生成过程可三用——变换参数生成配对样本（物理增强）、预测→仿真→比较构成自监督回路、显式反演作为先验/精修；仿真速度决定方法上限。
+- **证据**：waveform 5/5（1st Iterative Pseudo、9th CUDA 100×、2nd FWI 28.8→7.6、20th in-batch 回路）；rsna-2022 的伪标传播为弱化版。
+
+### L56｜非空间对齐任务的输入表示决定归纳偏置
+- **机制**：输入与输出无空间对应时，UNet 跳连无物理意义；多通道时间序列铺成 2D 网格 + ViT/像素重排回归是自然解；表示错误会让后续所有技巧失效。
+- **证据**：waveform 1st（重排后 CV 46.9→32.5）；ribonanza 的结构先验注入、single-cell 的表示链为同族（表示层先于模型层）。
+
+### L57｜外部数据先做重叠样本差值校正
+- **机制**：外部数据的标签尺度/口径可能整体偏移；同一分子/实体在两份数据中的标签差是直接估计量；校正（常数/isotonic/分位匹配）后再混训，并记录许可与来源。
+- **证据**：polymer 8th（91 个重叠 SMILES → Tg +20、Density −0.118）、1st 的五策略；godaddy census 口径、hubmap dilation 为同族。
+
+### L58｜相似性 CV：分离"分数水平"与"模型排序"
+- **机制**：训练集家族冗余时随机 KFold 高估绝对分数；聚类/相似性切分下绝对分数下降但相对排序可能不变——排序用于选模，水平需严格切分估计；泄漏重复样本主动清零是可信度选择。
+- **证据**：ribonanza 1st（DBSCAN 汉明 0.2 + 13% 重复清零仍夺冠）、8th（聚类 GroupKFold）、7th（相似性切分）；对照 T10。
+
+**待续（Batch 5+ 补充）**：IL vs 从零自对弈的上限、联赛/PFSP 配方、量化预算算术（NF4 98.5 MiB≤100 MiB）、二次模型信任校准（rogii 7th）、合成数据"教技能"三态、更多"选择即分数"案例、Batch 5 各场新规律。
 
 ## 张力清单（重点收录可证伪的对立）
 
@@ -204,15 +269,20 @@
 | --- | --- | --- | --- |
 | T1 | 单模/大模型 vs 大集成 | 按候选可用性与预算分层：异构候选可用时集成赢（rogii 6th 91 候选）；预算受限且表示已工程化时小模型赢（orbit-wars 13th 1.2M） | rogii 6th vs 1st；orbit-wars 13th vs 1st |
 | T2 | 灵活校准 vs 单参数校准 | 已知结构用最少参数；未知结构才上灵活模型 | nov2022（ln(w) vs isotonic） |
-| T3 | 信 CV 还是信公开榜 | 先证明 CV 无泄漏/无分布红利；公开榜只有"绝对水平"可用 | rogii 7th/26th；jigsaw；s5e12 |
+| T3 | 信 CV 还是信公开榜 | 先证明 CV 无泄漏/无分布红利；公开榜只有"绝对水平"可用；域偏移下需复现测试结构的 CV | rogii 7th/26th；jigsaw；s5e12；single-cell（CV-LB 近零相关但公私 0.98；测试来源分类器）；polymer（Tg 探针）；ribonanza（13% 重复） |
 | T4 | 合成数据有效 vs 失败 | 成败取决于生成质量与定位（2nd 结构一致性；26th 教技能；6th 生成差失败） | rogii 2nd/26th vs 6th |
 | T5 | 物理模型 vs 纯学习 | 两者都能上榜；榜单非平稳时物理先验是转移性保险 | rogii 6th/1st/3rd vs 26th |
-| T6 | 伪标签/蒸馏：增益 vs 毒药 | 预训练式（转移表示）稳；直接混训在被污染/错配分布上虚涨 CV | feedback-ell 3rd vs 5th；rogii 6th；lmsys |
+| T6 | 伪标签/蒸馏：增益 vs 毒药 | 预训练式（转移表示）稳；直接混训在被污染/错配分布上虚涨 CV；集成增益流程依赖 | feedback-ell 3rd vs 5th；rogii 6th；lmsys；single-cell 3rd（两阶段 PL 关键）vs #13（NN 无增益）；ribonanza 1st（单模型有效、集成无）vs 7th/8th（集成有效） |
 | T7 | 特征工程跨模型家族的可移植性 | 同手法（time_id 均值）在 GBDT 有效、在 Transformer 失效——须按家族定向验证 | ubiquant 1st/2nd vs 3rd |
-| T8 | 外部数据：有效 vs 无效 | 条件性（库组合/阶段/标签口径）：混训多库 + 预训练正确用法有效；单库预训练/跨域数据无效 | rsna 1st(+0.02) vs 4th/6th；vesuvius 6th（IR 训练 +0.01，IR 预训练伤） |
+| T8 | 外部数据：有效 vs 无效 | 条件性（库组合/阶段/标签口径/许可）：预训练与校正后混训有效，未校正混训无效 | rsna 1st(+0.02) vs 4th/6th；vesuvius 6th；polymer（+20/−0.118 校正；通用预训练）；multimodal（CLR/预训练 vs 混训）；ribonanza（EX 私榜无增益） |
 | T9 | 结构化约束（对称/晶格）：脚手架 vs 信仰 | 用作搜索脚手架有效；当作终态约束会封顶（实验裁决） | santa（A HS 24 核实验；1st 的自我疑问） |
-| T10 | 公开榜：验证集 vs 陷阱 | 由赛制决定：随机划分+足量→可用（jigsaw）；泄漏/漂移/数据错误→陷阱（llm-detect、godaddy、psp） | jigsaw-acrc vs llm-detect/godaddy/psp |
-| T11 | 使用测试数据：合法域适应 vs 违规套利 | 插补/预训练式/置信伪标签属合法域适应；利用泄漏标签或"公开榜可放大"的伪标签会反噬 | cmi-piu 14th、llm-detect 5th vs 21st（公开 0.986/私榜 0.932）；psp 泄漏上报 |
+| T10 | 公开榜：验证集 vs 陷阱 | 由赛制决定：随机划分+足量→可用（jigsaw）；泄漏/漂移/数据错误→陷阱 | jigsaw-acrc vs llm-detect/godaddy/psp；single-cell（out-of-day）；polymer（单性质事故）；ribonanza（13% 重复） |
+| T11 | 使用测试数据：合法域适应 vs 违规套利 | 插补/预训练式/置信伪标签属合法域适应；利用泄漏标签或"公开榜可放大"的伪标签会反噬；主动放弃泄漏红利可行 | cmi-piu 14th、llm-detect 5th vs 21st；psp 泄漏上报；ribonanza（13% 重复清零仍夺冠——正面案例）；polymer（探针拟合数据 bug 的合规争议） |
 | T12 | 模型容量：大集成 vs 简单模型 | 由数据信息量决定：多生成器大数据支持大集成（llm-detect/map）；高噪声小数据只支持简单模型（godaddy LR、cmi-piu） | godaddy 1st LR vs llm-detect 1st 大集成 |
+| T13 | 单阶段 vs 两阶段（医学多部位） | 两阶段稳（定位→分级）；单阶段反例缺正文 | rsna-2024 1st/3rd/4th + rsna-2022 4/4 vs 7th(539439) 标题 |
+| T14 | 3D 直训 vs 2.5D 序列（采样设计裁决） | 由 z-stride/分辨率/深度决定；融合上限最高 | rsna-2022 1st 失败 vs 6th（z-stride=1）vs 4th 标题；uw-madison 1st/5th/MONAI |
+| T15 | 数据事故：偏移利用 vs 保守对冲 | 私榜未知时对冲 + 保守校准；结构性变换（单位）优于纯常数拟合；探针有合规边界 | polymer 1st（V 曲线+raw 对冲）vs 2nd（+40；(9/5)x+32=0.068）vs 8th（拒绝仍第 8）；608250 伦理帖（未收录） |
+| T16 | 纯学习 vs 物理精修 | 本场纯 DL 胜（1st 6.9 vs 2nd 7.6），但物理精修在简单家族近完美（FlatVel<0.1）；可微物理层是未验证方向 | waveform 1st vs 2nd；扩展 T5 |
+| T17 | 榜单治理：泄漏/作弊/rescore 的应对 | 主动放弃泄漏红利与证据上报是可信度优先选择；探针/套利合规性因平台而异 | multimodal（作弊 147 票+泄漏+rescore）；ribonanza（13% 清零）；polymer（探针） |
 
-*（T5 的对立统一还缺一个"纯学习+无物理"在洗牌中存活的正面案例，待 Batch 2+ 补证或修正。）*
+*（T5/T16：仍缺"完全无物理"的正面案例；waveform 1st 虽纯 DL，但正演在环（物理增强+自监督）——物理参与已成头部主流，两者界线进一步模糊。）*
