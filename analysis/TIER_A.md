@@ -3,7 +3,7 @@
 > 选取规则：材料密度（正文数/方案帖数/机制帖数/图片数）× 系列重要性 × 主题平衡。
 > 计分明细见 `analysis/_tier_a_scored.csv`（票数项已封顶）。
 > 状态：⬜ 未开始 ｜ 🔄 进行中 ｜ ✅ 完成（深读 + 笔记回写 + 图证内嵌）
-> 进度：Batch 1–5 ✅ 50/50 ｜ Batch 6 🔄 1/10 ｜ 总计 **51/60**（2026-10-03）
+> 进度：Batch 1–5 ✅ 50/50 ｜ Batch 6 🔄 2/10 ｜ 总计 **52/60**（2026-10-03）
 
 ## 批次 1（10）
 
@@ -85,7 +85,7 @@
 | # | slug | 主题 | 为什么选它 | 状态 |
 | --- | --- | --- | --- | --- |
 | 51 | `birdclef-2022` | audio | 弱标签起步年的方法考古 | ✅ |
-| 52 | `birdclef-2025` | audio | 多轮伪标签流程化 | ⬜ |
+| 52 | `birdclef-2025` | audio | 多轮伪标签流程化 | ✅ |
 | 53 | `nfl-health-and-safety-helmet-assignment` | cv | 检测→几何映射→配准三段式（已做图证样板） | 🔄 |
 | 54 | `foursquare-location-matching` | tabular | 实体匹配四阶段 | ⬜ |
 | 55 | `predict-energy-behavior-of-prosumers` | tabular | 在线学习机制 | ⬜ |
@@ -99,6 +99,6 @@
 
 ## 进度小结
 
-- Tier A 完成：**51/60**；Batch 6 已开：#51 birdclef-2022 ✅（稀有类分组+阈值校准+BirdNET 公榜红利，图证 3 张）
-- Batch 6 待办：#52 birdclef-2025 → #60 tabular-playground-dec-2021（共 9 场）
-- 图证样板：birdclef-2022（focal/BCE 分布+逐鸟阈值）、pii、essay-scoring、nemotron、eedi、commonlit、kaggle-llm-science-exam、deep-past、g2net、ariel-2024、leap-climsim、rsna-2024、rsna-2022、uw-madison、multimodal、single-cell、polymer、ribonanza、waveform、isic-2024、hubmap、UBC-OCEAN
+- Tier A 完成：**52/60**；Batch 6：#51 birdclef-2022 ✅、#52 birdclef-2025 ✅（Noisy Student 三旋钮+多轮伪标，图证 5 张）
+- Batch 6 待办：#53 nfl-helmet → #60 tabular-playground-dec-2021（共 8 场）
+- 图证样板：birdclef-2025（Noisy Student 循环/幂变换）、birdclef-2022、pii、essay-scoring、nemotron、eedi、commonlit、kaggle-llm-science-exam、deep-past、g2net、ariel-2024、leap-climsim、rsna-2024、rsna-2022、uw-madison、multimodal、single-cell、polymer、ribonanza、waveform、isic-2024、hubmap、UBC-OCEAN
