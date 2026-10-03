@@ -12,7 +12,7 @@
 | 2 | `tabular-playground-series-feb-2022` | tabular | 随机数生成缺陷泄漏；重复样本；评估口径修正 | ✅ |
 | 3 | `playground-series-s5e12` | tabular | 刻意破坏数据 + ID 泄漏 + concept shift + post-cutoff CV | ✅ |
 | 4 | `amex-default-prediction` | tabular | 金融大场；清洗优先；蒸馏+半监督 | ✅ |
-| 5 | `optiver-realized-volatility-prediction` | tabular | 消融思维：集成只值 0.0002 | ⬜ |
+| 5 | `optiver-realized-volatility-prediction` | tabular | 消融思维 + 时间序逆向 + 近邻特征 | ✅ |
 | 6 | `jigsaw-toxic-severity-rating` | nlp | Union-Find 防泄漏；排序一致性；私榜泄漏悖论 | ✅ |
 | 7 | `petfinder-pawpularity-score` | cv | 增强配方；元数据辅助任务 | ⬜ |
 | 8 | `rogii-wellbore-geology-prediction` | science | 物理混合 + 问题重构 + 大洗牌 | ⬜ |
@@ -98,5 +98,5 @@
 
 ## 进度小结
 
-- Tier A 完成：**6/60**（nov-2022、feb-2022、s5e12、jigsaw-toxic、hms、amex）
+- Tier A 完成：**7/60**（nov-2022、feb-2022、s5e12、jigsaw-toxic、hms、amex、optiver-vol）
 - 图证样板：rsna-2024（4th 管线图）、UBC-OCEAN（13th 双骨干图）已内嵌
