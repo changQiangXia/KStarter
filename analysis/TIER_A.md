@@ -3,7 +3,7 @@
 > 选取规则：材料密度（正文数/方案帖数/机制帖数/图片数）× 系列重要性 × 主题平衡。
 > 计分明细见 `analysis/_tier_a_scored.csv`（票数项已封顶）。
 > 状态：⬜ 未开始 ｜ 🔄 进行中 ｜ ✅ 完成（深读 + 笔记回写 + 图证内嵌）
-> 进度：Batch 1 ✅ 10/10 ｜ Batch 2 ✅ 10/10 ｜ 总计 **20/60**（2026-10-03）
+> 进度：Batch 1 ✅ 10/10 ｜ Batch 2 ✅ 10/10 ｜ Batch 3 ✅ 10/10 ｜ 总计 **30/60**（2026-10-03）
 
 ## 批次 1（10）
 
@@ -48,7 +48,7 @@
 | 27 | `child-mind-institute-problematic-internet-use` | tabular | 序数标签再离散化；高方差稳健 | ✅ |
 | 28 | `cmi-detect-behavior-with-sensor-data` | tabular | 多模态传感器；缺失模式分模型 | ✅ |
 | 29 | `predict-student-performance-from-game-play` | tabular | CV 噪声量化成特征准入门槛 | ✅ |
-| 30 | `godaddy-microbusiness-density-forecasting` | tabular | 倍率建模；数据质量审计 | ⬜ |
+| 30 | `godaddy-microbusiness-density-forecasting` | tabular | 倍率建模；数据质量审计 | ✅ |
 
 ## 批次 4（10）
 
