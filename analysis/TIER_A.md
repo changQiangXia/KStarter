@@ -39,7 +39,7 @@
 
 | # | slug | 主题 | 为什么选它 | 状态 |
 | --- | --- | --- | --- | --- |
-| 21 | `map-charting-student-math-misunderstandings` | nlp | 提示结构工程；量化+LoRA | ⬜ |
+| 21 | `map-charting-student-math-misunderstandings` | nlp | 提示结构工程；量化+LoRA | ✅ |
 | 22 | `llm-detect-ai-generated-text` | nlp | CV-LB 背离时转扩数据多样性 | ⬜ |
 | 23 | `llm-prompt-recovery` | nlp | 指标套利边界；均值基线 | ⬜ |
 | 24 | `jigsaw-agile-community-rules` | nlp | 规则测试期出现→TTT/在线蒸馏 | ⬜ |
