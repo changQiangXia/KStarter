@@ -3,7 +3,7 @@
 > 选取规则：全部 264 场归档赛事减去 Tier A 60 场；按 `analysis/_tier_a_scored.csv` 的材料密度得分降序排列。
 > 轻量深读组件（4）：逐方案对照矩阵 ｜ 共识/分歧与裁决 ｜ 证据分级 ｜ 悬案/缺口；有归档图则内嵌图证。
 > 状态：⬜ 未开始 ｜ 🔄 进行中 ｜ ✅ 完成（轻读 + notes 回写）
-> 进度：**64/204**（2026-10-03；B01–B06 完成；B07 进行中 4/10）
+> 进度：**67/204**（2026-10-03；B01–B06 完成；B07 进行中 7/10）
 
 ## 批次 B01（1–10）
 
@@ -103,9 +103,9 @@
 | 62 | `sartorius-cell-instance-segmentation` | cv | Featured | 6/8 | 42.9 | ✅ |
 | 63 | `byu-locating-bacterial-flagellar-motors-2025` | cv | Research | 6/14 | 42.8 | ✅ |
 | 64 | `stanford-rna-3d-folding-2` | science | Featured | 7/1 | 42.8 | ✅ |
-| 65 | `womens-march-mania-2022` | tabular | Featured | 6/2 | 42.7 | ⬜ |
-| 66 | `tlvmc-parkinsons-freezing-gait-prediction` | tabular | Research | 6/3 | 42.6 | ⬜ |
-| 67 | `bengaliai-speech` | audio | Research | 6/5 | 42.6 | ⬜ |
+| 65 | `womens-march-mania-2022` | tabular | Featured | 6/2 | 42.7 | ✅ |
+| 66 | `tlvmc-parkinsons-freezing-gait-prediction` | tabular | Research | 6/3 | 42.6 | ✅ |
+| 67 | `bengaliai-speech` | audio | Research | 6/5 | 42.6 | ✅ |
 | 68 | `leash-BELKA` | science | Featured | 8/10 | 42.6 | ⬜ |
 | 69 | `czii-cryo-et-object-identification` | cv | Featured | 6/11 | 42.4 | ⬜ |
 | 70 | `hull-tactical-market-prediction` | tabular | Featured | 8/11 | 42.4 | ⬜ |
