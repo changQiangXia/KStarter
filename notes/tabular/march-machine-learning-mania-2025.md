@@ -51,7 +51,25 @@
 2. **小样本 + 锦标赛制**：概率校准与稳健性优先。
 3. 与 2026 届对照可见同一赛事的稳定套路（外部评分 + 树模型 + 校准），以及逐年变化（数据源、参赛队伍）。
 
-## 7. 出处
+## 7. 轻读结论（2026-10 补）
+
+**一句话**：raddar 特征 + 简单模型 + LOSO 的系列惯例延续；2025 的焦点是"手动覆写/加注（1st）vs 纯模型（4th）"的路线之争与早期 LB 噪声。
+
+- 1st（32 票）：29 特征 XGB（eta 0.0093/depth 4/704 轮）；后处理 <85% 预测 +10%；**手动覆写 6 场男队早期比赛**（0.582→0.982 等，专家确认高种子）。
+- 4th（37 票）：LR on XGB leaves（Cauchy 净胜分）+ Laplace 平滑特征；显式规避时间/目标泄漏（弃公共 CV/spline，LOSO 仅做模型平均）；不赌博不手动。
+- 事件：可视化器（图 1）；榜单早期出现"全部猜中"的噪声（"Current first place scares me"）。
+
+**裁决**：小样本强先验下手动注入可正收益但高方差、难归因；纯模型路线更可复用；赛程早期 LB 信息量极低。
+
+**悬案**：2nd/3rd 未收录；1st 的手动覆写贡献不可分离。
+
+## 8. 图表证据
+
+![2025 男队预测括号](../../intel/march-machine-learning-mania-2025/bodies/568862_img/01.png)
+
+**图 1**（topic 568862）：可视化器括号（FL Atlantic 胜 Purdue 等）与 Brier 0.21087/0.20150。
+
+## 9. 出处
 
 - 讨论区索引：`intel/march-machine-learning-mania-2025/topics.md`（80 条）
 - 已收录 write-up（6 篇）：
@@ -59,3 +77,4 @@
   - 4th（37 票）：https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/572466
   - 历届方案与要点（47 票）：https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/562585
   - 榜单更新帖（62 票）：https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/569248
+- 轻读全本：`analysis/deep/march-machine-learning-mania-2025.md`（Tier B 轻读：对照矩阵/裁决/证据分级/悬案 + 1 图证）

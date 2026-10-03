@@ -40,7 +40,25 @@
 2. **系列赛事是复用的富矿**（同一批人、相似数据、可迁移的流程）。
 3. 关注赛制公告——规则变化会影响策略。
 
-## 6. 出处
+## 6. 轻读结论（2026-10 补）
+
+**一句话**：腹部 CT 多器官损伤检测的标准骨架 = **3D 分割→器官裁剪→2.5D CNN+RNN**，并用"器官可见性"控制软标签/帧采样。
+
+- 1st（133 票）：软标签=患者标签×器官可见度；共享编码器 + 辅助分割损失 **+0.01~0.03**；Coat/EffNetV2+GRU；切片 max 聚合；最佳单模 OOF 0.326、集成 0.31x；患者级 GroupKFold。
+- 2nd（105 票，TheoViel）：EffNetV2 判每帧器官以控帧采样；3D ResNet18 裁器官→2D CNN+RNN；RNN 直接优化指标（器官条件池化+每器官 logits）；11 类；dicomsdl GPU 流水线 <4h；公开抱怨**截止延期**。
+- 3rd（53 票）：3D seg + 器官 cube；关键三招：肝 mask 输入、按器官分 batch 的 sampler、两档 crop。
+
+**裁决**：2.5D+序列聚合优于纯 3D；辅助分割损失/可见性中间变量是抗噪核心；规则变更登记为治理事件。
+
+**悬案**：4th–9th 未收录；延期影响不可量化。
+
+## 7. 图表证据
+
+![2nd 的两段式管线](../../intel/rsna-2023-abdominal-trauma-detection/bodies/447453_img/01.png)
+
+**图 1**（topic 447453）：2D 器官分类/3D 分割 → crop → 2D/2.5D 损伤分类 → Series（LSTM+attention）→ 11 类。
+
+## 8. 出处
 
 - 讨论区索引：`intel/rsna-2023-abdominal-trauma-detection/topics.md`（80 条）
 - 已收录 write-up（6 篇）：
@@ -48,3 +66,4 @@
   - 2nd（105 票）：https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/447453
   - 3rd（53 票）：https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/447464
   - 10th（38 票）：https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/447450
+- 轻读全本：`analysis/deep/rsna-2023-abdominal-trauma-detection.md`（Tier B 轻读：对照矩阵/裁决/证据分级/悬案 + 1 图证）

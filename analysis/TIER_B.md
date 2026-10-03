@@ -3,7 +3,7 @@
 > 选取规则：全部 264 场归档赛事减去 Tier A 60 场；按 `analysis/_tier_a_scored.csv` 的材料密度得分降序排列。
 > 轻量深读组件（4）：逐方案对照矩阵 ｜ 共识/分歧与裁决 ｜ 证据分级 ｜ 悬案/缺口；有归档图则内嵌图证。
 > 状态：⬜ 未开始 ｜ 🔄 进行中 ｜ ✅ 完成（轻读 + notes 回写）
-> 进度：**20/204**（2026-10-03；**B01、B02 全部完成**，共 20 场）
+> 进度：**23/204**（2026-10-03；B01+B02 完成；B03 已完成 march-mania-2025、icr、rsna-2023）
 
 ## 批次 B01（1–10）
 
@@ -39,9 +39,9 @@
 
 | # | slug | 主题 | 类别 | 材料(正文/图) | 得分 | 状态 |
 | --- | --- | --- | --- | --- | --- | --- |
-| 21 | `march-machine-learning-mania-2025` | tabular | Featured | 6/1 | 46.4 | ⬜ |
-| 22 | `icr-identify-age-related-conditions` | tabular | Featured | 10/6 | 46.2 | ⬜ |
-| 23 | `rsna-2023-abdominal-trauma-detection` | cv | Featured | 6/7 | 46.2 | ⬜ |
+| 21 | `march-machine-learning-mania-2025` | tabular | Featured | 6/1 | 46.4 | ✅ |
+| 22 | `icr-identify-age-related-conditions` | tabular | Featured | 10/6 | 46.2 | ✅ |
+| 23 | `rsna-2023-abdominal-trauma-detection` | cv | Featured | 6/7 | 46.2 | ✅ |
 | 24 | `birdclef-2026` | audio | Research | 6/7 | 46.1 | ⬜ |
 | 25 | `llm-20-questions` | nlp | Featured | 6/12 | 46.0 | ⬜ |
 | 26 | `us-patent-phrase-to-phrase-matching` | nlp | Featured | 8/4 | 45.9 | ⬜ |

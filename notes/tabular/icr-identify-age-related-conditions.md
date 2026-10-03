@@ -68,7 +68,26 @@
 3. **分布漂移要主动找证据**：把时间当特征看重要度、对比 train/public/private 的类别占比、检查测试集独有缺失——这些是低成本高回报的检查动作。
 4. **后处理要分折验证**，整体 CV 会掩盖"只在部分子集有效"的事实。
 
-## 7. 出处
+## 7. 轻读结论（2026-10 补）
+
+**一句话**：极小样本 + 时间漂移的噪声赛——**按时间验证、控过拟合、拒绝高风险后处理**是唯一可复制心法；名次有巨大运气成分（前三方法族完全不同）。
+
+- Silver（64 票）：滑窗时间 CV：CV 0.27/公 0.17/私 0.39；各时段难度 0.13–0.42（图 1）；25 折阈值分析证明 PP 只在"简单时段"有效，私榜=困难时段 → 保守 PP 与探测伪标的两种激进提交都失败。
+- 1st（318 票）：VSN DNN + 每特征 8 神经元线性投影 + 超大 dropout + 概率重加权；10 折重复 10–30 次、每折选 2 模型对抗巨震；自认运气。
+- 2nd：**"只是 CV"**（无探测/无 PP）：time 处理 + UMAP/KMeans + 手动特征剔除 + CatBoost/XGB/TabPFN 平均。
+- 3rd/4th/9th：特征交叉 CatBoost / 递归填补+类别概率+未调参 CatBoost / XGB+TabPFN 15 折加权；9th 明说 PP 无效。
+
+**裁决**：随机 CV 高估；时间 CV 是必需；PP/阈值/伪标在私榜负期望；Greeks 等"只在训练存在的字段"是陷阱。
+
+**悬案**：382/275/224/195 票的平衡/PP 原帖未入库；官方漂移处置未收录。
+
+## 8. 图表证据
+
+![各时间段验证损失](../../intel/icr-identify-age-related-conditions/bodies/431067_img/02.png)
+
+**图 1**（topic 431067）：Validation Balanced Log-Loss vs Date（约 0.13→0.42）——时间漂移与 PP 失效的机制证据。
+
+## 9. 出处
 
 - 讨论区索引：`intel/icr-identify-age-related-conditions/topics.md`（120 条，含 382 票的平衡训练帖、275 票的指标解释帖）
 - 已收录 write-up（8 篇）：
@@ -80,3 +99,4 @@
   - 6th（30 票）：https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/431048
   - 9th（20 票）：https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/430906
   - Silver + 滑动时间 CV（64 票）：https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/431067
+- 轻读全本：`analysis/deep/icr-identify-age-related-conditions.md`（Tier B 轻读：对照矩阵/裁决/证据分级/悬案 + 1 图证）
