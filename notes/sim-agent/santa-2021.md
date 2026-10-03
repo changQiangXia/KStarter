@@ -40,7 +40,27 @@
 2. **规模小的组合问题，人脑 + 枚举可能击败算法**（4th 的示范）。
 3. 与 Santa 2024/2025 对照可见该系列的三种打法：手工枚举（2021）→ 局部搜索/模拟退火（2024）→ 遗传算法 + GPU 松弛（2025），难度随年份递增。
 
-## 6. 出处
+## 6. 轻读结论（2026-10 补）
+
+**一句话**：超级排列构造题的破局点是**规约成非对称 TSP**——固定"每个排列归属哪条字符串"后，三条 ~1760 顶点 ATSP 可直接用 LKH/Concorde 求最优；剩下的自由度全在 **2-循环的分配与切分**（2480→2440），社区还用 Concorde 的 LP 松弛证明了**非通配解下界 2440**（= 可达到的最优）。
+
+- 3rd（300509）：ATSP 规约 + 2-循环 40/40/40 分配 → 2480；切分 2-循环（把能 1 步到 `12xxxxx` 的邻居分给其他串）→ 2440（无★）；有序构造 2-循环 + 两个★ → **2430**；并转述 eijirou 的非 TSP 构造（块代价 56→重叠后 54，40 块+40 强制 = 2440）。
+- 4th（300543）：纯手工 2440；关键洞察"**120 个 `12xxxxx` 不是浪费**"（它们本身是 2-循环的一部分）；**2428（含★）**。
+- 下界（294139）：5281 顶点 ATSP + Concorde LP 松弛 = 7320/3 = **2440（非通配下界，精确算术验证）**。
+- TSP 基线（288995）：排列=城市、重叠=非对称边权，LKH-3 起步 LB 2500（图 1）。
+- 社区：2429 已死/2428 长存（40 票）、可视化（45 票）、对称性（40 票）。
+
+**裁决**：组合构造先找"能交给成熟求解器的规约"；2-循环/结构模板决定分配质量；建立可信下界以判断是否最优；含特殊道具（★）的边界要单独分析。
+
+**悬案**：1st/2nd 与 5th–10th 方案缺失；含 ★ 的下界未给出；可视化/对称性帖未细读。
+
+## 7. 图表证据
+
+![TSP 视角下的超级排列](../../intel/santa-2021/bodies/288995_img/01.png)
+
+**图 1**（topic 288995）：排列=城市、重叠=非对称距离（1234567→4567312 为 3、反向为 5；三城市间 3/5/7 与 6/2），以及字符串中三个排列的重叠示意。
+
+## 8. 出处
 
 - 讨论区索引：`intel/santa-2021/topics.md`（80 条）
 - 已收录 write-up（6 篇）：
@@ -48,3 +68,9 @@
   - 4th 手工解法（32 票）：https://www.kaggle.com/competitions/santa-2021/discussion/300543
   - 5th 与经验（31 票）：https://www.kaggle.com/competitions/santa-2021/discussion/300572
   - 21st 反思（20 票）：https://www.kaggle.com/competitions/santa-2021/discussion/300901
+  - 3rd（39 票）：https://www.kaggle.com/competitions/santa-2021/discussion/300509
+  - 解析解与背景（49 票）：https://www.kaggle.com/competitions/santa-2021/discussion/288124
+  - TSP 基线：https://www.kaggle.com/competitions/santa-2021/discussion/288995
+  - 2440 下界（57 票）：https://www.kaggle.com/competitions/santa-2021/discussion/294139
+  - 至少 2440（67 票）：https://www.kaggle.com/competitions/santa-2021/discussion/292841
+- 轻读全本：`analysis/deep/santa-2021.md`（Tier B 轻读：对照矩阵/裁决/证据分级/悬案 + 1 图证）

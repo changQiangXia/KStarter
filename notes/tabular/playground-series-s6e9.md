@@ -49,8 +49,31 @@
 - 学 Team Alicia 的验证门控思想：即使不做全套，也要"先登记假设、再跑实验、用多种子与外折复核"。
 - 公开榜适合做"噪声守卫"，不适合做目标函数——0.949 的公开第 1 最终私榜 0.943。
 
-## 7. 出处
+## 7. 轻读结论（2026-10 补）
+
+**一句话**：两层看点——技术上，"原始 1 万行小数据是生成器钥匙"（复原购买公式单独 AUC 0.9377、合成行带 LLM token 痕迹→GPT-2 BPE 特征有效）；协作上，冠军是**"1 个教练 + 5 个 AI agent、三代接力"**，靠笔记与代码库继承上下文。
+
+- 1st（745013，私榜 0.94602）：GPT-5.6 Sol+Fable5 → GPT-6-Astra+Fable5.1 → Opus 5.5；每腿 CV 0.94637→0.94656→0.94683→0.94697；**接力棒=笔记**（plan.md / progress.md / discoveries.md / **closed ideas** / cookbook）；Opus 5.5 首日派 **13 个 helper agent 读历史 + 6 个审代码**；**隐藏分数用 p→1−p（AUC 变 1−AUC）**。
+- 2nd（744815，私榜 0.94588）：**嵌套 CV + 13.4 万密封 holdout + 预注册 + 双门槛**（常规 ≥1.0u/2SE，决赛 ≥1.5u/2.5SE）；嵌套增益与私榜 **Spearman 0.991**（公榜仅 0.793）；**TabPFN-3.5 全上下文（42.8 万行/折）**、distilgpt2 的 label-free LLR 特征、**AUC-direct 融合（~2.6e10 对，直方图+FFT，+1.62u）**；反面教材：拟合公榜的文件公榜第 1（0.94945）私榜仅 0.94313。
+- 3rd（744848）：115 列 logistic 堆叠（clip→logit→L2 LR）；**income 多级取整目标编码** + 折外编码，0.9431→0.9458。
+- 社区：辛普森悖论（31 票）、诚实模型目录/OOF Hub（17 票）、"逻辑回归在原始数据上击败高级模型"（16 票）。
+
+**裁决**：合成赛先吃透原始数据与生成伪影；折外监督编码 + LR 堆叠是稳健骨架；选择提交靠嵌套验证与预注册而非公榜；agent 团队的关键是上下文继承机制。
+
+**悬案**：4th–7th/9th 方案缺失；1st 的模型细节散落在其笔记体系中；2nd 的 Final B 风险未复盘。
+
+## 8. 图表证据
+
+![2nd 的最终管线与权重](../../intel/playground-series-s6e9/bodies/744815_img/02.png)
+
+**图 1**（topic 744815）：三级管线与两份提交的权重（AUC-direct 融合含 FFT 精确成对 AUC）+1.62u。
+
+## 9. 出处
 
 - 1st：The AI Relay（5 agents / 3 generations / 1 codebase）：https://www.kaggle.com/competitions/playground-series-s6e9/discussion/745013
 - 2nd：嵌套 CV、预注册与公开榜有害实验：https://www.kaggle.com/competitions/playground-series-s6e9/discussion/744815
-- 3rd：FE 与 logistic 回归堆叠（115 列）：https://www.kaggle.com/competitions/playground-series-s6e9/discussion/744848
+  - 3rd：FE 与 logistic 回归堆叠（115 列）：https://www.kaggle.com/competitions/playground-series-s6e9/discussion/744848
+  - 8th：https://www.kaggle.com/competitions/playground-series-s6e9/discussion/744923
+  - 10th：https://www.kaggle.com/competitions/playground-series-s6e9/discussion/744826
+  - 辛普森悖论（31 票）：https://www.kaggle.com/competitions/playground-series-s6e9/discussion/738991
+- 轻读全本：`analysis/deep/playground-series-s6e9.md`（Tier B 轻读：对照矩阵/裁决/证据分级/悬案 + 2 图证）
