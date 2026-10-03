@@ -3,7 +3,7 @@
 > 选取规则：全部 264 场归档赛事减去 Tier A 60 场；按 `analysis/_tier_a_scored.csv` 的材料密度得分降序排列。
 > 轻量深读组件（4）：逐方案对照矩阵 ｜ 共识/分歧与裁决 ｜ 证据分级 ｜ 悬案/缺口；有归档图则内嵌图证。
 > 状态：⬜ 未开始 ｜ 🔄 进行中 ｜ ✅ 完成（轻读 + notes 回写）
-> 进度：**202/204**（2026-10-03；B01–B20 完成；B21 进行中 2/10）
+> 进度：**204/204**（2026-10-03；B01–B21 全部完成 ✅）
 
 ## 批次 B01（1–10）
 
@@ -311,5 +311,5 @@
 | --- | --- | --- | --- | --- | --- | --- |
 | 201 | `wikipedia-image-caption` | cv | Playground | 6/0 | 9.8 | ✅ |
 | 202 | `autonomous-agent-prediction-beta` | sim-agent | Playground | 6/0 | 9.2 | ✅ |
-| 203 | `geolifeclef-2024` | cv | Research | 6/1 | 8.5 | ⬜ |
-| 204 | `scrabble-player-rating` | tabular | Playground | 6/0 | 6.3 | ⬜ |
+| 203 | `geolifeclef-2024` | cv | Research | 6/1 | 8.5 | ✅ |
+| 204 | `scrabble-player-rating` | tabular | Playground | 6/0 | 6.3 | ✅ |

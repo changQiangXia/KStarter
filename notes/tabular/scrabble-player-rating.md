@@ -38,7 +38,21 @@
 - 时序类聚合一定写"截至当前"版本。
 - 小赛练手价值高（竞争小、问题干净），但公开答案少，适合检验自己的判断力。
 
-## 7. 出处
+## 7. 轻读结论（2026-10 补）
+
+- **301 队、RMSE**；任务是用 woogles.io 人类 vs 3 bot 对局预测玩家评分（第二个 woogles 数据赛，前作预测下一手得分）（362735）。
+- **赛后复盘**：玩家历史聚合（此前各局 min/max/mean）+ 回合特征 → LightGBM + Optuna；KFold → GroupKFold(nickname) 后分数显著变差，StratifiedGroupKFold（time_control × rating_mode × lexicon）改善有限；**作者最终选择未在归档中说明**（372554，登记为悬案）。
+- **公开基线**：metlover 的 CNN/ANN（Flux.jl）17.24339 RMSE；另有 turn 分析/basicbot/omgwords starter；社区"Advanced Dataset, FE+AGG"（difficult_word 等）（362744 / 363143）。
+- **裁决**：按 data 切分逻辑，GroupKFold 是诚实口径、KFold 是乐观上界；玩家级特征必须在分组 CV 下评估（悬案：需对照 LB 才能最终定论）。
+
+## 8. 图表证据
+
+本场 0 张归档图（0/0），**图证缺口已登记**。
+
+## 9. 出处
 
 - 赛后讨论（聚合特征与 CV 之谜）：https://www.kaggle.com/competitions/scrabble-player-rating/discussion/372554
 - 高级数据集 FE+AGG：https://www.kaggle.com/competitions/scrabble-player-rating/discussion/363143
+- 官方欢迎与任务设定：https://www.kaggle.com/competitions/scrabble-player-rating/discussion/362735
+- 公开 kernel 清单：https://www.kaggle.com/competitions/scrabble-player-rating/discussion/362744
+- RMSE 资源：https://www.kaggle.com/competitions/scrabble-player-rating/discussion/362749
