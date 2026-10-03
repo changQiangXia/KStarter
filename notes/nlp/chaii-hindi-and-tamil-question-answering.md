@@ -37,10 +37,31 @@
 2. 判断依据是：**评估集大小 + 训练集噪声**。
 3. 与 AI4Code、PII Detection 对照：低资源语言任务的通用手段是"多语言预训练模型 + 噪声处理"。
 
-## 6. 出处
+## 6. 轻读结论（2026-10 补）
+
+**一句话**：训练集小而脏、公榜大且有 3 方标注 → 1st/2nd 都**完全放弃本地 CV、只信公榜**；最大涨分来自**跨语言同源数据（TyDi 孟加拉语/泰卢固语 + MLQA）**，其次是多分词器集成与图像式增强。36th 的对照（最佳公榜提交私榜第 728）提醒这条路是双刃剑。
+
+- 1st（287923）：XLM-R/MURIL/RemBERT + **词级多数投票**；数据配方（TyDi 英/孟/泰卢固 + 2/3 chaii + SQUAD + MLQA/XQUAD、负采样 0.1、1 epoch）；发现"预训练骨干常优于其微调版"→ 单阶段；**渐进式序列长度 256→384→448 + 随机裁剪 + token cutout**；标点后处理公榜 3→2 但私榜 -0.004。
+- 2nd（287917）：**TyDi 孟/泰卢固把公榜 0.787→0.799**；15 模型逐步堆叠到 0.829（XLM-R×7 含俄语微调版、RemBERT×3、InfoXLM×3、MURIL×2）；Jaccard soft labels 造多样性。
+- 5th（288049）：chaii 过采样 5–10×；max_len 384/doc_stride 128；**CustomSoftmax 解决跨 tokenizer 的 logits 尺度差异**。
+- 36th（287919）：最佳公榜 0.795 → 私榜 0.718（728 名）；最佳 CV 提交私榜 0.744；**后处理 `expit(1.2*start)*expit(end)` 私榜 +0.004**。
+
+**裁决**：验证集质量优于训练集时可信公榜，但必须"一冲榜、一守 CV"双提交；低资源语言优先找同源采集语料；跨分词器融合要么词级投票要么分数归一化。
+
+**悬案**：3rd–35th 方案缺失；TyDi 与 chaii 是否共享内容无证据；本场 0 归档图。
+
+## 7. 图表证据
+
+无可用图证（本场归档 0 图）。
+
+## 8. 出处
 
 - 讨论区索引：`intel/chaii-hindi-and-tamil-question-answering/topics.md`（80 条）
 - 已收录 write-up（6 篇）：
   - 1st 只信公开榜（173 票）：https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/287923
   - 2nd（59 票）：https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/287917
   - 5th（47 票）：https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/288049
+  - 36th（CV vs LB 对照 + PP）：https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/287919
+  - 噪声标签（65 票）：https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/264395
+  - Tamil Jaccard 讨论（51 票）：https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/264831
+- 轻读全本：`analysis/deep/chaii-hindi-and-tamil-question-answering.md`（Tier B 轻读：对照矩阵/裁决/证据分级/悬案；图证缺口已登记）

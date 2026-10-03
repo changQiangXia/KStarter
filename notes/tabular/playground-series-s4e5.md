@@ -42,8 +42,31 @@
 - 树模型不会做加法：行内 sum/max/排序这类"显式算子特征"必须人工给。
 - 两周默认参数 + 后两周少量调参，这个时间分配比全程调参更高效。
 
-## 7. 出处
+## 7. 轻读结论（2026-10 补）
+
+**一句话**：逆向合成过程是第一步——数据来自 **Poisson 生成**，**行内特征之和（sum）几乎解释全部信号**（图 1：均值概率随 sum 0.32→0.72 单调上升，71–76 区间特殊）；随后是"行级结构特征 + 多 GBM + 稳健 Ridge 集成"。
+
+- 1st（106 票）：发现"17 个原始特征中 16 个的和仍是 Poisson"；特征 = 行 sum/std/max + **排序后的原始特征** + 计数（>6/7/8）+ 目标编码 + **groupby(sum).std() 魔特征**；删原始特征与 skew/kurt；30+ GBM；**Ridge(positive=False, fit_intercept=False) + 3 次重复 K 折 OOF** + AutoGluon OOF；末段只提交 2 次，公私榜双第 1。
+- 2nd Peaky Blenders：56 模型 blends-of-blends；LR 融合 + 子集加权入池 + 前向特征选择；最佳单模仅 0.86933。
+- AGP 1st（LightAutoML）：`fsum/fstd/fspecial1`（sum∈[71,76]）+ skew/kurt + 行内计数/分位 + 近默认 TabularAutoML。
+- AGP 2nd：H2O DriverlessAI 全自动也进前二。
+
+**裁决**：合成数据赛先做生成式逆向（逐列/行统计）；主信号常是"行级聚合量"；线性/Ridge 集成是稳定器；AutoML 输出应作为集成成员而非直接提交。
+
+**悬案**：3rd–10th 方案缺失；"0.844 一行代码"未细读；AutoGluon OOF 的单独贡献未量化。
+
+## 8. 图表证据
+
+![洪水概率 vs 行内特征和](../../intel/playground-series-s4e5/bodies/499274_img/01.png)
+
+**图 1**（topic 499274）：均值概率 vs sum（0.32→0.72 单调），71–76 区间出现偏离（红点）——sum 主信号 + `fspecial1` 特征的依据。
+
+## 9. 出处
 
 - 1st：Poisson 洞察与行和特征集成：https://www.kaggle.com/competitions/playground-series-s4e5/discussion/509043
 - 2nd：Blends of Blends：https://www.kaggle.com/competitions/playground-series-s4e5/discussion/509410
-- 第一个真正有用的特征（sum 72–75）：https://www.kaggle.com/competitions/playground-series-s4e5/discussion/499274
+  - 第一个真正有用的特征（sum 72–75）：https://www.kaggle.com/competitions/playground-series-s4e5/discussion/499274
+  - AutoML GP 1st：https://www.kaggle.com/competitions/playground-series-s4e5/discussion/500700
+  - AutoML GP 2nd（H2O）：https://www.kaggle.com/competitions/playground-series-s4e5/discussion/500549
+  - Poisson 讨论（31 票）：https://www.kaggle.com/competitions/playground-series-s4e5/discussion/499244
+- 轻读全本：`analysis/deep/playground-series-s4e5.md`（Tier B 轻读：对照矩阵/裁决/证据分级/悬案 + 1 图证）
