@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""校验 notes/ 中所有 Kaggle 讨论链接是否对应该比赛的真实 topic id。
+"""校验 notes/ 与 people/profiles/ 中所有 Kaggle 讨论链接是否对应该比赛的真实 topic id。
 
 方法：从摘要里提取 discussion 链接，解析出 slug 与 topic id，再到
 intel/<slug>/topics.json 中确认该 id 存在。防止凭记忆写错链接。
@@ -13,7 +13,7 @@ import re
 import sys
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-NOTES = ROOT / "notes"
+SCAN_DIRS = (ROOT / "notes", ROOT / "people" / "profiles")
 INTEL = ROOT / "intel"
 
 LINK = re.compile(r"https://www\.kaggle\.com/competitions/([a-zA-Z0-9\-]+)/discussion/(\d+)")
@@ -24,7 +24,8 @@ def main() -> None:
     problems: list[str] = []
     checked = 0
 
-    for note in sorted(NOTES.rglob("*.md")):
+    notes = [p for d in SCAN_DIRS if d.exists() for p in sorted(d.rglob("*.md"))]
+    for note in notes:
         text = note.read_text()
         for slug, topic_id in LINK.findall(text):
             checked += 1

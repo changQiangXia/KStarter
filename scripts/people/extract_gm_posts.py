@@ -18,7 +18,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 
 HEADER_TOPIC = re.compile(r"^Topic #(\d+):\s*(.*)$")
 HEADER_AUTHOR = re.compile(r"^\s*Author:\s*(.+?)\s*$")
-HEADER_POSTED = re.compile(r"^\s*Posted:\s*(\S+)\s*$")
+HEADER_POSTED = re.compile(r"^\s*Posted:\s*(.+?)\s*$")
 HEADER_VOTES = re.compile(r"^\s*Votes:\s*(\d+)\s+Comments:\s*(\d+)")
 COMMENT = re.compile(r"^([│ ]*)([├└]─)\s*(.+?)\s*\((\d{4}-\d{2}-\d{2}[^)]*)\)\s*(?:\[([+-]?\d+)\])?\s*$")
 
@@ -59,7 +59,7 @@ def clean_lines(lines: list[str]) -> str:
 def parse_file(path: pathlib.Path, slug: str, people: dict[str, dict], min_chars: int):
     lines = path.read_text(encoding="utf-8", errors="ignore").splitlines()
     topic_id, title, author, posted, votes = "", "", "", "", 0
-    for line in lines[:8]:
+    for line in lines[:15]:
         m = HEADER_TOPIC.match(line)
         if m:
             topic_id, title = m.group(1), m.group(2)

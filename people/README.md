@@ -10,9 +10,11 @@
 | `roster/gm_top50_<date>.csv` | 竞赛榜前 50 名单快照（rank/积分/奖牌/主页）+ `manifest.json` | ✅ |
 | `competitions/gm_competitions.csv` | 人 × 比赛 × 名次/分数/提交数/团队成员（来自公开榜） | ✅ |
 | `competitions/summary.csv` | 每人匹配到的比赛数与最佳名次 | ✅ |
+| `competitions/coverage.csv` | 每场比赛的公开榜状态（`ok`/`no_zip`）与匹配人数，边界可审计 | ✅ |
 | `posts/gm_posts.jsonl` | 归档讨论区中这些人的主题帖与评论（含日期/票数/父节点/正文） | ✅ |
 | `posts/summary.csv` | 每人发言数（主题/评论）与时间跨度 | ✅ |
-| `profiles/<handle>.md` | 个人档案：战绩表 + 公开言论 + 方法关键词 | ✅ |
+| `profiles/<handle>.md` | 个人档案：战绩表 + 比赛领域分布 + 公开言论 + 方法关键词（总览：`analysis/people/OVERVIEW.md`） | ✅ |
+| `analysis/people/PLAYBOOK.md` | 跨人专题：声音榜 / 领域×人 / 组队网络 / 高票经验帖 | ✅ |
 | `data/cache/people_lb/` | 原始 leaderboard zip/CSV 与抓取状态（脚本缓存） | ❌（gitignore） |
 
 ## 生成流程
@@ -23,11 +25,24 @@ $PY scripts/people/fetch_gm_roster.py --count 50          # 榜单快照
 $PY scripts/people/fetch_leaderboards.py                  # 264 场公开榜（断点续跑）
 $PY scripts/people/extract_gm_posts.py                    # 归档讨论区发言
 $PY scripts/people/build_gm_profiles.py                   # 人档 + 总览
+$PY scripts/people/build_people_playbook.py               # 跨人专题
+$PY scripts/verify_links.py                               # 校验 notes + 人档的讨论链接
 ```
+
+## 数据规模（2026-10-04 快照）
+
+| 指标 | 数值 |
+| --- | --- |
+| 名单 | 50 人（37 GRANDMASTER + 13 MASTER） |
+| 公开榜抓取 | 264 场 → 241 场 `ok`、23 场 `no_zip` |
+| 人-赛记录 | 1842 条，覆盖 50/50 人、236 场比赛 |
+| 公开区发言 | 2467 条 / 47 人（主题 211 + 评论 2256，2021-08 ~ 2026-10） |
+| 链接校验 | 1903 条 Kaggle 讨论链接全部命中 `intel/<slug>/topics.json` |
 
 ## 覆盖与边界
 
-- 榜单匹配只覆盖 KStarter 归档的 **264 场近 5 年比赛**；公开榜不可下载/已关闭的比赛会记录状态但不产出记录。
+- 段位口径：统计对象是**竞赛榜前 50**（2026-10-04 快照：37 名 GRANDMASTER + 13 名 MASTER），不是"全部 GM 选手"。
+- 榜单匹配只覆盖 KStarter 归档的 **264 场近 5 年比赛**；公开榜不可下载/已关闭的比赛在 `coverage.csv` 记为 `no_zip` 但不产出记录。
 - 发言只覆盖这 264 场的讨论区归档（1567 个主题、含完整评论树）；未归档比赛与站外平台不计。
 - 身份匹配：公开榜 `TeamMemberUserNames`、讨论区作者显示名，按 handle/显示名归一化匹配；团队/改名/删号会造成漏配。
 - 快照是时点数据：榜单与奖牌会变化，历史快照保留在 `roster/`。

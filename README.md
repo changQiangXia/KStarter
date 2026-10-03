@@ -18,6 +18,7 @@
 | 追一个技法的来龙去脉 | `analysis/lineage.md`（9 族 52 节点 + 传播链 + 失败传播链） |
 | 赛前避坑 / 开赛流程 | `analysis/failures.md`（12 类失败模式 + 1964 条）、`analysis/SOP.md`（操作手册） |
 | 评估结论能不能用 | `analysis/limitations.md`（材料/证据/复现边界与使用建议） |
+| 研究顶尖选手 / 按人找经验 | `people/profiles/<handle>.md`（竞赛榜前 50 人档）→ `analysis/people/PLAYBOOK.md`（跨人专题） |
 | 从零打第一场 | `LEARNING_PATH.md` + `playbook/00-通用方法论.md` |
 | 看原始材料（正文/评论/图） | `intel/<slug>/`（`topics.json` / `*.html` / `*.txt` / `*_img/`） |
 | 做一份新场次的分析 | `analysis/SOP.md` §9 复盘模板 + `templates/` |
@@ -80,6 +81,7 @@ LEARNING_PATH.md  新手分阶段路径（含跨领域迁移、黑箱迭代、�
 | `analysis/images_index.csv` | 1666 张归档图索引（路径/来源/上下文/优先级/内嵌位置） |
 | `analysis/lineage.md` / `limitations.md` | 方法谱系（52 节点） / 批判与边界 |
 | `analysis/SOP.md` | 开赛—收官操作手册（侦查/验证/指标/建模/评审交付/提交/复盘） |
+| `analysis/people/OVERVIEW.md` | 竞赛榜前 50 总览（战绩/领域/发言/方法词），明细档案见 `people/profiles/` |
 | `analysis/GOAL.md` / `DEPTH_PLAN.md` / `TIER_A.md` / `TIER_B.md` | 目标、方案、两档进度权威表 |
 | `playbook/` | 七册主题方法论（v2 增补 + 检查清单） |
 | `LEARNING_PATH.md` | 新手分阶段学习路径 |

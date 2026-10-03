@@ -111,11 +111,13 @@ def main() -> int:
     parser.add_argument("--cache", default=str(ROOT / "data" / "cache" / "people_lb"))
     parser.add_argument("--out", default=str(ROOT / "people" / "competitions" / "gm_competitions.csv"))
     parser.add_argument("--summary", default=str(ROOT / "people" / "competitions" / "summary.csv"))
+    parser.add_argument("--coverage", default=str(ROOT / "people" / "competitions" / "coverage.csv"))
     parser.add_argument("--slugs", default="")
     parser.add_argument("--limit", type=int, default=0)
     parser.add_argument("--sleep", type=float, default=0.7)
     parser.add_argument("--retries", type=int, default=2)
     parser.add_argument("--force", action="store_true", help="忽略缓存状态，重新下载")
+    parser.add_argument("--rebuild-only", action="store_true", help="不下载，仅从缓存状态重建派生结果")
     args = parser.parse_args()
 
     roster_path = pathlib.Path(args.roster) if args.roster else latest_roster(pathlib.Path(args.roster_dir))
@@ -138,6 +140,9 @@ def main() -> int:
 
     status_counter = Counter()
     for i, slug in enumerate(slugs, 1):
+        if args.rebuild_only:
+            status_counter[state.get(slug, {}).get("status", "missing")] += 1
+            continue
         if state.get(slug, {}).get("status") == "ok" and not args.force:
             status_counter["cached"] += 1
             continue
@@ -174,6 +179,16 @@ def main() -> int:
 
     per_person = Counter(r["handle"] for r in all_records)
     per_slug = Counter(r["slug"] for r in all_records)
+
+    coverage_path = pathlib.Path(args.coverage)
+    with coverage_path.open("w", newline="", encoding="utf-8") as fh:
+        writer = csv.writer(fh)
+        writer.writerow(["slug", "status", "matched_people", "matched_records"])
+        for slug in slugs:
+            info = state.get(slug, {})
+            matched_people = len({r["handle"] for r in all_records if r["slug"] == slug})
+            writer.writerow([slug, info.get("status", "missing"), matched_people, per_slug.get(slug, 0)])
+
     summary_path = pathlib.Path(args.summary)
     with summary_path.open("w", newline="", encoding="utf-8") as fh:
         writer = csv.writer(fh)
@@ -186,6 +201,7 @@ def main() -> int:
     print(f"roster: {roster_path.name} ({len(roster_rows)} people)")
     print(f"slugs: {len(slugs)} | status: {dict(status_counter)}")
     print(f"matched records: {len(all_records)} | people: {len(per_person)} | competitions: {len(per_slug)}")
+    print(f"coverage -> {coverage_path}")
     for handle, n in per_person.most_common(10):
         print(f"  {handle}: {n} competitions")
     return 0

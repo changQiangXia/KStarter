@@ -30,6 +30,29 @@ KEYWORDS = {
     "后处理/校准": r"post.?process|calibrat|clip|threshold|isotonic|裁剪|校准",
 }
 
+# 比赛标签 -> 宽领域（一场比赛可命中多个领域，取并集后按场计数）
+DOMAINS = {
+    "视觉 CV": r"computer vision|image|video|object detection|segmentation",
+    "文本 NLP": r"\bnlp\b|text|language|llm|sentiment|translation|question answering",
+    "表格/结构化": r"tabular|binary classification|multiclass classification|regression|"
+    r"roc auc|auc\b|rmse|mean squared error|accuracy score|classification",
+    "时间序列": r"time series|forecast",
+    "语音/音频": r"audio|speech|music",
+    "生物/医疗": r"biology|health|medicine|medical|biotech|protein|genomic",
+    "强化学习/博弈": r"reinforcement learning|games|video games|simulations|optimization",
+    "科学研究": r"chemistry|physics|astronomy|research|science|climate|earth",
+}
+
+
+def domains_of(tags: str) -> set[str]:
+    hits = set()
+    for tag in (tags or "").split("|"):
+        tag = tag.strip().lower()
+        for name, pattern in DOMAINS.items():
+            if re.search(pattern, tag):
+                hits.add(name)
+    return hits
+
 
 def latest_roster(roster_dir: pathlib.Path) -> pathlib.Path:
     manifest = roster_dir / "manifest.json"
@@ -52,6 +75,13 @@ def main() -> int:
 
     roster = list(csv.DictReader(latest_roster(pathlib.Path(args.roster_dir)).open(encoding="utf-8")))
     meta = {r["name"]: r for r in csv.DictReader(open(args.meta, encoding="utf-8"))}
+
+    coverage_path = ROOT / "people" / "competitions" / "coverage.csv"
+    cov_ok = cov_total = 0
+    if coverage_path.exists():
+        cov_rows = list(csv.DictReader(coverage_path.open(encoding="utf-8")))
+        cov_total = len(cov_rows)
+        cov_ok = sum(1 for r in cov_rows if r["status"] == "ok")
 
     comps = defaultdict(list)
     if pathlib.Path(args.competitions).exists():
@@ -80,6 +110,11 @@ def main() -> int:
                 if re.search(pattern, text):
                     kw_counts[name] += 1
 
+        domain_counts = Counter()
+        for r in my_comps:
+            for d in domains_of(meta.get(r["slug"], {}).get("tags", "")):
+                domain_counts[d] += 1
+
         lines = [f"# {person['display_name']}（@{handle}）", ""]
         lines.append(
             f"> 当前竞赛榜第 {person['rank']} 名 ｜ {person['tier']} ｜ 积分 {person['points']} ｜ "
@@ -103,6 +138,13 @@ def main() -> int:
             lines.append(
                 f"共匹配 **{len(my_comps)}** 场；类别分布 " + "、".join(f"{k} {v}" for k, v in cats.most_common()) + "。"
             )
+            if domain_counts:
+                lines.append("")
+                lines.append(
+                    "领域分布（按赛事标签）"
+                    + "、".join(f"{k} {v}" for k, v in domain_counts.most_common(5))
+                    + "。"
+                )
         else:
             lines.append("_在归档的 264 场公开榜中没有匹配记录（可能未参加、使用团队账号或榜单不可下载）。_")
         lines.append("")
@@ -122,8 +164,9 @@ def main() -> int:
             for r in top_posts:
                 url = f"https://www.kaggle.com/competitions/{r['slug']}/discussion/{r['topic_id']}"
                 excerpt = re.sub(r"\s+", " ", r.get("text", ""))[:130].replace("|", "/")
+                title = r.get("topic_title", "").replace("|", "/")[:40]
                 lines.append(
-                    f"| {r.get('date','')[:10]} | {r['kind']} | `{r['slug']}` | [{r.get('topic_title','')[:40]}]({url}) | "
+                    f"| {r.get('date','')[:10]} | {r['kind']} | `{r['slug']}` | [{title}]({url}) | "
                     f"{r.get('votes',0)} | {excerpt} |"
                 )
             lines.append("")
@@ -152,22 +195,23 @@ def main() -> int:
                 "posts": len(my_posts),
                 "topics": sum(1 for r in my_posts if r["kind"] == "topic"),
                 "top_kw": ", ".join(k for k, _ in kw_counts.most_common(3)),
+                "domains": ", ".join(k for k, _ in domain_counts.most_common(3)),
             }
         )
 
     overview = [
         "# Kaggle 竞赛榜前 50：人档总览（2026-10 快照）",
         "",
-        "> 数据：竞赛榜前 50 名单 + 近 5 年 264 场公开榜匹配 + 归档讨论区公开发言。",
+        f"> 数据：竞赛榜前 50 名单 + 近 5 年 {cov_ok}/{cov_total} 场可下载公开榜匹配 + 归档讨论区公开发言。",
         "> 每个人的详细档案见 `people/profiles/<handle>.md`；抓取与生成脚本见 `scripts/people/`。",
         "",
-        "| # | 选手 | 积分 | 匹配场次 | 最佳名次 | 发言 | 主题 | 高频方法词 |",
-        "| --- | --- | --- | --- | --- | --- | --- | --- |",
+        "| # | 选手 | 积分 | 匹配场次 | 最佳名次 | 领域 | 发言 | 主题 | 高频方法词 |",
+        "| --- | --- | --- | --- | --- | --- | --- | --- | --- |",
     ]
     for r in sorted(overview_rows, key=lambda x: x["rank"]):
         overview.append(
             f"| {r['rank']} | [@{r['handle']}]({next(p['user_url'] for p in roster if p['handle']==r['handle'])}) "
-            f"| {r['points']} | {r['comps']} | {r['best_rank']} | {r['posts']} | {r['topics']} | {r['top_kw']} |"
+            f"| {r['points']} | {r['comps']} | {r['best_rank']} | {r['domains']} | {r['posts']} | {r['topics']} | {r['top_kw']} |"
         )
     overview.append("")
     out = pathlib.Path(args.out_overview)
