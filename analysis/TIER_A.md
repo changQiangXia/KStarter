@@ -3,7 +3,7 @@
 > 选取规则：材料密度（正文数/方案帖数/机制帖数/图片数）× 系列重要性 × 主题平衡。
 > 计分明细见 `analysis/_tier_a_scored.csv`（票数项已封顶）。
 > 状态：⬜ 未开始 ｜ 🔄 进行中 ｜ ✅ 完成（深读 + 笔记回写 + 图证内嵌）
-> 进度：Batch 1–4 ✅ 40/40 ｜ Batch 5 🔄 3/10 ｜ 总计 **43/60**（2026-10-03）
+> 进度：Batch 1–4 ✅ 40/40 ｜ Batch 5 🔄 4/10 ｜ 总计 **44/60**（2026-10-03）
 
 ## 批次 1（10）
 
@@ -72,7 +72,7 @@
 | 41 | `ariel-data-challenge-2024` | science | 贝叶斯两年连胜；规模工程 | ✅ |
 | 42 | `leap-atmospheric-physics-ai-climsim` | science | 算力-收益对照表 | ✅ |
 | 43 | `g2net-detecting-continuous-gravitational-waves` | science | 经典匹配滤波 vs ML | ✅ |
-| 44 | `deep-past-initiative-machine-translation` | nlp | 语料工程；ByT5 零结构改动 | ⬜ |
+| 44 | `deep-past-initiative-machine-translation` | nlp | 语料工程；ByT5 零结构改动 | ✅ |
 | 45 | `kaggle-llm-science-exam` | nlp | 检索侧>模型侧 | ⬜ |
 | 46 | `commonlit-evaluate-student-summaries` | nlp | 来源分组验证 | ⬜ |
 | 47 | `eedi-mining-misconceptions-in-mathematics` | nlp | 大标签空间→检索重排 | ⬜ |
@@ -99,6 +99,6 @@
 
 ## 进度小结
 
-- Tier A 完成：**43/60**；Batch 5：#41 ariel-2024 ✅、#42 leap-climsim ✅、#43 g2net-continuous-gw ✅（纯物理功率统计量夺冠+生成痕迹灰区，图证 6 张）
-- Batch 5 待办：#44 deep-past → #50 pii-detection（共 7 场）→ Batch 6 → Tier B 204 场 → 阶段二三
-- 图证样板：g2net（功率分布/去噪/彩蛋）、ariel-2024、leap-climsim、rsna-2024、rsna-2022、uw-madison、multimodal、single-cell、polymer、ribonanza、waveform、isic-2024、hubmap、UBC-OCEAN
+- Tier A 完成：**44/60**；Batch 5：#41 ariel-2024 ✅、#42 leap-climsim ✅、#43 g2net-continuous-gw ✅、#44 deep-past ✅（数据质量决定一切/语料工程，图证 6 张）
+- Batch 5 待办：#45 kaggle-llm-science-exam → #50 pii-detection（共 6 场）→ Batch 6 → Tier B 204 场 → 阶段二三
+- 图证样板：deep-past（提取工具/跨页对齐/OCR 错误）、g2net、ariel-2024、leap-climsim、rsna-2024、rsna-2022、uw-madison、multimodal、single-cell、polymer、ribonanza、waveform、isic-2024、hubmap、UBC-OCEAN
