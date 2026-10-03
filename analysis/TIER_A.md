@@ -3,7 +3,7 @@
 > 选取规则：材料密度（正文数/方案帖数/机制帖数/图片数）× 系列重要性 × 主题平衡。
 > 计分明细见 `analysis/_tier_a_scored.csv`（票数项已封顶）。
 > 状态：⬜ 未开始 ｜ 🔄 进行中 ｜ ✅ 完成（深读 + 笔记回写 + 图证内嵌）
-> 进度：Batch 1 ✅ 10/10 ｜ Batch 2 ✅ 10/10 ｜ Batch 3 ✅ 10/10 ｜ Batch 4 ✅ 10/10 ｜ 总计 **40/60**（2026-10-03）
+> 进度：Batch 1–4 ✅ 40/40 ｜ Batch 5 🔄 1/10 ｜ 总计 **41/60**（2026-10-03）
 
 ## 批次 1（10）
 
@@ -69,7 +69,7 @@
 
 | # | slug | 主题 | 为什么选它 | 状态 |
 | --- | --- | --- | --- | --- |
-| 41 | `ariel-data-challenge-2024` | science | 贝叶斯两年连胜；规模工程 | ⬜ |
+| 41 | `ariel-data-challenge-2024` | science | 贝叶斯两年连胜；规模工程 | ✅ |
 | 42 | `leap-atmospheric-physics-ai-climsim` | science | 算力-收益对照表 | ⬜ |
 | 43 | `g2net-detecting-continuous-gravitational-waves` | science | 经典匹配滤波 vs ML | ⬜ |
 | 44 | `deep-past-initiative-machine-translation` | nlp | 语料工程；ByT5 零结构改动 | ⬜ |
@@ -99,6 +99,6 @@
 
 ## 进度小结
 
-- Tier A 完成：**40/60**；Batch 1–4 全部收官（40 场）！Batch 4：#31 isic-2024、#32 hubmap、#33 rsna-2024、#34 rsna-2022、#35 uw-madison、#36 multimodal、#37 perturbations、#38 polymer、#39 ribonanza、#40 waveform-inversion（正演在环+非对齐输入+分家族专业化，图证 6 张）
-- 下一里程碑：THEORY v0.4（Batch 4 归纳）→ Batch 5（#41–#50）
-- 图证样板：rsna-2024、rsna-2022-cervical、uw-madison、open-problems-multimodal、single-cell-perturbations、neurips-open-polymer、ribonanza、waveform-inversion、isic-2024、hubmap-vasculature、UBC-OCEAN
+- Tier A 完成：**41/60**；Batch 5 已开：#41 ariel-2024 ✅（物理反演+仿真代码逆向+不确定度工程，图证 6 张）
+- Batch 5 待办：#42 leap-climsim → #50 pii-detection（共 9 场）→ Batch 6 → Tier B 204 场 → 阶段二三
+- 图证样板：ariel-2024（信号分解/前景/NMF/新分子谱）、rsna-2024、rsna-2022、uw-madison、multimodal、single-cell、polymer、ribonanza、waveform、isic-2024、hubmap、UBC-OCEAN
