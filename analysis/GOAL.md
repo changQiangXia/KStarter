@@ -44,8 +44,8 @@
 
 ## 断点续跑指引
 
-- 当前进度（2026-10-03）：**Tier A 53/60 ✅**（Batch 1–5 全部收官；Batch 6 已完成 #51 birdclef-2022、#52 birdclef-2025、#53 nfl-helmet，均推送）；
-  **THEORY.md 已扩 v0.5（L1–L76 + T1–T21）**；下一步 Batch 6 其余 7 场（#54 foursquare → #60 tabular-playground-dec-2021）→ Tier B 204 场 → 阶段二三（images_index / OCR / claims / lineage / limitations）。
+- 当前进度（2026-10-03）：**Tier A 54/60 ✅**（Batch 1–5 全部收官；Batch 6 已完成 #51 birdclef-2022、#52 birdclef-2025、#53 nfl-helmet、#54 foursquare，均推送）；
+  **THEORY.md 已扩 v0.5（L1–L76 + T1–T21）**；下一步 Batch 6 其余 6 场（#55 predict-energy-behavior → #60 tabular-playground-dec-2021）→ Tier B 204 场 → 阶段二三（images_index / OCR / claims / lineage / limitations）。
 - 进度看 `analysis/TIER_A.md`（⬜ 未开始 / 🔄 进行中 / ✅ 完成）；已完成深读在 `analysis/deep/<slug>.md`；
   计分在 `analysis/_tier_a_scored.csv`。
 - 单场节奏：读 digest/原帖 → 写 `analysis/deep/<slug>.md`（11 组件）→ 回写 `notes/<theme>/<slug>.md`（新增"深读结论""图表证据"节）→
