@@ -46,7 +46,7 @@
 | 25 | `ai-agent-security-multi-step-tool-attacks` | nlp | 隐藏评分器；能测的测准 | ✅ |
 | 26 | `child-mind-institute-detect-sleep-states` | tabular | 下采样→模型→上采样；事件级后处理 | ✅ |
 | 27 | `child-mind-institute-problematic-internet-use` | tabular | 序数标签再离散化；高方差稳健 | ✅ |
-| 28 | `cmi-detect-behavior-with-sensor-data` | tabular | 多模态传感器；缺失模式分模型 | ⬜ |
+| 28 | `cmi-detect-behavior-with-sensor-data` | tabular | 多模态传感器；缺失模式分模型 | ✅ |
 | 29 | `predict-student-performance-from-game-play` | tabular | CV 噪声量化成特征准入门槛 | ⬜ |
 | 30 | `godaddy-microbusiness-density-forecasting` | tabular | 倍率建模；数据质量审计 | ⬜ |
 
