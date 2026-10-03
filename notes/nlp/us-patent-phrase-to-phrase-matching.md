@@ -50,7 +50,26 @@
 2. **"把候选一起给模型看"**比"逐对判断"更强（对比学习思想的朴素版本）。
 3. 相似度任务优先试 **BCE + 回归头**。
 
-## 7. 出处
+## 7. 轻读结论（2026-10 补）
+
+**一句话**：短语相似度回归的胜负手是"**同 anchor 下 targets 的相关性**"这个结构性 magic——把同组 targets（甚至带 OOF 分数）拼进上下文，pairwise 任务变成"带近邻证据"的预测。
+
+- 1st（176 票）：targets groupby (anchor,context) 拼入输入（排除自身）+ (anchor,sector) 变体；Pearson loss；AWP（第 2 轮起）+ 冻结 embedding + BI-LSTM/attention pooling + 双 LR；单模 CV 0.8627；集成私 0.8745→+LSTM 0.8775→+sector 0.8782。
+- 2nd（154 票）：stage1 拼 targets；stage2 把 **OOF 分数（×100）**当 token 拼入（推理 concat train+test）；FGM +0.002~0.005、EMA +0.001~0.003、KD；BCE/MLM/PP 无效；模型够多时 CV-LB 完全相关。
+- 5th（332418）：PET 式 prompt（YES logits 作相似度）+0.005（图 1）；8th：一次预测全部 targets。
+- 治理：代码被窃/反作弊事件（337853）。
+
+**裁决**：验证必须按 anchor 分组；AWP/FGM+EMA 稳赚；Pearson 损失优于 BCE；多样性来自信息粒度（context→sector→带分数）。
+
+**悬案**：10th/相关赛冠军未细读；"Closing the CV-LB gap"（138 票）未入库。
+
+## 8. 图表证据
+
+![5th 的 prompt 结构](../../intel/us-patent-phrase-to-phrase-matching/bodies/332418_img/01.png)
+
+**图 1**（topic 332418）："Are they similar ? ___" + [SEP]anchor[SEP]context[SEP]target，YES=1/其他=0，取 YES logits 作相似度。
+
+## 9. 出处
 
 - 讨论区索引：`intel/us-patent-phrase-to-phrase-matching/topics.md`（80 条）
 - 已收录 write-up（6 篇）：
@@ -58,3 +77,4 @@
   - 2nd（154 票）：https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/332234
   - 8th（78 票）：https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/332492
   - 10th（99 票）：https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/332273
+- 轻读全本：`analysis/deep/us-patent-phrase-to-phrase-matching.md`（Tier B 轻读：对照矩阵/裁决/证据分级/悬案 + 1 图证）

@@ -45,7 +45,25 @@
 2. **类别层级结构（分类学）是免费先验**。
 3. **全自动 agent 参赛有规则风险**（101st 被取消资格）——先读规则再动手。
 
-## 6. 出处
+## 6. 轻读结论（2026-10 补）
+
+**一句话**：Perch 蒸馏 + 5s 集成 + 多轮 Noisy Student 的标准化配方；同时是"AI 编码代理参赛边界"的治理分水岭。
+
+- 1st（169 票）：Perch v2/AudioProtoPNet cosine 蒸馏 → 微调 + 自训练（1 轮 0.946 / 2 轮 **0.950** / 3 轮 0.949）；LSS 注入标签和归一化 0.5、PL 上限 0.75、双注入器分样本；Site-22 mask +0.002；属级专家 +0.001~0.002；两个域定制验证；终分公 0.967/私 0.961。
+- 2nd（53 票）：Perch 蒸馏 +0.02 但增相关性 → 弃用保多样性；4 轮伪标；soft AUC+0.25 BCE；XC 预训练骨干破 0.930；验证不可靠（LSS AUC-LB 相关 0.2）→ LB 主信号。
+- 事件：101 名纯 Claude-Code（自动 autoresearch + 邮件授权提交）被移除；LLM 工具使用大讨论（142/60 票帖）。
+
+**裁决**：蒸馏可塑但增相关；自训练要控注入强度/来源隔离；5s 是甜点；验证优先做域拆分；"人做 idea + agent 做工程"是合规安全区。
+
+**悬案**：移除的规则依据未收录；3rd 方案缺失。
+
+## 7. 图表证据
+
+![1st 的完整管线](../../intel/birdclef-2026/bodies/704752_img/01.png)
+
+**图 1**（topic 704752）：蒸馏（Perch/AudioProtoPNet→CNN）→ 微调+自训练 → 定制后处理 → rank 集成 → 两次提交。
+
+## 8. 出处
 
 - 讨论区索引：`intel/birdclef-2026/topics.md`（80 条）
 - 已收录 write-up（6 篇）：
@@ -54,3 +72,4 @@
   - 11th 不用 Perch（46 票）：https://www.kaggle.com/competitions/birdclef-2026/discussion/704264
   - 101st 全自动 Claude-Code 方案（48 票，被取消资格）：https://www.kaggle.com/competitions/birdclef-2026/discussion/704391
   - Claude-Code 结果讨论（142 票）：https://www.kaggle.com/competitions/birdclef-2026/discussion/681146
+- 轻读全本：`analysis/deep/birdclef-2026.md`（Tier B 轻读：对照矩阵/裁决/证据分级/悬案 + 1 图证）

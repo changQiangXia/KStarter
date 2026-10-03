@@ -42,10 +42,29 @@
 2. **agent 类任务先做工程拆分与测试**，再谈策略提升。
 3. 与 Pokemon/Orbit Wars 对照：agent 比赛的胜负常由工程可控性决定。
 
-## 6. 出处
+## 6. 轻读结论（2026-10 补）
+
+**一句话**：LLM 智能体玩 20 问——**Agent Alpha 握手（协调均衡）+ 关键词概率二分 + Answerer 外挂确定性计算**是顶部标配；评测集的"重置/换词/私榜重复"制造了大量噪声。
+
+- 1st（90 票）：首问 "Is it Agent Alpha?"；116,937 名词表 + 词频×GPT-4o mini thing-ness 概率（图 1）→ 按概率二分；4.55 亿项 p(keyword,question) 表（8×4090/vllm，~$500）；Answerer=Llama-3-8B+DeepSeek-Math；两 agent 分列 1st/等价 4th。
+- 2nd（42 票）：Alpha 二分 + 纯在线 LLM 双轨；Answerer 拼写/计数题手算 + "关键词替换回主语"提升准确率；LLM 四模态提问；Alpha 关键词命中 89%、LLM 胜率 12%。
+- 事件：榜单重置+新关键词（33 票/120 评论）；私榜 7.7% 关键词与公榜重复（42 票）；Llama 3.1 hack（41 票）。
+
+**裁决**：协调协议一旦形成即自我强化；关键词分布先验可被武器化；LLM 精确计数必须外挂；评测泄漏直接冲击公平性。
+
+**悬案**：官方对重置/重复的处置未收录；9th/11th 未细读。
+
+## 7. 图表证据
+
+![私榜关键词概率热图](../../intel/llm-20-questions/bodies/531106_img/02.png)
+
+**图 1**（topic 531106）：词频排名 × thing-ness 排名 → 私榜关键词概率热图。
+
+## 8. 出处
 
 - 讨论区索引：`intel/llm-20-questions/topics.md`（80 条）
 - 已收录 write-up（6 篇）：
   - 1st（90 票）：https://www.kaggle.com/competitions/llm-20-questions/discussion/531106
   - 起步 Notebook（60 票）：https://www.kaggle.com/competitions/llm-20-questions/discussion/520429
   - 9th（30 票）：https://www.kaggle.com/competitions/llm-20-questions/discussion/529525
+- 轻读全本：`analysis/deep/llm-20-questions.md`（Tier B 轻读：对照矩阵/裁决/证据分级/悬案 + 1 图证）
