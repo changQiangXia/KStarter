@@ -31,7 +31,7 @@
 | 15 | `h-and-m-personalized-fashion-recommendations` | tabular | 推荐系统工业范本；时间切分 | ✅ |
 | 16 | `ubiquant-market-prediction` | tabular | 缺失即信息；时间衰减 | ✅ |
 | 17 | `rsna-breast-cancer-detection` | cv | 患者级分组底线；分阶段分辨率 | ✅ |
-| 18 | `vesuvius-challenge-ink-detection` | cv | 大切块+上下文；几何增强对齐 | ⬜ |
+| 18 | `vesuvius-challenge-ink-detection` | cv | 大切块+上下文；几何增强对齐 | ✅ |
 | 19 | `ventilator-pressure-prediction` | science | 控制逻辑覆盖 66%；ML 补残差 | ⬜ |
 | 20 | `santa-2025` | sim-agent | 全局+局部双层搜索；性能工程换分 | ⬜ |
 
