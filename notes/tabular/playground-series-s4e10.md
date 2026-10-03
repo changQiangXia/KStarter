@@ -43,9 +43,36 @@
 - 二级学习不一定复杂：把一级预测当 baseline 再学一次残差（CatBoost 一行参数）就能稳定涨分。
 - 提交选择是独立技能：保留多份结构不同的候选，选"CV 稳 + 结构可解释"的而非分数最高的。
 
-## 7. 出处
+## 8. 轻读结论（2026-10 补）
+
+**一句话**：贷款获批预测 = **CatBoost 一枝独秀 + 数值列全类别化**：1st 把每个模型的预测当 baseline 再训 CatBoost 残差提升器（连 CatBoost 自己也能被提升），最终 NN 堆叠 4 路预测拿私榜 0.96938；2nd/8th/10th 也都做"数值+类别双份"，而"盲混"被 GM 反复警告，LLM 全自动方案只到 top 21%。
+
+- 1st（543725）：数值+类别双份、无 FE、加原数据；三库各 10 组 Optuna 平均 + NN；CatBoost-baseline 提升（LGBM .96811→.96856、CatBoost .96972→.96997…）；最终 CV 0.97059/公 0.97344/私 0.96938。
+- 2nd（543766）：简单集成 + 谨慎提交（放弃 LB 最高版）；公开全类别 notebook 功不可没。
+- 8th（543772）：5 流水线 + AutoGluon 融合 52 OOF（私 0.96900）；减少 OOF 数到 19 反而更好。
+- 10th（543735）：4 个 GBM 栈 → LR；4 种子箱线图；不插补不 FE；原数据仅训练。
+- 社区：max_bin 提分（34 票）、数据有分组（34 票）、线性 booster 集成（33 票）、原数据提升（25 票）、避免盲混（新手贴）。
+
+**裁决**：先做"数值列类别化 + CatBoost"；用 init_score 式残差提升放大强模型；信 CV（公榜只覆盖约 8%）；权重由 OOF 决定、拒绝盲混。
+
+**悬案**：3rd–7th/9th 未收录；分组与线性 booster 帖未细读。
+
+## 9. 图表证据
+
+![10th 的 OOF AUC 箱线图](../../intel/playground-series-s4e10/bodies/543735_img/01.png)
+
+**图 1**（topic 543735）：各基模型/集成的 OOF AUC 分布（4 种子）。
+
+![8th 的模型 CV 对比](../../intel/playground-series-s4e10/bodies/543772_img/01.png)
+
+**图 2**（topic 543772）：5 条流水线的 fold/average AUC（CatBoost 系领先）。
+
+## 10. 出处
 
 - 1st：CatBoost All The Way Down：https://www.kaggle.com/competitions/playground-series-s4e10/discussion/543725
 - 2nd：简单集成与提交选择：https://www.kaggle.com/competitions/playground-series-s4e10/discussion/543766
 - LLM 全自动方案的落点：https://www.kaggle.com/competitions/playground-series-s4e10/discussion/543734
 - 10th：no blind blend 的稳健栈：https://www.kaggle.com/competitions/playground-series-s4e10/discussion/543735
+- 8th：多流水线 + AutoGluon：https://www.kaggle.com/competitions/playground-series-s4e10/discussion/543772
+- 新手提示（55 票）：https://www.kaggle.com/competitions/playground-series-s4e10/discussion/539612
+- XGBoost max_bin（34 票）：https://www.kaggle.com/competitions/playground-series-s4e10/discussion/539963

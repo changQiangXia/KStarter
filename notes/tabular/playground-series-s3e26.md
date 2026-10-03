@@ -41,8 +41,35 @@
 - 表格任务里的 NN 要"现代化"：PLE/embedding/自定义堆叠权重，而不是朴素 MLP。
 - 堆叠是"信任 + 选择"的工程：别人的好 OOF 也是资产，但要有统一折口径。
 
-## 7. 出处
+## 8. 轻读结论（2026-10 补）
+
+**一句话**：肝硬化结局三分类 = **堆叠 + 医学先验 + 现代表格 NN**：4th 用 XGB 元模型吃下 AutoGluon/LightAutoML/AutoXGB 的 OOF；2nd 用 **PLE 编码的 NN**（单模私榜 ~0.401）和"每类独立权重"的 NN 堆叠器（比简单平均 +0.004）；1st 直接把两年前的冠军方案换成伪标签版夺冠。
+
+- 1st（464865）：2021 冠军方案 + 伪标签（唯一改动）。
+- 2nd（464887）：XGB/LGBM 各 10 组超参平均；PLE + 嵌入 + 二元的 NN；堆叠 NN 权重每类独立、由全部输入计算。
+- 4th（464863）：Age 分箱/Log/MinMax；AutoGluon 1.0.1b + LightAutoML + AutoXGB + 公开 notebook OOF → 20 折 XGB 元模型；别过度调基模型。
+- 7th（465167）：LGBM+XGB 软投票 + Optuna 自定义 logloss。
+- 医学先验：检验阈值（459392，44 票）、新类别特征（22 票）、Cox 生存分析（21 票）。
+
+**裁决**：多分类 log loss 优先用元模型堆叠（含校准）；表格 NN 用 PLE/嵌入；医学阈值离散化有效；旧冠军方案 + 现代技巧是可行打法。
+
+**悬案**：3rd/5th–6th 未收录；1st 改动细节与"quick trick"未细读。
+
+## 9. 图表证据
+
+![2nd 的 level-0 PLE 网络](../../intel/playground-series-s3e26/bodies/464887_img/01.png)
+
+**图 1**（topic 464887）：PLE 分支 + 嵌入 → 1634 维 → Softmax(3)。
+
+![2nd 的堆叠网络](../../intel/playground-series-s3e26/bodies/464887_img/03.png)
+
+**图 2**（topic 464887）：每类独立权重的 NN 堆叠器。
+
+## 10. 出处
 
 - 1st：跨届复用 + 伪标签：https://www.kaggle.com/competitions/playground-series-s3e26/discussion/464865
 - 2nd：PLE 神经网络与 NN 堆叠器：https://www.kaggle.com/competitions/playground-series-s3e26/discussion/464887
 - 4th：XGB 元模型堆叠：https://www.kaggle.com/competitions/playground-series-s3e26/discussion/464863
+- 7th：软投票：https://www.kaggle.com/competitions/playground-series-s3e26/discussion/465167
+- 医学风险因子（44 票）：https://www.kaggle.com/competitions/playground-series-s3e26/discussion/459392
+- 资源合集（47 票）：https://www.kaggle.com/competitions/playground-series-s3e26/discussion/459389

@@ -22,6 +22,23 @@
 - 提前公开作品换反馈的"半开源"策略，在评审制比赛里优于憋到最后。
 - 对新手：这类比赛零算力、门槛低、竞争靠洞见而非资源，适合作为叙事能力的练兵场。
 
+## 轻读结论（2026-10 补）
+
+**一句话**：评审制分析赛的胜负在"叙事 + 洞见"，不在算力：2022 冠军用"**因子化**"（按国家分组算占比，把定性问卷变成 15 个 [0,1] 连续因子）解锁回归/相关/分布分析，开发约 70–80 小时且大部分花在开工前的选题与草图设计上；提前 2 周公开 notebook 收集反馈，赛程期清空杂事。
+
+- 冠军幕后（374157/374969/377522）：设计先行、草图验证、选题放置几天再取舍；第 3 次参赛才夺冠（2019 无奖、2020 notebook 奖）。
+- 历届获奖库（359064，53 票）：2017–2021 全部获奖 notebook 清单，是最好的选题参照。
+- 外部数据源（359047，35 票）：往届调查、Stack Overflow 调查、World Development 国家指标、Meta Kaggle、薪资数据。
+- 评审导向（359342，20 票 / 35 评论）："Charts don't talk for themselves"——图表必须配解读。
+
+**裁决**：按 rubric 先做选题与设计；用因子化放大分析维度；多源数据交叉印证洞见；提前发布换反馈。
+
+**悬案**：15 个因子清单与完整获奖名单未收录；本场 0 图。
+
+## 图表证据
+
+无可用图证（本场归档 0 图，图证缺口已登记）。
+
 ## 出处
 
 - 冠军幕后连载（一）：开发前如何构思：https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/374157
@@ -30,3 +47,5 @@
 - 历届获奖 notebook 清单：https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/359064
 - 上一届冠军作品集：https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/359075
 - 外部数据源建议：https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/359047
+- 图表需解读（20 票 / 35 评论）：https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/359342
+- 官方 Q&A（25 票 / 41 评论）：https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/358116
