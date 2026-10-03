@@ -15,7 +15,7 @@
 | 5 | `optiver-realized-volatility-prediction` | tabular | 消融思维 + 时间序逆向 + 近邻特征 | ✅ |
 | 6 | `jigsaw-toxic-severity-rating` | nlp | Union-Find 防泄漏；排序一致性；私榜泄漏悖论 | ✅ |
 | 7 | `petfinder-pawpularity-score` | cv | 增强配方；元数据辅助任务；SVR 头部特征 | ✅ |
-| 8 | `rogii-wellbore-geology-prediction` | science | 物理混合 + 问题重构 + 大洗牌 | ⬜ |
+| 8 | `rogii-wellbore-geology-prediction` | science | 物理混合 + 问题重构 + 大洗牌 | ✅ |
 | 9 | `orbit-wars` | sim-agent | 推理预算决定方法；联盟自对弈 | ✅ |
 | 10 | `hms-harmful-brain-activity-classification` | tabular | 弱标注信号→频谱→视觉模型；校准；标签来源双位移 | ✅ |
 
