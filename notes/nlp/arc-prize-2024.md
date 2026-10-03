@@ -39,7 +39,27 @@
 2. **领域长期积累很重要**：ARC 系方案逐年迭代、互相复用。
 3. 与 ARC 2025 对照可见同一系列的演进：从 TTT → 合成数据难度阶梯。
 
-## 6. 出处
+## 6. 轻读结论（2026-10 补）
+
+**一句话**：ARC 2024 的分野是 **TTT（测试时训练）+ LLM**（2nd，把小模型解出数从 11 提到 33）对 **DSL 搜索 + 树/CNN 集成**（3rd/4th）；4th 的结语承认"TTT 是当前 SOTA"。表示与规范化（多任务逼出表示、颜色重映射 +2%）比模型规模更值钱。
+
+- 2nd（Omni-ARC）：Qwen2.5-0.5B + LoRA(128) 学 6 种 ARC 任务（原任务/生成输入/examples→code/code+input→output/code→inputs/inputs→code）；每题用 n−1 样本微调 ~300 步（bs=1，每次提交 100 个微调模型）；文本化网格表示；增强投票 + 与 2020 解法集成。
+- 4th：DSL+DAG 搜索 + 决策树 + CNN；靠 2024 年更大的内核资源（30GB/12h）加深搜索、扩大集成；集成 = 多数投票 + 关键解豁免 + 按"新解题数"概率抽样。
+- 3rd：得分 40 的 notebook；强调抵抗公榜过拟合、做通用解法。
+- 21st：**颜色重映射**（按颜色频率排序重编码）给 icecuber 求解器 +2%。
+- 社区：上手参考（101 票）、如何着手（85 票）、用 LLM 得 33 分（50 票）、tiny 模型（44 票）、400k 合成题（41 票）。
+
+**裁决**：每题新规则的赛制优先投"测试时适配"；先规范表示再谈模型；集成按历史贡献加权并对关键解豁免投票。
+
+**悬案**：**1st 方案未入库**；3rd 细节在 notebook；合成数据与 tiny 模型帖未细读。
+
+## 7. 图表证据
+
+![Omni-ARC 的六种任务形式](../../intel/arc-prize-2024/bodies/545671_img/02.png)
+
+**图 1**（topic 545671）：同模型多任务训练（含 inputs→input、inputs→code 等），以逼出可复用的 ARC 表示。
+
+## 8. 出处
 
 - 讨论区索引：`intel/arc-prize-2024/topics.md`（80 条）
 - 已收录 write-up（6 篇）：
@@ -47,3 +67,8 @@
   - 3rd（18 票）：https://www.kaggle.com/competitions/arc-prize-2024/discussion/550328
   - 4th（15 票）：https://www.kaggle.com/competitions/arc-prize-2024/discussion/550414
   - SOTA 方法综述（13 票）：https://www.kaggle.com/competitions/arc-prize-2024/discussion/535811
+  - 2nd Omni-ARC：https://www.kaggle.com/competitions/arc-prize-2024/discussion/545671
+  - 21st 颜色重映射：https://www.kaggle.com/competitions/arc-prize-2024/discussion/550209
+  - 用 LLM 得 33 分（50 票）：https://www.kaggle.com/competitions/arc-prize-2024/discussion/512910
+  - 400k 合成题（41 票）：https://www.kaggle.com/competitions/arc-prize-2024/discussion/543953
+- 轻读全本：`analysis/deep/arc-prize-2024.md`（Tier B 轻读：对照矩阵/裁决/证据分级/悬案 + 1 图证）

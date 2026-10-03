@@ -40,7 +40,27 @@
 2. 无障碍/文档类任务的社会价值明确，且评估维度通常可分解。
 3. 与 AI4Code、Feedback 2021 对照：**结构化抽取类任务的通用套路是分阶段 + 后处理**。
 
-## 6. 出处
+## 6. 轻读结论（2026-10 补）
+
+**一句话**：图表→数据表的异质性极强——**"类型分类 + 分类型路由"是标配**（line/bar 交给 DePlot/Matcha 端到端、scatter/dot 交给目标检测/分割）；瓶颈在数据管线（标注口径、噪声、坐标定义）与合成数据，而不是模型选择。
+
+- 1st（418786）：分类 + 分类型 DePlot + scatter 检测；数据 = 竞赛（剔约 100 张噪声）+ **ICDAR 逐张复核/伪标再复核** + **自造 6.5 万合成图**；多阶段训练（全类型 12 万图 8 epoch → 类型专属二次训练；h-bar/dot 因数据不足不二次训练）；处理了"竞赛 x/y 定义与 DePlot 相反"→ 按原定义训练、推理交换；public 0.86 → private 0.72（dot 仅 0.00/0.01）。
+- 2nd（418430）：全 Matcha-base 两阶段——**adaptation（大量合成图）→ specialization（scatter / 非 scatter 两个专用模型）**；输出模板含类型/点数/x/y 序列；公开代码。
+- 3rd（418420）：团队两条路线互补（端到端 vs 检测+OCR）；scatter/dot 检测、line/bar Matcha。
+- 7th（418510）：**无外部数据**的多模型流水线（分类/文本检测/文本识别/目标检测/分割 + DePlot 兜底仅 1/559）；CV/LB 0.871/0.86、私榜 0.67。
+- 社区：**"为什么 Pix2Struct/MatCha/DePlot 训不起来"**（42 票 / 133 评论）是全场共同坑。
+
+**裁决**：按图表类型路由；散点类必须检测/分割；先修数据与坐标口径；高公榜低私榜下看分项与稳定性选提交。
+
+**悬案**：4th/5th/8th–12th 方案缺失；dot 类近乎全灭的原因未系统整理；1st 的检测细节未展开。
+
+## 7. 图表证据
+
+![2nd 的两阶段训练管线](../../intel/benetech-making-graphs-accessible/bodies/418430_img/01.png)
+
+**图 1**（topic 418430）：matcha-base → adaptation（合成图适配，兼作分类检查点）→ specialization（scatter / 非 scatter 两条专精）。
+
+## 8. 出处
 
 - 讨论区索引：`intel/benetech-making-graphs-accessible/topics.md`（80 条）
 - 已收录 write-up（6 篇）：
@@ -48,3 +68,7 @@
   - 2nd（64 票，含代码）：https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/418430
   - 3rd（54 票，Matcha + 目标检测）：https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/418420
   - 7th（51 票，不用外部数据）：https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/418510
+  - 1st（60 票）：https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/418786
+  - 6th（40 票）：https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/418466
+  - Pix2Struct 训不起来（42 票 / 133 评论）：https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/406250
+- 轻读全本：`analysis/deep/benetech-making-graphs-accessible.md`（Tier B 轻读：对照矩阵/裁决/证据分级/悬案 + 1 图证）
