@@ -43,8 +43,28 @@
 - 集成不是越多越好：找到自己的甜点区，超过就回退。
 - 合成数据的"多出来的列"往往是可逆向的：先验证是不是对已有列的确定性变换。
 
-## 7. 出处
+## 7. 轻读结论（2026-10 补）
+
+**一句话**：本场是"CV 纪律 vs 公榜污染"的教科书案例——**用加权 log-loss 替代 BA 做选择、集成规模守甜点区、公开 artifact 必须过本地 OOF**；1st 从公开 344 逆转到私榜第 1。
+
+- 1st：49/78/89 模型两版决赛；100+ 模型反而退化；LR-Logits 与 MLP 集成器最好；MLP 版 CV 最高（0.970598）但公榜更低 → 按 CV 选它夺冠。
+- 6th：92 模型 OOF 概率栈（RealMLP 24/XGB 19/CatBoost 12…），OOF 0.970718/priv 0.97054；相对最强单成员仅 +0.00037。
+- 8th：**证明加权 log-loss 的 argmax 与 BA 最优决策一致**（`argmax η_c/π_c`），用它做 CV 比 BA 低方差；不支持样本权重的模型用"除以先验"校正。
+- 25th：公开 19 模型起点 → Codex 建议两处升级（TabICLv2 微调 + OVR CatBoost）→ 20 模型，priv 排名 45→25。
+
+**裁决**：指标是 BA/F1 类时，用 proper scoring rule 做模型选择；公榜高分若超出 CV 框架上限，视为污染；集成规模有甜点区；合成列先查可逆性。
+
+**悬案**：2nd–5th/7th 缺失；1st 的 78 模型 CV 数字疑为笔误；本场 0 归档图。
+
+## 8. 图表证据
+
+无可用图证（本场归档 0 图）。
+
+## 9. 出处
 
 - 1st：Mission 300+（344→1 的纪律复盘）：https://www.kaggle.com/competitions/playground-series-s6e6/discussion/717510
 - 6th：Trusting The OOF Plateau：https://www.kaggle.com/competitions/playground-series-s6e6/discussion/716945
 - 派生特征公式（spectral_type / galaxy_population）：https://www.kaggle.com/competitions/playground-series-s6e6/discussion/703535
+- 8th（28 票，加权 log-loss）：https://www.kaggle.com/competitions/playground-series-s6e6/discussion/716756
+- 25th（26 票，公开起点+Codex 升级）：https://www.kaggle.com/competitions/playground-series-s6e6/discussion/716748
+- 轻读全本：`analysis/deep/playground-series-s6e6.md`（Tier B 轻读：对照矩阵/裁决/证据分级/悬案；图证缺口已登记）
