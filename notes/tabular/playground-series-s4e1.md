@@ -43,10 +43,33 @@
 - 想挖掘合成痕迹时，设计可复用的检查器（如"子集是否在原数据出现"），而不是手工寻找个例。
 - 同样一份数据存在"泄漏路线"与"业务路线"两条前五方案——选择路线时先确认比赛规则与自己的学习目标。
 
-## 7. 出处
+## 8. 轻读结论（2026-10 补）
+
+**一句话**：本场是"**合成数据泄漏**"教科书——2nd 用 ~1000 个"某特征子集是否原样出现在原始数据"的特征 + AutoGluon 平均拿到私榜 0.90462；1st 用单 CatBoost 20 折 + CustomerId/Surname 高基数编码夺冠；3rd 靠"全列 CatBoost 编码 + 30 折"拿第三；5th 不用泄漏、单 XGB + 窗口特征也有 0.902。
+
+- 1st（472502）：单 CatBoost ×20 折；高基数类别编码是分水岭。
+- 2nd（472496）：枚举 10 特征的 1–10 元子集检查是否出现在原数据（+CustomerId+Surname）；LGBM 0.90203 / AutoGluon 0.90378 / 二者平均 0.90462；"feeling lucky" +0.01。
+- 3rd（472413）：TF-IDF+SVD；除 Balance/HasCrCard 全部编码（Age×10、ES×100）；`has_time=True`、原数据在前；7 模型 Ridge 加权；5→30 折（约 12 小时）；原数据拼两次最佳。
+- 5th（472497）：无泄漏单 XGB（LAG/LEAD 窗口特征），CV 0.9030 / 私 0.902。
+- 17th（472636）：OpenFE 470→103 特征 + AutoGluon 三层栈 + CleanLab；私 0.90106。
+- SMOTE/SMOTEENN/ADASYN 无正收益（12 票帖）；参与数创 Playground 纪录（3632 队）。
+
+**裁决**：合成 Playground 先做痕迹分析；是否利用泄漏取决于规则与取向（不用也能进前 5）；CatBoost 编码与多折平均是稳定增益；不平衡重采样不做。
+
+**悬案**：1st 参数/编码细节缺失；paddykb 后处理原理未归档；图证仅 1 张超宽栈图。
+
+## 9. 图表证据
+
+![AutoGluon 三层栈示意](../../intel/playground-series-s4e1/bodies/472636_img/01.png)
+
+**图 1**（topic 472636）：AutoGluon "Frankenstein II" 三层堆叠（L1 基模型 → L2 集成 → L3 最终）。
+
+## 10. 出处
 
 - 1st：单 CatBoost 之路：https://www.kaggle.com/competitions/playground-series-s4e1/discussion/472502
 - 2nd：子集匹配特征：https://www.kaggle.com/competitions/playground-series-s4e1/discussion/472496
 - 3rd：CatBoost 编码大全：https://www.kaggle.com/competitions/playground-series-s4e1/discussion/472413
 - 5th：不用泄漏的窗口特征方案：https://www.kaggle.com/competitions/playground-series-s4e1/discussion/472497
+- 17th：AutoGluon + 特征选择：https://www.kaggle.com/competitions/playground-series-s4e1/discussion/472636
+- Feeling lucky（32 票）：https://www.kaggle.com/competitions/playground-series-s4e1/discussion/469859
 - SMOTE 类方法讨论：https://www.kaggle.com/competitions/playground-series-s4e1/discussion/467034

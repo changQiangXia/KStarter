@@ -42,9 +42,31 @@
 - 数据越小、洗牌越猛，"选提交"的技能权重越大（4th 直接移动 255 名）。
 - 把上一场比赛的获奖方案搬过来并不可耻——4th 明确说这是从 S3E26 迁移的。
 
-## 7. 出处
+## 8. 轻读结论（2026-10 补）
+
+**一句话**：小数据 + 20/80 划分 + Accuracy 的 Playground 经典画像——**FE 基本无效、基础编码 + XGB/LGBM 集成是主配方、信 CV 不信 LB、概率阈值化是独立增益**；4th 在洗牌中移动 255 名，靠 XGB 元堆叠 + 9 份预测逐行最大类 + Accuracy 优化拿回第 4。
+
+- 4th（480939）：AutoGluon（CatBoost_r9 权重 0.363、LGBM 0.253）+ LightAutoML + 自训 XGB/LGBM 概率作为堆叠特征，XGB 元学习器；训练 log_loss、推理按 Accuracy 优化；提交 = 9 份预测逐行取最大类；原始数据拼接。
+- 2nd（481062）：原始数据加 **4 次**；5 折 HPO → 20 折训练；只用 XGB+LGBM；概率阈值化（CV 平均权重）；伪标签/AutoML/FE/ordinal/stacking/加权集成全部自述无效。
+- 6th（480795）：树集成 + NN（不同错误模式）+ 网格搜索权重；"把公榜当一折"。
+- 24th（480927）：XGB（MEstimate）+ LGBM（one-hot）10 折集成，权重微调，不加特征；trust CV。
+- 70th（480787）：CV 0.918、提交 0.916，论证合成赛 train/test 同分布 → 可信 CV。
+- 社区：BMI 缺陷（41 票）、CALC 缺类别（33 票 / 32 评论）、multiclass vs OVA（30 票 / 32 评论）、有序标签（19 票 / 28 评论）、种子效应（15 票 / 23 评论）。
+
+**裁决**：小数据合成赛以 CV 为决策锚；FE 与复杂集成的边际收益须用 CV 严格验证；概率后处理值得单列优化。
+
+**悬案**：1st/3rd/5th 未收录；OVA 增益未细读；本场 0 图（图证缺口）。
+
+## 9. 图表证据
+
+无可用图证（本场归档 0 图，图证缺口已登记）。
+
+## 10. 出处
 
 - 4th：堆叠 + 伪标签 + 指标优化：https://www.kaggle.com/competitions/playground-series-s4e2/discussion/480939
 - 2nd：两模型 + 阈值化（含反例清单）：https://www.kaggle.com/competitions/playground-series-s4e2/discussion/481062
 - 6th：树 + NN 的稳定性组合：https://www.kaggle.com/competitions/playground-series-s4e2/discussion/480795
 - 70th：trust CV is all you need：https://www.kaggle.com/competitions/playground-series-s4e2/discussion/480787
+- 24th：简单集成 + 权重微调：https://www.kaggle.com/competitions/playground-series-s4e2/discussion/480927
+- 启动资源（91 票）：https://www.kaggle.com/competitions/playground-series-s4e2/discussion/472392
+- multiclass vs OVA（30 票）：https://www.kaggle.com/competitions/playground-series-s4e2/discussion/477862

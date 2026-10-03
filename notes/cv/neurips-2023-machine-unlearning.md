@@ -40,10 +40,41 @@
 1. **AI 安全/隐私已成为 Kaggle 独立赛道**（本场、AI Agent Security、gpt-oss 红队、RECOD 图像伪造）。
 2. **"让模型忘掉"比"让模型学会"更难**（要同时满足多个互斥目标）。
 
-## 6. 出处
+## 7. 轻读结论（2026-10 补）
+
+**一句话**：本届的实践结论是"**简单重置/蒸馏/微调 > 论文 SOTA 遗忘算法**"——6th 重置 conv1/fc + KL 蒸馏 + 三损失微调（私榜 0.07831，且不需要 forget set）；2nd 用"KL 打平 + 对抗微调"（CosineAnnealingLR +0.007）；而 5th/6th 都报告 SCRUB、RelaxLoss、class weights 等无效。
+
+- 6th（458740）：conv1/fc 在"全量 vs 仅 retain"训练下的余弦相似度为负（-0.03/-0.014）→ 重置首末层；全类预热私榜 0.07219 vs 前两类预热私榜 0.07831（后者更优）。
+- 2nd（458721）：1 轮 KL→均匀 + 8 轮对抗微调（forget 轮监督对比、温度 1.15、batch 256）；CosineAnnealingLR 使公榜 0.084→0.091。
+- 5th（458531）：Conv2D 权重转置重训 3 轮 + 伪标签微调的两路集成（246+266 模型），私榜 0.0785/0.0756；RelaxLoss、SCRUB 等失败。
+- 12th 公榜（458648）：相似度采样 bad teaching（好/坏教师 KL + 加权 + 先破坏后重建），因超时未进最终榜。
+- 治理：不给积分/奖牌（50 票 / 34 评论）、公开 notebook 同质化（23 票）、评分失败（14 票）、"少 epoch 更好"（16 票）。
+
+**裁决**：先把指标本地复现；优先简单可控的重置/蒸馏/微调方案并调好调度与温度；论文方法需要在本赛指标下重新验证；工程（超时/评分）风险要预留。
+
+**悬案**：1st/3rd/4th/7th/9th 方案未收录；官方 metric 公式未整理。
+
+## 8. 图表证据
+
+![6th 的两阶段流程](../../intel/neurips-2023-machine-unlearning/bodies/458740_img/04.png)
+
+**图 1**（topic 458740）：KL 蒸馏预热 + CE/软 CE/KL 微调。
+
+![层间权重余弦相似度](../../intel/neurips-2023-machine-unlearning/bodies/458740_img/01.png)
+
+**图 2**（topic 458740）：conv1/fc 的余弦相似度为负 → 重置首末层的依据。
+
+![双教师 bad teaching 流程](../../intel/neurips-2023-machine-unlearning/bodies/458648_img/01.png)
+
+**图 3**（topic 458648）：好/坏教师 + 相似度采样的双教师 KL 结构。
+
+## 9. 出处
 
 - 讨论区索引：`intel/neurips-2023-machine-unlearning/topics.md`（80 条）
 - 已收录 write-up（6 篇）：
   - 2nd（35 票）：https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/458721
   - 5th（30 票）：https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/458531
   - 6th 简洁方案（13 票）：https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/458740
+  - 12th 公榜（14 票）：https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/458648
+  - 论文与代码合集（45 票）：https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/438660
+  - 无积分奖牌争议（50 票）：https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/438567
