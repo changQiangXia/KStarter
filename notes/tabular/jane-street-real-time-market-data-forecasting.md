@@ -55,13 +55,31 @@
 3. **简单模型 + 严谨训练也能有竞争力**（社区里 3 层 MLP 的案例），但前提是把泛化想清楚。
 4. **善用历史赛事资料**：同类比赛的历史 write-up 是最快的入门材料。
 
-## 7. 出处
+## 7. 轻读结论（2026-10 补）
+
+**一句话**：代码赛版的非平稳金融预测——**在线学习是第一杠杆（8th：+0.008 CV）、回放窗口×频率×lr 是第二杠杆（17th 赛后修正再 +0.0012）、验证必须复刻评测期时间结构**。
+
+- 私 8th（295 票）：2 折×200 天 CV + 200 天 gap；GRU 双架构 ×3 seed 集成 LB 0.0112；辅助 responder +0.001；每日 lr=3e-4 单次更新 +0.008；推理 0.06s/步。
+- 公 17th（57 票）：symbol 轴 + time 轴双 Transformer 各 3 层；每天回放最近 7 天×7 epoch（lr 1e-4）；赛后改为"每 8 天回放 56 天"再 +0.0012。
+- 私 162nd：70% 在线 TabM MLP（每天微调 3–4 天，lr 1e-5，混旧数据防遗忘）+ 30% 静态 LightGBM（含昨日 responder 滞后特征）。
+- 简单解：单 symbol 3 层 MLP、无在线学习 = 0.0064 → 结构不是胜负手。
+
+**裁决**：同分带内架构可互换（RNN/双 Transformer/MLP+GBDT 都进前列），胜负在**更新策略、回放窗口与推理时延**；responder 结构知识只有在能转成辅助目标时才产生增益。
+
+**悬案**：top 档（0.013+）方案缺失；公开集扩展影响未量化；作弊质疑未证实。
+
+## 8. 图表证据
+
+无可用图证：本场归档 6 图均为往届汇总帖（541003）的装饰头图，无架构图/分数表；原帖内嵌图未归档。
+
+## 9. 出处
 
 - 讨论区索引：`intel/jane-street-real-time-market-data-forecasting/topics.md`（120 条）
-- 已收录 write-up（8 篇）：
+- 已收录 write-up（6 篇）：
   - 私榜 8（295 票）：https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/556542
   - 公开 17（57 票）：https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/556541
   - 私榜 162（11 票）：https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/589829
   - 简单方案能到什么水平（32 票）：https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/550849
   - 参考资料与入门材料（172 票）：https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/540437
   - 往届金融赛获奖方案汇总（48 票）：https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/541003
+- 轻读全本：`analysis/deep/jane-street-real-time-market-data-forecasting.md`（Tier B 轻读：对照矩阵/裁决/证据分级/悬案；图证缺口已登记）
