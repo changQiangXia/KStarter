@@ -44,8 +44,8 @@
 
 ## 断点续跑指引
 
-- 当前进度（2026-10-03）：**Tier A 30/60 ✅**（Batch 1–3 收官并推送）；进行中 #33 `rsna-2024-lumbar-spine-degenerative-classification`（材料 3/4 已读）；
-  待办 Batch 4 其余 9 场（#31/#32/#34–#40）→ Batch 5–6 → Tier B 204 场 → 阶段二三（images_index / OCR / claims / lineage / limitations）。
+- 当前进度（2026-10-03）：**Tier A 34/60 ✅**（Batch 1–3 收官；Batch 4 已完成 #31 isic-2024、#32 hubmap-vasculature、#33 rsna-2024-lumbar、#34 rsna-2022-cervical，均已推送，图证可渲染）；
+  待办 Batch 4 其余 6 场（#35–#40）→ Batch 5–6 → Tier B 204 场 → 阶段二三（images_index / OCR / claims / lineage / limitations）。
 - 进度看 `analysis/TIER_A.md`（⬜ 未开始 / 🔄 进行中 / ✅ 完成）；已完成深读在 `analysis/deep/<slug>.md`；
   计分在 `analysis/_tier_a_scored.csv`。
 - 单场节奏：读 digest/原帖 → 写 `analysis/deep/<slug>.md`（11 组件）→ 回写 `notes/<theme>/<slug>.md`（新增"深读结论""图表证据"节）→
