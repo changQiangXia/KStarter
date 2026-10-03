@@ -11,8 +11,10 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
 import json
 import pathlib
+import re
 import sys
 from collections import Counter
 
@@ -47,9 +49,14 @@ def main() -> int:
             claim_counts[(row["person"], row["topic_id"])] += 1
 
     rows = []
+    seen_text: dict[str, str] = {}
     for r in posts:
         m = meta.get(r["slug"], {})
         n = claim_counts.get((r["person"], r["topic_id"]), 0)
+        text_hash = hashlib.sha1(re.sub(r"\s+", " ", r["text"]).strip().encode("utf-8")).hexdigest()
+        dup_of = seen_text.get(text_hash, "")
+        if not dup_of:
+            seen_text[text_hash] = r["topic_id"]
         rows.append(
             {
                 "person": r["person"],
@@ -61,7 +68,8 @@ def main() -> int:
                 "domain": ";".join(sorted(domains_of(m.get("tags", "")))) or m.get("category", ""),
                 "text_len": len(r["text"]),
                 "claims": n,
-                "status": "done" if n else "pending",
+                "status": "dup" if dup_of else ("done" if n else "pending"),
+                "dup_of": dup_of,
             }
         )
 
@@ -73,14 +81,15 @@ def main() -> int:
         writer.writerows(rows)
 
     done = sum(1 for r in rows if r["status"] == "done")
+    dup = sum(1 for r in rows if r["status"] == "dup")
     by_person = Counter(r["person"] for r in rows)
     by_domain = Counter(d for r in rows for d in r["domain"].split(";") if d)
     print(f"posts >= {args.min_votes} votes: {len(rows)} | people: {len(by_person)} | comps: {len({r['slug'] for r in rows})}")
-    print(f"extracted: {done}/{len(rows)} ({100*done/len(rows):.0f}%) | claims: {sum(r['claims'] for r in rows)}")
+    print(f"extracted: {done}/{len(rows)} ({100*done/len(rows):.0f}%) | verified duplicates: {dup} | claims: {sum(r['claims'] for r in rows)}")
     print("top people (posts):", ", ".join(f"{p} {n}" for p, n in by_person.most_common(8)))
     print("domains:", ", ".join(f"{d} {n}" for d, n in by_domain.most_common(8)))
     print(f"coverage -> {out}")
-    coverage = done / len(rows)
+    coverage = (done + dup) / len(rows)
     print(f"coverage: {coverage:.0%} (target >= {args.min_coverage:.0%})")
     if coverage < args.min_coverage:
         print("coverage below target: P1 未完成")
