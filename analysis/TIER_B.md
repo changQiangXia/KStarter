@@ -3,7 +3,7 @@
 > 选取规则：全部 264 场归档赛事减去 Tier A 60 场；按 `analysis/_tier_a_scored.csv` 的材料密度得分降序排列。
 > 轻量深读组件（4）：逐方案对照矩阵 ｜ 共识/分歧与裁决 ｜ 证据分级 ｜ 悬案/缺口；有归档图则内嵌图证。
 > 状态：⬜ 未开始 ｜ 🔄 进行中 ｜ ✅ 完成（轻读 + notes 回写）
-> 进度：**181/204**（2026-10-03；B01–B18 完成；B19 进行中 1/10）
+> 进度：**184/204**（2026-10-03；B01–B18 完成；B19 进行中 4/10）
 
 ## 批次 B01（1–10）
 
@@ -280,9 +280,9 @@
 | # | slug | 主题 | 类别 | 材料(正文/图) | 得分 | 状态 |
 | --- | --- | --- | --- | --- | --- | --- |
 | 181 | `kaggle-measuring-agi` | other | Featured | 6/1 | 16.2 | ✅ |
-| 182 | `hotel-id-to-combat-human-trafficking-2022-fgvc9` | cv | Research | 6/0 | 16.1 | ⬜ |
-| 183 | `sorghum-id-fgvc-9` | cv | Research | 6/2 | 16.0 | ⬜ |
-| 184 | `playground-series-s3e18` | tabular | Playground | 6/1 | 15.6 | ⬜ |
+| 182 | `hotel-id-to-combat-human-trafficking-2022-fgvc9` | cv | Research | 6/0 | 16.1 | ✅ |
+| 183 | `sorghum-id-fgvc-9` | cv | Research | 6/2 | 16.0 | ✅ |
+| 184 | `playground-series-s3e18` | tabular | Playground | 6/1 | 15.6 | ✅ |
 | 185 | `lux-ai-season-2-neurips-stage-2` | sim-agent | Featured | 6/12 | 15.5 | ⬜ |
 | 186 | `nfl-big-data-bowl-2024` | other | Community | 6/1 | 15.5 | ⬜ |
 | 187 | `playground-series-s3e25` | tabular | Playground | 6/1 | 15.1 | ⬜ |

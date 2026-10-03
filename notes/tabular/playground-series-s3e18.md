@@ -39,8 +39,29 @@
 - 判定方法很便宜：各自跑一遍小调参，比较最优模型差异即可。
 - 冗余列与错误值清理在分子数据上是最先到手的分。
 
-## 7. 出处
+## 7. 轻读结论（2026-10 补）
+
+- **"两场比赛"证据（420127 图）**：EC1 上 KNN(1180) 0.6981 < LR 0.7005 < ET(12) 0.7073 < RF(45) 0.7087 < Ensemble 0.7092；EC2 上 LR 0.5773 < KNN(490) 0.5859 < RF(80) 0.5865 < ET(24) 0.5883 < Ensemble 0.5888——模型排序完全反转；EC2 最佳单模型是 **Bagged KNN**（420822）。
+- **EC2 天花板低**：11th 的 EC1 三模型 Optuna 集成 OOF 0.71205，但 EC2 集成无法超过 0.592，最终直接借公开方案，私榜 0.66095 拿第 11（423642）。
+- **清洗三件套**：删 `FpDensityMorgan1 == -666`、删重复行、删 `HeavyAtomMolWt`/`fr_COO2`（近常数冗余）→ 训练 15824 行；test 端 OOD 类别值用频率编码（419692 / 419651）。
+- **特征选择分目标**：EC1 约 19 个重要特征、EC2 约 7 个（421210）。
+- **1st 是多输出 XGB+LGBM + RepeatedMultilabelStratifiedKFold + groupby 组合特征**（432011；其帖提到的 `mixed_desc` 列不在本场数据中，疑为模板错误，已登记）。
+- **指标口径**：必须用"逐列 AUC 再平均"，堆叠 GINI 会偏乐观（421149）。
+
+## 8. 图表证据
+
+![EC1 vs EC2 模型对比](../../intel/playground-series-s3e18/bodies/420127_img/01.png)
+
+**图**（topic 420127）：同一批模型在 EC1/EC2 上排序反转——"别一键预测两个目标"的直接证据。
+
+## 9. 出处
 
 - 1st：双输出 XGB+LGBM + 重型 FE：https://www.kaggle.com/competitions/playground-series-s3e18/discussion/432011
 - 11th：两目标分别建模：https://www.kaggle.com/competitions/playground-series-s3e18/discussion/423642
 - "不是多标签，是两场比赛"论证：https://www.kaggle.com/competitions/playground-series-s3e18/discussion/420127
+- EC2 最佳单模型 Bagged KNN：https://www.kaggle.com/competitions/playground-series-s3e18/discussion/420822
+- 指标最优实现：https://www.kaggle.com/competitions/playground-series-s3e18/discussion/421149
+- EC2 少即是多：https://www.kaggle.com/competitions/playground-series-s3e18/discussion/421210
+- 中期总结：https://www.kaggle.com/competitions/playground-series-s3e18/discussion/421462
+- OOD 类别值与频率编码：https://www.kaggle.com/competitions/playground-series-s3e18/discussion/419651
+- `-666` 异常值：https://www.kaggle.com/competitions/playground-series-s3e18/discussion/419692
