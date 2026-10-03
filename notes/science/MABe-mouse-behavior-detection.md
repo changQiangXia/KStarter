@@ -42,7 +42,30 @@
 2. **不变性特征**是动物/人体姿态任务的通用关键。
 3. 与 CMI 传感器、HMS-EEG 对照：**生物信号类任务统一强调"多视角/多通道 + 分组验证 + 事件后处理"**。
 
-## 6. 出处
+## 6. 轻读结论（2026-10 补）
+
+**一句话**：多实验室行为识别——**跨 lab 不变表示 + 逐 lab×action 阈值 + 多时间尺度 NN 与 XGB 叠加**决定名次；绝对坐标/部件命名必须先归一。
+
+- 7th（92 票）：不变特征三方案（agent 中心坐标/分位缩放/距离）+ 部件改名（hip/lateral→side）+ 正/负/mask 标签；CNN+Transformer（cross/self mouse attention）；4 时间窗（~2/4/8/16s）×10 模型；NN 集成私 0.518 → **+XGB 堆叠 0.523（第 7）**。
+- 2nd（46 票）：单鼠/配对分开、T=512、BCE、lab embedding；CNN+RNN/Transformer 与 SqueezeFormer；30fps 统一（标签最近邻/特征线性）；修 AdaptableSnail 25fps+ID 交换；lab×action 阈值。
+- 3rd（52 票）：LSTM + lab embedding + ~60 特征；NN+XGB blend；阈值 OOF 网格搜索 + prob/threshold 比值 tie-break；列出可疑 magic 模式（误标/固定 15 帧/9 帧交替）但未利用。
+- 治理：ghost 队友 PSA、文件损坏、私榜未更新。
+
+**裁决**：不变特征与阈值比骨干更重要；多窗口 + XGB 二阶融合稳定加分。
+
+**悬案**：1st/4th–6th 未收录；magic 模式是否被利用未核实。
+
+## 7. 图表证据
+
+![CNN Transformer 架构](../../intel/MABe-mouse-behavior-detection/bodies/663029_img/05.png)
+
+**图 1**（topic 663029）：Agent/Target/Relationship 特征 → CNN → 位置编码 → Transformer → T×37 概率。
+
+![不同实验室 arena 差异](../../intel/MABe-mouse-behavior-detection/bodies/663029_img/02.png)
+
+**图 2**（topic 663029）：三实验室鼻子位置散点（矩形/窄矩形/圆形）——绝对坐标不可跨 lab。
+
+## 8. 出处
 
 - 讨论区索引：`intel/MABe-mouse-behavior-detection/topics.md`（80 条）
 - 已收录 write-up（6 篇）：
@@ -50,3 +73,4 @@
   - 2nd（46 票）：https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/663083
   - 3rd（52 票）：https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/663026
   - 1D 目标检测方案（42 票）：https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/609063
+- 轻读全本：`analysis/deep/MABe-mouse-behavior-detection.md`（Tier B 轻读：对照矩阵/裁决/证据分级/悬案 + 2 图证）

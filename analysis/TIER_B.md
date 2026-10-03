@@ -3,7 +3,7 @@
 > 选取规则：全部 264 场归档赛事减去 Tier A 60 场；按 `analysis/_tier_a_scored.csv` 的材料密度得分降序排列。
 > 轻量深读组件（4）：逐方案对照矩阵 ｜ 共识/分歧与裁决 ｜ 证据分级 ｜ 悬案/缺口；有归档图则内嵌图证。
 > 状态：⬜ 未开始 ｜ 🔄 进行中 ｜ ✅ 完成（轻读 + notes 回写）
-> 进度：**17/204**（2026-10-03；B01 全部完成；B02 已完成 vesuvius、GBR、lux-ai-season-3、rsna-miccai、linking-writing、birdclef-2023、lux-ai-season-2）
+> 进度：**20/204**（2026-10-03；**B01、B02 全部完成**，共 20 场）
 
 ## 批次 B01（1–10）
 
@@ -31,9 +31,9 @@
 | 15 | `linking-writing-processes-to-writing-quality` | nlp | Featured | 6/6 | 46.9 | ✅ |
 | 16 | `birdclef-2023` | audio | Research | 6/2 | 46.8 | ✅ |
 | 17 | `lux-ai-season-2` | sim-agent | Featured | 12/14（本地归档补齐） | 46.8 | ✅ |
-| 18 | `nfl-player-contact-detection` | cv | Featured | 6/8 | 46.6 | ⬜ |
-| 19 | `MABe-mouse-behavior-detection` | science | Research | 6/7 | 46.5 | ⬜ |
-| 20 | `smartphone-decimeter-2022` | tabular | Research | 6/11 | 46.5 | ⬜ |
+| 18 | `nfl-player-contact-detection` | cv | Featured | 6/8 | 46.6 | ✅ |
+| 19 | `MABe-mouse-behavior-detection` | science | Research | 6/7 | 46.5 | ✅ |
+| 20 | `smartphone-decimeter-2022` | tabular | Research | 6/11 | 46.5 | ✅ |
 
 ## 批次 B03（21–30）
 
