@@ -42,8 +42,27 @@
 - AutoML 也能"解剖"：找出内部弱模型剔除、给强模型更多时间，是低成本优化。
 - 本场与 S4E9/S4E11 构成同一个教训：**生成易、选择难**——多做提交档案与选择纪律。
 
-## 7. 出处
+## 7. 轻读结论（2026-10 补）
+
+**一句话**：近确定性任务（MCC~0.9855）拼的是**数据清洗 + 原始信号特征 + 巨量 OOF 集成 + 第 5 位小数的提交工程**。
+
+- 主赛 1st（531823）：~80 OOF 用 72；Ridge/爬山/AutoGluon；把原始数据精确解概率当特征；31 个 ≥0.98512 提交，最佳私 0.98517；CV-LB 差 0.0001–0.0002；"盲 blend 也能在百万数据上过拟合"（shakeup）。
+- AGP 1st（523656）：AutoGluon 分布式（SLURM+Ray 1000 CPU）+ TabRepo 组合 + 16 折 + log loss 早停 + 100 次后处理 + **舍入精度 6→8 位 tiebreak** → 0.98533（图 1）。
+- 社区：高缺失特征仍有价值（69 票）；原始数据集帖（49 票）。
+
+**裁决**：查原始数据源；巨量 OOF + 简单 meta；集成器精度/提交选择是独立竞争力；以 CV 为锚、盲 blend 只作保险。
+
+**悬案**：2nd/3rd 未收录；KAN 细节未细读。
+
+## 8. 图表证据
+
+![AGP 1st 总览](../../intel/playground-series-s4e8/bodies/523656_img/01.jpg)
+
+**图 1**（topic 523656）：清洗 → 默认/定制 AutoGluon（192 vCPU vs 1000 CPU）→ 贪婪后处理集成 → 提交。
+
+## 9. 出处
 
 - 1st：72 OOF 与 AG 深挖：https://www.kaggle.com/competitions/playground-series-s4e8/discussion/531823
 - #4：https://www.kaggle.com/competitions/playground-series-s4e8/discussion/531343
 - 高缺失特征仍有价值（PPS）：https://www.kaggle.com/competitions/playground-series-s4e8/discussion/523474
+- 轻读全本：`analysis/deep/playground-series-s4e8.md`（Tier B 轻读：对照矩阵/裁决/证据分级/悬案 + 1 图证）

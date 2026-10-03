@@ -41,10 +41,30 @@
 2. **两个子任务分别建模再融合**，比强行端到端更稳。
 3. 医疗表格赛的公平性主题值得关注（数据中的社会变量会影响泛化）。
 
-## 6. 出处
+## 6. 轻读结论（2026-10 补）
+
+**一句话**：生存排序的通用解法 = **P(事件) 分类 × 条件时间/排名回归 + 合并函数**；删失用 KM 权重/efs 特征显式处理；分层指标下"按组加噪声"是伪增益。
+
+- 1st（186 票）：两目标 + 27 组合 + Optuna 权重（限 0.1–1 正则）→ CV 0.6965；**LGB/XGB 最佳深度=2**（特征交互极少）；GNN(KNN-25+GraphSAGE) 与 rank-loss 变体；race 噪声提 CV 不提 LB（图 1 为 merge 曲面）。
+- 2nd（115 票）：依 SurvivalGAN 论文拆成 efs 分类 + efs_time 回归（efs 当特征、推理设 1）；R=p(efs=1)×sigmoid(−reg)；NN pairwise 损失直接逼近指标；AutoGluon Medium 也能金（私 0.697）。
+- 4th（55 票）：因子化风险公式 + Kaplan-Meier 删失权重；纯 GBDT、4h 全流程、私 0.69936。
+- 指标帖（301 票）：C-index 的配对逻辑 + 两种建模路线（合并目标 vs Cox/AFT）。
+
+**裁决**：分解框架优于端到端；合并规则与子模型同等重要；合成数据的人工结构可反直觉地帮助建模（加入 efs=0 反而提升 efs=1 回归）。
+
+**悬案**：3rd/5th 未细读；公平性评估细节缺失。
+
+## 7. 图表证据
+
+![merge 函数曲面](../../intel/equity-post-HCT-survival-predictions/bodies/566550_img/01.jpg)
+
+**图 1**（topic 566550）：z=f(x=P(efs=0), y=归一化 efs_time) 合并曲面。
+
+## 8. 出处
 
 - 讨论区索引：`intel/equity-post-HCT-survival-predictions/topics.md`（80 条）
 - 已收录 write-up（6 篇）：
   - 1st 两目标 + 集成（186 票）：https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/566550
   - 2nd（115 票）：https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/566522
   - 4th 因子化建模（55 票）：https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/566528
+- 轻读全本：`analysis/deep/equity-post-HCT-survival-predictions.md`（Tier B 轻读：对照矩阵/裁决/证据分级/悬案 + 1 图证）

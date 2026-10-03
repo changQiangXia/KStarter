@@ -40,7 +40,19 @@
 2. **领域基础模型正在成为默认起点**（病理 Phikon、医疗 MedGemma、分子 Uni-Mol/Polymer 等）。
 3. 多中心数据的泛化能力比单机构分数更重要。
 
-## 6. 图表证据：13th 方案双骨干 MIL 管线（图证）
+## 6. 轻读结论（2026-10 补）
+
+**一句话**：病理切片分类已进入"**领域基础模型特征 + MIL 聚合 + 离群检测**"范式；放大倍率对齐与 Other 类是最大考点。
+
+- 1st（Owkin，65 票）：Phikon 特征 + Chowder MIL（50/折集成，最终 65 模型）；**高熵预测判 Other**（公榜 0.59→0.64，Other 值 16.6 分）；微调 Phikon（6.5M patches/iBOT/register tokens）作多样性；发现 **8% 切片分辨率错误（×12 vs ×20，LGSC 20%）**；CV 0.8–0.9 vs LB 0.64–0.68（跨中心差距）。
+- 8th（49 票）：先理解数据；WSI/TMA 分开、TMA 降采样 2× 对齐；ArcFace 检索（~60% TMA）+ 6 分类兜底；healthy/dead 当 Other。
+- 13th（48 票）：WSI 10× 降采样 + CTransPath/LUNIT-DINO + CLAM/DSMIL；TMA ArcFace+Faiss；**嵌入距离 + 概率分布双阈值**离群；不做颜色归一化。
+
+**裁决**：FM+MIL 是标准；Other 检测必须独立且校准；WSI/TMA 尺度对齐优先；颜色归一化收益否证；调参易拟合训练中心（1st：CV 升 LB 降）。
+
+**悬案**：病理学家视角（112 票）与数据质量投诉（57 票）未细读；2nd–7th 方案缺失。
+
+## 7. 图表证据：13th 方案双骨干 MIL 管线（图证）
 
 ![UBC-OCEAN 13th place dual-backbone MIL pipeline](../../intel/UBC-OCEAN/bodies/465358_img/01.png)
 
@@ -53,10 +65,15 @@
 - 两路输出对 5 分类做**均值融合**；
 - 启示：强队用"异构骨干 + 异构 MIL 池化器"制造多样性；768/384 特征维度与池化器名称是该方案可复现的关键参数。
 
-## 7. 出处
+![1st 的流程总览](../../intel/UBC-OCEAN/bodies/466455_img/01.png)
+
+**1st（Owkin）流程**（topic 466455）：WSI/TMA → matter detection → tiling（TMA 降采样对齐 20×）→ Phikon 特征 → Chowder MIL → 五亚型 + 高熵判 Other。
+
+## 8. 出处
 
 - 讨论区索引：`intel/UBC-OCEAN/topics.md`（80 条）
 - 已收录 write-up（6 篇）：
   - 1st Owkin（65 票）：https://www.kaggle.com/competitions/UBC-OCEAN/discussion/466455
   - 8th 数据理解优先（49 票）：https://www.kaggle.com/competitions/UBC-OCEAN/discussion/465382
   - 13th（48 票）：https://www.kaggle.com/competitions/UBC-OCEAN/discussion/465358
+- 轻读全本：`analysis/deep/UBC-OCEAN.md`（Tier B 轻读：对照矩阵/裁决/证据分级/悬案 + 1 图证）
