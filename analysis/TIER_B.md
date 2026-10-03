@@ -3,7 +3,7 @@
 > 选取规则：全部 264 场归档赛事减去 Tier A 60 场；按 `analysis/_tier_a_scored.csv` 的材料密度得分降序排列。
 > 轻量深读组件（4）：逐方案对照矩阵 ｜ 共识/分歧与裁决 ｜ 证据分级 ｜ 悬案/缺口；有归档图则内嵌图证。
 > 状态：⬜ 未开始 ｜ 🔄 进行中 ｜ ✅ 完成（轻读 + notes 回写）
-> 进度：**91/204**（2026-10-03；B01–B09 完成；B10 进行中 1/10）
+> 进度：**94/204**（2026-10-03；B01–B09 完成；B10 进行中 4/10）
 
 ## 批次 B01（1–10）
 
@@ -145,9 +145,9 @@
 | # | slug | 主题 | 类别 | 材料(正文/图) | 得分 | 状态 |
 | --- | --- | --- | --- | --- | --- | --- |
 | 91 | `novozymes-enzyme-stability-prediction` | science | Featured | 8/14 | 38.8 | ✅ |
-| 92 | `march-machine-learning-mania-2023` | tabular | Featured | 6/1 | 38.6 | ⬜ |
-| 93 | `ai-mathematical-olympiad-prize` | nlp | Featured | 6/6 | 38.6 | ⬜ |
-| 94 | `nfl-big-data-bowl-2026-prediction` | cv | Featured | 6/7 | 38.1 | ⬜ |
+| 92 | `march-machine-learning-mania-2023` | tabular | Featured | 6/1 | 38.6 | ✅ |
+| 93 | `ai-mathematical-olympiad-prize` | nlp | Featured | 6/6 | 38.6 | ✅ |
+| 94 | `nfl-big-data-bowl-2026-prediction` | cv | Featured | 6/7 | 38.1 | ✅ |
 | 95 | `wsdm-cup-multilingual-chatbot-arena` | nlp | Featured | 6/2 | 38.1 | ⬜ |
 | 96 | `stable-diffusion-image-to-prompts` | cv | Featured | 6/1 | 37.1 | ⬜ |
 | 97 | `playground-series-s5e6` | tabular | Playground | 6/4 | 35.8 | ⬜ |

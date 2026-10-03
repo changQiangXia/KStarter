@@ -55,7 +55,25 @@
 2. **相对化特征是追踪类任务的标配**。
 3. **做误差分析**：知道模型在哪种场景失效，比整体分数更有价值。
 
-## 7. 出处
+## 7. 轻读结论（2026-10 补）
+
+**一句话**：球员轨迹预测的配方 = **强增强 + 不确定性友好的损失 + 双路径时空架构**；1st 只用竞赛数据（靠 **GaussianNLL** 与强增强）夺冠，3rd 用官方 2018 追踪数据按事件链重构做预训练 + 双路径时空模型。
+
+- 1st（651604）：传球前 20 帧 ×10 维动态 + 12 维静态特征；目标=末帧位移；解码器 (256,player)→1536→(32,48)→Conv1d→2+4 输出；game_id 分组 5 折×3；RAdam + EMA 0.9995；**GaussianNLL（均值+方差，softplus 保正）优于 SmoothL1**；速度/加速度辅助损失。
+- 3rd（668048）：增强 = 水平翻转/180° 旋转/**随机球员丢弃**/球内重排（打破 slot 偏置）/随机输入裁剪（头部丢 2–6 帧、保留 ≥7 尾帧）；**2018 数据按 `ball_snap→pass_forward→pass_arrived` 事件链重构**，两阶段预训练（先小特征集，再加 bridge 层用全特征微调）；架构 = 双路径（球员交互 + 个体运动）+ 时空注意力 + **4 个多任务头**；**Dropout=0、宽浅(384×2)优于窄深(128×6)**；TemporalHuber（时间衰减 e^(−0.03t)）+ 速度平滑。
+- 社区：架构讨论（57 票/57 评论）、**在线训练/结构性数据泄漏**（54 票）、评测 API 变更（36 票/49 评论）。
+
+**裁决**：轨迹预测要学不确定性（NLL/异方差）并按时间衰减加权；小数据靠增强与同构外部数据（先做事件语义对齐）；变长多智能体要用掩码 + 位置编码。
+
+**悬案**：2nd/4th/5th 方案缺失；1st 的增强清单未展开；结构性泄漏无官方结论。
+
+## 8. 图表证据
+
+![3rd 的双路径时空模型](../../intel/nfl-big-data-bowl-2026-prediction/bodies/668048_img/01.png)
+
+**图 1**（topic 668048）：双路径输入 → 时间/球员位置编码 → STEncoderBlock×2（时间+空间注意力）→ 四个多任务头。
+
+## 9. 出处
 
 - 讨论区索引：`intel/nfl-big-data-bowl-2026-prediction/topics.md`（80 条）
 - 已收录 write-up（6 篇）：
@@ -64,3 +82,8 @@
   - 私榜 4 / 公开 5（43 票）：https://www.kaggle.com/competitions/nfl-big-data-bowl-2026-prediction/discussion/651814
   - 33rd 物理先验（32 票）：https://www.kaggle.com/competitions/nfl-big-data-bowl-2026-prediction/discussion/651530
   - 数据增强方案（17 票）：https://www.kaggle.com/competitions/nfl-big-data-bowl-2026-prediction/discussion/651651
+  - 1st（651604）：https://www.kaggle.com/competitions/nfl-big-data-bowl-2026-prediction/discussion/651604
+  - 3rd（45 票）：https://www.kaggle.com/competitions/nfl-big-data-bowl-2026-prediction/discussion/668048
+  - Model architectures（57 票 / 57 评论）：https://www.kaggle.com/competitions/nfl-big-data-bowl-2026-prediction/discussion/610240
+  - 在线训练/结构性泄漏（54 票）：https://www.kaggle.com/competitions/nfl-big-data-bowl-2026-prediction/discussion/612263
+- 轻读全本：`analysis/deep/nfl-big-data-bowl-2026-prediction.md`（Tier B 轻读：对照矩阵/裁决/证据分级/悬案 + 1 图证）

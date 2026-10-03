@@ -44,7 +44,26 @@
 2. **数据与测试格式对齐**是被忽视的细节（本场：只要整数答案题）。
 3. 把 AIMO 三届连起来看：**首届比训练（SFT+ORM）→ 第二届比数据规模（1.7M/540K 筛选）→ 第三届纯推理工程**，是同一赛事三年演进的最好教材。
 
-## 6. 出处
+## 6. 轻读结论（2026-10 补）
+
+**一句话**：50 道奥数题的算力受限赛——**工具集成推理（TIR）是核心**（模型只规划、Python/SymPy 负责计算），**解码/投票策略与模型同等重要**，而**方差极大**（社区专帖："洗牌不可避免"）。
+
+- 1st（Numina/AI-MO，191 票）：DeepSeekMath-Base-7B 按 **MuMath-Code 两阶段**全参微调（Stage1 CoT → Stage2 ToRA 格式 TIR 数据，GPT-4 生成 + 执行反馈）；带执行反馈的 TIR 解码；TRL packing/ZeRO-3/8×H100 10h；验证=AMC12 83 题（解出 60–65%，5–10 种子波动 1–3%）+ AIME + MATH L4&5；**on-policy KTO 比 SFT 好几个百分点（公榜 27/50）**但未用于终版；RLOO 无效。
+- 2nd（CMU_MATH）：**SFT + ORM**——两个 DeepSeekMath-7B-RL（策略 + 奖励），奖励模型做**加权多数投票**；数据=AMC/AIME/Odyssey 整数题 + GPT-4 代码解筛选；全开源。
+- 3rd（72 票）：**不微调**，DeepSeek-Math-7B-RL + vLLM（FP16 KV cache）+ **120–160 候选** + 自研打分规则（惩罚 <10 的数字与**抄题面的数字**）+ "The final answer is \boxed{" 强制作答。
+- 社区：SymPy（86 票）、20 分不用 probing（63 票）、外部数据 21k/8.8k（68–75 票）、方差帖（70 票）、$10k 早分享奖（84 票）。
+
+**裁决**：先接工具（TIR），再优化解码与投票，最后才考虑微调/RL；模型选择用多种子内部验证；在线 RL（RLOO）不如采样+KTO。
+
+**悬案**：4th–10th 方案缺失；probing 的规模与影响未整理；提交关闭/身份验证事件无结论。
+
+## 7. 图表证据
+
+![MuMath-Code 的两阶段训练](../../intel/ai-mathematical-olympiad-prize/bodies/519303_img/01.png)
+
+**图 1**（topic 519303）：CoT 数据 → MuMath → ToRA 格式 TIR 数据（含执行失败→调试→成功循环）→ MuMath-Code。
+
+## 8. 出处
 
 - 讨论区索引：`intel/ai-mathematical-olympiad-prize/topics.md`（80 条）
 - 已收录 write-up（6 篇）：
@@ -53,3 +72,8 @@
   - 3rd（72 票）：https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/517206
   - 4th（36 票）：https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/518960
   - 41st（23 票）：https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/516868
+  - 2nd CMU_MATH：https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/518964
+  - 分数方差（70 票）：https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/509388
+  - SymPy（86 票）：https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/494713
+  - 入门资源（177 票）：https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/488264
+- 轻读全本：`analysis/deep/ai-mathematical-olympiad-prize.md`（Tier B 轻读：对照矩阵/裁决/证据分级/悬案 + 1 图证）
