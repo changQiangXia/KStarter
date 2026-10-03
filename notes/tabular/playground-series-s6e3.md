@@ -44,7 +44,25 @@
 - 交互结构决定模型选择：depth=1 最优时别再堆深树与特征交叉，转向线性/简单模型。
 - 学 3rd 的日常节奏：收集 OOF → 逐个加入 → 观察 CV 与 LB 的背离，而不是一次性糊一个大 blend。
 
-## 7. 出处
+## 7. 轻读结论（2026-10 补）
+
+**一句话**：合成赛的胜负在"**回到原始数据**"——1st 用 **Snap 特征**（把合成浮点吸附到原始 IBM 数据的最近取值，差值=生成噪声）+ **小数位提取**（d1/d2/frac100/mod10/mod100、分母残差、is_round）+ 锚点目标编码 + 投影特征；模型侧是 **850→150 + 4 层堆叠**（特征抽取 → GBDT/NN → GBDT/NN → 逻辑回归，L2 跳连到 L4）。
+
+- 1st（686686）：遵循 **KGMON Playbook 2026**；代码全部由 LLM 写（GPT5.4/Gemini3.1/ClaudeOpus4.6，60 万行、50 个 EDA 脚本），4×A100 训练 850 个模型，最终 150 个（90 个树模型跨 XGB/LGBM/CatBoost/YDF/cuML-RF 五库）；FE 另含 TF-IDF 字符 n-gram、Benford 偏离、漂移比 `log1p(train_freq/orig_freq)`、PCA/随机投影、`(MC_snap, tenure)` 锚点 TE、用 7k 原始行做自监督辅助预测。
+- 3rd（686834）：100 个 OOF 集成（自研 + 公开 kernel 派生）；CUDF XGB + 伪标签为骨架。
+- 5th：149 模型 → 6 元模型 → 3 混合；社区：高级 EDA 技巧（112 票）、盲混之争（39 票）、YDF 默认（31 票）、GNN starter（36 票）。
+
+**裁决**：合成数据先拿原数据当坐标系（吸附/残差/投影）；数值的十进制结构是生成器指纹；大池 + 嵌套 OOF 堆叠能吃到边际 AUC；跨库树模型差异本身是多样性。
+
+**悬案**：2nd/4th/6th–15th 方案缺失；150 模型清单未列出；LLM 代码可复现性未归档。
+
+## 8. 图表证据
+
+![1st 的四层堆叠结构](../../intel/playground-series-s6e3/bodies/686686_img/01.png)
+
+**图 1**（topic 686686）：L1 特征抽取（KNN/DAE/PCA/TE）→ L2 树与 NN → L3 树与 NN → L4 逻辑回归（含 L2→L4 跳连）；每层用 5×5 嵌套 OOF。
+
+## 9. 出处
 
 - 1st：KGMON Playbook（四级堆叠 + 合成指纹特征）：https://www.kaggle.com/competitions/playground-series-s6e3/discussion/686686
 - 3rd：100 OOF 集成：https://www.kaggle.com/competitions/playground-series-s6e3/discussion/686834
