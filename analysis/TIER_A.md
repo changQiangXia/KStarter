@@ -28,7 +28,7 @@
 | 12 | `feedback-prize-2021` | nlp | 跨度任务；WBF 跨域迁移 | ✅ |
 | 13 | `feedback-prize-english-language-learning` | nlp | 多目标回归；爬山权重 | ✅ |
 | 14 | `otto-recommender-system` | tabular | 召回-排序；共现规则进前三 | ✅ |
-| 15 | `h-and-m-personalized-fashion-recommendations` | tabular | 推荐系统工业范本；时间切分 | ⬜ |
+| 15 | `h-and-m-personalized-fashion-recommendations` | tabular | 推荐系统工业范本；时间切分 | ✅ |
 | 16 | `ubiquant-market-prediction` | tabular | 缺失即信息；时间衰减 | ⬜ |
 | 17 | `rsna-breast-cancer-detection` | cv | 患者级分组底线；分阶段分辨率 | ⬜ |
 | 18 | `vesuvius-challenge-ink-detection` | cv | 大切块+上下文；几何增强对齐 | ⬜ |
