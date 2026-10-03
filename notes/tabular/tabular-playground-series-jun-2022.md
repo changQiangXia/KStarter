@@ -40,8 +40,31 @@
 - 掩码要"显式"进入模型：把缺失位置当特征而非噪声。
 - 插补方法有成熟谱系（FIML/MICE），先读综述再动手。
 
-## 7. 出处
+## 8. 轻读结论（2026-10 补）
+
+**一句话**：插补赛的难点全部集中在 **F4 的多值缺失条件分布**：1st 用带掩码的**去噪自编码器**（特征/掩码双嵌入 + masked MSE）拿到私榜 0.83343；2nd 用"按缺失数分 6 组 + 逐列回归"卡在 ~0.8358；F1/F3 用均值/描述统计即可，F2 被普遍忽略。
+
+- 1st（334331）：随机二项掩码（每行至少 1 个）+ 源缺失 dummy；16 维特征/掩码嵌入相加；7 层 mish+LayerNorm+skip；输出 `x_pred*m + x_mi*(1-m)`；masked MSE；PyTorch×3 + TF 后条件集成；私榜 0.83351 → 0.83343。
+- 2nd（334319）：复用 2022-05 TPS 冠军方案；F4 按 0–5 个缺失分 6 组训练（远超 80 个回归器）。
+- 4th（334497）：均值/中位数基线 0.86–0.90；F4 用 Keras 稠密网；"na count of each record" 是关键视角。
+- 8th/16th/17th（334415）：MLM 式网络集成 / 重型 NN / 按缺失数建模；判断公榜主要由 F4 构成。
+- 资源：插补综述（59 票）、逐列回归 80 模型框架（28 票）、MissForest/missingpy（27 票）。
+
+**裁决**：按缺失模式分解问题；顶部用掩码式自监督条件建模（DAE/MLM），无 GPU 时用缺失模式分组回归；先读赛题"与往届相似"的元信息。
+
+**悬案**：3rd/5th–7th 未收录；特征语义未归档；通用插补器量化表现缺失。
+
+## 9. 图表证据
+
+![DAE 架构](../../intel/tabular-playground-series-jun-2022/bodies/334331_img/01.png)
+
+**图 1**（topic 334331）：0 填充 + 掩码双嵌入 → 7 层 MLP → 条件输出 + masked MSE。
+
+## 10. 出处
 
 - 1st：去噪自编码器方案：https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/334331
 - 插补技术综述：https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/328568
 - 冠军技巧汇总：https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/334415
+- 2nd：缺失模式分组：https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/334319
+- 4th 方案：https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/334497
+- 逐列回归框架：https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/328369

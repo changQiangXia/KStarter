@@ -44,9 +44,42 @@
 - 2nd 的建议朴素有效：想进前 500，先把已结束的 AUC 场（S5E8/S5E11/S6E3/S6E5）练一遍，理解"哪些 FE 反复有效、哪些 blender 稳定、OOF/LB 关系如何"。
 - 社区资产（公开 OOF、共享折）用好了是杠杆——但要先学会写"准入检查"。
 
-## 7. 出处
+## 8. 轻读结论（2026-10 补）
+
+**一句话**：本场是 **agentic data science 的里程碑**——1st 用 Codex 自主跑 4 天建成 380 模型集成，再让 GPT-5.6 与 Claude Fable 5 互相对战/分享，产出**单独夺冠的模型**（18 个月来首次单模夺冠），随后又把 ChatGPT Pro 与 ~150 个 LLM 组织成分布式智能；技术侧主信号是**合成生成器伪影**（exact-value/stringified TE）。
+
+- 1st（738592）：四阶段 agent 流程；单模 RealMLP CV 0.97070/LB 0.97174；最终 449 模型、公榜 0.97206。
+- 2nd（738856）：四周流程；`fake_daily = social+work+game` 等反推特征；用 200+ 公开预测；私榜 0.97123；建议练旧赛、别调公榜。
+- 7th（738650）：556 条预测流（206 本地 + 350 公开）；**exact-value TE 9 列 +0.00191**；6 LR 秩平均；OOF 0.97088 / 公 0.97127 / 私 0.97095；bootstrap 95% CI [+0.000020, +0.000039]。
+- 14th（739004）：36 自训 + 278 共享 OOF；密封折嵌套 OOF + 5/5 折门槛 + 完整性检查（重算 AUC <1e-5、哈希去重、许可证清单）；公榜零决策；私榜 0.97109。
+- 233rd（738691）：对抗验证 AUC 0.5654；TE 晶格（二三元组合）；177 成员栈 + 锚流；结论：树模型饱和、顶部靠 GPU NN。
+- 社区：starter CV 0.96（24 票）、生成缺失原始数据（21 票）、stringified TE（9 票）。
+
+**裁决**：先逆向生成器伪影，再用严格验证协议（密封折/嵌套 OOF）和大规模共享 OOF + 线性融合；agent 群体编排已是顶级竞争力的组成部分。
+
+**悬案**：1st 的 agent 成本与新 FE 细节未公开；3rd–6th/8th–13th 未收录。
+
+## 9. 图表证据
+
+![Agent 四阶段架构](../../intel/playground-series-s6e8/bodies/738592_img/01.png)
+
+**图 1**（topic 738592）：单 agent → 双 agent 竞争 → ChatGPT Pro → LLM 群体的四阶段架构。
+
+![堆叠进度与模型数](../../intel/playground-series-s6e8/bodies/738592_img/02.png)
+
+**图 2**（topic 738592）：公榜分数与模型数随提交日期的增长（最终 449 模型、0.97206）。
+
+![严格 OOF 流水线](../../intel/playground-series-s6e8/bodies/738650_img/01.png)
+
+**图 3**（topic 738650）：556 条清洗流 → 9 折拟合/1 折评估 → 6 LR → 秩平均 → 外层混合。
+
+## 10. 出处
 
 - 1st：Distributed Intelligence（agent 四阶段）：https://www.kaggle.com/competitions/playground-series-s6e8/discussion/738592
 - 2nd：夯实单模、善用公开预测的反思：https://www.kaggle.com/competitions/playground-series-s6e8/discussion/738856
 - 14th：278 组共享 OOF + 密封折判决：https://www.kaggle.com/competitions/playground-series-s6e8/discussion/739004
 - 7th：太多模型，一个简单堆叠：https://www.kaggle.com/competitions/playground-series-s6e8/discussion/738650
+- 233rd：https://www.kaggle.com/competitions/playground-series-s6e8/discussion/738691
+- 简单 XGB/EDA starter（24 票）：https://www.kaggle.com/competitions/playground-series-s6e8/discussion/736409
+- 生成缺失原始数据集（21 票）：https://www.kaggle.com/competitions/playground-series-s6e8/discussion/732428
+- stringified TE + 秩平均（9 票）：https://www.kaggle.com/competitions/playground-series-s6e8/discussion/734063
