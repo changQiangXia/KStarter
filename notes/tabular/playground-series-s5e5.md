@@ -46,10 +46,32 @@
 - 爬山选出的模型可能"单看都一般"——**集成贡献 ≠ 单模分数**。
 - 大洗牌场合：少交多验、私榜直觉来自 CV 与多样性，而不是公开榜名次。
 
-## 7. 出处
+## 7. 轻读结论（2026-10 补）
+
+**一句话**：RMSLE 的正确打开方式 = **在 `log1p` 空间做一切**（平均/加权/Ridge/HC），再 `expm1` 还原；集成胜负则取决于"多样性 vs 过度拟合 OOF"——本场 HC 的 CV 最好却常输给 Ridge。
+
+- RMSLE 教程（140 票）：MSE→算术平均、MAE→中位数、**RMSLE→log 空间加权平均**。
+- 1st（GPU HC）：数百候选 → 7 模型；**弱模型（cuML-TE XGB，单模 0.06XX）占 25% 权重**；残差堆叠（NN-over-LR 0.0608→0.0599）；"100% 重训 + 迭代×1.25 + 多种子"；priv 0.05841。
+- 2nd："Trust CV and diversity"；最佳私榜是 11 模型 HC（仅正权重），含 LR/ResMLP/LNN 等异质成员 + 分类概率残差二次 CatBoost。
+- 6th：Ridge（priv 0.05846）击败 HC（0.05848），HC 日志里出现负权重（-0.066/-0.057）。
+- 7th：只把 Sex 转整数、几乎无预处理；AutoGluon 本场不具竞争力；明确反对盲混。
+
+**裁决**：指标决定集成空间；成员选择看错误结构而非单模分数；噪声赛里 Ridge/非负 HC 比自由 HC 稳；折内模型推理时按 1/(K−1) 放大迭代数。
+
+**悬案**：3rd–5th 方案缺失；洗牌原因未量化；1st 的候选模型清单未列全。
+
+## 8. 图表证据
+
+![6th 的 Hill Climbing 迭代日志](../../intel/playground-series-s5e5/bodies/582518_img/03.png)
+
+**图 1**（topic 582518）：HC 逐轮加模型，第 3/6 轮出现负权重（-0.066、-0.057）——HC 过拟合 OOF 的直观证据。
+
+## 9. 出处
 
 - 1st：GPU 爬山与七模型组合：https://www.kaggle.com/competitions/playground-series-s5e5/discussion/582611
 - 2nd：Trust CV and diversity：https://www.kaggle.com/competitions/playground-series-s5e5/discussion/582700
 - 6th：30 模型 Ridge 集成：https://www.kaggle.com/competitions/playground-series-s5e5/discussion/582518
 - 7th：拒绝 blender、Ridge vs HC：https://www.kaggle.com/competitions/playground-series-s5e5/discussion/582591
 - RMSLE 集成教程：https://www.kaggle.com/competitions/playground-series-s5e5/discussion/576111
+- 往届方案洞察（49 票）：https://www.kaggle.com/competitions/playground-series-s5e5/discussion/576731
+- 轻读全本：`analysis/deep/playground-series-s5e5.md`（Tier B 轻读：对照矩阵/裁决/证据分级/悬案 + 1 图证）

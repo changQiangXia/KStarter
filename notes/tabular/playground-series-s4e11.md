@@ -44,9 +44,32 @@
 - 简单随机平均不是"没本事"，本场 24th 与 1st 都是靠它/接近它的结构赢的。
 - 把每次提交当作实验记录：13th 用样本提交反推了类比例，这种"探针思维"成本极低。
 
-## 7. 出处
+## 7. 轻读结论（2026-10 补）
+
+**一句话**：硬标签 Accuracy + 合成数据 = 榜面近乎完全重排（Top 50 稳定队伍 **0/50**）；胜负在"选提交"而不是"堆模型"——**用 AUC 代理 ACC、拒绝 OOF 加权、准备多种风格的提交**。
+
+- 1st：69 个模型只留 24 个 + AutoGluon 集成；无 FE；**夺冠的是第二周做的"早期实验"**（CV 0.94173/pub 0.94284），投入更多的一版反而略低。
+- 13th：**16 个提交优于最终选择**（最好一个本可第 4）；用样本提交反推出公榜正例率 17.297% vs 训练 18.171% → 分布漂移是洗牌根源。
+- 24th（+662 名）：**20 个模型朴素不加权平均**，刻意无视 Hill Climbing 的加权；GBDT 跨折统一定最佳迭代数而非各折早停。
+- 25th：3 模型（CatBoost+XGB+MLP）等权 0.9415 私榜；NN 单模≈第 68；**用 AUC 代理 ACC**，全列字符串化 + RARE/NAN。
+- 4th：不合理值→NaN；AutoGluon + LightAutoML 等权；提醒 AutoGluon 的 CV 偏乐观。
+
+**裁决**：0/1 型指标的赛题用概率型指标（AUC/log-loss）做训练与选择，最后再按 ACC 决策；集成分权在噪声指标上会拟合噪声，等权最稳；每场都留一个"样本提交探针"。
+
+**悬案**：2nd/3rd/5th–12th 方案缺失；正例率漂移成因未证实；1st 的 24 模型清单未列全。
+
+## 8. 图表证据
+
+![硬标签指标下的公榜稳定性](../../intel/playground-series-s4e11/bodies/543929_img/02.png)
+
+**图 1**（topic 543929）：Top 50 稳定 0/50、51–150 各 1/50、151–275 为 66/125——硬标签 + 小样本导致的榜面重排量化证据。
+
+## 9. 出处
 
 - 1st：信 CV（24 模型 + AutoGluon）：https://www.kaggle.com/competitions/playground-series-s4e11/discussion/549160
 - 13th：10 倍努力换第 13 名（16 份未选提交更优）：https://www.kaggle.com/competitions/playground-series-s4e11/discussion/549155
 - 24th：上升 662 名（等权平均与统一最佳迭代）：https://www.kaggle.com/competitions/playground-series-s4e11/discussion/549147
 - 硬标签指标下的公开榜讨论：https://www.kaggle.com/competitions/playground-series-s4e11/discussion/543929
+- 25th：GBDT+NN / AUC 代理 ACC：https://www.kaggle.com/competitions/playground-series-s4e11/discussion/549194
+- 4th：预处理 + AutoML：https://www.kaggle.com/competitions/playground-series-s4e11/discussion/549197
+- 轻读全本：`analysis/deep/playground-series-s4e11.md`（Tier B 轻读：对照矩阵/裁决/证据分级/悬案 + 1 图证）
