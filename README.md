@@ -71,6 +71,7 @@ LEARNING_PATH.md  新手分阶段路径（含跨领域迁移、黑箱迭代、�
 | `intel/<slug>/` | 每场原始材料：`topics.json`、`topics.md`、`bodies/*.html`、`bodies/*.txt`（含评论）、`bodies/*_img/`、`DONE` 断点标记 |
 | `digests/<slug>.md` | 索引 + 正文纯文本汇总 |
 | `notes/<主题>/<slug>.md` | 264 篇结构化摘要；`notes/INDEX.md` 为全量索引 |
+| `people/` | **以人为中心资产**：竞赛榜前 50 快照（`roster/`）、公开榜人-赛记录（`competitions/`）、归档讨论区发言（`posts/`）、个人档案（`profiles/`）；规范见 `people/README.md` |
 | `analysis/deep/<slug>.md` | 264 篇深读（Tier A 11 组件 / Tier B 轻读） |
 | `analysis/THEORY.md` | 跨场可证伪规律（L）+ 张力（T） |
 | `analysis/evidence_map.md` | L114–L133 / T28–T37 的数字证据台账 + 六册数字锚点 |
@@ -82,7 +83,7 @@ LEARNING_PATH.md  新手分阶段路径（含跨领域迁移、黑箱迭代、�
 | `analysis/GOAL.md` / `DEPTH_PLAN.md` / `TIER_A.md` / `TIER_B.md` | 目标、方案、两档进度权威表 |
 | `playbook/` | 七册主题方法论（v2 增补 + 检查清单） |
 | `LEARNING_PATH.md` | 新手分阶段学习路径 |
-| `scripts/` | 采集 / digest / 摘要 / 校验 / 分析生成器（可断点续跑、限流退避） |
+| `scripts/` | 采集 / digest / 摘要 / 校验 / 分析生成器（可断点续跑、限流退避）；人档工具在 `scripts/people/` |
 | `templates/` | 摘要模板（完整版 / 精简版） |
 
 ## 常用命令
