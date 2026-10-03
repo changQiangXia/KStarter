@@ -57,6 +57,12 @@ def main() -> int:
         dup_of = seen_text.get(text_hash, "")
         if not dup_of:
             seen_text[text_hash] = r["topic_id"]
+        if not r["text"].strip():
+            status = "empty"
+        elif dup_of:
+            status = "dup"
+        else:
+            status = "done" if n else "pending"
         rows.append(
             {
                 "person": r["person"],
@@ -68,7 +74,7 @@ def main() -> int:
                 "domain": ";".join(sorted(domains_of(m.get("tags", "")))) or m.get("category", ""),
                 "text_len": len(r["text"]),
                 "claims": n,
-                "status": "dup" if dup_of else ("done" if n else "pending"),
+                "status": status,
                 "dup_of": dup_of,
             }
         )
@@ -82,14 +88,18 @@ def main() -> int:
 
     done = sum(1 for r in rows if r["status"] == "done")
     dup = sum(1 for r in rows if r["status"] == "dup")
+    empty = sum(1 for r in rows if r["status"] == "empty")
     by_person = Counter(r["person"] for r in rows)
     by_domain = Counter(d for r in rows for d in r["domain"].split(";") if d)
     print(f"posts >= {args.min_votes} votes: {len(rows)} | people: {len(by_person)} | comps: {len({r['slug'] for r in rows})}")
-    print(f"extracted: {done}/{len(rows)} ({100*done/len(rows):.0f}%) | verified duplicates: {dup} | claims: {sum(r['claims'] for r in rows)}")
+    print(
+        f"extracted: {done}/{len(rows)} ({100*done/len(rows):.0f}%) | verified duplicates: {dup} "
+        f"| empty posts: {empty} | claims: {sum(r['claims'] for r in rows)}"
+    )
     print("top people (posts):", ", ".join(f"{p} {n}" for p, n in by_person.most_common(8)))
     print("domains:", ", ".join(f"{d} {n}" for d, n in by_domain.most_common(8)))
     print(f"coverage -> {out}")
-    coverage = (done + dup) / len(rows)
+    coverage = (done + dup + empty) / len(rows)
     print(f"coverage: {coverage:.0%} (target >= {args.min_coverage:.0%})")
     if coverage < args.min_coverage:
         print("coverage below target: P1 未完成")
