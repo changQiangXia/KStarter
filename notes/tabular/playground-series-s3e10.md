@@ -40,8 +40,31 @@
 - 树模型不是唯一解：连续的、低维的、物理意义强的数据，GAM 可能更合适。
 - "特征工程不可行"时，竞争转向关系形态与概率质量。
 
-## 7. 出处
+## 8. 轻读结论（2026-10 补）
+
+**一句话**：加性模型胜过 GBDT——1st 用 **GAM**（+两个 XGB/LASSO 派生特征，非必需）夺冠；3rd/7th 的集成里也都有 GAM；跨十届复盘把"Episode 10 的关键 = GAM"写进结论。logloss 赛要看校准曲线而非混淆矩阵（49 票帖），且本届产出了系列最有价值的社区元分析（十届冠军汇编 + 结构化复盘）。
+
+- 1st（396345）：变量少且已是高层特征 → FE 几乎不可能；GAM 自带正则/内部 CV；树只逼近连续关系。
+- 19th（396259）：8 特征全组合/全排列 + ExtraTrees 重要性筛选；k-means 分组提升 CV 但未提交（自述本可最佳）。
+- 校准（393073，49 票）：`CalibrationDisplay` + 预测直方图；概率校准专帖（28 票）。
+- 十届汇编（394981）/结构化复盘（395484）：原数据三种用法与"必须排除出验证折"、对抗验证、SMOTE 普遍无效、信 CV、集成四维多样性、单模反例。
+- 其他：天体物理科普（35 票）、异常值处理（22 票）、双周赛制（32 票）。
+
+**裁决**：连续/低维/统计量型特征优先 GAM 类加性模型；logloss 用校准诊断；本场的元分析应成为系列赛起手读物。
+
+**悬案**：2nd/4th–6th 等未收录；偏度峰度争议未定论。
+
+## 9. 图表证据
+
+![校准曲线与预测直方图](../../intel/playground-series-s3e10/bodies/393073_img/01.png)
+
+**图 1**（topic 393073）：校准曲线 + 预测直方图（预测集中在 0 附近）。
+
+## 10. 出处
 
 - 1st：GAM + 派生特征：https://www.kaggle.com/competitions/playground-series-s3e10/discussion/396345
 - 19th：特征组合与两模型集成：https://www.kaggle.com/competitions/playground-series-s3e10/discussion/396259
 - 别用错诊断模板（校准图）：https://www.kaggle.com/competitions/playground-series-s3e10/discussion/393073
+- 十届冠军汇编（32 票）：https://www.kaggle.com/competitions/playground-series-s3e10/discussion/394981
+- 十届结构化复盘（23 票）：https://www.kaggle.com/competitions/playground-series-s3e10/discussion/395484
+- 概率校准（28 票）：https://www.kaggle.com/competitions/playground-series-s3e10/discussion/393861

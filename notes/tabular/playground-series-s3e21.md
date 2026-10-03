@@ -39,8 +39,31 @@
 - 学会用训练误差/置信度给样本排序——普遍适用的坏样本发现法。
 - DCAI 的技能栈（审计、纠错、覆盖）在真实行业里比调参更常用。
 
-## 7. 出处
+## 8. 轻读结论（2026-10 补）
+
+**一句话**：罕见的"模型固定、只许改数据"赛制：有效手段 = **异常值/错误值处理**（物理范围截断+迭代插补、IsolationForest 行/列过滤、移除 top-N 误差样本）与主动学习/伪标签；但清洗收益高度不确定——66th 自述"原样提交原始数据是第二好"，未修改的 sample_submission 进私榜前 200，且赛中指标从 MAE 改为 RMSE。
+
+- 66th（438609）：Censor（物理范围，`O2_1` 最优 4.5–14.3）+ IterativeImputer + RF，区间当超参搜索。
+- 23rd（438824）：IsolationForest 行版私 1.01699（23rd）；逐列版私 1.01535（估 12th）未被选中。
+- Missed 2nd（438635）：主动学习私 1.00889，未选中（截图）。
+- 4th（439142）：移除 top-N 误差样本；MIT DCAI 课程；cleanlab 不适用回归。
+- 社区：伪标签有效（32 票）、原始 train 有危险（32 票）、单样本的力量（31 票）、IsolationForest 评估（30 票）、别信公榜（20/27）。
+
+**裁决**：把清洗策略参数化进 CV；按清洗强度分档提交；指标/公榜不稳时以 CV 为准；主动学习是重要备选路线。
+
+**悬案**：1st–3rd/5th–22nd 未收录；主动学习细节未公开。
+
+## 9. 图表证据
+
+![未选中的主动学习提交](../../intel/playground-series-s3e21/bodies/438635_img/01.png)
+
+**图 1**（topic 438635）：私榜 1.00889 的主动学习提交未被选中。
+
+## 10. 出处
 
 - Data-centric 方法与理论资源：https://www.kaggle.com/competitions/playground-series-s3e21/discussion/433516
 - 4th：Objective remove top-N errors：https://www.kaggle.com/competitions/playground-series-s3e21/discussion/439142
 - 66th：数据清洗流程：https://www.kaggle.com/competitions/playground-series-s3e21/discussion/438609
+- 23rd：IsolationForest：https://www.kaggle.com/competitions/playground-series-s3e21/discussion/438824
+- Missed 2nd：主动学习：https://www.kaggle.com/competitions/playground-series-s3e21/discussion/438635
+- 伪标签有效（32 票）：https://www.kaggle.com/competitions/playground-series-s3e21/discussion/433531
