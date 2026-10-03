@@ -46,7 +46,35 @@
 - **同一份外部数据的接入方式（行/列）可能比模型选择更重要**——做对照实验而不是默认拼行。
 - 洗牌场合的定稿原则：稳健（等权/秩平均）+ 不看公开榜 + 参考 CV−LB 背离度。
 
-## 7. 出处
+## 8. 轻读结论（2026-10 补）
+
+**一句话**：146 行的公榜把本场变成"探榜 + 洗牌"的极端案例（公开分 0.961、10 份 AUC=1.0），真正的胜负手是**原始数据的接法**：2nd 用同一份香港数据，拼成新行（XGB 私 0.90317）与 merge 成新列（RAPIDS SVC 单模私 0.90610 → 第 2），其未提交的三模型等权融合私榜 0.90728 本可第 1。
+
+- 2nd（571176）：零 FE + 6 折按年 GroupKFold + 等权平均；原数据两接法都试；最终六模型等权私 0.90604/0.90599。
+- 54th（571133）：留一年嵌套 CV；对抗验证后弃时间特征；比值 + 年度相对温度；XGB+LGBM 秩平均私 0.90669（未提交）。
+- 18th（571021）：单 XGB + 自定义 AUC 损失；前向特征选择；模拟显示加原数据只有 50% 改善 → 不用；提交按 "CV−公榜" 选。
+- 37th（571139）：TabPFN + 基础 FE + 纯合成数据取胜。
+- 社区：公榜 146 行、探榜指南、标签错误、"Trust Your CV"。
+
+**裁决**：小公榜赛以按年分组 CV 为准；外部数据要按"接法×模型"做对抗验证；小数据用简单模型 + 等权平均；提交选择是独立技能。
+
+**悬案**：真实 1st 方案未收录；标签错误成因未明；归档帖 571015 未细读。
+
+## 9. 图表证据
+
+![温度的长期趋势](../../intel/playground-series-s5e3/bodies/571133_img/01.png)
+
+**图 1**（topic 571133）：6 年温度周期平稳（365 日均线）。
+
+![各年降雨比例](../../intel/playground-series-s5e3/bodies/571133_img/02.png)
+
+**图 2**（topic 571133）：各年降雨率接近，支持按年 CV。
+
+![月度降雨分布对比](../../intel/playground-series-s5e3/bodies/571133_img/03.png)
+
+**图 3**（topic 571133）：赛方 vs 原始数据的月度降雨分布差异。
+
+## 10. 出处
 
 - 2nd Place：GBDT + NN + SVR + 原数据两接法：https://www.kaggle.com/competitions/playground-series-s5e3/discussion/571176
 - 54th：特征工程、年度嵌套 CV、对抗验证：https://www.kaggle.com/competitions/playground-series-s5e3/discussion/571133
@@ -54,3 +82,5 @@
 - 37th：TabPFN 小数据打法：https://www.kaggle.com/competitions/playground-series-s5e3/discussion/571139
 - Linear SVC + 受控非线性：https://www.kaggle.com/competitions/playground-series-s5e3/discussion/568268
 - 全方案归档帖（社区大合集）：https://www.kaggle.com/competitions/playground-series-s5e3/discussion/571015
+- 公榜 146 行（41 票）：https://www.kaggle.com/competitions/playground-series-s5e3/discussion/568465
+- 探榜指南（30 票）：https://www.kaggle.com/competitions/playground-series-s5e3/discussion/568865

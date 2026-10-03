@@ -43,9 +43,36 @@
 - 最后关头的"50-50 双集成器混合"常稳过任一单集成器（1st 的最后一分钟验证了它）。
 - Agent 很好用，但需要人工把关两件事：它是否过早放弃、它是否在"重复发明"而不是改几行。
 
-## 7. 出处
+## 8. 轻读结论（2026-10 补）
+
+**一句话**：本场标志两件事——**agent 自主实验**（2nd 让 Codex 在 4×A100 上无人值守迭代，218 模型 logit 融合，输 0.00001）与**融合/提交选择决定名次**（1st 最后一分钟 50-50 混合胜出 0.00001；4th 借力他人集成从第 6 升第 4）。
+
+- 1st（703562）：186 OOF；重型 FE；对抗 AUC 显示 Driver 是原数据伪影 → 去 Driver 提分；原数据权重 0.5–1 最好；AutoGluon + LR-logits 50-50 → 私 0.95503。
+- 2nd（703615）：Codex 自主循环（local_leaderboard.md）；六大件单模 CV 提升 + 37 类模型；218 模型 cuML LR（logits）融合；无 stacking/伪标签；最佳单模 RealMLP CV 0.954426；换提交输 0.00001。
+- 5th（703572）：99 模型 logit 栈（LR，C=1，class_weight=None）；OOF AUC 0.95536；平均 Spearman 0.950；0.918 的 Deep FFM 等正交弱模型贡献最大；原数据当行是唯一稳健 FE。
+- 8th（703539）：L5 = 5/7/10 折三种 L4 集成平均；L2→L3 LR→L4 自蒸馏；GPT-5.5 写码 + Gemini 讨论。
+- 4th（703528）：5 天从 0.95406 到第 4；小特征集 + HC 集成 + 并入他人集成。
+
+**裁决**：饱和 AUC 赛的公式 = 大 OOF 池 + 低自由度 logit 融合 + 正交弱模型多样性 + 原数据逐列审计 + 谨慎的提交选择；agent 自主实验已可用，但需中间产物与预算约束。
+
+**悬案**：3rd/6th/7th/9th 未细读；原数据不一致成因未细读；agent 成本未量化。
+
+## 9. 图表证据
+
+![各赛道 PitNextLap 目标率](../../intel/playground-series-s6e5/bodies/698434_img/01.png)
+
+**图 1**（topic 698434）：赛道头像上的 PitNextLap 目标率（Monaco 0.3574 vs Canada 0.1539）。
+
+![Agent 迭代循环](../../intel/playground-series-s6e5/bodies/703615_img/01.png)
+
+**图 2**（topic 703615）：LLM Agent 的"想法→实验→分析"闭环。
+
+## 10. 出处
 
 - 1st：By the skin of my teeth（0.00001 分之胜）：https://www.kaggle.com/competitions/playground-series-s6e5/discussion/703562
 - 2nd：Autonomous Codex YOLO：https://www.kaggle.com/competitions/playground-series-s6e5/discussion/703615
 - 5th：99 模型 logit 栈与 AUC 决策细节：https://www.kaggle.com/competitions/playground-series-s6e5/discussion/703572
 - 4th：5 天冲刺：https://www.kaggle.com/competitions/playground-series-s6e5/discussion/703528
+- 8th：L5 Ensemble：https://www.kaggle.com/competitions/playground-series-s6e5/discussion/703539
+- 赛道 EDA（54 票）：https://www.kaggle.com/competitions/playground-series-s6e5/discussion/698434
+- 原数据不一致（31 票）：https://www.kaggle.com/competitions/playground-series-s6e5/discussion/696380

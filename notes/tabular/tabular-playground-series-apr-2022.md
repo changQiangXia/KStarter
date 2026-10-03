@@ -43,8 +43,30 @@
 - DAE 的价值在"理解输入结构"（无论有无标签），层输出是免费特征。
 - 特征工程有坑要先读"六大坑"复盘，少走重复路。
 
-## 7. 出处
+## 8. 轻读结论（2026-10 补）
+
+**一句话**：13 路传感器 × 60 步序列 + subject 不相交的二分类：1st 用 **LSTM 去噪自编码器（DAE）自监督 + 预测网络 + 大混合**拿到私榜 0.99249；2nd 的单个 CNN+GRU 私榜 0.989（单独可第 6）；5th 的 tsfresh 9000 特征 + LGBM 也能进前 5。硬约束是 **CV 必须按 subject 分组**。
+
+- 1st（322259）：DAE swap-noise <30%；层输出当特征 + 原始 scaled 序列；spatial dropout >0.35；ElasticNet 混合 4 个 DAE + TPU 模型 + LGBM；单 DAE 私 0.99134，总混合 0.99249。
+- 2nd（322257）：40 模型 stacking；单模 4×2D-CNN+GRU+GMP 私 0.989；reshape 后按标签 Stratified（每 index 即完整 subject）；LGBM 元学习器 +0.0013。
+- 3rd（322269）：shapelets（tslearn→torch）+ CatBoost stacking；**按 subject 聚合预测 +0.002**；伪标签/HMM/序列拼接失败；powershap 筛特征。
+- 5th（322277）：tsfresh ~9000 特征 + 按 subject 归一化 + RFE → LGBM 私 0.97816，再与 LSTM/公开模型加权混合。
+- 6th（322622）：每条序列投影 16 维后 13 路独立 4 层 GRU → 私 0.9839。
+- 六坑帖（185 票）：kurtosis 是单特征之王；聚合别重复；必须做特征选择；别漏 subject 序列数；**GroupKFold(subject) 不可省**；RF 不如 GBDT。
+
+**裁决**：分组结构决定 CV；序列深度模型为主线，GBDT+统计特征作补充；FE 要针对生成机制并严格筛选；AUC 交概率；组级预测聚合值得一试。
+
+**悬案**：4th/7th–10th 未收录；图证全缺。
+
+## 9. 图表证据
+
+无可用图证（本场归档 0 张可读图，图证缺口已登记）。
+
+## 10. 出处
 
 - 1st：DAE 序列适配全记录：https://www.kaggle.com/competitions/tabular-playground-series-apr-2022/discussion/322259
 - 2nd 方案：https://www.kaggle.com/competitions/tabular-playground-series-apr-2022/discussion/322257
 - 特征工程六大坑：https://www.kaggle.com/competitions/tabular-playground-series-apr-2022/discussion/318527
+- 3rd 方案：https://www.kaggle.com/competitions/tabular-playground-series-apr-2022/discussion/322269
+- 5th 方案：https://www.kaggle.com/competitions/tabular-playground-series-apr-2022/discussion/322277
+- 6th 方案：https://www.kaggle.com/competitions/tabular-playground-series-apr-2022/discussion/322622
