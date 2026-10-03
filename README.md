@@ -19,7 +19,6 @@
 | 赛前避坑 / 开赛流程 | `analysis/failures.md`（12 类失败模式 + 1964 条）、`analysis/SOP.md`（操作手册） |
 | 评估结论能不能用 | `analysis/limitations.md`（材料/证据/复现边界与使用建议） |
 | 从零打第一场 | `LEARNING_PATH.md` + `playbook/00-通用方法论.md` |
-| 直接开一场"上分" | `skills/kaggle-score-climb/`（本机已装为 `$kaggle-score-climb`） |
 | 看原始材料（正文/评论/图） | `intel/<slug>/`（`topics.json` / `*.html` / `*.txt` / `*_img/`） |
 | 做一份新场次的分析 | `analysis/SOP.md` §9 复盘模板 + `templates/` |
 
@@ -39,22 +38,6 @@ analysis/         THEORY(v0.7) · evidence_map · claims · failures · lineage 
 playbook/ 七册     通用 / 表格 / CV / NLP-LLM / 科学 / Agent / 多模态-音频-元类（v2 增补 + 检查清单）
 LEARNING_PATH.md  新手分阶段路径（含跨领域迁移、黑箱迭代、提交与定稿）
 ```
-
-## 开箱即用的 Skill：`kaggle-score-climb`
-
-- **定位**：专门用于 Kaggle **上分**的决策层 skill——指标结构套利、验证↔榜单校准、按期望收益排序实验、提交组合与 shakeup 对冲、收官保护。
-- **与执行 skill 的分工**：本 skill 决定"打什么、先打什么、何时停"；Kaggle CLI / GPU offload / producer-consumer notebook 等执行层配合 `agentic-kaggle-skill` 使用。
-- **位置**：仓库内 `skills/kaggle-score-climb/`（版本化）；本机已安装到 `~/.codex/skills/kaggle-score-climb`，以 `$kaggle-score-climb` 触发。
-- **安装/更新**：
-  ```bash
-  cp -r skills/kaggle-score-climb ~/.codex/skills/
-  ```
-  或从本仓库用 skill-installer 安装。
-- **内容**：
-  - `SKILL.md`：分数模型、上分阶梯、五条硬规则、快速决策表、Definition of Done；
-  - `references/`：指标套利、验证↔LB、上分实验阶梯、提交组合、公开情报差分、60 条顶层规律、40 项故障预检、按赛型打法；
-  - `scripts/submission_guard.py`：提交 CSV 体检（列顺序/行数/ID 集合/NaN/数值解析）；
-  - `assets/`：实验台账模板、收官 48h 清单。
 
 ## 规模与质量（2026-10 快照）
 
@@ -98,7 +81,6 @@ LEARNING_PATH.md  新手分阶段路径（含跨领域迁移、黑箱迭代、�
 | `analysis/SOP.md` | 开赛—收官操作手册（侦查/验证/指标/建模/评审交付/提交/复盘） |
 | `analysis/GOAL.md` / `DEPTH_PLAN.md` / `TIER_A.md` / `TIER_B.md` | 目标、方案、两档进度权威表 |
 | `playbook/` | 七册主题方法论（v2 增补 + 检查清单） |
-| `skills/kaggle-score-climb/` | **上分 Skill**（开箱即用）：SKILL.md + 8 references + submission_guard + 台账/收官 assets |
 | `LEARNING_PATH.md` | 新手分阶段学习路径 |
 | `scripts/` | 采集 / digest / 摘要 / 校验 / 分析生成器（可断点续跑、限流退避） |
 | `templates/` | 摘要模板（完整版 / 精简版） |
