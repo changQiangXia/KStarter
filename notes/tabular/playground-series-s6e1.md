@@ -48,11 +48,34 @@
 - 模型多样性不仅是"换算法"：换损失函数、换特征集、换权重方案都在制造可集成的多样性。
 - 伪标签的价值原理是"更多真实特征进入训练"，不是"假标签"本身——这能帮你在新比赛里正确判断它是否适用。
 
-## 7. 出处
+## 7. 轻读结论（2026-10 补）
+
+**一句话**：数据几乎由线性公式生成（EDA 78 票帖）——**先恢复生成式（GP/线性回归，单独 RMSE≈8.97），再做大规模 Ridge 集成**；本场 NN（RealMLP/TabM）系统性不弱于 GBDT。
+
+- 1st（671371）：两套特征集（NN 友好 / GBDT 友好）；**专注做强单模**（最佳单模可排第 7；RealMLP CV 8.58742 最好）；**190 模型 Ridge 集成**（HC/AG/CatBoost 集成器更差）→ CV 8.56634 / LB 8.53096 / PB 8.57273。
+- 2nd（671261）：TabM 单模"远远最好"；75 模型里 68 个是 NN（60 个 TabM）；170–700 特征 × 6 超参组合 + **GP 公式残差建模**（两条公式 RMSE 8.9703/8.9741）。
+- 6th（671328）：单模 FE 失败但**为集成有效**（200+ XGB + 公开 notebook）；核心纪律=**保存 OOF + 统一 KFold/seed + 三层嵌套 CV**；把 Linear Regression 当最强特征（树只看序、线性模型吃单调变换）。
+- 13th（671285）：173 模型 + HC + Ridge；**分数范围偏差**（低分高估/高分低估）→ target 相关加权 MSE（长尾端 4×/2×/1.5×/3×）。
+
+**裁决**：合成回归先恢复生成式；NN 与 GBDT 平权投入；FE 的价值在"多样性"；OOF/KFold 纪律是事后集成的前提；注意标签截尾与分数范围偏差。
+
+**悬案**：3rd–5th/7th–12th 方案缺失；1st 引用的"公式"未展开；2nd 的 75 模型清单未列。
+
+## 8. 图表证据
+
+![各特征与平均成绩的关系](../../intel/playground-series-s6e1/bodies/665965_img/01.png)
+
+**图 1**（topic 665965）：11 个特征的分布与均值曲线——study_hours/class_attendance/sleep_hours/facility_rating 等近乎单调线性，解释本场"恢复公式 + 线性回归"的做法。
+
+## 9. 出处
 
 - 1st place：两套特征集 + 190 模型 Ridge：https://www.kaggle.com/competitions/playground-series-s6e1/discussion/671371
 - 2nd place：TabM 与 GBM 的对比 + GP 公式特征：https://www.kaggle.com/competitions/playground-series-s6e1/discussion/671261
 - 6th place：231 模型与 gating 技巧：https://www.kaggle.com/competitions/playground-series-s6e1/discussion/671328
 - 13th place：非对称损失与分歧度选模：https://www.kaggle.com/competitions/playground-series-s6e1/discussion/671285
 - 伪标签教程（含防泄漏论证）：https://www.kaggle.com/competitions/playground-series-s6e1/discussion/666888
-- EDA：线性关系与建模启示：https://www.kaggle.com/competitions/playground-series-s6e1/discussion/665965
+  - EDA：线性关系与建模启示：https://www.kaggle.com/competitions/playground-series-s6e1/discussion/665965
+  - 2nd：NN 胜 GBM（55 票）：https://www.kaggle.com/competitions/playground-series-s6e1/discussion/671261
+  - 恢复原始数据模型（44 票）：https://www.kaggle.com/competitions/playground-series-s6e1/discussion/665915
+  - Tobit 截尾建模（25 票）：https://www.kaggle.com/competitions/playground-series-s6e1/discussion/667296
+- 轻读全本：`analysis/deep/playground-series-s6e1.md`（Tier B 轻读：对照矩阵/裁决/证据分级/悬案 + 1 图证）

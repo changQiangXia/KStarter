@@ -3,7 +3,7 @@
 > 选取规则：全部 264 场归档赛事减去 Tier A 60 场；按 `analysis/_tier_a_scored.csv` 的材料密度得分降序排列。
 > 轻量深读组件（4）：逐方案对照矩阵 ｜ 共识/分歧与裁决 ｜ 证据分级 ｜ 悬案/缺口；有归档图则内嵌图证。
 > 状态：⬜ 未开始 ｜ 🔄 进行中 ｜ ✅ 完成（轻读 + notes 回写）
-> 进度：**79/204**（2026-10-03；B01–B07 完成；B08 进行中 9/10）
+> 进度：**82/204**（2026-10-03；B01–B08 完成；B09 进行中 2/10）
 
 ## 批次 B01（1–10）
 
@@ -123,14 +123,14 @@
 | 77 | `image-matching-challenge-2023` | cv | Research | 6/15 | 41.2 | ✅ |
 | 78 | `image-matching-challenge-2025` | cv | Research | 6/12 | 41.0 | ✅ |
 | 79 | `biohub-cell-tracking-during-development` | cv | Research | 6/30 | 40.9 | ✅ |
-| 80 | `playground-series-s6e1` | tabular | Playground | 6/4 | 40.7 | ⬜ |
+| 80 | `playground-series-s6e1` | tabular | Playground | 6/4 | 40.7 | ✅ |
 
 ## 批次 B09（81–90）
 
 | # | slug | 主题 | 类别 | 材料(正文/图) | 得分 | 状态 |
 | --- | --- | --- | --- | --- | --- | --- |
-| 81 | `jpx-tokyo-stock-exchange-prediction` | tabular | Featured | 6/1 | 40.7 | ⬜ |
-| 82 | `cafa-5-protein-function-prediction` | science | Research | 6/5 | 40.6 | ⬜ |
+| 81 | `jpx-tokyo-stock-exchange-prediction` | tabular | Featured | 6/1 | 40.7 | ✅ |
+| 82 | `cafa-5-protein-function-prediction` | science | Research | 6/5 | 40.6 | ✅ |
 | 83 | `santa-2022` | sim-agent | Featured | 6/6 | 40.3 | ⬜ |
 | 84 | `playground-series-s6e9` | tabular | Playground | 6/21 | 40.0 | ⬜ |
 | 85 | `santa-2021` | sim-agent | Featured | 6/4 | 39.5 | ⬜ |
