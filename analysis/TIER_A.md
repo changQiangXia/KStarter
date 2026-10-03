@@ -26,7 +26,7 @@
 | --- | --- | --- | --- | --- |
 | 11 | `lmsys-chatbot-arena` | nlp | 人类偏好建模；LoRA/QLoRA 平民化 | ✅ |
 | 12 | `feedback-prize-2021` | nlp | 跨度任务；WBF 跨域迁移 | ✅ |
-| 13 | `feedback-prize-english-language-learning` | nlp | 多目标回归；爬山权重 | ⬜ |
+| 13 | `feedback-prize-english-language-learning` | nlp | 多目标回归；爬山权重 | ✅ |
 | 14 | `otto-recommender-system` | tabular | 召回-排序；共现规则进前三 | ⬜ |
 | 15 | `h-and-m-personalized-fashion-recommendations` | tabular | 推荐系统工业范本；时间切分 | ⬜ |
 | 16 | `ubiquant-market-prediction` | tabular | 缺失即信息；时间衰减 | ⬜ |
