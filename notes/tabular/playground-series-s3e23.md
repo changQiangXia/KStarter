@@ -40,9 +40,29 @@
 - 集成至少有"一族之外"的成员；全树集成多样性不足。
 - 把 CV 当"评估预算"来管理——几百个模型的取舍全靠它。
 
-## 7. 出处
+## 7. 轻读结论（2026-10 补）
+
+- **流程胜利场**：117 票《Instructions for winning》给出七模型配方（RF/ET/HistGB/XGB/LGBM/CatBoost + 一个非树模型，首选 Nyström 核近似 LR）；CV 是唯一评估预算（3 周、5 次提交/天）；"无 CV 的公开 notebook 直接忽略"；集成权重按 CV 调（445245）。
+- **量化对比**：Ensemble(HGB+RF+NY) 0.79220 > ET 0.79136 > HistGB 0.79121 > Nyström-LR 0.79112 > RF 0.79107；非树单模型（Poly-LR/SVC/KNN）明显更弱，价值在集成互补（445245）。
+- **#2 八模型**：6 树爬山（允许负权重）LB 0.7907（私榜 0.79379）→ +Nyström LR 0.79099 → +NN 0.79101；log 变换输入对树模型有小幅提升；PCA/t-SNE/聚类全部无效（450315 / 444784 / 445015）。
+- **数据审计线索**：准重复观测、完全相关特征、原始数据预处理等索引帖存在，但正文未归档，影响未量化（444988 / 445099 / 444640）。
+
+## 8. 图表证据
+
+![单模型与集成 AUC 对比](../../intel/playground-series-s3e23/bodies/445245_img/01.png)
+
+**图**（topic 445245）：Ensemble(HGB+RF+NY) 0.79220 高于最好单模型 ET 0.79136——多样性集成 > 单模型的直接证据。
+
+![爬山集成提交分数](../../intel/playground-series-s3e23/bodies/450315_img/01.png)
+
+**图**（topic 450315，#2）：爬山集成版本 public 0.7907 / private 0.79379。
+
+## 9. 出处
 
 - 胜利说明书（七模型与 CV 论证）：https://www.kaggle.com/competitions/playground-series-s3e23/discussion/445245
 - #2：8 模型集成（对数变换输入）：https://www.kaggle.com/competitions/playground-series-s3e23/discussion/450315
 - 爬山集成教程：https://www.kaggle.com/competitions/playground-series-s3e23/discussion/444784
 - 数据与领域指标解释：https://www.kaggle.com/competitions/playground-series-s3e23/discussion/444627
+- McCabe/Halstead 指标：https://www.kaggle.com/competitions/playground-series-s3e23/discussion/444685
+- 入门材料：https://www.kaggle.com/competitions/playground-series-s3e23/discussion/444629
+- log 变换提示：https://www.kaggle.com/competitions/playground-series-s3e23/discussion/445015

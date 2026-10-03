@@ -3,7 +3,7 @@
 > 选取规则：全部 264 场归档赛事减去 Tier A 60 场；按 `analysis/_tier_a_scored.csv` 的材料密度得分降序排列。
 > 轻量深读组件（4）：逐方案对照矩阵 ｜ 共识/分歧与裁决 ｜ 证据分级 ｜ 悬案/缺口；有归档图则内嵌图证。
 > 状态：⬜ 未开始 ｜ 🔄 进行中 ｜ ✅ 完成（轻读 + notes 回写）
-> 进度：**169/204**（2026-10-03；B01–B16 完成；B17 进行中 9/10）
+> 进度：**172/204**（2026-10-03；B01–B17 完成；B18 进行中 2/10）
 
 ## 批次 B01（1–10）
 
@@ -258,14 +258,14 @@
 | 167 | `playground-series-s5e9` | tabular | Playground | 6/8 | 20.1 | ✅ |
 | 168 | `playground-series-s3e9` | tabular | Playground | 6/3 | 20.1 | ✅ |
 | 169 | `llm-prompting-with-makersuite` | other | Community | 6/2 | 20.1 | ✅ |
-| 170 | `openai-to-z-challenge` | other | Featured | 2/0 | 19.5 | ⬜ |
+| 170 | `openai-to-z-challenge` | other | Featured | 2/0 | 19.5 | ✅ |
 
 ## 批次 B18（171–180）
 
 | # | slug | 主题 | 类别 | 材料(正文/图) | 得分 | 状态 |
 | --- | --- | --- | --- | --- | --- | --- |
-| 171 | `playground-series-s3e22` | tabular | Playground | 6/1 | 19.3 | ⬜ |
-| 172 | `playground-series-s3e23` | tabular | Playground | 6/6 | 18.9 | ⬜ |
+| 171 | `playground-series-s3e22` | tabular | Playground | 6/1 | 19.3 | ✅ |
+| 172 | `playground-series-s3e23` | tabular | Playground | 6/6 | 18.9 | ✅ |
 | 173 | `data-assistants-with-gemma` | other | Community | 6/2 | 18.7 | ⬜ |
 | 174 | `2023-kaggle-ai-report` | other | Community | 6/2 | 18.7 | ⬜ |
 | 175 | `gemini-long-context` | other | Community | 6/1 | 18.1 | ⬜ |
