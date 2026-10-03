@@ -3,7 +3,7 @@
 > 选取规则：材料密度（正文数/方案帖数/机制帖数/图片数）× 系列重要性 × 主题平衡。
 > 计分明细见 `analysis/_tier_a_scored.csv`（票数项已封顶）。
 > 状态：⬜ 未开始 ｜ 🔄 进行中 ｜ ✅ 完成（深读 + 笔记回写 + 图证内嵌）
-> 进度：Batch 1–4 ✅ 40/40 ｜ Batch 5 🔄 6/10 ｜ 总计 **46/60**（2026-10-03）
+> 进度：Batch 1–4 ✅ 40/40 ｜ Batch 5 🔄 7/10 ｜ 总计 **47/60**（2026-10-03）
 
 ## 批次 1（10）
 
@@ -75,7 +75,7 @@
 | 44 | `deep-past-initiative-machine-translation` | nlp | 语料工程；ByT5 零结构改动 | ✅ |
 | 45 | `kaggle-llm-science-exam` | nlp | 检索侧>模型侧 | ✅ |
 | 46 | `commonlit-evaluate-student-summaries` | nlp | 来源分组验证 | ✅ |
-| 47 | `eedi-mining-misconceptions-in-mathematics` | nlp | 大标签空间→检索重排 | ⬜ |
+| 47 | `eedi-mining-misconceptions-in-mathematics` | nlp | 大标签空间→检索重排 | ✅ |
 | 48 | `nvidia-nemotron-model-reasoning-challenge` | nlp | 求解器→推理链；简单损失 | ⬜ |
 | 49 | `learning-agency-lab-automated-essay-scoring-2` | nlp | 多来源拼接；QWK 阈值 | ⬜ |
 | 50 | `pii-detection-removal-from-educational-data` | nlp | maxlen/stride 作为集成维度 | ⬜ |
@@ -99,6 +99,6 @@
 
 ## 进度小结
 
-- Tier A 完成：**46/60**；Batch 5：#41–#45 ✅、#46 commonlit ✅（Head Mask+主题扩增+长上下文鲁棒性，图证 2 张）
-- Batch 5 待办：#47 eedi → #50 pii-detection（共 4 场）→ Batch 6 → Tier B 204 场 → 阶段二三
-- 图证样板：commonlit（LLM 主题/摘要生成提示）、kaggle-llm-science-exam、deep-past、g2net、ariel-2024、leap-climsim、rsna-2024、rsna-2022、uw-madison、multimodal、single-cell、polymer、ribonanza、waveform、isic-2024、hubmap、UBC-OCEAN
+- Tier A 完成：**47/60**；Batch 5：#41–#46 ✅、#47 eedi ✅（长尾误区检索级联+unseen 分布修复，图证 4 张）
+- Batch 5 待办：#48 nvidia-nemotron → #50 pii-detection（共 3 场）→ Batch 6 → Tier B 204 场 → 阶段二三
+- 图证样板：eedi（级联/消融/单 token 排序）、commonlit、kaggle-llm-science-exam、deep-past、g2net、ariel-2024、leap-climsim、rsna-2024、rsna-2022、uw-madison、multimodal、single-cell、polymer、ribonanza、waveform、isic-2024、hubmap、UBC-OCEAN
