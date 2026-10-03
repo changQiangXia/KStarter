@@ -3,7 +3,7 @@
 > 选取规则：材料密度（正文数/方案帖数/机制帖数/图片数）× 系列重要性 × 主题平衡。
 > 计分明细见 `analysis/_tier_a_scored.csv`（票数项已封顶）。
 > 状态：⬜ 未开始 ｜ 🔄 进行中 ｜ ✅ 完成（深读 + 笔记回写 + 图证内嵌）
-> 进度：Batch 1 ✅ 10/10 ｜ Batch 2 ✅ 10/10 ｜ Batch 3 ✅ 10/10 ｜ 总计 **30/60**（2026-10-03）
+> 进度：Batch 1 ✅ 10/10 ｜ Batch 2 ✅ 10/10 ｜ Batch 3 ✅ 10/10 ｜ Batch 4 🔄 1/10 ｜ 总计 **31/60**（2026-10-03）
 
 ## 批次 1（10）
 
@@ -56,7 +56,7 @@
 | --- | --- | --- | --- | --- |
 | 31 | `isic-2024-challenge` | cv | pAUC 优化；图像+元数据双线 | ⬜ |
 | 32 | `hubmap-hacking-the-human-vasculature` | cv | 标注噪声；细管损失 | ⬜ |
-| 33 | `rsna-2024-lumbar-spine-degenerative-classification` | cv | 定位→分类；每条件子模型（已做图证样板） | 🔄 |
+| 33 | `rsna-2024-lumbar-spine-degenerative-classification` | cv | 定位→分类；每条件子模型（已做图证样板） | ✅ |
 | 34 | `rsna-2022-cervical-spine-fracture-detection` | cv | 两阶段+分割辅助 | ⬜ |
 | 35 | `uw-madison-gi-tract-image-segmentation` | cv | 部分标注 masked loss | ⬜ |
 | 36 | `open-problems-multimodal` | science | IR 方法迁移到单细胞 | ⬜ |
@@ -99,5 +99,6 @@
 
 ## 进度小结
 
-- Tier A 完成：**8/60**（nov-2022、feb-2022、s5e12、jigsaw-toxic、hms、amex、optiver-vol、petfinder）
-- 图证样板：rsna-2024（4th 管线图）、UBC-OCEAN（13th 双骨干图）已内嵌
+- Tier A 完成：**31/60**；Batch 1–3 全部收官（30 场），Batch 4 已开：**#33 rsna-2024-lumbar-spine** ✅（深读 11 组件 + notes 回写 + 图证 6 张）
+- Batch 4 待办：#31 isic-2024、#32 hubmap、#34 rsna-2022-cervical → #40 waveform-inversion（共 9 场）
+- 图证样板：rsna-2024（1st/3rd/4th 管线与模型图，6 张）、UBC-OCEAN（13th 双骨干图）已内嵌
