@@ -3,7 +3,7 @@
 > 选取规则：材料密度（正文数/方案帖数/机制帖数/图片数）× 系列重要性 × 主题平衡。
 > 计分明细见 `analysis/_tier_a_scored.csv`（票数项已封顶）。
 > 状态：⬜ 未开始 ｜ 🔄 进行中 ｜ ✅ 完成（深读 + 笔记回写 + 图证内嵌）
-> 进度：Batch 1 ✅ 10/10 ｜ 总计 **10/60**（2026-10-03；理论层首版 `analysis/THEORY.md` 16 条）
+> 进度：Batch 1 ✅ 10/10 ｜ Batch 2 ✅ 10/10 ｜ 总计 **20/60**（2026-10-03）
 
 ## 批次 1（10）
 
@@ -33,7 +33,7 @@
 | 17 | `rsna-breast-cancer-detection` | cv | 患者级分组底线；分阶段分辨率 | ✅ |
 | 18 | `vesuvius-challenge-ink-detection` | cv | 大切块+上下文；几何增强对齐 | ✅ |
 | 19 | `ventilator-pressure-prediction` | science | 控制逻辑覆盖 66%；ML 补残差 | ✅ |
-| 20 | `santa-2025` | sim-agent | 全局+局部双层搜索；性能工程换分 | ⬜ |
+| 20 | `santa-2025` | sim-agent | 全局+局部双层搜索；性能工程换分 | ✅ |
 
 ## 批次 3（10）
 
