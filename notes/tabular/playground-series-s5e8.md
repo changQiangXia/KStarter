@@ -43,8 +43,29 @@
 - 集成器也要选型：AutoGluon 12 小时不一定赢过一个 1.5 小时的 NN 集成器。
 - 平台期不要只会加模型：换表示（新 FE 重跑）或换集成结构，往往更快。
 
-## 7. 出处
+## 7. 轻读结论（2026-10 补）
+
+**一句话**：本场把"OOF 收藏馆 + 集成器选型"推到极限：**成员多样性 > 单模强度，集成器本身是一等模型**——1st 的赛后实验甚至推翻了自己整月依赖的 AutoGluon。
+
+- 1st（JAPE）：136 OOF 大集成；AG 跑满 12h；flip +0.00001~0.00003；100 OOF 遇墙、136 OOF 破墙（0.97844 pub），私榜 0.97801 第 1；**赛后：NN 集成器 1.5h 达到同等水平，配 LGBM+LR 爬山后 0.97805 私榜，优于所有 AG 结果且省 8 倍时间**。
+- 2nd：59 模型 + CatBoost 集成器；最好单模 TabM 0.97750 priv；"不同模型 > 同模型调参"。
+- 3rd：迭代 OOF 堆叠（收集 OOF → AG 训练 → 按重要性筛 → 循环），先过滤泄漏与虚高 CV。
+- 15th：单模最佳 CatBoost Optuna 0.97732 priv、xLearn FFM 0.97708；遗传编程特征在原数据上 +0.003、加统计/TE 后仅 +0.0001。
+- QuantileDMatrix（69 票）：分批建直方图 + 降 dtype，最多支持 8× 数据；进阶用"落盘→分块读"省显存。
+
+**裁决**：二分类 Playground 的通用配方 = 多样 OOF（含弱模型）+ 多集成器对照 + flip；扩池优先加"机制不同"的成员。
+
+**悬案**：baseline 接力技巧细节缺失；反盲混争议结论未细读；本场 0 归档图。
+
+## 8. 图表证据
+
+无可用图证（本场归档 0 图）。
+
+## 9. 出处
 
 - 1st：JAPE 大集成全记录（含 NN 集成器复盘）：https://www.kaggle.com/competitions/playground-series-s5e8/discussion/603210
 - XGBoost QuantileDMatrix 与降精度技巧：https://www.kaggle.com/competitions/playground-series-s5e8/discussion/600048
 - 2nd：异质 OOF 流程：https://www.kaggle.com/competitions/playground-series-s5e8/discussion/603297
+- 3rd：迭代 OOF 堆叠 + AutoGluon：https://www.kaggle.com/competitions/playground-series-s5e8/discussion/603198
+- 15th：遗传编程特征：https://www.kaggle.com/competitions/playground-series-s5e8/discussion/603179
+- 轻读全本：`analysis/deep/playground-series-s5e8.md`（Tier B 轻读：对照矩阵/裁决/证据分级/悬案；图证缺口已登记）

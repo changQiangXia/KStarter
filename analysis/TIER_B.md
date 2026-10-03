@@ -3,7 +3,7 @@
 > 选取规则：全部 264 场归档赛事减去 Tier A 60 场；按 `analysis/_tier_a_scored.csv` 的材料密度得分降序排列。
 > 轻量深读组件（4）：逐方案对照矩阵 ｜ 共识/分歧与裁决 ｜ 证据分级 ｜ 悬案/缺口；有归档图则内嵌图证。
 > 状态：⬜ 未开始 ｜ 🔄 进行中 ｜ ✅ 完成（轻读 + notes 回写）
-> 进度：**49/204**（2026-10-03；B01–B04 完成；B05 进行中 9/10）
+> 进度：**52/204**（2026-10-03；B01–B05 完成；B06 进行中 2/10）
 
 ## 批次 B01（1–10）
 
@@ -78,14 +78,14 @@
 | 47 | `playground-series-s4e7` | tabular | Playground | 6/3 | 43.9 | ✅ |
 | 48 | `playground-series-s4e6` | tabular | Playground | 6/5 | 43.9 | ✅ |
 | 49 | `ai-village-capture-the-flag-defcon31` | sim-agent | Featured | 6/9 | 43.9 | ✅ |
-| 50 | `playground-series-s5e8` | tabular | Playground | 6/0 | 43.8 | ⬜ |
+| 50 | `playground-series-s5e8` | tabular | Playground | 6/0 | 43.8 | ✅ |
 
 ## 批次 B06（51–60）
 
 | # | slug | 主题 | 类别 | 材料(正文/图) | 得分 | 状态 |
 | --- | --- | --- | --- | --- | --- | --- |
-| 51 | `make-data-count-finding-data-references` | nlp | Research | 6/3 | 43.8 | ⬜ |
-| 52 | `csiro-biomass` | science | Research | 6/10 | 43.7 | ⬜ |
+| 51 | `make-data-count-finding-data-references` | nlp | Research | 6/3 | 43.8 | ✅ |
+| 52 | `csiro-biomass` | science | Research | 6/10 | 43.7 | ✅ |
 | 53 | `image-matching-challenge-2022` | cv | Research | 6/13 | 43.6 | ⬜ |
 | 54 | `uspto-explainable-ai` | nlp | Featured | 6/6 | 43.5 | ⬜ |
 | 55 | `mayo-clinic-strip-ai` | cv | Research | 6/3 | 43.4 | ⬜ |

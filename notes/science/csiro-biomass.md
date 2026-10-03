@@ -45,7 +45,27 @@
 2. 农业/食品视觉是 Kaggle 的重要赛题来源（与 CMI、RSNA 并列的行业方向）。
 3. 首次参加新领域也能拿金（前提是实验量与记录到位）。
 
-## 6. 出处
+## 6. 轻读结论（2026-10 补）
+
+**一句话**：小样本 + 分布漂移的农业 CV 赛——**按 Sampling_Date 分组 CV 是生死线**（不分组 CV-LB 差 0.119，分组后 0.027）；DINOv3 底座 + 数据清洗 + 区间分类辅助头 + 在线伪标是涨分四件套。
+
+- 分组验证（132 票）：按 State 分层 CV 0.7189/LB 0.60；按日期分组 CV 0.5837/LB 0.55 → 调优后 0.5968/0.57。
+- 1st（670735）：3 折（state+日期）+ 左右视角注意力融合 + DINOv3；**7 区间分类辅助头 +0.03**；两轮伪标 + SWA 在线训练 +0.02；物理关系仅用于后处理；priv 0.68。
+- 4th（670677）：**手裁纸板 +0.01**；ViT-Huge + NDVI/Height 表格融合；**从图像预测 NDVI/Height 的辅助任务 +0.01**（最终 0.76/0.66）。
+- 5th（670668）：HSV+inpaint 去日期戳；把 Dead=Total−GDM、Clover=GDM−Green 当先验。
+- 7th（670654）：DINOv3-Large 冻 80%；日期分组 + WA 细分虚拟日期 + 1000 万种子搜切分；SWA（top-3 loss + top-3 score）。
+
+**裁决**：先做数据审计（伪影/日期戳/背景板）与分组验证，再上大底座；物理约束放推理端推导；测试期自适应（伪标/TTT/SWA）是最后的大杠杆。
+
+**悬案**：2nd/3rd/6th 方案缺失；5th 私榜 0.76 与其余队 0.66–0.68 的口径差未澄清。
+
+## 7. 图表证据
+
+![4th 的多模态融合架构](../../intel/csiro-biomass/bodies/670677_img/01.png)
+
+**图 1**（topic 670677）：RGB → ViT-Huge DINOv3，NDVI/Height → MLP(64→128)，拼接 → 融合 MLP(512→256) → 五个回归头。
+
+## 8. 出处
 
 - 讨论区索引：`intel/csiro-biomass/topics.md`（80 条）
 - 已收录 write-up（6 篇）：
@@ -53,3 +73,6 @@
   - 2nd 弱监督语义分割（61 票）：https://www.kaggle.com/competitions/csiro-biomass/discussion/670895
   - 4th ViT-Huge DINOv3 多模态（46 票）：https://www.kaggle.com/competitions/csiro-biomass/discussion/670677
   - 5th solo 金（81 票）：https://www.kaggle.com/competitions/csiro-biomass/discussion/670668
+  - 7th single/dual+TTT（41 票）：https://www.kaggle.com/competitions/csiro-biomass/discussion/670654
+  - 按 Sampling_Date 分组（132 票）：https://www.kaggle.com/competitions/csiro-biomass/discussion/615401
+- 轻读全本：`analysis/deep/csiro-biomass.md`（Tier B 轻读：对照矩阵/裁决/证据分级/悬案 + 1 图证）
