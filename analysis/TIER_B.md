@@ -3,7 +3,7 @@
 > 选取规则：全部 264 场归档赛事减去 Tier A 60 场；按 `analysis/_tier_a_scored.csv` 的材料密度得分降序排列。
 > 轻量深读组件（4）：逐方案对照矩阵 ｜ 共识/分歧与裁决 ｜ 证据分级 ｜ 悬案/缺口；有归档图则内嵌图证。
 > 状态：⬜ 未开始 ｜ 🔄 进行中 ｜ ✅ 完成（轻读 + notes 回写）
-> 进度：**149/204**（2026-10-03；B01–B14 完成；B15 进行中 9/10）
+> 进度：**150/204**（2026-10-03；B01–B15 完成；B16 待开始）
 
 ## 批次 B01（1–10）
 
@@ -228,7 +228,7 @@
 | 147 | `gemini-3` | other | Featured | 8/0 | 26.4 | ✅ |
 | 148 | `tabular-playground-series-nov-2021` | tabular | Playground | 6/1 | 26.3 | ✅ |
 | 149 | `playground-series-s5e2` | tabular | Playground | 6/1 | 25.9 | ✅ |
-| 150 | `playground-series-s3e2` | tabular | Playground | 6/1 | 25.6 | ⬜ |
+| 150 | `playground-series-s3e2` | tabular | Playground | 6/1 | 25.6 | ✅ |
 
 ## 批次 B16（151–160）
 
