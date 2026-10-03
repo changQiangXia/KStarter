@@ -41,9 +41,32 @@
 - 额外数据不是越多越好：本场辅助原数据被实测排除——每个数据源都要过 CV 门槛。
 - 特征规模先守住百列级，用置换重要性淘汰，而不是无上限膨胀。
 
-## 7. 出处
+## 8. 轻读结论（2026-10 补）
+
+**一句话**："**暴力特征工程 + 谨慎集成**"的医疗表格赛：头部都在百列级组合特征上做文章，NN/TabNet 只是边际；全场最亮的单点是**潜变量重建**——用外部数据训练 0.997 准确率的性别分类器，把"男性概率"当新特征（性别与目标 MI 24.5%，全场最高）；#4 用多折多 seed 复核的稳健 Hill Climbing 拿第 4。
+
+- #3（455248）：80–120 特征 + permutation importance；10×1 分层 CV；3+5+3 树模型 + RF/LR/TabNet/MLP/GAM；Optuna 权重 + 少量有依据的探榜 → 私 3。
+- #4（455296）：25 OOF 选 7；每个模型在所有折都需提升 + 换 seed 复核；并行 HC + numpy AUC 优化；提到公榜第一只交 3 次。
+- #7（455271）：XGB+Optuna → 伪标签 → 公开特征/预测平均 → hemoglobin 交互 → seed 42→43；私 0.87926（7th）；未选提交 0.87931 更好。
+- #8（455268）：频率离散化 + 暴力组合 + top-N 并集；Optuna 融合 + 公榜排名加权混合；多次运行超时。
+- 社区：Be careful with AUC（42 票）、组合示例（41 票）、stacking vs blending（31 票）。
+
+**裁决**：先把组合特征做透；集成用重复 CV 复核增益；有未给出的关键潜变量就做"代理模型概率特征"；探榜只在 CV 支持内；提交保留多条线。
+
+**悬案**：1st/2nd/5th/6th 未收录；探榜风险与 gender 特征权重未量化。
+
+## 9. 图表证据
+
+![#7 的未选提交](../../intel/playground-series-s3e24/bodies/455271_img/01.jpeg)
+
+**图 1**（topic 455271）：私榜 0.87931 的未选版本。
+
+## 10. 出处
 
 - 3rd：简单集成与探测：https://www.kaggle.com/competitions/playground-series-s3e24/discussion/455248
 - 4th：稳健爬山：https://www.kaggle.com/competitions/playground-series-s3e24/discussion/455296
 - 潜特征：构造 gender 列：https://www.kaggle.com/competitions/playground-series-s3e24/discussion/452379
 - 领域信息与特征想法：https://www.kaggle.com/competitions/playground-series-s3e24/discussion/450314
+- #7 private / #2 public：https://www.kaggle.com/competitions/playground-series-s3e24/discussion/455271
+- #8 private / #7 public：https://www.kaggle.com/competitions/playground-series-s3e24/discussion/455268
+- Be careful with AUC（42 票）：https://www.kaggle.com/competitions/playground-series-s3e24/discussion/450764

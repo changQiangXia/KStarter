@@ -41,8 +41,31 @@
 - 特征集可以继承和致谢：名字写清来源，复用不是抄。
 - 大表先解决读取（本场有"只读部分数据"的教程帖），再谈模型。
 
-## 7. 出处
+## 8. 轻读结论（2026-10 补）
+
+**一句话**：百万行大表 = "**工程先行 + 强 NN**"：社区头部帖子都在讲分块读取（nrows/skiprows）、dtype/gc、datatable/dask/cudf 与 GPU LightGBM 注意点；榜单上方是"AutoML/GBDT + 强多输入 NN"——4th 的 NN 加 KMeans 特征（0.85424→0.85503），3rd 用 25-seed NN + 极端置信伪标签，9th 堆 47 基模型 → 9 元模型 → LDA。
+
+- 9th（284492）：15 LGBM×20 seeds + 32 变体；逐模型缩放；L1 九个元模型；L2 LDA。
+- 4th（284560）：多输入 NN + KMeans；"深度学习对本场公榜影响很大"。
+- 3rd（284594）：AutoML GBDT + NN（25 seeds）+ 伪标签（<0.05/>0.95）。
+- 工程（75/56/25 票帖）：只读部分数据、gc、datatable/dask/cudf、GPU 注意点。
+- 特征（36/27 票帖）：内置重要性不可信 → SHAP/Boruta；feature22 特殊性。
+
+**裁决**：大表先解 I/O/内存；GBDT 同质化后加异质 NN；重要性用 SHAP 复核；伪标签取极端置信；数据量大时深堆叠可行。
+
+**悬案**：1st/2nd/5th–8th 未收录；KMeans 特征细节未展开。
+
+## 9. 图表证据
+
+![9th 的三级栈](../../intel/tabular-playground-series-oct-2021/bodies/284492_img/01.jpg)
+
+**图 1**（topic 284492）：47 基 → 9 元 → LDA 的三级栈。
+
+## 10. 出处
 
 - 9th：多模型栈与特征借用：https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/284492
 - 4th：NN + KMeans 特征：https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/284560
 - 3rd：AutoML + NN + 伪标签：https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/284594
+- 百万行读取（75 票）：https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/275669
+- 大表教程汇编（56 票）：https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/275712
+- SHAP 重要性警告（36 票）：https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/276953
