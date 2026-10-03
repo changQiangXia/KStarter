@@ -1,0 +1,82 @@
+# amp-parkinsons-disease-progression-prediction 讨论区（按票数排序，共 80 条）
+
+- [4th Place Gold - Single Model RAPIDS cuML SVR!](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/411398) — 150 票 / 32 评论 / 2023-05-21 **write-up?**
+- [1st Place Solution](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/411505) — 99 票 / 59 评论 / 2023-05-22 **write-up?**
+- [#5: Find the control group](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/411388) — 76 票 / 26 评论 / 2023-05-19 
+- [Kaggle's best time-series resources](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/388550) — 75 票 / 6 评论 / 2023-02-18 
+- [Patient-level Time Series Feature Engineering](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/388521) — 61 票 / 3 评论 / 2023-02-17 
+- [SMAPE: A good evaluation metric?](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/390682) — 50 票 / 18 评论 / 2023-02-26 
+- [How many Patients are in the Test Part? We have an answer...](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/398758) — 48 票 / 18 评论 / 2023-03-31 
+- [A Guide to the competition metric: SMAPE](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/388549) — 47 票 / 3 评论 / 2023-02-18 
+- [Evaluation updates scheduled for March 14th [Updates are now live] ](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/394534) — 47 票 / 32 评论 / 2023-03-13 
+- [Summary of Facts about The Test Dataset](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/403045) — 41 票 / 16 评论 / 2023-04-20 
+- [9th Place Solution](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/411380) — 39 票 / 9 评论 / 2023-05-19 **write-up?**
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/388269) — 36 票 / 170 评论 / 2023-02-16 
+- [A very similar competition with a twist at the end](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/396462) — 33 票 / 9 评论 / 2023-03-21 
+- [Peptide sequence that may help in detecting PD (from internet)](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/394983) — 32 票 / 14 评论 / 2023-03-15 
+- [The explanation for the high cv–lb differences](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/410873) — 29 票 / 12 评论 / 2023-05-16 
+- [8th place solution: One trick to win the gold](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/411395) — 28 票 / 0 评论 / 2023-05-19 **write-up?**
+- [Top 89 - Non Leaky Solution.](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/411561) — 27 票 / 2 评论 / 2023-05-19 **write-up?**
+- [Starter Pack](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/400422) — 27 票 / 1 评论 / 2023-04-08 
+- [Tools for working with Time Series](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/388552) — 25 票 / 5 评论 / 2023-02-18 
+- [13th place solution](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/411436) — 21 票 / 4 评论 / 2023-05-19 **write-up?**
+- [Working with the API and Python 3.10](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/406514) — 20 票 / 13 评论 / 2023-05-02 
+- [Alpha Synuclein, Lewy Bodies and Dopamine. Their role in Parkinson Disease.](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/388685) — 20 票 / 2 评论 / 2023-02-19 
+- [12th Place Solution](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/411394) — 19 票 / 4 评论 / 2023-05-19 **write-up?**
+- [Probably this competition may be better explained?](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/391900) — 18 票 / 19 评论 / 2023-03-03 
+- [3rd place solution](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/411546) — 18 票 / 6 评论 / 2023-05-19 **write-up?**
+- [Starter materials and adjutant resources to refer](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/388291) — 18 票 / 4 评论 / 2023-02-16 
+- [Can someone explain the Kaggle API and What we are predicting?](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/399688) — 17 票 / 37 评论 / 2023-04-05 
+- [New to Kaggle or Machine Learning? Check this out ~](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/388270) — 16 票 / 7 评论 / 2023-02-16 
+- [Request for more info in Data and Evolution pages](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/389271) — 16 票 / 2 评论 / 2023-02-21 
+- [No data for 3342_0 and 50423_6](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/388738) — 16 票 / 6 评论 / 2023-02-19 
+- [The target is a survey and that's what its asking:](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/398819) — 16 票 / 3 评论 / 2023-04-01 
+- [Parkinson relation AI research & competition](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/388322) — 16 票 / 0 评论 / 2023-02-16 
+- [SMAPE 69 is the final score?](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/392705) — 15 票 / 12 评论 / 2023-03-06 
+- [Data patch pending for February 21st [applied]](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/389142) — 14 票 / 11 评论 / 2023-02-21 
+- [Medication questions](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/388977) — 13 票 / 2 评论 / 2023-02-20 
+- ["Unimod" character in Peptides](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/388327) — 13 票 / 4 评论 / 2023-02-16 
+- [Do they want us to predict the past?](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/393645) — 13 票 / 15 评论 / 2023-03-10 
+- [It would be possible to have sex and age at first visit of patients of TRAIN set?](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/393414) — 12 票 / 10 评论 / 2023-03-09 
+- [What is group_key ?](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/388925) — 12 票 / 2 评论 / 2023-02-20 
+- [Restarting Environment for Testing](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/392305) — 12 票 / 4 评论 / 2023-03-04 
+- [We Make Redundant Predictions. Does Kaggle LB SMAPE Score Them Redundantly?](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/400078) — 11 票 / 10 评论 / 2023-04-06 
+- [NaNs in UPDRS scores](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/388501) — 11 票 / 2 评论 / 2023-02-17 
+- [Multiple patients have the same history of updrs_3](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/388742) — 10 票 / 3 评论 / 2023-02-19 
+- [Summarizing the current situation](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/392894) — 10 票 / 14 评论 / 2023-03-07 
+- [21st Solution](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/411396) — 10 票 / 0 评论 / 2023-05-19 **write-up?**
+- [2nd Place Solution](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/418143) — 10 票 / 3 评论 / 2023-06-20 **write-up?**
+- [#18: Ensemble & Stacking with Extra Protein](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/411410) — 10 票 / 2 评论 / 2023-05-19 
+- [What I learned in this competition](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/411589) — 10 票 / 7 评论 / 2023-05-19 
+- [The SMAPE metric ruin the competition](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/393792) — 9 票 / 6 评论 / 2023-03-10 
+- [Why use the API ?](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/390688) — 9 票 / 9 评论 / 2023-02-26 
+- [NPX Comparisons in time and patients](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/389928) — 9 票 / 8 评论 / 2023-02-23 
+- [There is a best way to handle with missing data in this dataset?](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/392554) — 9 票 / 8 评论 / 2023-03-05 
+- [My result on CV and LB are quite different. (+ 230409 updated)](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/398662) — 9 票 / 10 评论 / 2023-03-31 
+- [Extra Decimal Place Added to Leaderboard](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/392789) — 8 票 / 5 评论 / 2023-03-06 
+- [What is the API for?](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/391887) — 8 票 / 3 评论 / 2023-03-02 
+- [29th Place Solution & Experiments](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/411425) — 8 票 / 0 评论 / 2023-05-19 **write-up?**
+- [Leaderboard refresh published](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/389760) — 8 票 / 2 评论 / 2023-02-22 
+- [Modeling with proteins: better CV worse LB](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/410797) — 8 票 / 11 评论 / 2023-05-16 
+- [Beginner's Experience in 20 Lessons Learned from this competition. ](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/412067) — 7 票 / 2 评论 / 2023-05-22 
+- [Domain Knowledge generated by ChatGPT](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/398513) — 7 票 / 1 评论 / 2023-03-30 
+- [Not able to find good validation strategy](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/394363) — 7 票 / 11 评论 / 2023-03-13 
+- [How to using python 3.8/3.9/3.10/3.11 on Kaggle](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/407358) — 7 票 / 9 评论 / 2023-05-06 
+- [Train vs test patients](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/394941) — 7 票 / 1 评论 / 2023-03-15 
+- [Unknown Submission Scoring Error](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/388930) — 7 票 / 9 评论 / 2023-02-20 
+- [Wow. First competition thoughts](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/411392) — 7 票 / 3 评论 / 2023-05-19 
+- [Basic Learning Points to the Algo Being Used for This Task	](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/389002) — 7 票 / 0 评论 / 2023-02-20 
+- [What's the point of predicting UPDRS scores for the current visit?](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/397476) — 7 票 / 4 评论 / 2023-03-25 
+- [Question:clinical_state_on_medication is given in train set while not given in the test set?](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/393593) — 6 票 / 4 评论 / 2023-03-10 
+- [Is there any guarantee with a good LB score?](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/401647) — 6 票 / 7 评论 / 2023-04-14 
+- [Odd NaN values for upd23b_clinical_state_on_medication](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/392185) — 6 票 / 2 评论 / 2023-03-04 
+- [Thoughts about the problem formulation & testing scheme](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/398384) — 6 票 / 0 评论 / 2023-03-29 
+- [Question about submission](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/396161) — 6 票 / 3 评论 / 2023-03-20 
+- [How is the UPDRS Scale](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/393205) — 6 票 / 3 评论 / 2023-03-08 
+- [Does one patient_id occur in only one iteration in test or multiple?](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/400547) — 6 票 / 4 评论 / 2023-04-09 
+- [Possible to use R?](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/393964) — 6 票 / 8 评论 / 2023-03-11 
+- [Need reference notebook on how to submit the code and submission file from local machine!!](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/388355) — 6 票 / 1 评论 / 2023-02-17 
+- [How many visits per patient are we given to make predictions in the test dateset? (time-series?!)](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/390666) — 6 票 / 8 评论 / 2023-02-26 
+- [What's the difference between 3342_0_updrs_1_plus_6_months and 3342_6_updrs_1_plus_0_months?](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/390656) — 6 票 / 3 评论 / 2023-02-26 
+- [Questions about the competition](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/392082) — 6 票 / 1 评论 / 2023-03-03 
+- [Call for Proteomics Solutions to the AMP PD Kaggle Challenge](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/416747) — 5 票 / 2 评论 / 2023-06-12 **write-up?**

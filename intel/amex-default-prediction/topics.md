@@ -1,0 +1,122 @@
+# amex-default-prediction 讨论区（按票数排序，共 120 条）
+
+- [Integer columns in the data - here you go!](https://www.kaggle.com/competitions/amex-default-prediction/discussion/328514) — 834 票 / 116 评论 / 2022-06-01 
+- [How To Reduce Data Size](https://www.kaggle.com/competitions/amex-default-prediction/discussion/328054) — 521 票 / 137 评论 / 2022-05-30 
+- [Tabular Classification - Tips and Tricks](https://www.kaggle.com/competitions/amex-default-prediction/discussion/335892) — 358 票 / 41 评论 / 2022-07-08 
+- [1st solution(update github code)](https://www.kaggle.com/competitions/amex-default-prediction/discussion/348111) — 303 票 / 115 评论 / 2022-09-04 **write-up?**
+- [14th Place Gold – NN Transformer using LGBM Knowledge Distillation](https://www.kaggle.com/competitions/amex-default-prediction/discussion/347641) — 271 票 / 145 评论 / 2022-09-02 **write-up?**
+- [Graphical explanation of the competition metric](https://www.kaggle.com/competitions/amex-default-prediction/discussion/327464) — 254 票 / 31 评论 / 2022-05-27 
+- [Speed Up XGB, CatBoost, and LGBM by 20x](https://www.kaggle.com/competitions/amex-default-prediction/discussion/328606) — 211 票 / 43 评论 / 2022-06-02 
+- [Which is the right feature importance?](https://www.kaggle.com/competitions/amex-default-prediction/discussion/331131) — 210 票 / 48 评论 / 2022-06-15 
+- [2nd place solution - team JuneHomes (writeup)](https://www.kaggle.com/competitions/amex-default-prediction/discussion/347637) — 180 票 / 57 评论 / 2022-08-26 **write-up?**
+- [Parquet Format Dataset for Low Memory Use ](https://www.kaggle.com/competitions/amex-default-prediction/discussion/327138) — 168 票 / 70 评论 / 2022-05-25 
+- [Kaggle Dataset for Transformers and RNNs](https://www.kaggle.com/competitions/amex-default-prediction/discussion/327828) — 159 票 / 28 评论 / 2022-05-29 
+- [⚡ 9x Data Compression achieved with Feather🕊️](https://www.kaggle.com/competitions/amex-default-prediction/discussion/327143) — 157 票 / 36 评论 / 2022-05-25 
+- [Understanding competition metric step by step](https://www.kaggle.com/competitions/amex-default-prediction/discussion/333338) — 144 票 / 26 评论 / 2022-06-26 
+- [Let's catchup with all the learnings so far](https://www.kaggle.com/competitions/amex-default-prediction/discussion/328565) — 143 票 / 11 评论 / 2022-06-01 
+- [Thank you all!](https://www.kaggle.com/competitions/amex-default-prediction/discussion/347688) — 141 票 / 34 评论 / 2022-08-25 
+- [ DART algorithm explained](https://www.kaggle.com/competitions/amex-default-prediction/discussion/334670) — 132 票 / 17 评论 / 2022-07-02 
+- [Can you find the best seed?](https://www.kaggle.com/competitions/amex-default-prediction/discussion/329787) — 127 票 / 37 评论 / 2022-06-08 
+- [🔥🔥Marilia Prata Becomes Discussion GrandMaster](https://www.kaggle.com/competitions/amex-default-prediction/discussion/327463) — 115 票 / 196 评论 / 2022-05-27 
+- [10x fast metric (numpy)](https://www.kaggle.com/competitions/amex-default-prediction/discussion/328020) — 111 票 / 13 评论 / 2022-05-30 
+- [Thank you Raddar and Martin](https://www.kaggle.com/competitions/amex-default-prediction/discussion/347644) — 108 票 / 10 评论 / 2022-08-25 
+- [Welcome to Amex modeling challenge](https://www.kaggle.com/competitions/amex-default-prediction/discussion/327189) — 105 票 / 77 评论 / 2022-05-26 
+- [11th Place Solution (LightGBM with meta features)](https://www.kaggle.com/competitions/amex-default-prediction/discussion/347786) — 103 票 / 44 评论 / 2022-08-29 **write-up?**
+- [The distribution of missing values over time](https://www.kaggle.com/competitions/amex-default-prediction/discussion/328756) — 100 票 / 9 评论 / 2022-06-02 
+- [Insights from a previous default prediction competition](https://www.kaggle.com/competitions/amex-default-prediction/discussion/327148) — 95 票 / 12 评论 / 2022-05-25 
+- [Normalized Gini Coefficient (G). Default Rate (D).](https://www.kaggle.com/competitions/amex-default-prediction/discussion/327116) — 94 票 / 21 评论 / 2022-05-25 
+- [10th Place Solution: XGB with Autoregressive RNN features](https://www.kaggle.com/competitions/amex-default-prediction/discussion/347668) — 93 票 / 29 评论 / 2022-08-30 **write-up?**
+- [DART, LGBM, Saving Best Models  [Callbacks Code Snippet]](https://www.kaggle.com/competitions/amex-default-prediction/discussion/332575) — 89 票 / 21 评论 / 2022-06-22 
+- [How to identify Public and Private](https://www.kaggle.com/competitions/amex-default-prediction/discussion/327926) — 89 票 / 8 评论 / 2022-05-30 
+- [Time Series EDA and GRU Starter - LB 0.790](https://www.kaggle.com/competitions/amex-default-prediction/discussion/327761) — 85 票 / 14 评论 / 2022-05-29 
+- [The data has uniform random noise injected](https://www.kaggle.com/competitions/amex-default-prediction/discussion/327649) — 82 票 / 10 评论 / 2022-05-28 
+- [3rd solution--simple is the best](https://www.kaggle.com/competitions/amex-default-prediction/discussion/349741) — 80 票 / 23 评论 / 2022-09-02 **write-up?**
+- [13th Place Gold Solution](https://www.kaggle.com/competitions/amex-default-prediction/discussion/348014) — 76 票 / 20 评论 / 2022-09-06 **write-up?**
+- [Strange Histograms](https://www.kaggle.com/competitions/amex-default-prediction/discussion/327651) — 73 票 / 14 评论 / 2022-05-28 
+- [Metric without DF](https://www.kaggle.com/competitions/amex-default-prediction/discussion/327534) — 73 票 / 4 评论 / 2022-05-27 
+- [Towards data de-anonymization](https://www.kaggle.com/competitions/amex-default-prediction/discussion/332574) — 71 票 / 11 评论 / 2022-06-22 
+- [A checklist of ideas for Improving GBM Baselines](https://www.kaggle.com/competitions/amex-default-prediction/discussion/331165) — 69 票 / 9 评论 / 2022-06-16 
+- [Tabular Deep Learning - A Tutorial](https://www.kaggle.com/competitions/amex-default-prediction/discussion/332018) — 66 票 / 11 评论 / 2022-06-20 
+- [Understanding NA in the dataset](https://www.kaggle.com/competitions/amex-default-prediction/discussion/331725) — 66 票 / 14 评论 / 2022-06-18 
+- [Reminder: American Express is Hiring!](https://www.kaggle.com/competitions/amex-default-prediction/discussion/340114) — 64 票 / 30 评论 / 2022-07-27 
+- [Last month per customer](https://www.kaggle.com/competitions/amex-default-prediction/discussion/327094) — 64 票 / 6 评论 / 2022-05-25 
+- [Bypass the features anonymization with LightGBM's feature interactions](https://www.kaggle.com/competitions/amex-default-prediction/discussion/329094) — 63 票 / 5 评论 / 2022-06-04 
+- [Sharing my ablations studies](https://www.kaggle.com/competitions/amex-default-prediction/discussion/336546) — 63 票 / 27 评论 / 2022-07-11 
+- [5th Place Solution - Team 💳VISA💳(Summary&zakopuro's part)](https://www.kaggle.com/competitions/amex-default-prediction/discussion/348097) — 61 票 / 12 评论 / 2022-08-27 **write-up?**
+- [What can we still do when we have no information about the feaures](https://www.kaggle.com/competitions/amex-default-prediction/discussion/329436) — 61 票 / 7 评论 / 2022-06-06 
+- [Articles, Research Papers and Methodologies ](https://www.kaggle.com/competitions/amex-default-prediction/discussion/327135) — 59 票 / 2 评论 / 2022-05-25 
+- [Summary: Basic pipeline for tabular competition for beginner!](https://www.kaggle.com/competitions/amex-default-prediction/discussion/331840) — 58 票 / 6 评论 / 2022-06-19 
+- [21st Solution and Code Sharing](https://www.kaggle.com/competitions/amex-default-prediction/discussion/348530) — 57 票 / 18 评论 / 2022-08-29 **write-up?**
+- [A List of EDA tricks when memory is limited](https://www.kaggle.com/competitions/amex-default-prediction/discussion/330347) — 56 票 / 14 评论 / 2022-06-11 
+- [Some useful information I found about Features and Feature groups ](https://www.kaggle.com/competitions/amex-default-prediction/discussion/330486) — 56 票 / 10 评论 / 2022-06-12 
+- [The "Kaggle Ensembling Guide"](https://www.kaggle.com/competitions/amex-default-prediction/discussion/332729) — 55 票 / 14 评论 / 2022-06-23 
+- [Lag Features Are All You Need](https://www.kaggle.com/competitions/amex-default-prediction/discussion/335524) — 55 票 / 6 评论 / 2022-07-06 
+- [Best Single Model](https://www.kaggle.com/competitions/amex-default-prediction/discussion/333000) — 54 票 / 32 评论 / 2022-06-24 
+- [19th Place Solution](https://www.kaggle.com/competitions/amex-default-prediction/discussion/347651) — 52 票 / 19 评论 / 2022-08-30 **write-up?**
+- [5th Place Solution - Team 💳VISA💳(Patrick's part)](https://www.kaggle.com/competitions/amex-default-prediction/discussion/348118) — 51 票 / 11 评论 / 2022-08-27 **write-up?**
+- [New to Kaggle or Machine Learning? Come Say Hi!](https://www.kaggle.com/competitions/amex-default-prediction/discussion/326904) — 51 票 / 52 评论 / 2022-05-24 
+- [Better models make better abstract art](https://www.kaggle.com/competitions/amex-default-prediction/discussion/339726) — 51 票 / 29 评论 / 2022-07-26 
+- [Ensembling probabilities with log-odds](https://www.kaggle.com/competitions/amex-default-prediction/discussion/329103) — 50 票 / 14 评论 / 2022-06-04 
+- [How overfit is the leaderboard?](https://www.kaggle.com/competitions/amex-default-prediction/discussion/338140) — 49 票 / 17 评论 / 2022-07-19 
+- [[Rant] Why were we ever given the test data?](https://www.kaggle.com/competitions/amex-default-prediction/discussion/346145) — 49 票 / 18 评论 / 2022-08-18 
+- [A reminder for those of you who have used that 0.8 notebook just now.](https://www.kaggle.com/competitions/amex-default-prediction/discussion/344545) — 49 票 / 56 评论 / 2022-08-15 
+- [Tutorial on reading large datasets by Rohan](https://www.kaggle.com/competitions/amex-default-prediction/discussion/327205) — 48 票 / 12 评论 / 2022-05-26 
+- [[Place 17th Solution]: Pseodo-label + FE.](https://www.kaggle.com/competitions/amex-default-prediction/discussion/347850) — 48 票 / 26 评论 / 2022-08-29 **write-up?**
+- [Big "positional" shakeup](https://www.kaggle.com/competitions/amex-default-prediction/discussion/329738) — 47 票 / 13 评论 / 2022-06-08 
+- [12th Place Gold (2/2) - LGBM + XGBoost + Catboost](https://www.kaggle.com/competitions/amex-default-prediction/discussion/348058) — 47 票 / 13 评论 / 2022-08-26 **write-up?**
+- [What models ensemble well?](https://www.kaggle.com/competitions/amex-default-prediction/discussion/337610) — 46 票 / 15 评论 / 2022-07-16 
+- [12th Place Gold (1/2) - lgbm+xgboost+FCN+Transformer](https://www.kaggle.com/competitions/amex-default-prediction/discussion/347740) — 43 票 / 20 评论 / 2022-08-31 **write-up?**
+- [How good are the predictions? See for yourself!](https://www.kaggle.com/competitions/amex-default-prediction/discussion/339278) — 43 票 / 19 评论 / 2022-07-24 
+- [Stratification by P_2_LST can significantly reduce your CV variance](https://www.kaggle.com/competitions/amex-default-prediction/discussion/339426) — 43 票 / 14 评论 / 2022-07-24 
+- [The Random Kaggle estimator](https://www.kaggle.com/competitions/amex-default-prediction/discussion/332286) — 43 票 / 23 评论 / 2022-06-21 
+- [Final/Private dataset evaluation on October 2019 statement](https://www.kaggle.com/competitions/amex-default-prediction/discussion/327602) — 42 票 / 5 评论 / 2022-05-28 
+- [FYI: Nvidia blog - How American Express Uses Deep Learning for Better Decision Making](https://www.kaggle.com/competitions/amex-default-prediction/discussion/332218) — 42 票 / 5 评论 / 2022-06-20 
+- [Basic Feature Engineering - 1500 features](https://www.kaggle.com/competitions/amex-default-prediction/discussion/336557) — 42 票 / 20 评论 / 2022-07-11 
+- [Temporal features in the dataset](https://www.kaggle.com/competitions/amex-default-prediction/discussion/330987) — 41 票 / 2 评论 / 2022-06-15 
+- [Experiences from the field: A few things to remember about credit risk models in practice](https://www.kaggle.com/competitions/amex-default-prediction/discussion/330444) — 40 票 / 12 评论 / 2022-06-12 
+- [Why is there so much test data?](https://www.kaggle.com/competitions/amex-default-prediction/discussion/329088) — 40 票 / 12 评论 / 2022-06-04 
+- [45th place with XGBoost in first Kaggle competition](https://www.kaggle.com/competitions/amex-default-prediction/discussion/347966) — 40 票 / 4 评论 / 2022-08-30 **write-up?**
+- [The curse of exotic scoring](https://www.kaggle.com/competitions/amex-default-prediction/discussion/338268) — 39 票 / 25 评论 / 2022-07-19 
+- [15th Place Solution Meta features ,FE, DART, CAT, XG , Tabnet , MLP , ensemble 😊](https://www.kaggle.com/competitions/amex-default-prediction/discussion/347908) — 38 票 / 5 评论 / 2022-08-29 **write-up?**
+- [Good luck!](https://www.kaggle.com/competitions/amex-default-prediction/discussion/347181) — 36 票 / 28 评论 / 2022-08-23 
+- [I love Kaggle but decide to leave for a while (No More Kaggle, Goodbye)](https://www.kaggle.com/competitions/amex-default-prediction/discussion/348789) — 36 票 / 21 评论 / 2022-08-30 
+- [Share your shake up/down reasons](https://www.kaggle.com/competitions/amex-default-prediction/discussion/347660) — 35 票 / 27 评论 / 2022-08-25 
+- [27th place, +720 place shake up with NN model](https://www.kaggle.com/competitions/amex-default-prediction/discussion/347722) — 35 票 / 9 评论 / 2023-04-14 **write-up?**
+- [Training data starter](https://www.kaggle.com/competitions/amex-default-prediction/discussion/327106) — 35 票 / 7 评论 / 2022-05-25 
+- [🥇 Model Performance Ranking](https://www.kaggle.com/competitions/amex-default-prediction/discussion/328846) — 35 票 / 8 评论 / 2022-06-03 
+- [What All we can try to improve our model performance?](https://www.kaggle.com/competitions/amex-default-prediction/discussion/333953) — 34 票 / 16 评论 / 2022-06-29 
+- [Another way to keep only the last month without groupby](https://www.kaggle.com/competitions/amex-default-prediction/discussion/327361) — 34 票 / 5 评论 / 2022-05-26 
+- [I am addicted to this competition](https://www.kaggle.com/competitions/amex-default-prediction/discussion/346975) — 34 票 / 41 评论 / 2022-08-22 
+- [Two notebook medals for the same code](https://www.kaggle.com/competitions/amex-default-prediction/discussion/335986) — 34 票 / 27 评论 / 2022-07-08 
+- [⚡[FAST LOADING] only 1.4GB Training Data using Feather](https://www.kaggle.com/competitions/amex-default-prediction/discussion/327400) — 33 票 / 1 评论 / 2022-05-27 
+- [Bronze Medal Solution](https://www.kaggle.com/competitions/amex-default-prediction/discussion/347685) — 33 票 / 2 评论 / 2022-08-25 **write-up?**
+- [Handling large datasets with Dask](https://www.kaggle.com/competitions/amex-default-prediction/discussion/327110) — 33 票 / 3 评论 / 2022-05-25 
+- [9th Place Solution ( XGBoost+LGBM+NN )](https://www.kaggle.com/competitions/amex-default-prediction/discussion/350538) — 32 票 / 8 评论 / 2022-09-06 **write-up?**
+- [Is this the largest tabular dataset on Kaggle?](https://www.kaggle.com/competitions/amex-default-prediction/discussion/327084) — 32 票 / 15 评论 / 2022-05-25 
+- [Leaderboard is Finalized - Congrats to our Winners, Recap](https://www.kaggle.com/competitions/amex-default-prediction/discussion/348961) — 31 票 / 10 评论 / 2022-08-30 
+- [See how LightGBM learns as it grows trees](https://www.kaggle.com/competitions/amex-default-prediction/discussion/339451) — 31 票 / 12 评论 / 2022-07-24 
+- [Nine lines of feature engineering code to got 0.80727 private score --- alpha 191 factor base on Quant](https://www.kaggle.com/competitions/amex-default-prediction/discussion/347647) — 31 票 / 10 评论 / 2022-08-25 
+- [[Paper Summary] Why do tree-based models still outperform deep learning on tabular data?](https://www.kaggle.com/competitions/amex-default-prediction/discussion/343966) — 31 票 / 14 评论 / 2022-08-13 
+- [Feature Selection](https://www.kaggle.com/competitions/amex-default-prediction/discussion/336145) — 31 票 / 10 评论 / 2022-07-09 
+- [G and D learning curves](https://www.kaggle.com/competitions/amex-default-prediction/discussion/334157) — 30 票 / 6 评论 / 2022-06-30 
+- [Boosting XGBoost model score - without slowness of DART](https://www.kaggle.com/competitions/amex-default-prediction/discussion/338752) — 30 票 / 7 评论 / 2022-07-21 
+- [How To Select Features?](https://www.kaggle.com/competitions/amex-default-prediction/discussion/330931) — 30 票 / 6 评论 / 2022-06-15 
+- [Reading & Working with Large Dataset](https://www.kaggle.com/competitions/amex-default-prediction/discussion/327195) — 30 票 / 0 评论 / 2022-05-26 
+- [Unique number of categorical features](https://www.kaggle.com/competitions/amex-default-prediction/discussion/327161) — 29 票 / 1 评论 / 2022-05-25 
+- [CV vs LB Scores](https://www.kaggle.com/competitions/amex-default-prediction/discussion/327295) — 29 票 / 14 评论 / 2022-05-26 
+- [Maybe release the fourth decimal place in the leaderboard?](https://www.kaggle.com/competitions/amex-default-prediction/discussion/330130) — 29 票 / 8 评论 / 2022-06-10 
+- [Unstable random seed behaviour on public LB](https://www.kaggle.com/competitions/amex-default-prediction/discussion/336957) — 28 票 / 13 评论 / 2022-07-13 
+- [How to move from beyond 0.795? ](https://www.kaggle.com/competitions/amex-default-prediction/discussion/331454) — 28 票 / 10 评论 / 2022-06-17 
+- [t-SNE learns to separate data classess -- a short movie](https://www.kaggle.com/competitions/amex-default-prediction/discussion/342679) — 28 票 / 19 评论 / 2022-08-08 
+- [Analysis of Information loss during conversion from float64 to float16](https://www.kaggle.com/competitions/amex-default-prediction/discussion/328057) — 28 票 / 3 评论 / 2022-05-30 
+- [2020 place overview](https://www.kaggle.com/competitions/amex-default-prediction/discussion/347745) — 28 票 / 9 评论 / 2022-08-27 
+- [[16th place solution] Features Diversity and Ensemble](https://www.kaggle.com/competitions/amex-default-prediction/discussion/347858) — 27 票 / 3 评论 / 2022-09-01 **write-up?**
+- [Model ensembling](https://www.kaggle.com/competitions/amex-default-prediction/discussion/337188) — 27 票 / 6 评论 / 2022-07-14 
+- [(66th) My Reflections On This Competition](https://www.kaggle.com/competitions/amex-default-prediction/discussion/347763) — 26 票 / 2 评论 / 2022-08-30 
+- [Caution of using "publicly shared codes"](https://www.kaggle.com/competitions/amex-default-prediction/discussion/331388) — 26 票 / 4 评论 / 2022-06-17 
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/amex-default-prediction/discussion/326905) — 25 票 / 224 评论 / 2022-05-24 
+- [Tabular Data Augmentations](https://www.kaggle.com/competitions/amex-default-prediction/discussion/332930) — 25 票 / 4 评论 / 2022-06-24 
+- [Best Single NN Score](https://www.kaggle.com/competitions/amex-default-prediction/discussion/334391) — 25 票 / 8 评论 / 2022-07-01 
+- [Minority Report](https://www.kaggle.com/competitions/amex-default-prediction/discussion/327597) — 25 票 / 12 评论 / 2022-05-28 
+- [GBDT or NN,which is the winner of this competition](https://www.kaggle.com/competitions/amex-default-prediction/discussion/327765) — 25 票 / 9 评论 / 2022-05-29 
+- [Find your perfect NN!!](https://www.kaggle.com/competitions/amex-default-prediction/discussion/343011) — 24 票 / 6 评论 / 2022-08-09 

@@ -1,0 +1,82 @@
+# ai-mathematical-olympiad-prize 讨论区（按票数排序，共 80 条）
+
+- [AIMO | External Dataset with 21k Math Problems 🚀🚀🚀](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/488473) — 199 票 / 31 评论 / 2024-04-02 
+- [Numina 1st Place Solution](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/519303) — 191 票 / 36 评论 / 2024-07-10 **write-up?**
+- [🚀 Helpful links, datasets, models and papers to get started 🚀](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/488264) — 177 票 / 26 评论 / 2024-04-01 
+- [Solutions to 10 samples in train set](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/490640) — 114 票 / 39 评论 / 2024-04-03 **write-up?**
+- [Submissions Temporarily Disabled and Identity Verification Now Required to Submit](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/495133) — 92 票 / 85 评论 / 2024-04-19 
+- [SymPy is half you need](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/494713) — 86 票 / 23 评论 / 2024-04-18 
+- [$10,000 cash prize for the first to publish a public notebook scoring at least 20/50](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/492178) — 84 票 / 41 评论 / 2024-04-08 
+- [Early Sharing Prize Winner!](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/497136) — 81 票 / 29 评论 / 2024-04-23 
+- [3rd place solution](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/517206) — 72 票 / 8 评论 / 2024-07-08 **write-up?**
+- [On Score Variance (tl;dr: shakeup is inevitable)](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/509388) — 70 票 / 63 评论 / 2024-06-02 
+- [AIMO | External data: 8.8k problems with answers from "Art Of Problem Solving" website 🚀🚀🚀](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/492945) — 68 票 / 11 评论 / 2024-04-11 
+- [Notebook Scoring 20 points without Probing](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/495362) — 63 票 / 15 评论 / 2024-04-20 
+- [2nd place solution (All code and datasets released) - CMU_MATH](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/518964) — 62 票 / 16 评论 / 2024-07-10 **write-up?**
+- [Mixtral 8x7b trained on math dataset](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/492013) — 58 票 / 9 评论 / 2024-04-08 
+- [Google sheet summarizing similar DeepSeek notebooks](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/494847) — 57 票 / 12 评论 / 2024-04-18 
+- [Submissions Enabled with New Evaluation API](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/498044) — 53 票 / 42 评论 / 2024-04-26 
+- [Kaggle Beginner's(me) Brainstorming: Survey of MathQA, CoT, Fine-Tune, Models, Datasets, How others solve,,,](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/493572) — 53 票 / 1 评论 / 2024-04-14 
+- [Speeding DeepSeekMath Inference from 8+ hours to 3 hours (short answer: use P100)](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/492578) — 53 票 / 23 评论 / 2024-04-10 
+- [Status Update](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/497123) — 51 票 / 37 评论 / 2024-04-23 
+- [Leaderboard Finalization and Next Steps](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/515516) — 46 票 / 37 评论 / 2024-06-28 
+- [Is DeepSeekMath an Eligible Model?](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/493554) — 45 票 / 35 评论 / 2024-04-13 
+- [If someone manage to solve 47/50 of these questions, would they really want to turn the solution in for ~800k?](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/488441) — 44 票 / 30 评论 / 2024-04-02 **write-up?**
+- [Train vs LB score](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/499464) — 44 票 / 38 评论 / 2024-05-01 
+- [New Dataset Alert: >15k Samples from MATH & GSM8K Datasets Annotated with Code Solutions 🚀🚀🚀](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/507796) — 41 票 / 34 评论 / 2024-05-27 **write-up?**
+- [GPT-4o - 7/10 on Training set](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/502523) — 39 票 / 18 评论 / 2024-05-13 
+- [Potential Avenues for Getting Started](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/492861) — 37 票 / 5 评论 / 2024-04-11 
+- [If you need hugging face libraries while submitting](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/497470) — 37 票 / 4 评论 / 2024-04-24 
+- [2xT4 vLLM Fix](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/495404) — 37 票 / 14 评论 / 2024-04-21 
+- [Mixtral baseline gets 1/10 examples correct](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/488274) — 36 票 / 13 评论 / 2024-04-01 
+- [4th place solution](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/518960) — 36 票 / 1 评论 / 2024-07-09 **write-up?**
+- [My prediction of how the top solutions will look like](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/490691) — 35 票 / 0 评论 / 2024-04-03 **write-up?**
+- [DeepSeekMath + MCTS > GPT-4 (?)](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/501382) — 31 票 / 21 评论 / 2024-05-09 
+- [My Started (But Very Incomplete) Deep Dive into AlphaGeometry](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/493556) — 27 票 / 6 评论 / 2024-04-14 
+- [AIME | External Data Set of Mathematical Problems from 1983-2024 ](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/493772) — 27 票 / 5 评论 / 2024-04-14 
+- [AIMO prize](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/491058) — 26 票 / 3 评论 / 2024-04-04 
+- [Notebook Threw Exception - with New API? [Solved]](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/498069) — 26 票 / 32 评论 / 2024-04-26 
+- [Quick Learnings Post to Help New DeepSeekers](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/495055) — 24 票 / 2 评论 / 2024-04-19 
+- [What's up with Feb, 23 cutoff](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/493966) — 24 票 / 19 评论 / 2024-04-15 
+- [Fixing the "save and run all" fail issue with notebooks with "code.py"](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/493100) — 24 票 / 7 评论 / 2024-04-12 
+- [41st Place Solution](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/516868) — 23 票 / 1 评论 / 2024-07-05 **write-up?**
+- [Clarifying pre-trained model use violating Feb. 23 cutoff/open-source rules](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/499962) — 23 票 / 39 评论 / 2024-05-03 
+- [Why the dollar sign ($) doesn't show when we read the test.csv? However, it does on the train file.](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/488297) — 23 票 / 4 评论 / 2024-04-01 
+- [Leaderboard Updating (Final Scores Posted)](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/516823) — 21 票 / 64 评论 / 2024-07-03 
+- [Alpha Geometry](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/488259) — 21 票 / 6 评论 / 2024-04-01 
+- [Strange Behavior on the LB [current 3rd place user deleted account]](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/511414) — 20 票 / 24 评论 / 2024-06-10 **write-up?**
+- [MathGenie-InterLM-20B: what is good about this model](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/498982) — 20 票 / 20 评论 / 2024-04-30 
+- [Get started here!](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/487443) — 19 票 / 14 评论 / 2024-03-29 
+- [Trust the code, not the textual answers ](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/496457) — 19 票 / 0 评论 / 2024-04-21 
+- [🚀 [New Paper] Can Language Models Solve Olympiad Programming?](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/494931) — 19 票 / 0 评论 / 2024-04-19 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/488235) — 18 票 / 5 评论 / 2024-04-01 
+- [Zero-shot performance of gpt2-chatbot on the train set problems](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/498863) — 18 票 / 9 评论 / 2024-04-29 
+- [Did finetuning or RL worked for anybody ?](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/515379) — 18 票 / 26 评论 / 2024-06-28 
+- [Mysterious submission time outs in the final days of the competition](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/515519) — 18 票 / 25 评论 / 2024-06-28 
+- [T4 makes me hate my life](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/491771) — 18 票 / 10 评论 / 2024-04-07 
+- [About potential data leakage when validating on MATH dataset](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/505876) — 18 票 / 19 评论 / 2024-05-19 
+- [Microsoft releases new Rho models for math [not usable for this competition]](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/493251) — 18 票 / 36 评论 / 2024-04-12 
+- [Is anybody trying to fine-tune Deepseekmath on external data ?](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/500739) — 17 票 / 17 评论 / 2024-05-06 
+- [New GPT4-2024 Model 'Majorly Improved' in Math](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/492646) — 17 票 / 7 评论 / 2024-04-10 
+- [A prompt that covers generic strategies](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/505808) — 16 票 / 3 评论 / 2024-05-19 
+- [Meme Thread](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/515259) — 16 票 / 4 评论 / 2024-06-27 
+- [53rd Place Solution](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/518543) — 16 票 / 6 评论 / 2024-07-07 **write-up?**
+- [Has Anyone Made Finetuned deepseek-math-rl work?](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/505756) — 16 票 / 16 评论 / 2024-05-19 
+- [P100 Vs T4x2 Vs A100 (co-lab) outputs](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/493345) — 16 票 / 18 评论 / 2024-04-13 
+- [MathBench Benchmark](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/506378) — 16 票 / 1 评论 / 2024-05-21 
+- [56th Place Solution for the AI Mathematical Olympiad - Progress Prize 1 Competition](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/516856) — 15 票 / 1 评论 / 2024-07-03 **write-up?**
+- [[Solved: use test['problem'][0] ] Notebook with new API scores ZERO ! Before API scored 15](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/498135) — 15 票 / 9 评论 / 2024-04-27 
+- [Temperature Decay in AIMO LLM Class DeepSeek notebook](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/516851) — 15 票 / 6 评论 / 2024-07-03 
+- [What is the fastest way to do inference? (vLLM doesn't work for me)](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/500529) — 15 票 / 20 评论 / 2024-05-06 
+- [The best public notebook score decrease from 20 to 17(16) after new submission api?](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/499815) — 14 票 / 16 评论 / 2024-05-03 
+- [Getting "Notebook Timeout" when submitting with vLLM ](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/509444) — 14 票 / 22 评论 / 2024-06-02 
+- [GigaBenchmark LLM Accuracy / Math Problems](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/496771) — 14 票 / 1 评论 / 2024-04-22 
+- [AIMO: 36th Place Solution](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/516966) — 13 票 / 2 评论 / 2024-07-04 **write-up?**
+- [Should we think differently about math tokens?](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/498108) — 13 票 / 6 评论 / 2024-04-26 
+- [A way to reproduce results 🤔](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/502070) — 13 票 / 7 评论 / 2024-05-11 
+- [Great introduction paper of LLM for mathematical reasoning](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/490717) — 13 票 / 0 评论 / 2024-04-03 
+- [Problems with AlphaGeometry](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/490838) — 13 票 / 7 评论 / 2024-04-03 
+- [Dataset with DeepSeek model solutions](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/508194) — 13 票 / 1 评论 / 2024-05-28 **write-up?**
+- [Building RAG system in Kaggle comps. Use LangChain or write your own?](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/501600) — 12 票 / 4 评论 / 2024-05-10 
+- [OpenAI released MATH Eval prompt and code ](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/493045) — 12 票 / 0 评论 / 2024-04-12 
+- [Power of 2 for prizes! 2^20 total...](https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/488243) — 12 票 / 4 评论 / 2024-04-01 

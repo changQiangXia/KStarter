@@ -1,0 +1,82 @@
+# ai-village-capture-the-flag-defcon31 讨论区（按票数排序，共 80 条）
+
+- [25 flags writeup, (all except granny3 and cifar)](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/454403) — 49 票 / 5 评论 / 2023-11-10 **write-up?**
+- [Useful references](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/446004) — 46 票 / 3 评论 / 2023-10-09 
+- [9th Place Solution & Last to reach 24](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/454364) — 43 票 / 9 评论 / 2023-11-10 **write-up?**
+- [25 Flags of Pain // no CIFAR and Granny 3 ](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/454545) — 37 票 / 6 评论 / 2023-11-17 
+- [Starter Notebook Updates! (Check in throughout)](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/446213) — 22 票 / 24 评论 / 2023-10-10 
+- [11th Place Solution Code & "Aha" Moments [23 Flags]](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/454579) — 22 票 / 3 评论 / 2023-11-10 **write-up?**
+- [6th Place Solution [24 Points]](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/454471) — 18 票 / 0 评论 / 2024-08-02 **write-up?**
+- [CTF solutions from Bingus Traveller, 4th place](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/454480) — 18 票 / 1 评论 / 2023-11-10 **write-up?**
+- [3rd place solution - 25 points](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/454720) — 17 票 / 0 评论 / 2023-11-11 **write-up?**
+- [10th place solution - 23 flags](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/455174) — 16 票 / 1 评论 / 2023-11-13 **write-up?**
+- [Pixelated - bad OCR? Generate an adversarial image instead!](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/454373) — 14 票 / 2 评论 / 2023-11-10 
+- [23 tasks - 27th place.](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/454946) — 14 票 / 0 评论 / 2023-11-12 **write-up?**
+- [29th Place Solution for the AI Village Capture the Flag @ DEFCON31 Competition](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/456808) — 13 票 / 3 评论 / 2023-11-22 **write-up?**
+- [8th Solutions + thoughts](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/454466) — 13 票 / 0 评论 / 2023-11-10 **write-up?**
+- [Leaderboard Viz](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/446841) — 12 票 / 4 评论 / 2023-10-13 
+- [Useful Resources for this competitions ](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/451482) — 12 票 / 4 评论 / 2023-10-29 
+- [Crazy inversion findings](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/454370) — 11 票 / 1 评论 / 2023-11-10 
+- [75th Place Solution for the DEFCON31 Competition](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/454369) — 11 票 / 0 评论 / 2023-11-17 **write-up?**
+- [61st place solution for the AI Village Capture the Flag @ DEFCON31](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/454840) — 11 票 / 0 评论 / 2023-11-27 **write-up?**
+- [27th place solution - 23 points](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/456747) — 10 票 / 0 评论 / 2023-11-21 **write-up?**
+- [A view from the Midfield (14 flags)](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/455436) — 10 票 / 3 评论 / 2023-11-16 
+- [Learnings & my solutions in this competition](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/455966) — 10 票 / 5 评论 / 2023-11-17 **write-up?**
+- [5th place | 24/27 | Lessons from my first CTF + how GPT4 can help](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/455206) — 10 票 / 4 评论 / 2023-11-20 **write-up?**
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/446007) — 9 票 / 6 评论 / 2023-10-09 
+- [Is this competition too ambiguous?](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/446360) — 9 票 / 4 评论 / 2023-10-11 
+- [How did you get over being a novice of CTF?](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/446637) — 8 票 / 4 评论 / 2023-10-12 
+- [how to submit cluster 1](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/447397) — 8 票 / 7 评论 / 2023-10-15 
+- [7th Place Solution [24 points] for the AI Village Capture the Flag @ DEFCON31 Competition](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/454578) — 8 票 / 0 评论 / 2023-11-10 **write-up?**
+- [I cannot waiting to see those answer.](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/453979) — 8 票 / 2 评论 / 2023-11-08 
+- [AI Village Capture the Flag @ DEFCON31 - 22 Points](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/454390) — 8 票 / 0 评论 / 2023-11-10 
+- [Count CIFAR solution?](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/454767) — 8 票 / 4 评论 / 2023-11-11 **write-up?**
+- [No solution for CIFAR??](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/454662) — 7 票 / 1 评论 / 2023-11-11 **write-up?**
+- [21st place writeup [23 flags]](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/454399) — 7 票 / 0 评论 / 2023-11-10 **write-up?**
+- [First Kaggle Hackathon](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/454384) — 7 票 / 0 评论 / 2023-11-10 
+- [Solution to Inversion](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/454367) — 7 票 / 0 评论 / 2023-11-10 **write-up?**
+- [Template notebook not found](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/445984) — 7 票 / 1 评论 / 2023-10-09 
+- [11 flags..... sharing my solution](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/454404) — 6 票 / 0 评论 / 2023-11-10 **write-up?**
+- [CTF 23 Solutions](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/454543) — 6 票 / 0 评论 / 2023-11-10 **write-up?**
+- [Will there be official solutions posted after competition](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/453379) — 6 票 / 2 评论 / 2023-11-06 **write-up?**
+- [DEFCON31 AI CTF - 22 flags](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/454600) — 6 票 / 0 评论 / 2023-11-10 
+- [18 Flags + Some Unsuccessful Trials](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/454366) — 5 票 / 1 评论 / 2023-11-10 
+- [WriteUp - 20 Points](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/454368) — 5 票 / 0 评论 / 2023-11-10 **write-up?**
+- [Quite a fun competition but hard at the same time](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/446160) — 5 票 / 4 评论 / 2023-10-10 
+- [Typo in the starter notebook, task 10](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/446031) — 5 票 / 3 评论 / 2023-10-10 
+- [Grrrr...What's up with no credits, please top up](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/446666) — 5 票 / 10 评论 / 2023-10-12 
+- [Input Data To Be Submitted To Post Request For Catalyst 1 Challenge](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/446192) — 5 票 / 1 评论 / 2023-10-10 
+- [AI CTF [20 points]](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/454728) — 5 票 / 0 评论 / 2023-11-11 
+- [23 flags with elegant solutions especially to Cluster 3 and Semantle](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/454655) — 5 票 / 1 评论 / 2023-11-11 **write-up?**
+- [Can you explain the MNIST clue?](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/454705) — 5 票 / 8 评论 / 2023-11-11 
+- [1188th Place Solution for the AI Village Capture the Flag @DEFCON31 Competition](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/455723) — 5 票 / 1 评论 / 2023-11-16 **write-up?**
+- [69th Place Solution for the AI Village Capture the Flag @ DEFCON31 Competition (22 Flags)](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/455919) — 5 票 / 1 评论 / 2023-11-17 **write-up?**
+- [First person who got 27 flags win?](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/445991) — 5 票 / 1 评论 / 2023-10-09 
+- [85th Place Solution for the AI Village Capture the Flag @ DEFCON31](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/456858) — 5 票 / 1 评论 / 2023-11-22 **write-up?**
+- [Until when can I send requests to the server?](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/455266) — 4 票 / 3 评论 / 2023-11-14 
+- [[UPDATED] When to expect the final results?](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/455664) — 4 票 / 2 评论 / 2023-11-15 
+- [Easter egg(whats my ip)+ my rabbit holes [9 solves]](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/455884) — 4 票 / 0 评论 / 2023-11-17 
+- [Challenge completion stats?](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/454537) — 4 票 / 0 评论 / 2023-11-10 
+- [Few comments [24 flags]](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/455985) — 4 票 / 0 评论 / 2023-11-17 
+- [Congrats to winners!](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/454363) — 4 票 / 1 评论 / 2023-11-10 
+- [138th Place Solution for the AI Village Capture the Flag @ DEFCON31 Competition](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/456071) — 4 票 / 0 评论 / 2023-11-17 **write-up?**
+- [Do Not Share Flags Kagglers (again)! The Spirit of AI Village CTF.  Stealing and Fooling AI it's OK.](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/446010) — 4 票 / 12 评论 / 2023-10-09 
+- [Are all the MNIST datasets same?](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/449263) — 4 票 / 9 评论 / 2023-10-23 
+- [Input Data Format For Cluster 3 Challenge](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/446430) — 4 票 / 2 评论 / 2023-10-11 
+- [Are there any resources for this competetion?](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/446975) — 4 票 / 2 评论 / 2023-10-13 
+- [How to load model for Cluster - Level 1](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/447712) — 3 票 / 0 评论 / 2023-10-16 
+- [API timeouts](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/446400) — 3 票 / 3 评论 / 2023-10-11 
+- [AI Village Write-up notebook](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/455973) — 3 票 / 0 评论 / 2023-11-17 **write-up?**
+- [Persistence Pays Off in LLMs](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/454527) — 3 票 / 0 评论 / 2023-11-10 
+- [Is it enough to submit just the flags?](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/446211) — 3 票 / 3 评论 / 2023-10-10 
+- [136th place solution for AI Village Capture the Flag @ DEFCON31 competition](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/456057) — 3 票 / 2 评论 / 2023-11-20 **write-up?**
+- [A new LLM Capture The Flag Competition](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/456436) — 3 票 / 0 评论 / 2023-11-20 
+- [A little advice](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/449000) — 3 票 / 2 评论 / 2023-10-22 
+- [Starters for ML Security Newcomers?](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/446062) — 3 票 / 1 评论 / 2023-10-10 
+- [Has anyone successfully submitted count MNIST?](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/446540) — 3 票 / 4 评论 / 2023-10-12 
+- [New to Machine Learning or Kaggle? Start here.](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/445994) — 2 票 / 7 评论 / 2023-10-09 
+- [Trying to Create A Live Leaderboard](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/446379) — 2 票 / 4 评论 / 2023-10-11 
+- [Why am I getting a different flag for a particular challenge everytime I run it ? ](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/446423) — 2 票 / 4 评论 / 2023-10-11 
+- [Cannot Get Test Challenge to Run](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/446345) — 2 票 / 3 评论 / 2023-10-11 
+- [Error in starter notebook](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/446014) — 2 票 / 1 评论 / 2023-10-09 
+- [Tracking team's progress on leaderboard](https://www.kaggle.com/competitions/ai-village-capture-the-flag-defcon31/discussion/448093) — 2 票 / 0 评论 / 2023-10-18 

@@ -1,0 +1,82 @@
+# arc-prize-2025 讨论区（按票数排序，共 80 条）
+
+- [Dream came true.](https://www.kaggle.com/competitions/arc-prize-2025/discussion/614436) — 152 票 / 106 评论 / 2025-11-04 
+- [NVARC solution](https://www.kaggle.com/competitions/arc-prize-2025/discussion/651671) — 123 票 / 21 评论 / 2025-12-05 **write-up?**
+- [We just got a 29.72 score](https://www.kaggle.com/competitions/arc-prize-2025/discussion/615018) — 64 票 / 6 评论 / 2025-11-08 
+- [Welcome to ARC Prize 2025!](https://www.kaggle.com/competitions/arc-prize-2025/discussion/570243) — 58 票 / 44 评论 / 2025-03-26 
+- [ARC 2024 Solutions and Key Takeaways](https://www.kaggle.com/competitions/arc-prize-2025/discussion/575595) — 49 票 / 16 评论 / 2025-04-29 **write-up?**
+- [A Beginner's Guide to the ARC-AGI Challenge](https://www.kaggle.com/competitions/arc-prize-2025/discussion/589852) — 43 票 / 24 评论 / 2025-07-15 
+- [Exploring the combination of search and learn for the ARC25 challenge](https://www.kaggle.com/competitions/arc-prize-2025/discussion/614521) — 41 票 / 0 评论 / 2025-11-04 
+- [Summer thoughts about ARC](https://www.kaggle.com/competitions/arc-prize-2025/discussion/588467) — 37 票 / 12 评论 / 2025-07-06 
+- [Kaggle Code Template for ARC-AGI Without Pretraining](https://www.kaggle.com/competitions/arc-prize-2025/discussion/572453) — 34 票 / 12 评论 / 2025-04-09 
+- [Hidden Test Challenges Can Have Only One Training Sample](https://www.kaggle.com/competitions/arc-prize-2025/discussion/578736) — 32 票 / 9 评论 / 2025-05-13 
+- [ARC AGI Research Paper Collection: A Resource Hub](https://www.kaggle.com/competitions/arc-prize-2025/discussion/570249) — 32 票 / 4 评论 / 2025-03-26 
+- [ARC Prize 2025: Official Compute Grants & Resource Opportunities - Participants](https://www.kaggle.com/competitions/arc-prize-2025/discussion/570824) — 30 票 / 0 评论 / 2025-03-30 
+- [Starting materials](https://www.kaggle.com/competitions/arc-prize-2025/discussion/570252) — 27 票 / 4 评论 / 2025-03-26 
+- [Deadline and the queue](https://www.kaggle.com/competitions/arc-prize-2025/discussion/614325) — 21 票 / 23 评论 / 2025-11-03 
+- [ARC-Interactive-History-Dataset, recordings of how humans solve ARC-AGI puzzles](https://www.kaggle.com/competitions/arc-prize-2025/discussion/570452) — 20 票 / 3 评论 / 2025-03-27 
+- [Post comp update](https://www.kaggle.com/competitions/arc-prize-2025/discussion/652927) — 20 票 / 0 评论 / 2025-12-06 
+- [ARC Prize 2025 Test Set Edits](https://www.kaggle.com/competitions/arc-prize-2025/discussion/573301) — 20 票 / 4 评论 / 2025-04-14 
+- [Is Kaggle data updated when issues are fixed in gthub?](https://www.kaggle.com/competitions/arc-prize-2025/discussion/570621) — 19 票 / 4 评论 / 2025-03-29 
+- [What's wrong with this prize pool?](https://www.kaggle.com/competitions/arc-prize-2025/discussion/570259) — 19 票 / 29 评论 / 2025-03-26 
+- [Continuous Thought Machines](https://www.kaggle.com/competitions/arc-prize-2025/discussion/579909) — 19 票 / 7 评论 / 2025-05-21 
+- [Lb 8.33 with ARChitects Approach and a 0.5B model (Private Runtime ~5 hours)](https://www.kaggle.com/competitions/arc-prize-2025/discussion/615239) — 18 票 / 3 评论 / 2025-11-09 
+- [Does ARC 2 have a future?](https://www.kaggle.com/competitions/arc-prize-2025/discussion/608071) — 18 票 / 0 评论 / 2025-09-17 
+- [Qwen announces QVQ-Max, a visual reasoning model with step-by-step analysis for images and videos via Qwen Chat interface](https://www.kaggle.com/competitions/arc-prize-2025/discussion/570552) — 16 票 / 1 评论 / 2025-03-28 
+- [MindsAI & Tufa Labs – ARC Prize 2025 Solution](https://www.kaggle.com/competitions/arc-prize-2025/discussion/629790) — 16 票 / 2 评论 / 2025-12-05 **write-up?**
+- [Emergence: Declarative ARC-AGI solver (open source) + visualizer](https://www.kaggle.com/competitions/arc-prize-2025/discussion/599036) — 16 票 / 2 评论 / 2025-08-13 
+- [Tackling the Abstraction and Reasoning Corpus with Vision Transformers: the Importance of 2D Representation, Positions, and Objects](https://www.kaggle.com/competitions/arc-prize-2025/discussion/584862) — 16 票 / 2 评论 / 2025-06-16 
+- [Encyclopaedia of basic shapes](https://www.kaggle.com/competitions/arc-prize-2025/discussion/570479) — 16 票 / 9 评论 / 2025-03-28 
+- [ARC-CDG: The Curriculum Dataset Generator for ARC-AGI](https://www.kaggle.com/competitions/arc-prize-2025/discussion/599277) — 15 票 / 1 评论 / 2025-08-15 
+- [Solving ARC AGI 2 with cellular automata](https://www.kaggle.com/competitions/arc-prize-2025/discussion/601001) — 15 票 / 12 评论 / 2025-08-26 
+- [The ARChitects’ Solution](https://www.kaggle.com/competitions/arc-prize-2025/discussion/656966) — 15 票 / 5 评论 / 2025-12-09 **write-up?**
+- [Can TRM work without puzzle embeddings?](https://www.kaggle.com/competitions/arc-prize-2025/discussion/615253) — 14 票 / 3 评论 / 2025-11-09 
+- [Queues suddenly get quite bad?](https://www.kaggle.com/competitions/arc-prize-2025/discussion/611119) — 14 票 / 13 评论 / 2025-10-08 
+- [Get Started Here!](https://www.kaggle.com/competitions/arc-prize-2025/discussion/570237) — 14 票 / 6 评论 / 2025-03-26 
+- [Video: "Three Approaches Towards Solving ARC AGI" by Trelis Research](https://www.kaggle.com/competitions/arc-prize-2025/discussion/575842) — 14 票 / 2 评论 / 2025-05-01 
+- [ARC Prize 2025 Competition Writeup: 5th Place](https://www.kaggle.com/competitions/arc-prize-2025/discussion/617939) — 13 票 / 7 评论 / 2025-12-06 **write-up?**
+- [ARC Prize 2025 - End Of Competition Timeline](https://www.kaggle.com/competitions/arc-prize-2025/discussion/612886) — 12 票 / 53 评论 / 2025-10-22 
+- [TRM anyone?](https://www.kaggle.com/competitions/arc-prize-2025/discussion/611756) — 12 票 / 19 评论 / 2025-10-14 
+- [Conference write-up for my attempts at ARC AGI 2024 (llama.cpp + llama 3.0 8B/70B writing Python solvers)](https://www.kaggle.com/competitions/arc-prize-2025/discussion/575152) — 12 票 / 3 评论 / 2025-04-26 **write-up?**
+- [Encyclopaedia of Ambiguities](https://www.kaggle.com/competitions/arc-prize-2025/discussion/570842) — 12 票 / 3 评论 / 2025-03-31 
+- [LB 10.00 with Small Tweaks to 2024ARChitects](https://www.kaggle.com/competitions/arc-prize-2025/discussion/615041) — 11 票 / 0 评论 / 2025-11-09 
+- [4xL4 GPUs queued for hours](https://www.kaggle.com/competitions/arc-prize-2025/discussion/614039) — 11 票 / 23 评论 / 2025-10-31 
+- [I got Claude Code to try solving every problem with code](https://www.kaggle.com/competitions/arc-prize-2025/discussion/613470) — 11 票 / 13 评论 / 2025-10-27 
+- [My attempt at ARC-AGI-2](https://www.kaggle.com/competitions/arc-prize-2025/discussion/614983) — 10 票 / 1 评论 / 2025-11-07 
+- [Nice starter resources for Abstract Reasoning Corpus 2025 (ARC-2025) Contest](https://www.kaggle.com/competitions/arc-prize-2025/discussion/570323) — 10 票 / 4 评论 / 2025-03-27 
+- [Sharing My Pseudo-RL Approach for ARC Prize 2025](https://www.kaggle.com/competitions/arc-prize-2025/discussion/604936) — 9 票 / 7 评论 / 2025-09-07 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/arc-prize-2025/discussion/570300) — 9 票 / 7 评论 / 2025-03-27 
+- [The ARC challenge has been solved? ](https://www.kaggle.com/competitions/arc-prize-2025/discussion/608207) — 9 票 / 20 评论 / 2025-09-18 
+- [some most promising new way for ARC for AGI：ARC problem as space Analogy problem](https://www.kaggle.com/competitions/arc-prize-2025/discussion/570307) — 9 票 / 2 评论 / 2025-03-27 
+- [Will submission still be available after comp ends?](https://www.kaggle.com/competitions/arc-prize-2025/discussion/612763) — 9 票 / 1 评论 / 2025-10-21 
+- [A modification of the arc web app and an invitation for collective creation of synthetic data.](https://www.kaggle.com/competitions/arc-prize-2025/discussion/575246) — 9 票 / 4 评论 / 2025-04-27 
+- [symbolic meanings beyond visual patterns](https://www.kaggle.com/competitions/arc-prize-2025/discussion/570470) — 9 票 / 8 评论 / 2025-03-28 
+- [Google Spreadsheet of resources from ARC-AGI website](https://www.kaggle.com/competitions/arc-prize-2025/discussion/570847) — 9 票 / 3 评论 / 2025-03-31 
+- [ARC Prize 2025 is now complete!](https://www.kaggle.com/competitions/arc-prize-2025/discussion/652078) — 8 票 / 2 评论 / 2025-12-05 
+- [What do you think is the most difficult puzzle (for humans?)](https://www.kaggle.com/competitions/arc-prize-2025/discussion/570285) — 8 票 / 17 评论 / 2025-03-27 
+- [Are the hidden tasks the same difficulty as the evaluation tasks or harder?](https://www.kaggle.com/competitions/arc-prize-2025/discussion/570303) — 8 票 / 6 评论 / 2025-03-27 
+- [How to monitor disk space during runtime ?](https://www.kaggle.com/competitions/arc-prize-2025/discussion/571247) — 8 票 / 3 评论 / 2025-04-02 
+- [ AB-MCTS (Adaptive Branching Monte Carlo Tree Search)](https://www.kaggle.com/competitions/arc-prize-2025/discussion/587670) — 8 票 / 2 评论 / 2025-07-02 
+- [Kicking off a Rescore - COMPLETE](https://www.kaggle.com/competitions/arc-prize-2025/discussion/610195) — 8 票 / 0 评论 / 2025-10-02 
+- [⚠️Still mistakes being found in the dataset⚠️](https://www.kaggle.com/competitions/arc-prize-2025/discussion/570284) — 8 票 / 6 评论 / 2025-03-27 
+- [Wave Function Collapse](https://www.kaggle.com/competitions/arc-prize-2025/discussion/571630) — 8 票 / 3 评论 / 2025-04-04 
+- [Ideas: Simpler ARC challenges! 🤔](https://www.kaggle.com/competitions/arc-prize-2025/discussion/570716) — 8 票 / 3 评论 / 2025-03-30 
+- [OpenARC My Approach to Neural Models for Solving ARC-like Puzzles](https://www.kaggle.com/competitions/arc-prize-2025/discussion/578537) — 7 票 / 8 评论 / 2025-05-11 
+- [Should we assume private dataset has mistakes?](https://www.kaggle.com/competitions/arc-prize-2025/discussion/571091) — 7 票 / 1 评论 / 2025-04-01 
+- [Do we know the maximum number of input grids?](https://www.kaggle.com/competitions/arc-prize-2025/discussion/570510) — 6 票 / 5 评论 / 2025-03-28 
+- [DSL solvers for 2025 test problems ](https://www.kaggle.com/competitions/arc-prize-2025/discussion/571695) — 6 票 / 8 评论 / 2025-04-04 
+- [o4-mini-high Performance](https://www.kaggle.com/competitions/arc-prize-2025/discussion/574909) — 6 票 / 5 评论 / 2025-04-24 
+- [Arcified.AI Winning Playbook for Strong Compute ARC AGI 2 Hackathon](https://www.kaggle.com/competitions/arc-prize-2025/discussion/585477) — 6 票 / 0 评论 / 2025-06-20 **write-up?**
+- [Solution approaches that have led to the current state-of-the-art.](https://www.kaggle.com/competitions/arc-prize-2025/discussion/570293) — 6 票 / 2 评论 / 2025-03-27 **write-up?**
+- [ARC-AGI-2 puzzle solving by humans](https://www.kaggle.com/competitions/arc-prize-2025/discussion/572126) — 6 票 / 2 评论 / 2025-04-07 
+- [Scripts to compare git and kaggle data](https://www.kaggle.com/competitions/arc-prize-2025/discussion/570477) — 6 票 / 4 评论 / 2025-03-28 
+- [Simplified scene graphs](https://www.kaggle.com/competitions/arc-prize-2025/discussion/571270) — 6 票 / 1 评论 / 2025-04-02 
+- [is a solution guranteed to be unique?](https://www.kaggle.com/competitions/arc-prize-2025/discussion/599987) — 6 票 / 15 评论 / 2025-08-20 **write-up?**
+- [Tropical Attention: a strong alternative to Softmax](https://www.kaggle.com/competitions/arc-prize-2025/discussion/603660) — 6 票 / 0 评论 / 2025-09-03 
+- [ARC OFFICIAL WEBSITE GRAND PRIZE 700K BUT KAGGLE GRAND PRIZE 600K ???????](https://www.kaggle.com/competitions/arc-prize-2025/discussion/570515) — 6 票 / 3 评论 / 2025-03-28 
+- [No more icecuber-like solutions ?](https://www.kaggle.com/competitions/arc-prize-2025/discussion/570257) — 6 票 / 4 评论 / 2025-03-26 **write-up?**
+- [https://github.com/etimush/ARC_NCA](https://www.kaggle.com/competitions/arc-prize-2025/discussion/581026) — 5 票 / 3 评论 / 2025-05-28 
+- [ARC-AGI-2 Technical Report is out ](https://www.kaggle.com/competitions/arc-prize-2025/discussion/580194) — 5 票 / 1 评论 / 2025-05-23 
+- [Abstraction is key to human and artificial intelligence：Algebraic anti-unification](https://www.kaggle.com/competitions/arc-prize-2025/discussion/579953) — 5 票 / 0 评论 / 2025-05-21 
+- [Super late but here you go. ](https://www.kaggle.com/competitions/arc-prize-2025/discussion/614015) — 5 票 / 0 评论 / 2025-10-31 
+- [77% of training set is from ARC-AGI-1?](https://www.kaggle.com/competitions/arc-prize-2025/discussion/573594) — 5 票 / 10 评论 / 2025-04-16 

@@ -1,0 +1,237 @@
+# https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/411505
+
+Topic #411505: 1st Place Solution
+  Author: dott
+  Posted: 2023-05-19 14:32:14.041000
+  Votes: 99  Comments: 59
+
+First of all we would like to thank Kaggle and AMP PD for hosting this competition and providing a great dataset to dig into and rich enough to get lost in it for several months. It is always an extra motivation to work on problems that can bring value to the medical field or contribute to scientific research. Additional words of gratitude of course go to @kyakovlev for the amazing work he has done, I think we formed a great team for this competition and the results reflect that.
+
+We publish the full code of the winning notebook here
+
+Quick summary
+
+Our final solution is a simple average of two models: LGB and NN. Both models were trained on the same features (+ scaling/binarization for NN):
+
+
+
+Visit month
+
+Forecast horizon
+
+Target prediction month
+
+Indicator whether blood was taken during the visit
+
+Supplementary dataset indicator
+
+Indicators whether a patient visit occurred on 6th, 18th and 48th month
+
+Count of number of previous “non-annual” visits (6th or 18th)
+
+Index of the target (we pivot the dataset to have a single target column)
+
+
+The winning solution fully ignores the results of the blood tests. We’ve tried hard to find any signal in this crucial piece of the data, but unfortunately we came to the conclusion that none of our approaches or models can benefit from blood test features significant enough to distinguish it from random variations. The final models were trained only on the union of clinical and supplementary datasets.
+
+LGB
+
+For the entire duration of the competition LGB was our model to beat and only a NN trained with the competition metric as the loss function was able to achieve competitive performance on CV. At first, we tried running a regression LGB model with different hyperparameters and custom objective functions, but nothing was better than l1 regression, which does not optimize the desired metric SMAPE+1. We also noticed that on CV the performance of every model is always better when the regression outputs are rounded to integers. Then we switched to an alternative approach.
+
+Our LGB model is a classification model with 87 target classes (0 to maximum target value) and logloss objective. To produce the forecast we applied the following post-processing: given the predicted distribution of target classes, pick a value that minimizes SMAPE+1. Taking into account the observation that the optimal predictions are always integers, the task boils down to a trivial search among 87 possible values. Such an approach would have worked well for the original SMAPE metric also, because the approach treats cases with multiple local minimums naturally.
+
+We ran an optimization routine to tune LGB hyperparameters to minimize SMAPE+1 on CV using the described post-processing.
+
+NN
+
+The neural network has a simple multi-layer feed-forward architecture with a regression target, using the competition metric SMAPE+1 as the loss function. We fixed the number of epochs and scheduler, and then tuned the learning rate and hidden layer size. The only trick there was to add a leaky relu activation as the last layer to prevent NN from getting stuck at negative predictions. Of course there are alternative ways to solve this issue.
+
+Cross-Validation
+
+We’ve tried multiple cross-validation schemes due to the small training sample size, all of them were stratified by patient id. Once a sufficient number of folds is used, they all are quite well correlated to each other. Better than to the public leaderboard :) The final scheme we relied on was leave-one-(patient)-out or, in other words, a group k-fold cross validation with a fold for each patient. We used it because it doesn’t depend on random numbers. The cross-validation correlated well enough with the private leaderboard, and the submit we chose turned out to be our best private LB submission.
+
+What worked
+
+The most impactful feature was the indication of whether a patient visit happened on the 6th month or not. It correlates strongly with the UPDRS targets (especially 2 and 3) and with frequency of medications being taken. As we can observe only the data correlation, it is impossible to judge what is the core reason for that. During the competition our hypothesis was that the patients that had more severe symptoms during the first examination (UPDRS scores parts 2 and 3) were more likely to get invited for a visit after 6 months and more likely to get medications prescribed. But for model training it was important that the patients that made a visit on the 6th month, have higher UPDRS scores on average. The same is true for an 18th month visit as well, but these 2 features are correlated. I personally wonder if presence / absence of these variables in the models are the reason for the private LB cliff effect around 20th place.
+
+Another curious effect related to it is observed for the forecasts made at visit_month = 0. If you look at the model forecasts for 0, 12 and 24 months ahead, they are consistently lower than the forecasts 6 months ahead. It is very logical from the math point of view - if a patient will show up on the 6th month, they will have higher UPDRS scores on average, and if not - the forecast will be ignored. But such model behaviour is unreasonable from a clinical point of view of course.
+
+It was also important to pay attention to the differences between training and test datasets as e.g. nicely summarized here. That, for instance, explains well why adding a feature indicating the visit on the 30th month could improve the CV, but ruin LB.
+
+What didn’t work
+
+Blood test data. We’ve tried many approaches to add proteins and/or peptides data to our models, but none of them improved CV. We narrowed it down to a bag of logistic regressions that forecasted the visit on the 6th month based on the blood test result on the 0th month. We applied soft up/down scaling of model-based predictions for patients that were more/less likely to visit on the 6th month based on the logistic regression probabilities. It worked on public LB after tuning a couple of “magic” coefficients directly on public LB itself. That gave us a boost all the way up to the second place on public LB, but it was clearly an overfit. We chose a “mild” version of that approach as our second final submission. It scored worse on private LB than the other submission, but, interestingly enough, not by as much as one could have expected (60.0 vs 60.3).
+
+Thanks to everyone who participated in the competition, those who kept many interesting discussions going on the forum and those who suggested improvements! And congrats to all the winners!
+
+Comments:
+├─ Konstantin Yakovlev (2023-05-19 14:41:03.777000) [+13]
+│  It was a huge huge pleasure to team up with @dott1718 (Dmitry) in this competition. I felt as a total junior DS - Dmitry's ideas, approach and dedication were astonishing - I've learned so much and...
+  ├─ Konstantin Yakovlev (2023-05-19 14:52:08.873000) [+16]
+  │  A SMAPE1P thing:
+  │  
+  │  MAPE / SMAPE / SMAPE1P are very tricky metrics for GBT models:
+  │  
+  │  
+  │  
+  │  Need custom loss or target transform with l1 loss (l1 is never optimal choice for gbt)
+  │  
+  │  Multimodal
+  │  
+  │  Zero inflatio...
+    ├─ Chris Deotte (2023-05-19 17:23:22.423000) [+5]
+    │  Amazing hack! Great discovery and thanks for sharing!
+    ├─ Chris Deotte (2023-05-19 17:52:21.440000) [+2]
+    │  Wow amazing it is working. My MLP CV = 54.95. So far using your hack and XGB, I achieved CV = 54.79 with my features. I will finish tuning XGB with your hack and then make a submission to LB. I wil...
+    ├─ Konstantin Yakovlev (2023-05-19 17:59:04.133000) [+2]
+    │  We’ve tried all possible ways - weighted  rounded ensemble / probabilities blend / voting / … nothing really worked on cv - just a very slight move. We ended up with this
+    │  
+    │   sample_test["preds_lgb"]...
+    ├─ Konstantin Yakovlev (2023-05-19 18:05:05.340000) [+1]
+    │  I’m convincing Dmitry to write a paper about this tiny part of the code - because it’s “gamechanger” for all MAPE lovers)))(no “dancing” around target/straight forward approach / better results) he...
+    ├─ Chris Deotte (2023-05-19 18:48:17.607000) [+1]
+    │  Wow, i have my XGB CV = 54.64 using your hack. This is +0.3 better than my MLP CV and I'm still tuning. I'm curious if this will boost my LB score this much!
+    ├─ Konstantin Yakovlev (2023-05-19 18:52:20.760000) [+2]
+    │  Waiting for your lb probing - all our tests showed that loo cv was very stable and aligned with lb and we had the same boost on loo cv / private / public lb.
+    ├─ Chris Deotte (2023-05-19 20:44:47.883000) [+2]
+    │  @kyakovlev I made a notebook here with single model XGB and just submitted to the LB. We should have a score in a few hours. Note that this is the first submission, so we have not adjusted the mode...
+    ├─ Chris Deotte (2023-05-19 21:30:03.270000) [+0]
+    │  Submission finished. Private LB = 60.29. I'm surprised i thought it would do better. Perhaps there is a bug in my code. 
+    │  
+    │  I also noticed that i can improve my MLP CV score but predicting multi-clas...
+    ├─ Chris Deotte (2023-05-20 02:00:20.640000) [+0]
+    │  Weird. It improves my MLP CV by +0.3 but degraded the private LB -0.1. So this SMAPE optimization does not help my model. I wonder why.
+    ├─ Konstantin Yakovlev (2023-05-20 04:35:53.960000) [+2]
+    │  @cdeotte I’l try to look on it on Sunday and report you.
+    ├─ Chris Deotte (2023-05-20 19:45:00.223000) [+1]
+    │  I just got reg:absoluteerror to work with XGB. It appears that Kaggle's version 1.7.5 has a bug with reg:absoluteerror. I pip installed 1.7.1 and now XGB achieves a similar CV score as MLP (only 0....
+    ├─ Chris Deotte (2023-05-20 20:44:01.420000) [+1]
+    │  Results are in. (Note these CV scores are from my local not on Kaggle CV scheme)
+    │  
+    │  
+    │  
+    │  
+    │  XGB with your multiclass hack - CV 54.65 - Private LB 60.29 (notebook version 1)
+    │  
+    │  
+    │  XGB with reg:absoluteerror - ...
+    ├─ Konstantin Yakovlev (2023-05-20 20:50:30.127000) [+2]
+    │  @cdeotte thank you so much for checking and analysis - your dedication and post competition work amazes me. A was planning to spend Sunday on exactly the same thing that you did with xgb, but now I...
+    ├─ Chris Deotte (2023-05-20 21:04:29.360000) [+3]
+    │  Thanks. I will do a few more submissions with XGB. For the above four experiments i use a local (i.e. not on Kaggle) CV scheme which i think is closer to Kaggle's evaluation. However it is slightly...
+    ├─ Chris Deotte (2023-05-21 15:49:02.390000) [+2]
+    │  I finished all my experiments. Using XGB reg:absoluteerror and 'subsample':0.5, i boosted the notebook's CV by +0.2 and improved the Private LB to 60.4. So using multiclass trick is still better (a...
+    ├─ dott (2023-05-22 14:32:19.653000) [+2]
+    │  Thank you for analysis Chris!
+    │  On private LB a single NN (SMAPE1p regression) scored around 60.2-60.3 depending on the seed and rounding / not rounding the outputs. The LGB (classification + optimiz...
+    ├─ Chris Deotte (2023-05-22 14:55:58.637000) [+1]
+    │  I personally am still puzzled why NN bagging didn't improve CV, I don't think I've seen such behaviour ever before. So instead of e.g. averaging 5-7 NN runs with different seeds, we used a single N...
+├─ Chris Deotte (2023-05-19 16:41:05.543000) [+3]
+│  Congratulations @dott1718 and @kyakovlev Fantastic job! 
+│  
+│  
+│    
+│  The winning solution fully ignores the results of the blood tests. We’ve tried hard to find any signal in this crucial piece of the dat...
+  ├─ Chris Deotte (2023-05-19 16:44:48.583000) [+1]
+  │  Now i just read that you did try using blood without visit month. So perhaps you demonstrated that it does not have predictive power.
+  │  
+  │  
+  │    
+  │  Blood test data. We’ve tried many approaches to add protei...
+    ├─ dott (2023-05-22 14:44:49.517000) [+1]
+    │  Yes, it is exactly why we tried to narrow it down to a single homogenous group, but without much success. At some point I managed to get a CV improvement with some proteins data of a 0.01 magnitude...
+├─ Vitaly Kudelya (2023-05-20 17:38:41.290000) [+4]
+│  Why is leave-one-(patient)-out cross-validation also called "stratified cross validation with a fold for each patient" in the post?
+│  I thought that for stratification we need our folds to be stratif...
+  ├─ [deleted] (2023-05-20 17:50:43.277000) [+0]
+  │  [deleted]
+  ├─ dott (2023-05-22 14:14:48.670000) [+1]
+  │  You are right, thank you for pointing that out! It is indeed group k-fold and not stratified k-fold, I've corrected the text to prevent potential confusion.
+├─ oka_haru (2023-05-20 12:16:29.457000) [+4]
+│  Congratulations!!!
+│  Thanks for sharing your solution!!
+├─ Jindo (2023-05-20 11:48:58.513000) [+4]
+│  Congratulations🎉 
+│  I really learned a lot from your source code and explanations. 
+│  Thank you very much.
+├─ Samvel Kocharyan (2023-05-19 15:15:44.447000) [+4]
+│  Congratulations Dmitry and Konstantin! What a brilliant skill to focus on one smaller part of data (visits) and have enough wisdom and experience to ignore the others (CSF). I would say it is one o...
+├─ Jai Chauhan (2023-05-24 10:06:13.043000) [+1]
+│  Congratulations! sir
+├─ Rida Mahmood (2023-05-21 19:31:50.733000) [+1]
+│  Many congratulations @dott1718. Also I highly appreciate you for sharing your winning solution. 
+│  Stay blessed!
+├─ sameelie (2023-05-21 17:39:05.437000) [+1]
+│  Congratulations! Thanks for sharing your approach to a simple but effective solution.
+├─ Konstantin Yakovlev (2023-05-21 10:30:51.380000) [+1]
+│  https://www.kaggle.com/code/kyakovlev/amp-blood-randomness/
+│  
+│  Small example for "fake" correlations in proteins / peptides
+├─ Gaurav Srivastava (2023-05-23 09:53:36.787000) [+2]
+│  Heartiest Congratulations @dott1718. And thanks for sharing. Keep up the good work 😊
+├─ Vincent Schuler (2023-05-21 13:18:03.707000) [+2]
+│  Congratulations @dott1718 and @kyakovlev ! Best team name and best solution 💪
+│  
+│  I tried multiclass classification as well but couldn't make it work better than a simple regression model. Thanks for ...
+  ├─ dott (2023-05-22 14:13:22.817000) [+1]
+  │  Thank you Vincent! I was cheering for you to get to the gold zone on private LB, hopefully you are not too upset about the result.
+    ├─ Vincent Schuler (2023-05-22 15:37:29.450000) [+0]
+    │  Thanks 😄 Nothing too frustrating, hopefully I'll get it another time !
+    ├─ dott (2023-05-22 17:24:39.700000) [+1]
+    │  I am sure you will!
+├─ Aaron C Bastian (2023-05-20 15:02:13.793000) [+2]
+│  It is unfortunate that no signal was found in the protein data, as that was the entire point of the challenge.  Parkinson's remains a clinical diagnosis it seems.
+├─ Ion05 (2023-05-20 13:01:59.950000) [+2]
+│  Congratulations!
+│  Thanks for sharing your solution with us. It has been very helpful for me.
+│  Thank you!!
+├─ windupbirdjdt (2023-05-20 12:21:40.700000) [+2]
+│  very interesting discussion and work, thank you for taking the time to update on this, its interesting that the blood test data was not directly an input
+├─ Jayanth Sai Marreddi (2023-05-20 10:52:07.053000) [+2]
+│  Congratulations! Thanks for sharing your solution gives a lot insights to me to see how does top people in leaderboard approach a project.
+├─ Viji (2023-05-20 08:39:37.713000) [+2]
+│  Congratulations! Thanks for sharing your approach to a simple but effective solution.
+├─ Chris Deotte (2023-05-19 16:49:43.167000) [+2]
+│  Thanks for sharing your solution. I never achieved good results from GBT. (I think CV was 57 compared with my MLP's 55). And i did not achieve any significant boosts from SMAPE optimization (beside...
+  ├─ Konstantin Yakovlev (2023-05-19 17:02:46.523000) [+1]
+  │  Same with our ensembles - NN with lgbm showed just a tiiiny boost on CV.
+  ├─ Chris Deotte (2023-05-19 17:17:00.267000) [+2]
+  │  I like your trick of training multi-class then optimizing output to SMAPE. That's clever. 
+  │  
+  │  
+  │    
+  │  Our LGB model is a classification model with 87 target classes (0 to maximum target value) and loglos...
+├─ MichaelDarling (2023-08-26 23:28:52.627000) [+0]
+│  Hi @dott1718, congratulations!  Would you be able to send along the testing data provided by the competition?  I have a student working with this data for his capstone project and would love to get...
+├─ Aleksey SCHUKIN (2023-07-03 17:45:31.560000) [+0]
+│  Congratulations! Thanks for sharing your approach.
+├─ Tomonori Sasaki (2023-06-05 00:14:32.767000) [+0]
+│  Congratulations!
+│  Thank you for publishing and sharing.
+│  The discussion around the metrics in this competition was difficult and confusing to me. I will learn from the published notes.
+├─ Backyard (2023-06-04 19:38:54.847000) [+0]
+│  Good job,thank you very much. Because I can learn from it .
+├─ Jeong Taewoo (2023-05-27 00:54:56.890000) [+0]
+│  I thought XGBoost almost always had good performance, but I guess it wasn't necessarily. Your writing and notebook helped me improve my skills a lot. Thank you!!
+  ├─ Josef Švenda (2023-06-08 07:59:20.263000) [+0]
+  │  As I understood the discussion: XGB would be a comparable method if it would have custom objective function aligned with SMAPE metric. Right @cdeotte, @dott1718, @kyakovlev ? 
+  │  Anyway excellent lear...
+├─ GridSearchGK (2023-05-24 20:11:35.700000) [+0]
+│  Congratulations !! Well done 🔥
+├─ 3SE3_212011556_Aronad Brilliantio Evan Maheswara (2023-05-24 10:37:07.383000) [+0]
+│  Congratulations! Thanks for sharing your approach.
+├─ Nooruddin Hyderabadwalla, CFA (2023-05-24 05:29:40.277000) [+0]
+│  Many congratulations @dott1718 on winning this competition. Reading through your solution is a learning experience for me, very insightful. Thank you so much for sharing.
+├─ Murugesan Narayanaswamy (2023-05-21 00:35:05.700000) [+0]
+│  The objective of this competition is to discern what kind of correlation the protein / peptides (levels) have on disease progression. Hence, I never tried any model (though I joined the competition...
+├─ [deleted] (2023-05-20 21:55:33.930000) [+1]
+│  [deleted]
+  ├─ Konstantin Yakovlev (2023-05-21 08:01:50.460000) [+1]
+  │  I really like your "confidence" in the approach that you've created, but you are wrong.
+  │  
+  │  There is an error in CV or Metric or any other place. 
+  │  It is easy to check if you really want to dig deeper....
+    ├─ Murugesan Narayanaswamy (2023-05-22 00:49:33.947000) [+0]
+    │  As per a research paper I sampled, there are around 13879 peptides which differ from normal healthy people compared to parkinson' diseased patients. Of these peptides, 1466 are observable from the ...
+├─ castberry (2023-08-09 14:27:06.767000) [+0]
+│  Thank you. It was helpful.

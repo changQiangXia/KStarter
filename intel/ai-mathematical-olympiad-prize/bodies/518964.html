@@ -1,0 +1,152 @@
+<h1>2nd place solution: SFT + ORM</h1>
+<h2>All the code and dataset, please check our <a href="https://github.com/AIMO-CMU-MATH/CMU_MATH-AIMO" target="_blank"><strong>Github repository</strong></a>.</h2>
+<p><a href="https://www.kaggle.com/code/edwardsun0909/aimo-2nd-place-solution" target="_blank">The notebook of the solution can be found here</a></p>
+<p><a href="https://huggingface.co/AIMO-CMU-MATH/policy-model" target="_blank">policy model</a></p>
+<p><a href="https://huggingface.co/AIMO-CMU-MATH/reward-model" target="_blank">reward model</a></p>
+<h2>Model Details</h2>
+<p>We fine-tuned two DeepSeek-Math-7B-RL models, one is used as policy model (to generate solutions), one as reward model (to score the solutions for weighted majority voting). The training infra is adopted from (Sun et al., 2024), bibtex is in the end.</p>
+<h3>Policy Model</h3>
+<p>Our dataset is a combination of AMC, AIME, and Odyssey-Math. We only select those problems of integer answers since the answer of the test problems will be integers. We also delete the choices of the multiple choice problem in AMC.</p>
+<ul>
+<li><p><a href="https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/492945" target="_blank">AMC, AIME datasets can be found here</a>. Thanks  <a href="https://www.kaggle.com/alexryzhkov" target="_blank">@alexryzhkov</a> !</p></li>
+<li><p><a href="https://github.com/protagolabs/odyssey-math" target="_blank">Odyssey-Math dataset can be found here</a></p></li>
+</ul>
+<p>We prompt GPT4 to sample code to solutions to the problems in our dataset using few-shot examples, and select the correct solutions as our training dataset for our policy model.</p>
+<p>The datasets can be found at our github <a href="https://github.com/AIMO-CMU-MATH/AIMO-2nd-Solution" target="_blank">AIMO-CMU-MATH</a>.</p>
+<p>We finetune the model for 3 epochs with learning rate 2e-5.</p>
+<h3>Reward Model</h3>
+<h4>Problem Set</h4>
+<p>We use the problems in <a href="https://github.com/hendrycks/math/" target="_blank">MATH</a>, AIME, AMC and Odyssey-Math with nonnegative integer answers as our problem set for training the reward model.</p>
+<h4>Reward Dataset Collection</h4>
+<h5>Observation</h5>
+<p>On MATH dataset, if we sample solutions with DeepSeek-MATH-7B RL, we will only get correct solutions for some problems, and those solutions can be similar. On the other hand, sampling solutions with DeepSeek-MATH-7B Base fails to output any correct solutions on some problems.</p>
+<p>On AMC, AIME and Odyssey, the observation is similar. When using DeepSeek-Math-7B-RL to sample solutions, most of the results are wrong; When using our fine-tuned policy model, the accuracy is high. </p>
+<p>We believe that in order to train a good reward model, the dataset should satisfies:</p>
+<ul>
+<li><p>Diversity: The solutions for each question are quite different.</p></li>
+<li><p>Label balance: The dataset contains both correct solutions (positive examples) and incorrect ones (negative examples) for each question.</p></li>
+</ul>
+<p>Therefore, we adopt the following sample strategies.</p>
+<h5>1. Interpolation</h5>
+<p>For MATH dataset, we interpolate the model parameters of DeepSeek-Math-7B RL and DeepSeek-Math-7B Base to get models with different level of capabilities. Denote the model parameters of DeepSeek-Math-7B RL and DeepSeek-Math-7B Base as $M_{RL}$ and $M_{Base}$, respectively. The interpolated model parameter $M_{\alpha}$ is a linear combination of $M_{RL}$ and $M_{Base}$.<br>
+$$<br>
+M_{\alpha}=\alpha M_{RL} + (1-\alpha)M_{Base}<br>
+$$<br>
+We choose 8 different models with $\alpha=0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0$. Each model generates two solutions for each question. The larger $\alpha$ is, the more correct answers the model samples.</p>
+<p>By interpolation, we can get different models which yield diverse solutions, and the proportion of positive labels and negative labels are much more balanced compare to sampling with only one model.</p>
+<h5>2. Fine-tuning</h5>
+<p>For AMC, AIME, Odyssey, we use the training dataset we collect for the policy model, and train the DeepSeek-Math-RL 7B with 0, 1, 2, and 3 epoch(s) to get 4 different models. Each model generates 12 solutions for each problem.</p>
+<p>In this way, we obtain different solutions and each problems are more likely to have both correct solutions and wrong solutions.</p>
+<h5>Filtering</h5>
+<p>Once we collected all the solutions with labels, we do the filtering below:</p>
+<ul>
+<li>We remove those wrong solutions with non-integer answer, since only solutions with integer answer will be scored as a candidate answer in our weighted majority voting method.</li>
+<li>We keep the number of positive labels v.s. negative labels as 1:1 for each problem. </li>
+</ul>
+<h4>What else we tried for fine-tuning reward model and policy model</h4>
+<ul>
+<li>De-duplicate similar solutions in policy model training dataset.</li>
+<li>Include those gpt's wrong solutions in the policy model training dataset.</li>
+<li>Keep all the sampled solutions with labels in the reward training dataset.</li>
+<li>Not keep the proportion of positive and negative labels for each question in the reward dataset as 1:1, instead  a range of  1:2 to 2:1.</li>
+</ul>
+<p>We find that the above methods don't result in models that perform better on our validation dataset. Therefore we use the methods described before.</p>
+<h2>Solution</h2>
+<h3>vLLM</h3>
+<p>For the policy model, we use <a href="https://github.com/vllm-project/vllm" target="_blank">vLLM</a> to speed up sampling and  huggingface transformer for reward model. Scoring a solution is just a forward pass and doesn't take much time. Each model uses one GPU (T4).</p>
+<h3>Generation</h3>
+<p>We sample 42 solutions for each problem, the policy model is asked to write code. Prompt is simply problem + tool_instruction.</p>
+<p><code>tool_instruction = '\nPlease integrate natural language reasoning with programs to solve the problem above, and put your final answer within \\boxed{}.'</code></p>
+<hr>
+<p>If the result of code execution is not an integer, we give feedback and ask policy model to do it again, the code is below:</p>
+<pre><code> ():
+    prompt = problem + tool_instruction
+    texts = [prompt  _  (num_sequences)]
+    results = []
+    result_texts = []
+     i  (rounds):
+        sampling_params = SamplingParams(temperature=T, top_p=, n=, max_tokens=, stop=)
+        generated_texts = llm.generate(texts, sampling_params)
+        next_round_texts = []
+        completed = []
+        ((generated_texts))
+         j, (text, generated_text)  ((texts, generated_texts)):
+            new_text = generated_text.outputs[].text
+            completed = 
+               new_text:
+                :
+                    code_text = new_text.split()[-].split()[]
+                    code_result, CODE_STATUS = process_code(code_text, return_shell_output=)
+                    :
+                        result = ((code_result.strip()))
+                         result &gt;= :
+                            results.append(result % )
+                            result_texts.append((prompt +  + new_text.split()[-]).split()[])
+                        completed = 
+                     Exception  e:
+                       code_result += 
+                 Exception  e:
+                    code_result = 
+                    
+                 completed == :
+                    next_round_texts.append(text + new_text +  + code_result + )
+
+        texts = next_round_texts
+        (, (texts))
+         texts == []:
+            
+     results, result_texts
+</code></pre>
+<p>Where num_sequences was set to be 42, T=0.9, rounds=2.</p>
+<h3>Weighted Majority voting</h3>
+<p>The outcome reward model (ORM) assigns a score to each solution. The input of the ORM is problem + code instead of problem + solution. We let the ORM to score the code generated by the policy model since the final candidate answers are simply execution results of the code.</p>
+<pre><code>def (reward_model, tokenizer, text):
+    input_id = torch.([tokenizer.(text)]).(reward_model.device)
+    with torch.():
+        logits = (input_id).logits
+        score = logits[].(dim=-).().().()[-]
+    return score
+</code></pre>
+<hr>
+<p>To calculate the total weight of one answer, we calculate it as the geometric mean times $N$, i.e. if $N$ solutions lead to the same answer $a$, the $i$-th solution has a score of $S_i$, the weight of answer a is:<br>
+$$<br>
+N(\prod_{i=1}^n S_i)^{\frac{1}{N}}.<br>
+$$<br>
+We choose geometric mean times $N$ instead of the sum the weights because it prevents over-optimization. For example, in our experiment, the answer of the question "There exists a unique increasing geometric sequence of five 2-digit positive integers. What is their sum?" is 211. ORM gives score 0.75 to one solution with 211, but 0.85, 0.03, 0.15 to answer 50. The 0.85 can be a false positive of reward model and geometric mean prevents us from choosing such answer.</p>
+<p>We also note that there is a tendency for the policy model to generate solutions with wrong answer 0, so we add some penalty for answer 0. Below is the code of weighted majority voting.</p>
+<pre><code> ():
+     math
+    max_weight = -
+    number_weight_dict = {}
+    max_weight_answer = 
+     answer, score  (answers, scores):
+         answer == :
+            score /= 
+         answer   number_weight_dict:
+            number_weight_dict[answer] = [score]
+        :
+            number_weight_dict[answer].append(score)
+     answer  number_weight_dict.keys():
+        score_list = number_weight_dict[answer]
+        weight = (score_list) * math.prod(score_list) ** ( / (score_list))
+         weight &gt; max_weight:
+            max_weight = weight
+            max_weight_answer = answer
+     max_weight_answer
+</code></pre>
+<h3>Summary</h3>
+<p>We attribute the high performance of our notebook to the two points below:</p>
+<ul>
+<li>Stronger fine-tuned policy model</li>
+<li>A powerful reward model that selects the true answers from multiple candidate answers.</li>
+</ul>
+<p>In the AIMO train set of 10 problems, with the fine-tuned policy model, the accuracy improves from 1/10 to 2/10, and the reward model further improves it from 2/10 to 4/10.</p>
+<h3>Citation</h3>
+<p>The fine-tuning <a href="https://github.com/Edward-Sun/gpt-accelera" target="_blank">code base</a> is adopted from the code of the paper below:</p>
+<pre><code>@article{sun2024easy,
+  title={Easy-to-Hard Generalization: Alignment Human Supervision},
+  author={Sun, Zhiqing Yu, Longhui Yikang Liu, Weiyang Yang, Yiming Welleck, Sean Gan, Chuang},
+  preprint arXiv:.},
+  year={}
+}
+</code></pre>

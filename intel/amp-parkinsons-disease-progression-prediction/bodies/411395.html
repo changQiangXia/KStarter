@@ -1,0 +1,18 @@
+<p>Thanks my teammates <a href="https://www.kaggle.com/hookman" target="_blank">@hookman</a> <a href="https://www.kaggle.com/zui0711" target="_blank">@zui0711</a> <a href="https://www.kaggle.com/max2020" target="_blank">@max2020</a> <a href="https://www.kaggle.com/librauee" target="_blank">@librauee</a> , I have learnt a lot from them. A crucial trick found by them is there are two groups in the data: <strong>The true patients and the control group</strong>. We can find this by <strong>the minimum visit_month diff</strong> of each id:</p>
+<pre><code>for df in [clinical, sup_clinical]:
+    df['visit_month_diff'] = df.groupby(['patient_id'])['visit_month'].diff()
+    df['visit_month_diff_min'] = df.groupby('patient_id')['visit_month_diff'].transform('min')
+</code></pre>
+<p>There are 3, 5, 6, 12, 36 visit_month diff in clinical and sup_clinical, we choose only 3, 6, 12, 36 parts as training data, and transform 3, 36 to 6. We find 3, 6 and 36 has obviously higher updrs values and 12 has lower updrs values(5 part dropped as abnormal).<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F3110858%2F99690a48cfd9b72ad8bc4fc746815856%2FWX20230519-0926512x.png?generation=1684460243462016&amp;alt=media" alt="updrs in different visit_month diff and months"><br>
+We can draw a conclusion <strong>visit_month diff==6</strong> are true patients and <strong>visit_month diff==12</strong> are control group.<br>
+We use piecewise function to optimize two groups smape separately:</p>
+<pre><code>def calculate_predictions(pred_month, trend):
+    if target == 'updrs_4': 
+        pred_month = pred_month.clip(60, None) 
+    pred_month2 = (pred_month-60).clip(0, None)
+    return np.round(trend[0] + pred_month * trend[1] + pred_month2 * trend[2])
+</code></pre>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F3110858%2F5705a4149bab70f274bd16c521c5c967%2FWX20230519-1027572x.png?generation=1684463307465921&amp;alt=media" alt="0=control group, 1=true patients"><br>
+In the first loop inference, we cannot get visit_month diff, so we train additional coefficients based on true patients + control group. In every loop, we record history data so that we could get the <strong>the minimum visit_month diff</strong>.<br>
+Finding these two groups can help you reach 54.2~54.8 on public board and 60.1~60.7 on private board.</p>

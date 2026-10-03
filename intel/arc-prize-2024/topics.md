@@ -1,0 +1,82 @@
+# arc-prize-2024 讨论区（按票数排序，共 80 条）
+
+- [2nd Place Solution for the ARC Prize 2024 Competition: Omni-ARC approach](https://www.kaggle.com/competitions/arc-prize-2024/discussion/545671) — 176 票 / 55 评论 / 2024-12-07 **write-up?**
+- [Kaggle references for onboarding](https://www.kaggle.com/competitions/arc-prize-2024/discussion/511728) — 101 票 / 20 评论 / 2024-06-11 
+- [How to tackle this competition](https://www.kaggle.com/competitions/arc-prize-2024/discussion/511879) — 85 票 / 14 评论 / 2024-06-12 
+- [Daily Submission Limit Change](https://www.kaggle.com/competitions/arc-prize-2024/discussion/515322) — 53 票 / 48 评论 / 2024-06-27 
+- [Score 33 using LLM](https://www.kaggle.com/competitions/arc-prize-2024/discussion/512910) — 50 票 / 8 评论 / 2024-06-17 
+- [ARC datasets and tagging](https://www.kaggle.com/competitions/arc-prize-2024/discussion/515360) — 49 票 / 3 评论 / 2024-06-27 
+- [Welcome to ARC Prize 2024!](https://www.kaggle.com/competitions/arc-prize-2024/discussion/510823) — 46 票 / 37 评论 / 2024-06-07 
+- [A Tiny Model for ARC Prize](https://www.kaggle.com/competitions/arc-prize-2024/discussion/545844) — 44 票 / 19 评论 / 2024-11-12 
+- [Releasing 400k synthetic ARC problems with Python code + fine-tuned models](https://www.kaggle.com/competitions/arc-prize-2024/discussion/543953) — 41 票 / 19 评论 / 2024-11-02 
+- [The most promising way：​Systematic Abductive Reasoning via DiverseRelation Representations in Vector-symbolicArchitecture  https://arxiv.org/pdf/2501.11896 + michaelhodel/arc-dsl，and some opensource ARC project code](https://www.kaggle.com/competitions/arc-prize-2024/discussion/514625) — 40 票 / 36 评论 / 2024-06-25 
+- [ARC: Generalization Difficulty. Computation efficiency. Core Knowledge priors.](https://www.kaggle.com/competitions/arc-prize-2024/discussion/511743) — 36 票 / 6 评论 / 2024-06-11 
+- [My failed attempts](https://www.kaggle.com/competitions/arc-prize-2024/discussion/545523) — 35 票 / 12 评论 / 2024-11-10 
+- [ARC2020 Vs. ARC2024](https://www.kaggle.com/competitions/arc-prize-2024/discussion/521200) — 33 票 / 4 评论 / 2024-07-19 
+- [Get Started Here!](https://www.kaggle.com/competitions/arc-prize-2024/discussion/510083) — 30 票 / 8 评论 / 2024-06-04 
+- [[place holder] my idea to solve ARC-AGI](https://www.kaggle.com/competitions/arc-prize-2024/discussion/528879) — 30 票 / 22 评论 / 2024-08-17 
+- [More approaches and ideas](https://www.kaggle.com/competitions/arc-prize-2024/discussion/522803) — 28 票 / 10 评论 / 2024-07-28 
+- [FYI: Fixes issued for certain training/evaluation tasks](https://www.kaggle.com/competitions/arc-prize-2024/discussion/513114) — 26 票 / 5 评论 / 2024-06-18 
+- [Platform for Creating ARC-AGI Puzzles](https://www.kaggle.com/competitions/arc-prize-2024/discussion/518522) — 26 票 / 15 评论 / 2024-07-06 
+- [graph approach ](https://www.kaggle.com/competitions/arc-prize-2024/discussion/518930) — 26 票 / 36 评论 / 2024-07-08 
+- [Sharing My ARC Prize 2024 Code (31 Points in the final submission)](https://www.kaggle.com/competitions/arc-prize-2024/discussion/546302) — 26 票 / 8 评论 / 2024-11-15 
+- [yeah I feel powerful now](https://www.kaggle.com/competitions/arc-prize-2024/discussion/518641) — 25 票 / 2 评论 / 2024-07-07 
+- [A wrong sample?](https://www.kaggle.com/competitions/arc-prize-2024/discussion/536066) — 25 票 / 20 评论 / 2024-09-25 
+- [[RESOLVED] Submission issues from the Viewer](https://www.kaggle.com/competitions/arc-prize-2024/discussion/514034) — 24 票 / 7 评论 / 2024-06-22 
+- [Beyond Memorization: Why Input-Output Models Won't Conquer the ARC Challenge](https://www.kaggle.com/competitions/arc-prize-2024/discussion/516596) — 23 票 / 1 评论 / 2024-07-03 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/arc-prize-2024/discussion/511707) — 20 票 / 7 评论 / 2024-06-11 
+- [The big book of TARCs ](https://www.kaggle.com/competitions/arc-prize-2024/discussion/521727) — 18 票 / 2 评论 / 2024-07-22 
+- [Solving ARC with VLMs... or not](https://www.kaggle.com/competitions/arc-prize-2024/discussion/535820) — 18 票 / 17 评论 / 2024-09-24 
+- [3rd place solution](https://www.kaggle.com/competitions/arc-prize-2024/discussion/550328) — 18 票 / 3 评论 / 2024-12-06 **write-up?**
+- [✍️Corpus Mistakes and Standard Tasks](https://www.kaggle.com/competitions/arc-prize-2024/discussion/512962) — 18 票 / 1 评论 / 2024-06-17 
+- [Link to previous competition (ARC 2020)](https://www.kaggle.com/competitions/arc-prize-2024/discussion/511713) — 16 票 / 6 评论 / 2024-06-11 
+- [4th place solution](https://www.kaggle.com/competitions/arc-prize-2024/discussion/550414) — 15 票 / 1 评论 / 2024-12-10 **write-up?**
+- [Unable to Submit [Fixed]](https://www.kaggle.com/competitions/arc-prize-2024/discussion/512256) — 14 票 / 21 评论 / 2024-06-14 
+- [Why only public leaderboard ](https://www.kaggle.com/competitions/arc-prize-2024/discussion/511840) — 14 票 / 6 评论 / 2024-06-12 
+- [feeling the void](https://www.kaggle.com/competitions/arc-prize-2024/discussion/545860) — 13 票 / 7 评论 / 2024-11-12 
+- [Solution approaches that have led to the current state-of-the-art.](https://www.kaggle.com/competitions/arc-prize-2024/discussion/535811) — 13 票 / 1 评论 / 2024-09-24 **write-up?**
+- [Enhance 400k BARC models with 850k VLM](https://www.kaggle.com/competitions/arc-prize-2024/discussion/545917) — 13 票 / 0 评论 / 2024-11-13 
+- [5 month comp duration?](https://www.kaggle.com/competitions/arc-prize-2024/discussion/511683) — 13 票 / 14 评论 / 2024-06-11 
+- [Program Synthesis with LLMs ?](https://www.kaggle.com/competitions/arc-prize-2024/discussion/527423) — 13 票 / 3 评论 / 2024-08-12 
+- [21st place: a short report](https://www.kaggle.com/competitions/arc-prize-2024/discussion/550209) — 12 票 / 1 评论 / 2024-12-28 **write-up?**
+- [Measuring submission runtime with Distill Web Monitor](https://www.kaggle.com/competitions/arc-prize-2024/discussion/533645) — 12 票 / 0 评论 / 2024-09-12 
+- [Labeled data to ARC Prize 2024 ](https://www.kaggle.com/competitions/arc-prize-2024/discussion/544590) — 12 票 / 2 评论 / 2024-11-05 
+- [https://github.com/IBM/abductive-rule-learner-with-context-awareness  Learning Abductive Reasoning using VSA Distributed Representations](https://www.kaggle.com/competitions/arc-prize-2024/discussion/517243) — 12 票 / 1 评论 / 2024-07-05 
+- [Pretraining on the Test Set Is All You Need](https://www.kaggle.com/competitions/arc-prize-2024/discussion/512870) — 12 票 / 5 评论 / 2024-06-17 
+- [September 18 Prize Increase!](https://www.kaggle.com/competitions/arc-prize-2024/discussion/534826) — 11 票 / 1 评论 / 2024-09-18 
+- [Are ARC Tests Underspecified?](https://www.kaggle.com/competitions/arc-prize-2024/discussion/522100) — 11 票 / 6 评论 / 2024-07-24 
+- [5th place solution](https://www.kaggle.com/competitions/arc-prize-2024/discussion/550336) — 11 票 / 5 评论 / 2024-12-07 **write-up?**
+- [An ensemble of all Kaggle submissions scores 81%!](https://www.kaggle.com/competitions/arc-prize-2024/discussion/550775) — 11 票 / 12 评论 / 2024-12-09 
+- [What happened to first place?](https://www.kaggle.com/competitions/arc-prize-2024/discussion/550442) — 11 票 / 27 评论 / 2024-12-07 **write-up?**
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/arc-prize-2024/discussion/546448) — 10 票 / 1 评论 / 2024-11-15 
+- [Guessing how active inference (test time fine-tuning) is done](https://www.kaggle.com/competitions/arc-prize-2024/discussion/515050) — 10 票 / 6 评论 / 2024-06-26 
+- [🧬genetic algorithm as sloution 🧬](https://www.kaggle.com/competitions/arc-prize-2024/discussion/524468) — 10 票 / 16 评论 / 2024-08-06 
+- [IEEE Spectrum Article on ARC Prize 2024 competition](https://www.kaggle.com/competitions/arc-prize-2024/discussion/523234) — 9 票 / 1 评论 / 2024-07-31 
+- [Neural approach](https://www.kaggle.com/competitions/arc-prize-2024/discussion/520739) — 9 票 / 25 评论 / 2024-07-17 
+- [ARC Prize 2024: Silver Medal Solution: 37th Place](https://www.kaggle.com/competitions/arc-prize-2024/discussion/545886) — 9 票 / 2 评论 / 2024-11-12 **write-up?**
+- [DreamCoder supplemental material ](https://www.kaggle.com/competitions/arc-prize-2024/discussion/516002) — 9 票 / 4 评论 / 2024-07-01 
+- [OpenAI's o3 scores 87.5%](https://www.kaggle.com/competitions/arc-prize-2024/discussion/552666) — 9 票 / 1 评论 / 2024-12-20 
+- [Submission using Hodel's Resources](https://www.kaggle.com/competitions/arc-prize-2024/discussion/537448) — 9 票 / 4 评论 / 2024-10-03 
+- [Check out my work in 2020 ARC Competition](https://www.kaggle.com/competitions/arc-prize-2024/discussion/516827) — 9 票 / 2 评论 / 2024-07-03 
+- [ARC Mastery📌Tutorial-1](https://www.kaggle.com/competitions/arc-prize-2024/discussion/527716) — 8 票 / 0 评论 / 2024-08-13 
+- [Platform for Creating ARC-AGI Puzzles (revisited)](https://www.kaggle.com/competitions/arc-prize-2024/discussion/522584) — 8 票 / 7 评论 / 2024-07-26 
+- [The reasons why I find ARC problem difficult](https://www.kaggle.com/competitions/arc-prize-2024/discussion/524052) — 8 票 / 1 评论 / 2024-08-04 
+- [Here’s My Approach](https://www.kaggle.com/competitions/arc-prize-2024/discussion/545606) — 8 票 / 0 评论 / 2024-11-11 
+- [Whats the highest LLM-only score?](https://www.kaggle.com/competitions/arc-prize-2024/discussion/532140) — 8 票 / 8 评论 / 2024-09-04 
+- [new paper: TTA: SoTA in ARC public validation set 61%=avg. human score](https://www.kaggle.com/competitions/arc-prize-2024/discussion/545689) — 7 票 / 4 评论 / 2024-11-11 
+- [Using a small CodeGen model for DSL program synthesis—successes and failures](https://www.kaggle.com/competitions/arc-prize-2024/discussion/545691) — 7 票 / 1 评论 / 2024-11-11 
+- [Visualizing Attention Patterns from My ARC Solution (31 Score Model)](https://www.kaggle.com/competitions/arc-prize-2024/discussion/545747) — 7 票 / 1 评论 / 2024-11-12 **write-up?**
+- [Incorrect File Format?](https://www.kaggle.com/competitions/arc-prize-2024/discussion/537093) — 7 票 / 3 评论 / 2024-10-01 
+- [[BUG] Your team has used its overall Submission allowance](https://www.kaggle.com/competitions/arc-prize-2024/discussion/515618) — 7 票 / 9 评论 / 2024-06-29 
+- [solved in openai's o1?](https://www.kaggle.com/competitions/arc-prize-2024/discussion/533813) — 7 票 / 8 评论 / 2024-09-13 
+- [Submission CSV Not Found - Very Frequent](https://www.kaggle.com/competitions/arc-prize-2024/discussion/513673) — 6 票 / 16 评论 / 2024-06-21 
+- [ACTION REQUIRED: (Slightly) Updated Data](https://www.kaggle.com/competitions/arc-prize-2024/discussion/515012) — 6 票 / 0 评论 / 2024-06-26 
+- [interesting paper on analogical reasoning in ARC](https://www.kaggle.com/competitions/arc-prize-2024/discussion/531821) — 6 票 / 0 评论 / 2024-09-03 
+- [Are there any excellent tools for ARC data management and data generation?](https://www.kaggle.com/competitions/arc-prize-2024/discussion/522797) — 6 票 / 3 评论 / 2024-07-28 
+- [Tasks 39a8645d and 73ccf9c2 have 2 possible solutions](https://www.kaggle.com/competitions/arc-prize-2024/discussion/531848) — 6 票 / 8 评论 / 2024-09-03 **write-up?**
+- [Videos  relevant  for ARC Prize 2024](https://www.kaggle.com/competitions/arc-prize-2024/discussion/534437) — 6 票 / 2 评论 / 2024-09-16 
+- [A question about priors](https://www.kaggle.com/competitions/arc-prize-2024/discussion/521044) — 6 票 / 2 评论 / 2024-07-18 
+- [suggestions](https://www.kaggle.com/competitions/arc-prize-2024/discussion/519604) — 6 票 / 5 评论 / 2024-07-11 
+- [Public-LB and Private-LB for the ARC Prize 2024: No Shakeup in this competition !](https://www.kaggle.com/competitions/arc-prize-2024/discussion/535303) — 6 票 / 4 评论 / 2024-09-21 
+- [My GPT4o Attempts](https://www.kaggle.com/competitions/arc-prize-2024/discussion/516825) — 6 票 / 3 评论 / 2024-07-03 
+- [Late submissions with public test](https://www.kaggle.com/competitions/arc-prize-2024/discussion/545737) — 6 票 / 6 评论 / 2024-11-11 

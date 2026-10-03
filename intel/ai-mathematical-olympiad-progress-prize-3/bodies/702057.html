@@ -1,0 +1,490 @@
+<h1>A. Model Summary</h1>
+<h2>A1. Background</h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Competition Name</td>
+<td>AI Mathematical Olympiad - Progress Prize 3</td>
+</tr>
+<tr>
+<td>Team Name</td>
+<td>Andreas Bisiadis</td>
+</tr>
+<tr>
+<td>Private Leaderboard Score</td>
+<td>41.5</td>
+</tr>
+<tr>
+<td>Private Leaderboard Place</td>
+<td>546</td>
+</tr>
+<tr>
+<td>Public Leaderboard Reference</td>
+<td>41/50 for the selected Mk I Version 16 notebook; 42/50 peak for the public no-suffix notebook lineage</td>
+</tr>
+<tr>
+<td>Team Member Name</td>
+<td>Andreas Bisiadis</td>
+</tr>
+</tbody>
+</table>
+<p>This submission was developed for Kaggle's AI Mathematical Olympiad - Progress Prize 3 competition. The selected solution is an inference-only notebook based on GPT-OSS-120B with tool-integrated Python reasoning. The notebook selected for the final submission was Mk I Version 16:</p>
+<pre><code>code/inference/gpt-oss-120b-with-tools/aimo-3-gpt-oss-120b-with-tools-version-16.ipynb
+</code></pre>
+<p>This selected notebook scored 41/50 on the public leaderboard and 41.5 on the private leaderboard. The same public, no-suffix notebook lineage reached a peak public score of 42/50 in Version 11.</p>
+<h2>A2. Background On Team</h2>
+<p>This was a solo submission by Andreas Bisiadis. The technical work represented in this repository focused on long-context LLM inference systems, vLLM backend tuning, tool-integrated mathematical reasoning, Jupyter kernel sandbox reliability, prompt minimization, and answer aggregation under Kaggle's fixed H100 runtime constraints.</p>
+<p>Primary competition work included:</p>
+<ul>
+<li>Building and iterating 68 notebook versions and previews across Mk I, Mk II, Mk III, and Mk IV.</li>
+<li>Developing the public no-suffix notebook lineage, <code>gpt-oss-120b-with-tools</code>, through 22 versions. This is the only lineage intended to correspond to the publicly available Kaggle notebook.</li>
+<li>Running later Mk II, Mk III, and Mk IV development lines as follow-up research notebooks. These lines tested more advanced pipeline ideas, but they did not improve beyond the public notebook lineage's 42/50 public leaderboard peak.</li>
+<li>Migrating the inference backend in later experiments through vLLM versions up to <code>vllm==0.17.0</code>, while the selected public Mk I Version 16 notebook used <code>vllm==0.11.2</code>.</li>
+<li>Designing a stateful Python tool sandbox with persistent Jupyter kernels, port retry logic, output truncation, process cleanup, and CPU isolation.</li>
+<li>Evaluating prompt, timeout, context length, KV cache, pass@K, voting, and backend choices against reference problems and public leaderboard submissions.</li>
+<li>Selecting a final pipeline that emphasized reliability under the 5-hour competition notebook limit.</li>
+</ul>
+<h2>A3. Summary</h2>
+<p>The final selected solution is an inference-time ensemble built around GPT-OSS-120B served locally with vLLM on a single Kaggle H100 GPU. Each math problem is solved by up to 8 parallel attempts using the Harmony prompt format, <code>ReasoningEffort.HIGH</code>, and a Python tool backed by persistent Jupyter kernels. Candidate integer answers are extracted from final answers using a <code>\boxed{}</code> parser with a narrow textual fallback for "final answer is", then aggregated with inverse-entropy weighting computed from top-logprob token entropy. The selected Mk I Version 16 notebook uses <code>vllm==0.11.2</code>, a 65,536-token context, FP8 E4M3 KV cache, async scheduling, disabled log stats, and prefix caching. No model training or fine-tuning is performed; development effort was concentrated on inference robustness, tool reliability, runtime allocation, and answer selection.</p>
+<h2>A4. Feature Selection And Engineering</h2>
+<p>The effective inputs and engineered signals are:</p>
+<ul>
+<li>The original problem statement from Kaggle.</li>
+<li>A short system prompt identifying the assistant as a world-class IMO competitor and specifying the answer range and <code>\boxed{}</code> format.</li>
+<li>A short user suffix instructing the model that it has access to <code>math</code>, <code>numpy</code>, and <code>sympy</code>.</li>
+<li>Stateful Python outputs from each attempt's Jupyter sandbox.</li>
+<li>Per-attempt top-logprob entropy over generated tokens.</li>
+<li>Normalized candidate integer answers extracted from final answer text.</li>
+</ul>
+<p>The main transformations are prompt composition, answer normalization, and entropy-based scoring. Boxed answer extraction accepts comma separators, strips them, converts to an integer, and keeps only values in <code>[0, 99999]</code>. Version 16 also includes a narrow case-insensitive fallback for text matching <code>final answer is &lt;integer&gt;</code>.</p>
+<p>No external problem data or retrieval corpus is used. The only external artifacts are allowed Kaggle inputs: the competition data, the GPT-OSS-120B model weights, utility wheels, and local tiktoken encoding files needed for offline execution.</p>
+<h2>A5. Training Method</h2>
+<p>No training, fine-tuning, reinforcement learning, or preference optimization is used in the submitted solution. The model is the pretrained GPT-OSS-120B checkpoint loaded from a Kaggle model dataset.</p>
+<p>The ensemble is created at inference time:</p>
+<ul>
+<li>8 attempts are launched per problem.</li>
+<li>Attempts use deterministic per-attempt seeds computed as <code>(seed + attempt_index) ** 2</code>, with <code>seed=42</code>.</li>
+<li>Sampling uses <code>temperature=1.0</code> and <code>min_p=0.02</code>.</li>
+<li>Each attempt can call a stateful Python tool for calculations and verification.</li>
+<li>Early stopping occurs when 4 attempts agree on the same answer.</li>
+<li>Final answer selection uses inverse entropy weighting:</li>
+</ul>
+<pre><code>mean_entropy = average per-token Shannon entropy over top logprobs
+weight = 1 / max(mean_entropy, entropy_floor)
+entropy_floor = 1e-9
+</code></pre>
+<p>The answer with the largest total weight is submitted. If no valid answer is found, the notebook returns <code>0</code>.</p>
+<h2>A6. Interesting Findings</h2>
+<p>The most important result was that inference-system reliability mattered more than adding more reasoning machinery. Strong leaderboard submissions consistently used pass@8, short prompts, FP8 KV cache, prefix caching, long context, and a 2x overprovisioned sandbox pool.</p>
+<p>Key findings from the release history:</p>
+<ul>
+<li><code>context_tokens=81920</code> avoided truncation failures observed at 65,536 tokens while preserving enough concurrency for 8 attempts.</li>
+<li>FP8 E4M3 KV cache was necessary for long-context concurrency; BF16/auto KV cache reduced concurrency and correlated with a lower public score.</li>
+<li>Pass@8 with early stop at 4 votes was a better runtime/performance tradeoff than pass@12 or pass@16 variants.</li>
+<li>Disabling vLLM prefix caching correlated with lower public scores.</li>
+<li>Short prompts were more stable than verbose problem-solving frameworks.</li>
+<li>The "IMO Gold Medalist" persona was more stable than broader competitor personas.</li>
+<li>A 2x sandbox pool (<code>workers=16</code> for <code>attempts=8</code>) repeatedly outperformed 1:1 worker/attempt configurations on the public leaderboard, even though the 10-problem local reference subset did not reveal the difference.</li>
+<li>For vLLM 0.17.0, the Marlin MoE backend was required to avoid CUDA OOM on the 120B model at <code>gpu_memory_utilization=0.99</code>.</li>
+<li>On the measured workload, <code>performance_mode="throughput"</code> was preferred over <code>interactivity</code> because prefix caching reduced repeated prefill cost and generation throughput dominated.</li>
+<li>CUDA 12.8 wheels outperformed CUDA 13.0 wheels in the logged experiments for this pipeline.</li>
+</ul>
+<p>The later Mk II, Mk III, and Mk IV notebooks were useful research lines, but they are not the publicly available Kaggle notebook lineage. They tested superior-in-theory approaches such as vLLM upgrades, longer contexts, richer sandbox cleanup, explicit attention configuration, CUDA graph tuning, Marlin MoE backend selection, developer-channel prompt layouts, extra error interception, and XML-style prompts. Despite these improvements in engineering maturity, the follow-up pipelines did not outperform the public no-suffix notebook lineage's 42/50 public leaderboard peak.</p>
+<p>Several explored ideas were not used because they reduced reliability or exceeded the runtime budget: fine-tuning, retrieval-augmented generation, in-context example retrieval, speculative decoding, entropy pruning from larger pass@K runs, sequential refinement, extra DSL/prover tools, developer-channel prompt variants, and eager-execution router/probing experiments.</p>
+<h2>A7. Simpler Features And Methods</h2>
+<p>The closest simplified model that preserves most of the final result is the early Mk I baseline: GPT-OSS-120B with the Python tool, pass@8, prefix caching, 65,536-token context, and frequency-based voting. That baseline reached 40/50 on the public leaderboard, which is close to the selected Version 16 score of 41/50 and the public lineage peak of 42/50.</p>
+<p>The most important single model is GPT-OSS-120B. The most important method is not training but reliable inference-time sampling with Python tool use and answer aggregation.</p>
+<p>A very simple version with only one attempt would be faster but was not the selected approach because public leaderboard variance and hard-problem coverage favored multiple independent attempts.</p>
+<h2>A8. Model Execution Time</h2>
+<p>Prediction time is bounded by the Kaggle notebook limit. The final selected notebook is configured for the 5-hour competition environment with:</p>
+<table>
+<thead>
+<tr>
+<th>Runtime Setting</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Notebook limit</td>
+<td>17,400 seconds</td>
+</tr>
+<tr>
+<td>Server startup timeout</td>
+<td>180 seconds</td>
+</tr>
+<tr>
+<td>Base problem timeout</td>
+<td>240 seconds</td>
+</tr>
+<tr>
+<td>High problem timeout</td>
+<td>840 seconds</td>
+</tr>
+<tr>
+<td>Session timeout</td>
+<td>900 seconds</td>
+</tr>
+<tr>
+<td>Python tool timeout</td>
+<td>6 seconds</td>
+</tr>
+<tr>
+<td>Problems</td>
+<td>50</td>
+</tr>
+<tr>
+<td>Attempts per problem</td>
+<td>8</td>
+</tr>
+<tr>
+<td>Sandbox workers</td>
+<td>16</td>
+</tr>
+</tbody>
+</table>
+<p>Actual runtime is stochastic because problem difficulty, answer agreement, tool calls, and generated token counts vary. The pipeline reserves time for remaining problems and gives surplus time to current hard problems while trying to finish within the competition's 5-hour limit.</p>
+<p>The simpler Mk I-style baselines also perform no training. Their prediction runtime is similar or lower, but the selected Version 16 notebook combined tighter time allocation, refactored streaming/tool handling, regex compilation, and prefix caching in a more reliable public-notebook configuration.</p>
+<h2>A9. References</h2>
+<p>Relevant references and sources used during development:</p>
+<ul>
+<li>Kaggle, AI Mathematical Olympiad - Progress Prize 3 competition environment and evaluation API.</li>
+<li>Kaggle, Winning Model Documentation Guidelines.</li>
+<li>OpenAI GPT-OSS-120B model documentation and Harmony chat format documentation.</li>
+<li>vLLM documentation and release behavior for versions 0.11.2, 0.15.1, 0.16.0, and 0.17.0.</li>
+<li>Flash Attention 3 backend documentation and vLLM attention configuration.</li>
+<li>OCP MXFP4 quantization format references.</li>
+<li>Internal release notes in <code>code/inference/**/RELEASES.md</code>.</li>
+</ul>
+<h1>B. Submission Model</h1>
+<h2>B1. Archive Contents</h2>
+<p>The solution can be submitted as a Kaggle notebook solution. The selected final inference notebook is the public no-suffix Mk I notebook:</p>
+<pre><code>code/inference/gpt-oss-120b-with-tools/aimo-3-gpt-oss-120b-with-tools-version-16.ipynb
+</code></pre>
+<p>The utility notebook used to prepare offline wheels and tiktoken encoding files is:</p>
+<pre><code>code/inference/gpt-oss-120b-with-tools/aimo-3-utils.ipynb
+</code></pre>
+<p>The later Mk II, Mk III, and Mk IV directories document follow-up experiments. They are useful for explaining the development process, but the no-suffix <code>gpt-oss-120b-with-tools</code> lineage is the public notebook lineage, and Version 16 is the selected final submission notebook.</p>
+<p>The release notes that document development history are under:</p>
+<pre><code>code/inference/gpt-oss-120b-with-tools/RELEASES.md
+code/inference/gpt-oss-120b-with-tools-mk-ii-previews/RELEASES.md
+code/inference/gpt-oss-120b-with-tools-mk-ii/RELEASES.md
+code/inference/gpt-oss-120b-with-tools-mk-iii-previews/RELEASES.md
+code/inference/gpt-oss-120b-with-tools-mk-iii/RELEASES.md
+code/inference/gpt-oss-120b-with-tools-mk-iv/RELEASES.md
+</code></pre>
+<p>No trained model file is produced by this repository. The pretrained model is loaded from the Kaggle GPT-OSS-120B model input.</p>
+<h2>B2. README Requirements</h2>
+<h3>Hardware</h3>
+<p>The Kaggle competition notebook environment provides:</p>
+<table>
+<thead>
+<tr>
+<th>Resource</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GPU</td>
+<td>1 x NVIDIA H100 SXM</td>
+</tr>
+<tr>
+<td>GPU memory</td>
+<td>80 GB HBM3</td>
+</tr>
+<tr>
+<td>GPU bandwidth</td>
+<td>3.35 TB/s</td>
+</tr>
+<tr>
+<td>CPU workers</td>
+<td>26</td>
+</tr>
+<tr>
+<td>System memory</td>
+<td>230 GB</td>
+</tr>
+<tr>
+<td>Internet</td>
+<td>Disabled during competition inference</td>
+</tr>
+</tbody>
+</table>
+<h3>Platform</h3>
+<p>The selected notebook metadata records:</p>
+<table>
+<thead>
+<tr>
+<th>Platform Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Environment</td>
+<td>Kaggle Notebook</td>
+</tr>
+<tr>
+<td>Accelerator</td>
+<td>NVIDIA H100</td>
+</tr>
+<tr>
+<td>Python</td>
+<td>3.12.12</td>
+</tr>
+<tr>
+<td>Kaggle Docker image version</td>
+<td>31236</td>
+</tr>
+<tr>
+<td>Internet</td>
+<td>Disabled for inference notebook</td>
+</tr>
+</tbody>
+</table>
+<h3>Key Software</h3>
+<p>The selected public utility notebook downloads offline wheels for:</p>
+<pre><code>unsloth
+trl
+vllm==0.11.2
+openai_harmony
+</code></pre>
+<p>The utility notebook downloads Python 3.12 binary wheels using the CUDA 12.8 PyTorch index and the NVIDIA package index, then packages the wheels and tiktoken encodings into <code>wheels.tar.gz</code>. The selected inference notebook extracts that archive to:</p>
+<pre><code>/kaggle/tmp/setup
+</code></pre>
+<p>and installs from:</p>
+<pre><code>/kaggle/tmp/setup/wheels
+</code></pre>
+<p>Important runtime libraries imported by the selected notebook include <code>vllm</code>, <code>openai</code>, <code>openai_harmony</code>, <code>transformers</code>, <code>jupyter_client</code>, <code>pandas</code>, <code>polars</code>, and Kaggle's <code>kaggle_evaluation.aimo_3_inference_server</code>.</p>
+<h3>How To Train</h3>
+<p>There is no training step.</p>
+<h3>How To Predict</h3>
+<p>Run the selected Mk I Version 16 Kaggle notebook with the required Kaggle inputs attached:</p>
+<ul>
+<li>AI Mathematical Olympiad - Progress Prize 3 competition data.</li>
+<li>GPT-OSS-120B model input at <code>/kaggle/input/gpt-oss-120b/transformers/default/1</code>.</li>
+<li>Public utility input containing <code>/kaggle/input/aimo-3-utils/wheels.tar.gz</code>.</li>
+</ul>
+<p>The notebook:</p>
+<ol>
+<li>Extracts <code>/kaggle/input/aimo-3-utils/wheels.tar.gz</code> to <code>/kaggle/tmp/setup</code>.</li>
+<li>Installs <code>unsloth</code>, <code>trl</code>, <code>vllm</code>, and <code>openai_harmony</code> from offline wheels.</li>
+<li>Sets tokenizer, CUDA, and transformer-related environment variables.</li>
+<li>Starts a local vLLM OpenAI-compatible server for GPT-OSS-120B.</li>
+<li>Initializes 16 persistent Jupyter sandbox kernels.</li>
+<li>Registers <code>predict()</code> with <code>kaggle_evaluation.aimo_3_inference_server.AIMO3InferenceServer</code>.</li>
+<li>Calls <code>serve()</code> during competition reruns or <code>run_local_gateway()</code> for local reference execution.</li>
+</ol>
+<h3>Important Side Effects</h3>
+<p>The notebook intentionally modifies the runtime environment:</p>
+<ul>
+<li>Uninstalls several large packages before installing the offline wheel set: <code>keras</code>, <code>matplotlib</code>, <code>scikit-learn</code>, and <code>tensorflow</code>.</li>
+<li>Extracts the utility archive to <code>/kaggle/tmp/setup</code>.</li>
+<li>Starts a vLLM server process on port <code>8000</code>.</li>
+<li>Writes <code>vllm_server.log</code> in the working directory.</li>
+<li>Starts 16 Jupyter kernels and allocates local ports starting at <code>50000</code>.</li>
+<li>Resets and reuses sandbox kernels between problems.</li>
+<li>Does not overwrite competition input data.</li>
+</ul>
+<h3>Key Assumptions</h3>
+<ul>
+<li>The notebook runs in the Kaggle AIMO3 environment with one H100 GPU and no internet access.</li>
+<li>The GPT-OSS-120B model and <code>aimo-3-utils</code> wheel archive are attached as Kaggle inputs.</li>
+<li>The answer is an integer between 0 and 99999.</li>
+<li>The full test set contains 50 problems.</li>
+<li>The competition rerun environment sets <code>KAGGLE_IS_COMPETITION_RERUN</code>.</li>
+<li>The working directory can hold logs and kernel temporary files.</li>
+</ul>
+<h2>B3. Configuration Files</h2>
+<p>There are no external configuration files required by the final notebook. Runtime configuration is centralized in the <code>CFG</code> class inside the selected notebook.</p>
+<p>Important final configuration values include:</p>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Model</td>
+<td>GPT-OSS-120B</td>
+</tr>
+<tr>
+<td>Model path</td>
+<td><code>/kaggle/input/gpt-oss-120b/transformers/default/1</code></td>
+</tr>
+<tr>
+<td>vLLM version</td>
+<td>0.11.2</td>
+</tr>
+<tr>
+<td>Reasoning effort</td>
+<td>HIGH</td>
+</tr>
+<tr>
+<td>KV cache dtype</td>
+<td><code>fp8_e4m3</code></td>
+</tr>
+<tr>
+<td>dtype</td>
+<td><code>auto</code></td>
+</tr>
+<tr>
+<td>Context length</td>
+<td>65,536</td>
+</tr>
+<tr>
+<td>Search tokens</td>
+<td>32</td>
+</tr>
+<tr>
+<td>Buffer tokens</td>
+<td>512</td>
+</tr>
+<tr>
+<td>Max sequences</td>
+<td>256</td>
+</tr>
+<tr>
+<td>GPU memory utilization</td>
+<td>0.96</td>
+</tr>
+<tr>
+<td>Prefix caching</td>
+<td>Enabled</td>
+</tr>
+<tr>
+<td>Async scheduling</td>
+<td>Enabled</td>
+</tr>
+<tr>
+<td>Disable log stats</td>
+<td>Enabled</td>
+</tr>
+<tr>
+<td>Temperature</td>
+<td>1.0</td>
+</tr>
+<tr>
+<td>min_p</td>
+<td>0.02</td>
+</tr>
+<tr>
+<td>top_logprobs</td>
+<td>5</td>
+</tr>
+<tr>
+<td>Attempts</td>
+<td>8</td>
+</tr>
+<tr>
+<td>Workers</td>
+<td>16</td>
+</tr>
+<tr>
+<td>Early stop</td>
+<td>4 matching answers</td>
+</tr>
+<tr>
+<td>Max turns</td>
+<td>128</td>
+</tr>
+<tr>
+<td>Seed</td>
+<td>42</td>
+</tr>
+<tr>
+<td>Entropy score floor</td>
+<td><code>1e-9</code> in the inverse-entropy weighting expression</td>
+</tr>
+</tbody>
+</table>
+<h2>B4. Requirements</h2>
+<p>For the Kaggle notebook workflow, exact package installation is handled by the utility dataset. The repository <code>requirements.txt</code> corresponds to the utility notebook used by the selected Mk I Version 16 submission, <code>code/inference/gpt-oss-120b-with-tools/aimo-3-utils.ipynb</code>; it is the expanded pinned package list derived from the wheels downloaded by that utility notebook.</p>
+<p>The selected utility notebook downloads binary wheels for Python 3.12 using:</p>
+<pre><code>pip download --dest /kaggle/working/wheels --python-version 3.12 --only-binary=:all: --extra-index-url https://download.pytorch.org/whl/cu128 --extra-index-url https://pypi.nvidia.com unsloth trl vllm==0.11.2 openai_harmony
+</code></pre>
+<p>The inference notebook then installs offline with:</p>
+<pre><code>python -m pip install --no-index --find-links /kaggle/tmp/setup/wheels unsloth trl vllm openai_harmony
+</code></pre>
+<p>The tiktoken encoding files are bundled into the same archive and loaded from:</p>
+<pre><code>/kaggle/tmp/setup/tiktoken_encodings
+</code></pre>
+<h2>B5. Directory Structure</h2>
+<p>The main project directories relevant to this writeup are:</p>
+<pre><code>.
+code/
+code/inference/
+code/inference/gpt-oss-120b-with-tools/
+code/inference/gpt-oss-120b-with-tools-mk-ii-previews/
+code/inference/gpt-oss-120b-with-tools-mk-ii/
+code/inference/gpt-oss-120b-with-tools-mk-iii-previews/
+code/inference/gpt-oss-120b-with-tools-mk-iii/
+code/inference/gpt-oss-120b-with-tools-mk-iv/
+code/other/gpt-oss-120b-error-logs/
+sandbox/
+</code></pre>
+<p>For a formal archive, generate <code>directory_structure.txt</code> from the project root with:</p>
+<pre><code>find . -type d &gt; directory_structure.txt
+</code></pre>
+<h2>B6. Settings</h2>
+<p>Kaggle's generic documentation template recommends a <code>SETTINGS.json</code> file. This repository uses a notebook-style competition submission instead. All I/O paths and runtime settings are centralized in the notebook's <code>CFG</code> class and in the Kaggle input attachments.</p>
+<p>Primary paths:</p>
+<table>
+<thead>
+<tr>
+<th>Purpose</th>
+<th>Path</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Model weights</td>
+<td><code>/kaggle/input/gpt-oss-120b/transformers/default/1</code></td>
+</tr>
+<tr>
+<td>Utility archive</td>
+<td><code>/kaggle/input/aimo-3-utils/wheels.tar.gz</code></td>
+</tr>
+<tr>
+<td>Extracted offline wheels</td>
+<td><code>/kaggle/tmp/setup/wheels</code></td>
+</tr>
+<tr>
+<td>Tiktoken encodings</td>
+<td><code>/kaggle/tmp/setup/tiktoken_encodings</code></td>
+</tr>
+<tr>
+<td>Local gateway data</td>
+<td><code>/kaggle/input/ai-mathematical-olympiad-progress-prize-3/test.csv</code></td>
+</tr>
+<tr>
+<td>vLLM server log</td>
+<td><code>vllm_server.log</code></td>
+</tr>
+</tbody>
+</table>
+<h2>B7. Serialized Trained Model</h2>
+<p>No serialized trained model is produced. The submission uses the pretrained GPT-OSS-120B checkpoint supplied as a Kaggle model input. All competition-specific behavior is implemented in the inference notebook.</p>
+<h2>B8. Entry Points</h2>
+<p>The competition entry point is the <code>predict()</code> function in the selected notebook:</p>
+<pre><code>code/inference/gpt-oss-120b-with-tools/aimo-3-gpt-oss-120b-with-tools-version-16.ipynb
+</code></pre>
+<p>The notebook creates:</p>
+<pre><code>inference_server = kaggle_evaluation.aimo_3_inference_server.AIMO3InferenceServer(predict)
+</code></pre>
+<p>Then it uses:</p>
+<pre><code>inference_server.serve()
+</code></pre>
+<p>when <code>KAGGLE_IS_COMPETITION_RERUN</code> is set. For local reference execution, it uses:</p>
+<pre><code>inference_server.run_local_gateway(("/kaggle/input/ai-mathematical-olympiad-progress-prize-3/test.csv",))
+</code></pre>
+<p>There are no separate <code>prepare_data.py</code>, <code>train.py</code>, or <code>predict.py</code> scripts because the Kaggle submission format is a notebook with a registered inference server callback.</p>

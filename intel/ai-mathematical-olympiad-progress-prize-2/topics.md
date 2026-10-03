@@ -1,0 +1,122 @@
+# ai-mathematical-olympiad-progress-prize-2 讨论区（按票数排序，共 120 条）
+
+- [1st place solution - NemoSkills](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/574765) — 147 票 / 40 评论 / 2025-06-26 **write-up?**
+- [2nd place solution (Team imagination-research)](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/572948) — 111 票 / 59 评论 / 2025-04-18 **write-up?**
+- [[LB Pub 29 Pvt 28] Enhancing the efficiency of a reasoner using SFT and GRPO [Fast-Math-R1-14B]](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/571252) — 89 票 / 33 评论 / 2025-04-24 
+- [It’s time to level up! Let’s create and learn with this step-by-step guide.](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/541520) — 80 票 / 67 评论 / 2024-10-20 
+- [Some Math Data for LLMs Validation and Fine-Tuning](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/557197) — 70 票 / 27 评论 / 2025-01-17 
+- [Upgraded Hardware - L4x4 Machines Available for this Competition](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/540909) — 67 票 / 87 评论 / 2024-10-16 
+- [8th place - Solution (LB28) takeway](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/571356) — 65 票 / 41 评论 / 2025-04-09 **write-up?**
+- [R1 671B eval on all 100 hidden problems](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/562647) — 65 票 / 29 评论 / 2025-02-12 
+- [3rd Place Solution Report](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/573314) — 58 票 / 14 评论 / 2025-04-14 **write-up?**
+- [new dataset: AIME 2025](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/561415) — 46 票 / 38 评论 / 2025-02-06 
+- [7th place solution (pure luck)](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/572760) — 46 票 / 23 评论 / 2025-04-11 **write-up?**
+- [Rethink What’s Possible: Ideas for Improvements](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/564562) — 42 票 / 9 评论 / 2025-02-23 
+- [My prediction of how the competition will end](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/546772) — 39 票 / 36 评论 / 2024-11-18 
+- [GRPOTrainer on TRL](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/561062) — 36 票 / 10 评论 / 2025-02-03 
+- [LLM Reasoning [LONG LIST]](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/568067) — 35 票 / 19 评论 / 2025-03-13 
+- [GRPO fine tuning from scratch 🗿. no huggingface ](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/563707) — 35 票 / 15 评论 / 2025-02-18 
+- [XTX Markets makes new €3m grant to Project Numina](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/552030) — 35 票 / 8 评论 / 2024-12-17 
+- [🎉 Early Sharing Prize Award](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/551292) — 33 票 / 3 评论 / 2024-12-12 
+- [Faster version of open-r1's GRPO](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/568552) — 30 票 / 16 评论 / 2025-03-16 
+- [[LB=29] Two identical answers, that's all we need!](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/571519) — 29 票 / 14 评论 / 2025-04-03 
+- [7B TiR + 72B RM@64](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/547485) — 29 票 / 8 评论 / 2024-11-21 
+- [DeepSeek R1 vs o1 vs deepseek_r1_qwen_32b_distill - and ~150 pages of outputs from R1 😀](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/560363) — 28 票 / 31 评论 / 2025-01-30 
+- [vLLM 0.8.0/0.8.2 is here](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/568981) — 28 票 / 32 评论 / 2025-03-19 
+- [deepseek distill model and Quantization](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/565339) — 28 票 / 137 评论 / 2025-02-28 
+- [Private Leaderboard Scores](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/572408) — 27 票 / 88 评论 / 2025-04-09 
+- [endgame? openAI o3 at 96.7% at AIME 2024](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/552644) — 27 票 / 13 评论 / 2024-12-20 
+- [Call for Whitelisting Models [closed]](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/548129) — 27 票 / 244 评论 / 2024-11-25 
+- [Deepseek opensourced R1  &  distilled version weights range from 1.5B ~ 70B](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/557637) — 25 票 / 48 评论 / 2025-01-20 
+- [I created a validation set based on omni-math](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/543304) — 24 票 / 8 评论 / 2024-10-29 
+- [21st Place Solution](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/571289) — 24 票 / 13 评论 / 2025-04-09 **write-up?**
+- [Suggestions for AIMO 3 (or other large competitions)](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/571548) — 23 票 / 93 评论 / 2025-04-03 
+- [Show and Tell: Decision on allowing quantized models of whitelisted models](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/563445) — 23 票 / 79 评论 / 2025-02-17 
+- [My first "freelance research" competition: What I learned in AIMO2](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/571310) — 23 票 / 6 评论 / 2025-04-02 
+- [Helpful links, datasets, models and papers to get started](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/541104) — 23 票 / 0 评论 / 2024-10-17 
+- [How Fast can vLLM Infer?](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/571277) — 23 票 / 47 评论 / 2025-04-02 
+- [🦉 Beyond Fine-Tuning: Better Reasoning with Model (Fusion &) Merging](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/569269) — 22 票 / 29 评论 / 2025-03-21 
+- [Qwen 2.5 MATH 72b Instruct Running!](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/543107) — 21 票 / 29 评论 / 2024-10-28 
+- [[Score 12+] QwQ-32B-Preview-AWQ + My Best Scoring Notebook ](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/548756) — 21 票 / 18 评论 / 2024-11-28 
+- [Suggestion: relax the cutoff date condition for all models globally](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/559407) — 20 票 / 1 评论 / 2025-01-25 
+- [OpenR1-Math-220k Dataset Available!](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/562262) — 20 票 / 3 评论 / 2025-02-10 
+- [Last Rethinking: SFT and RL - If I can't crack it! I'll hack it.](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/568722) — 20 票 / 13 评论 / 2025-03-17 
+- [ Qwen2.5-Math-7B license Vs  Qwen2.5-Math-72B license](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/541890) — 19 票 / 20 评论 / 2024-10-21 
+- [Use TYXZ (or other AI tools such as NotebookLM, etc.) to get your answers faster!](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/555174) — 19 票 / 11 评论 / 2025-01-05 
+- [11th place solution](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/573086) — 19 票 / 5 评论 / 2025-04-14 **write-up?**
+- [rStar-Math](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/555856) — 18 票 / 4 评论 / 2025-01-09 
+- [My modest contribution: LLMEngine inference (Public LB = 23, Private LB = 23)](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/571301) — 18 票 / 18 评论 / 2025-04-02 
+- [Qwen 2.5 Math 72b Instruct working w/ vLLM](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/544546) — 18 票 / 16 评论 / 2024-11-05 
+- [❌ AI outputs Wrong Answers due to Corner Cases for Medium-Level Math Problems](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/571769) — 18 票 / 4 评论 / 2025-04-05 
+- [So… We cooked a model 🤷](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/573496) — 18 票 / 3 评论 / 2025-04-19 
+- [Attempts on thought engineering](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/562208) — 17 票 / 9 评论 / 2025-02-10 
+- [Attempts at GRPO to classify code execution outputs](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/571230) — 17 票 / 4 评论 / 2025-04-02 
+- [5th place solution](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/574262) — 17 票 / 4 评论 / 2025-05-14 **write-up?**
+- [Solved the Airlines Problem using the Qwen Model](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/560690) — 17 票 / 16 评论 / 2025-02-01 
+- [Rethink Reasoning Models: Do They Need Fine-Tuning for Code? Fine-Tuning Is Key?](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/565155) — 16 票 / 12 评论 / 2025-02-27 
+- [Qwen 2.5 Math 1.5B on CPU! (Update: 7B now working!)](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/544081) — 16 票 / 4 评论 / 2024-11-03 
+- [Possible hardware failure during notebook submission](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/568874) — 16 票 / 4 评论 / 2025-03-18 
+- [The amsthm Package. Theorem styles. Proofs. Other packages.](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/541179) — 16 票 / 4 评论 / 2024-10-18 
+- [4th place solution](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/573671) — 16 票 / 2 评论 / 2025-04-17 **write-up?**
+- [Stabilize to survive shakeup](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/570972) — 16 票 / 29 评论 / 2025-03-31 
+- [power of open sauce: new paper to reduce R1 thinking time](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/562438) — 16 票 / 4 评论 / 2025-02-11 
+- [[Fast-Math-R1-14B] We open-sourced everything behind our blazing-fast math model](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/573345) — 16 票 / 15 评论 / 2025-04-15 
+- [Latest vLLM Working](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/545449) — 15 票 / 0 评论 / 2024-11-10 
+- [NuminaMath-1.5 dataset by Project Numina](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/562470) — 15 票 / 5 评论 / 2025-02-11 
+- [Deepseek-R1-Distill-Qwen7b Reference Problems EDA](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/560302) — 15 票 / 23 评论 / 2025-01-30 
+- [vLLM 0.7.1 installation?](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/560682) — 15 票 / 39 评论 / 2025-02-01 
+- [We’re dropping another model [Fast-Math-Qwen3-14B] - same brain, but 65% faster!](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/575794) — 15 票 / 0 评论 / 2025-05-01 
+- [[Private27,Public28] Solution for 17th: To get code & fix it with DeepSeek](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/573071) — 15 票 / 2 评论 / 2025-04-13 **write-up?**
+- [Why is our score and rank removed? We are the authors of open-sourced Light-R1, which was used in many teams.](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/571434) — 15 票 / 13 评论 / 2025-04-03 
+- [[LB27] part 1/3: using a CPPRepl for executing LLM-generated C++ code ](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/571476) — 15 票 / 7 评论 / 2025-04-03 
+- [Important points regarding Notebook (submission) for this competition](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/541103) — 14 票 / 6 评论 / 2024-10-17 
+- [(Public 28) More Distillation and things that didn't work](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/571683) — 14 票 / 4 评论 / 2025-04-04 
+- [Important: Whitelisting freeze Feb 10th](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/561785) — 14 票 / 24 评论 / 2025-02-07 
+- [Is AIMO2 significantly more challenging than AIMO1?](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/541502) — 13 票 / 13 评论 / 2024-10-20 
+- [Important information](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/568745) — 13 票 / 24 评论 / 2025-03-17 
+- [Welcome to the AIMO 2 Progress Prize! ](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/541818) — 12 票 / 2 评论 / 2024-10-21 
+- [DeepSeek-R1-Lite: o1-preview performance on AIME & MATH benchmarks.](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/547238) — 12 票 / 16 评论 / 2024-11-20 
+- [How to Move on after AIMO2?](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/572591) — 12 票 / 9 评论 / 2025-04-10 
+- [is it possible to use  72B model on kaggle notebook?](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/541449) — 12 票 / 25 评论 / 2024-10-19 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/572481) — 11 票 / 8 评论 / 2025-04-09 
+- [Let's Share Final Ideas to Improve. What Did Not Work for Me? [LLM Reasoning Information]](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/568061) — 11 票 / 21 评论 / 2025-03-13 
+- [ 🧩Steering Reasoning in LLMs: Unlock Hidden Features for Better Accuracy ](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/570688) — 11 票 / 12 评论 / 2025-03-30 
+- [s1 Released: Simple test-time scaling ( Train 1000 samples / 32B Parameters / Perfect for 4xL4 )](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/561029) — 11 票 / 1 评论 / 2025-02-03 
+- [Is the score the same as the lottery](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/572416) — 11 票 / 8 评论 / 2025-04-09 
+- [Scoring System Update](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/567717) — 11 票 / 32 评论 / 2025-03-11 
+- [Proposal for "Stable Early Sharing Award"](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/550270) — 11 票 / 14 评论 / 2024-12-06 
+- [Proposal: Fixed Question Order for Private Leaderboard Submissions](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/553004) — 11 票 / 3 评论 / 2024-12-23 
+- [✂️ Early Pruning for Inference Efficiency in Reasoning Models ✂️](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/571669) — 11 票 / 18 评论 / 2025-04-04 
+- [vLLM 0.7.3 issue](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/564106) — 10 票 / 36 评论 / 2025-02-20 
+- [toy implementation:  let's verify step by step (COT based generative reward)](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/544156) — 10 票 / 1 评论 / 2024-11-03 
+- [Notebook automatically deselects the L4x4 Accelerator when reloaded](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/543890) — 10 票 / 2 评论 / 2024-11-02 
+- [RM@ Sampling Demo with Qwen 2.5 Math 72B RM](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/547462) — 10 票 / 1 评论 / 2024-11-21 
+- [A Fun Approach from a First Time Competitor!](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/571319) — 10 票 / 2 评论 / 2025-04-02 
+- [Reminder - Do not leave to the last day of the competition to submit](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/567949) — 10 票 / 4 评论 / 2025-03-13 
+- [Can AIMO take over Konwinski Prize resources to increase daily submission limit after 13 March 2025?](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/567801) — 9 票 / 5 评论 / 2025-03-12 
+- [ERROR - Notebook Inference Server Never Started](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/562126) — 9 票 / 27 评论 / 2025-02-10 
+- [SGLang offline](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/560724) — 9 票 / 3 评论 / 2025-02-01 
+- [[Suggestion]: Don't count submissions if the notebook errors out before receiving questions](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/565143) — 9 票 / 2 评论 / 2025-02-27 
+- [A bronze for prompt engineering (Public: 20, Private: 24)](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/572908) — 9 票 / 1 评论 / 2025-04-12 
+- [How many points do you get by submitting the early-share notebook?](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/549635) — 9 票 / 10 评论 / 2024-12-03 
+- [most people cannot solve these maths question ... how to get ground truth?](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/541175) — 9 票 / 12 评论 / 2024-10-18 
+- [QwQ-32B (Preview): Qwen's take on o1-like models](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/548617) — 9 票 / 13 评论 / 2024-11-27 
+- [Something is wrong with the default vLLM version (0.6.3)](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/560736) — 9 票 / 12 评论 / 2025-02-02 
+- [20th place solution - generate lots of code with a 32b model](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/575172) — 9 票 / 0 评论 / 2025-04-26 **write-up?**
+- [In AIMO1, the LB was Finalized Approximately One Week After the Final Submission](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/571236) — 9 票 / 3 评论 / 2025-04-02 
+- [Dear Hosts and Kaggle staff: Please consider ignoring the queue on the last day](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/568212) — 9 票 / 4 评论 / 2025-03-14 
+- [Team PolyMath](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/556725) — 9 票 / 4 评论 / 2025-01-14 
+- [There is a new leaderboard update ,does it reflect the final results?](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/572209) — 9 票 / 18 评论 / 2025-04-08 
+- [Prompting Qwen2.5-72B-Instruct to check their own solution](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/545585) — 9 票 / 1 评论 / 2024-11-11 **write-up?**
+- [beware if you using vllm](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/542541) — 9 票 / 1 评论 / 2024-10-25 
+- [New notebook: SuperCorrect / "Buffer of Thought"](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/545769) — 9 票 / 6 评论 / 2024-11-12 
+- [There is a defective video card with faulty memory.](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/571061) — 8 票 / 12 评论 / 2025-04-01 
+- [QWEN 2.5 math 7b API endpoint. ](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/542866) — 8 票 / 4 评论 / 2024-10-27 
+- [Which is your final choice 7B, 14B, or 32B? Final tips](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/570868) — 8 票 / 50 评论 / 2025-03-31 
+- [Quantization techniques and code](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/568868) — 8 票 / 7 评论 / 2025-03-18 
+- [New version of vLLM available. Working utitlity script](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/552957) — 8 票 / 4 评论 / 2024-12-22 
+- [Quantized version for TokenSwift-DeepSeek-R1-Distill-Qwen-32B?](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/570478) — 8 票 / 8 评论 / 2025-03-28 
+- [Code to perform AWQ on L4 ](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/569862) — 8 票 / 10 评论 / 2025-03-24 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/541128) — 8 票 / 3 评论 / 2024-10-17 
+- [Private (Final) Leaderboard Ordering Announcement](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/574546) — 6 票 / 6 评论 / 2025-04-22 
+- [OpenAI x AIMO eval](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/604155) — 3 票 / 0 评论 / 2025-09-06 

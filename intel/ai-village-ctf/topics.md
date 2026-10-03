@@ -1,0 +1,82 @@
+# ai-village-ctf 讨论区（按票数排序，共 80 条）
+
+- [Can anyone explain why this isn't working for HOTTERDOG :)](https://www.kaggle.com/competitions/ai-village-ctf/discussion/344336) — 52 票 / 10 评论 / 2022-08-14 
+- [What this competition has turned me into over 48 hours](https://www.kaggle.com/competitions/ai-village-ctf/discussion/344396) — 39 票 / 2 评论 / 2022-08-15 
+- [7th Place - Published 21 Solutions in My Notebook](https://www.kaggle.com/competitions/ai-village-ctf/discussion/351800) — 33 票 / 2 评论 / 2022-09-12 **write-up?**
+- [Solve sloth with abs()](https://www.kaggle.com/competitions/ai-village-ctf/discussion/351806) — 30 票 / 13 评论 / 2022-09-12 
+- [Competition End](https://www.kaggle.com/competitions/ai-village-ctf/discussion/351801) — 26 票 / 3 评论 / 2022-09-12 
+- [1st place solution: A brief overview of my experience](https://www.kaggle.com/competitions/ai-village-ctf/discussion/353536) — 24 票 / 2 评论 / 2022-09-18 **write-up?**
+- [Welcome to the AI Village Capture The Flag!](https://www.kaggle.com/competitions/ai-village-ctf/discussion/343582) — 23 票 / 5 评论 / 2022-08-11 
+- [CTF Feedback](https://www.kaggle.com/competitions/ai-village-ctf/discussion/346451) — 19 票 / 27 评论 / 2022-08-19 
+- [Is Public Sharing Answers Allowed?](https://www.kaggle.com/competitions/ai-village-ctf/discussion/343964) — 18 票 / 6 评论 / 2022-08-13 
+- [I'm caught in a trap. And I can walk out that arousing, compelling Kaggle Competition.](https://www.kaggle.com/competitions/ai-village-ctf/discussion/344609) — 15 票 / 12 评论 / 2022-08-15 
+- [Other Prizes](https://www.kaggle.com/competitions/ai-village-ctf/discussion/350907) — 14 票 / 1 评论 / 2022-09-07 
+- [🦥 The sloth: Hats off to organizers!](https://www.kaggle.com/competitions/ai-village-ctf/discussion/352068) — 13 票 / 1 评论 / 2022-09-12 
+- [Reminder: Sharing answers/solutions is not permitted during the competition](https://www.kaggle.com/competitions/ai-village-ctf/discussion/344845) — 13 票 / 3 评论 / 2022-08-16 **write-up?**
+- [Leaderboard is Finalized - Congrats to our Winners, Recap](https://www.kaggle.com/competitions/ai-village-ctf/discussion/352466) — 12 票 / 1 评论 / 2022-09-14 
+- [Murderbots Challenge](https://www.kaggle.com/competitions/ai-village-ctf/discussion/344324) — 12 票 / 11 评论 / 2022-08-14 
+- [Description for the flag in Math #3 is incorrect](https://www.kaggle.com/competitions/ai-village-ctf/discussion/344368) — 12 票 / 2 评论 / 2022-08-15 
+- [No Medals & No Teaming ? ](https://www.kaggle.com/competitions/ai-village-ctf/discussion/343947) — 12 票 / 7 评论 / 2022-08-13 
+- [Release Notes](https://www.kaggle.com/competitions/ai-village-ctf/discussion/343654) — 11 票 / 5 评论 / 2022-08-12 
+- [Summary of 21 solutions (LB: 0.894)](https://www.kaggle.com/competitions/ai-village-ctf/discussion/351804) — 11 票 / 3 评论 / 2022-09-12 **write-up?**
+- [Any hint for secret-sloth?](https://www.kaggle.com/competitions/ai-village-ctf/discussion/347149) — 11 票 / 21 评论 / 2022-08-23 
+- [CTF writeup](https://www.kaggle.com/competitions/ai-village-ctf/discussion/351834) — 10 票 / 0 评论 / 2022-09-12 **write-up?**
+- [Secret Sloth Solution](https://www.kaggle.com/competitions/ai-village-ctf/discussion/351812) — 10 票 / 1 评论 / 2022-09-12 **write-up?**
+- [10th place write up](https://www.kaggle.com/competitions/ai-village-ctf/discussion/351840) — 9 票 / 2 评论 / 2022-09-12 **write-up?**
+- [DeepFake Solution](https://www.kaggle.com/competitions/ai-village-ctf/discussion/351863) — 9 票 / 1 评论 / 2022-09-12 **write-up?**
+- [Learning Resources](https://www.kaggle.com/competitions/ai-village-ctf/discussion/343809) — 9 票 / 5 评论 / 2022-08-12 
+- [Obligatory sloth meme](https://www.kaggle.com/competitions/ai-village-ctf/discussion/351803) — 9 票 / 1 评论 / 2022-09-12 
+- [2nd Place Solution: The Solution Without Crop2](https://www.kaggle.com/competitions/ai-village-ctf/discussion/352622) — 8 票 / 3 评论 / 2022-09-18 **write-up?**
+- [Hot Dog Question](https://www.kaggle.com/competitions/ai-village-ctf/discussion/344675) — 8 票 / 11 评论 / 2022-08-16 
+- [Crop2 Hints! ](https://www.kaggle.com/competitions/ai-village-ctf/discussion/352007) — 8 票 / 0 评论 / 2022-09-12 
+- [Token in less than 30 secs !](https://www.kaggle.com/competitions/ai-village-ctf/discussion/351851) — 8 票 / 0 评论 / 2022-09-12 
+- [In Preparation For Landing...](https://www.kaggle.com/competitions/ai-village-ctf/discussion/350964) — 8 票 / 5 评论 / 2022-09-07 
+- [Looking forward to the crop2 solution from the hosts! ](https://www.kaggle.com/competitions/ai-village-ctf/discussion/351808) — 7 票 / 2 评论 / 2022-09-12 **write-up?**
+- [How to encode or decode string in WAF, base64 may cause error?](https://www.kaggle.com/competitions/ai-village-ctf/discussion/343931) — 7 票 / 3 评论 / 2022-08-13 
+- [How can i read theft/encpickle](https://www.kaggle.com/competitions/ai-village-ctf/discussion/343990) — 6 票 / 9 评论 / 2022-08-13 
+- ["token" output always the same](https://www.kaggle.com/competitions/ai-village-ctf/discussion/343912) — 6 票 / 11 评论 / 2022-08-12 
+- [Potential Crop2 typo's](https://www.kaggle.com/competitions/ai-village-ctf/discussion/348212) — 6 票 / 0 评论 / 2022-08-27 
+- [A Review of the CTF Competition](https://www.kaggle.com/competitions/ai-village-ctf/discussion/351884) — 6 票 / 1 评论 / 2022-09-15 
+- [Henry Hacker's .984 solution](https://www.kaggle.com/competitions/ai-village-ctf/discussion/351866) — 6 票 / 2 评论 / 2022-09-12 **write-up?**
+- [My CTF journey with notebook](https://www.kaggle.com/competitions/ai-village-ctf/discussion/351858) — 6 票 / 2 评论 / 2022-09-12 
+- [Maths, Hot Dogs and Flags. What an AI brainiac Competition!](https://www.kaggle.com/competitions/ai-village-ctf/discussion/351813) — 5 票 / 0 评论 / 2022-09-12 
+- [Mail: Competition Launch: AI Village Capture the Flag @ DEFCON](https://www.kaggle.com/competitions/ai-village-ctf/discussion/344684) — 5 票 / 3 评论 / 2022-08-16 
+- [Crop1 Solutions by idx](https://www.kaggle.com/competitions/ai-village-ctf/discussion/351850) — 5 票 / 2 评论 / 2022-09-12 **write-up?**
+- [leakage answer.](https://www.kaggle.com/competitions/ai-village-ctf/discussion/351993) — 5 票 / 0 评论 / 2022-09-12 
+- [Third Place Walkthrough](https://www.kaggle.com/competitions/ai-village-ctf/discussion/352819) — 5 票 / 1 评论 / 2022-09-15 
+- [My solutions to all but crop2](https://www.kaggle.com/competitions/ai-village-ctf/discussion/352765) — 5 票 / 2 评论 / 2022-09-15 **write-up?**
+- [Can anybody explain this "dimensionality of the data in first_dim1.npy"?](https://www.kaggle.com/competitions/ai-village-ctf/discussion/344190) — 5 票 / 1 评论 / 2022-08-14 
+- [Part of Challenge code released on github](https://www.kaggle.com/competitions/ai-village-ctf/discussion/354937) — 5 票 / 0 评论 / 2022-09-24 
+- [Inference Challenge](https://www.kaggle.com/competitions/ai-village-ctf/discussion/344395) — 4 票 / 2 评论 / 2022-08-15 
+- [Great sportsmanship!](https://www.kaggle.com/competitions/ai-village-ctf/discussion/351856) — 4 票 / 1 评论 / 2022-09-12 
+- [Crop 2 pre-processing of the input](https://www.kaggle.com/competitions/ai-village-ctf/discussion/349147) — 4 票 / 1 评论 / 2022-08-31 
+- [Sloth solution(without the original image). ](https://www.kaggle.com/competitions/ai-village-ctf/discussion/351989) — 4 票 / 2 评论 / 2022-09-12 **write-up?**
+- [Loading the picklemodel file for the SALT challenge](https://www.kaggle.com/competitions/ai-village-ctf/discussion/346173) — 4 票 / 3 评论 / 2022-08-18 
+- [What order do we need to output in Crop2?](https://www.kaggle.com/competitions/ai-village-ctf/discussion/343944) — 4 票 / 16 评论 / 2022-08-13 
+- [Observations on crop2](https://www.kaggle.com/competitions/ai-village-ctf/discussion/351823) — 4 票 / 1 评论 / 2022-09-12 
+- [5th Place Solution - A Compilation of my Code](https://www.kaggle.com/competitions/ai-village-ctf/discussion/355510) — 4 票 / 0 评论 / 2022-09-27 **write-up?**
+- [Still unknow what crop2 need us do](https://www.kaggle.com/competitions/ai-village-ctf/discussion/346180) — 3 票 / 8 评论 / 2022-08-18 
+- [Any hint for secret-sloth?](https://www.kaggle.com/competitions/ai-village-ctf/discussion/346256) — 3 票 / 4 评论 / 2022-08-18 
+- [Theft Challenge](https://www.kaggle.com/competitions/ai-village-ctf/discussion/343811) — 3 票 / 2 评论 / 2022-08-12 
+- [No module named 'levit'](https://www.kaggle.com/competitions/ai-village-ctf/discussion/343861) — 3 票 / 4 评论 / 2022-08-12 
+- [WAF Challenge](https://www.kaggle.com/competitions/ai-village-ctf/discussion/344594) — 3 票 / 3 评论 / 2022-08-15 
+- [Inference challenge hint?](https://www.kaggle.com/competitions/ai-village-ctf/discussion/348848) — 3 票 / 2 评论 / 2022-08-30 
+- [crop1 understanding](https://www.kaggle.com/competitions/ai-village-ctf/discussion/348897) — 3 票 / 4 评论 / 2022-08-30 
+- [75th Anniversary Commemorative Coin - Have Fun](https://www.kaggle.com/competitions/ai-village-ctf/discussion/350093) — 3 票 / 1 评论 / 2022-09-04 
+- [A User Customized WAF solution - ADD your message !](https://www.kaggle.com/competitions/ai-village-ctf/discussion/351817) — 3 票 / 0 评论 / 2022-09-12 **write-up?**
+- [Please explain idea behind Token challenge](https://www.kaggle.com/competitions/ai-village-ctf/discussion/351864) — 3 票 / 1 评论 / 2022-09-12 
+- [A Survey - for scientific research (10 min)](https://www.kaggle.com/competitions/ai-village-ctf/discussion/353208) — 3 票 / 2 评论 / 2022-09-17 
+- [Solutions for some of the challenges](https://www.kaggle.com/competitions/ai-village-ctf/discussion/358656) — 3 票 / 0 评论 / 2022-10-08 **write-up?**
+- [deepfake - server error "failed to create MP4"](https://www.kaggle.com/competitions/ai-village-ctf/discussion/345929) — 2 票 / 9 评论 / 2022-08-17 
+- [Ban for spamming the API?](https://www.kaggle.com/competitions/ai-village-ctf/discussion/346208) — 2 票 / 5 评论 / 2022-08-18 
+- [Inference challenge hint mentioned in notebook](https://www.kaggle.com/competitions/ai-village-ctf/discussion/351221) — 2 票 / 1 评论 / 2022-09-09 
+- [error on token submission](https://www.kaggle.com/competitions/ai-village-ctf/discussion/344231) — 2 票 / 3 评论 / 2022-08-14 
+- [Typo in the rules?](https://www.kaggle.com/competitions/ai-village-ctf/discussion/343915) — 2 票 / 2 评论 / 2022-08-13 
+- [how to get the flag](https://www.kaggle.com/competitions/ai-village-ctf/discussion/343837) — 2 票 / 3 评论 / 2022-08-12 
+- [Score not increasing](https://www.kaggle.com/competitions/ai-village-ctf/discussion/346479) — 1 票 / 9 评论 / 2022-08-19 
+- [Inference challenge.](https://www.kaggle.com/competitions/ai-village-ctf/discussion/347776) — 1 票 / 2 评论 / 2022-08-25 
+- [Honorstudent (id: honorstudent) Image source](https://www.kaggle.com/competitions/ai-village-ctf/discussion/346194) — 1 票 / 4 评论 / 2022-08-18 
+- [WIFI where is the encrypted password to decode?](https://www.kaggle.com/competitions/ai-village-ctf/discussion/348020) — 1 票 / 2 评论 / 2022-08-26 
+- [Connection problems with post request](https://www.kaggle.com/competitions/ai-village-ctf/discussion/346379) — 1 票 / 3 评论 / 2022-08-19 
+- [Score not getting updated after submission](https://www.kaggle.com/competitions/ai-village-ctf/discussion/348210) — 1 票 / 2 评论 / 2022-08-27 
+- [Black magic in the wifi's numpy file?](https://www.kaggle.com/competitions/ai-village-ctf/discussion/347785) — 1 票 / 6 评论 / 2022-08-25 

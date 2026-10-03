@@ -1,0 +1,561 @@
+# https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-3/discussion/672528
+
+Topic #672528: [Math Corpus Prize] Annotated Solution Traces
+  Author: Tong Hui Kang
+  Posted: 2026-02-08 23:50:11.751000
+  Votes: 31  Comments: 16
+
+This is my entry for the Math Corpus Prize in AIMO3.
+
+
+
+Dataset: link
+
+Models: link
+
+Discussion post: link
+
+Comment in submission thread: link
+
+Github: link
+
+
+
+
+Summary
+
+In my submission, I demonstrate how I annotate solution traces and train the model.
+
+My submission contains:
+
+Performance on Project Euler problems
+
+
+
+This informs which problems have space for improvement, and to understand the failure modes.
+
+This is problems.jsonl, problems.csv in the Kaggle dataset.
+
+You can visualize the problems at aimo.huikang.dev/problems
+
+
+Annotations on thinking traces
+
+
+
+Each solution trace is an attempt to solve the problem by the original gpt-oss-120b
+
+I annotate solution traces to different extents
+
+This is reflections.csv in the Kaggle dataset.
+
+You can visualize the annotations at: aimo.huikang.dev/annotations
+
+
+Training corpus
+
+
+
+Each entry is a prompt-completion pair.
+
+Metadata for each entry includes problem source, character counts, and annotation comments.
+
+This is corpus.csv and corpus.jsonl in the Kaggle dataset.
+
+You can visualize the corpus at aimo.huikang.dev/corpus
+
+
+Trained models
+
+
+
+I have published the model (huikang/gpt-oss-120b-aimo3/Transformers/160a/9) on Kaggle. My notebook streaming-inference-tool-calling shows an example how this model is used.
+
+
+
+
+Motivation
+
+Think of how you learn from experience.
+
+You tried to solve a math problem in a competition.
+
+Each attempt involves brainstorming, calculation, and verification.
+
+After solving the math problem, you find out the correct answer. You may read the reference solution there.
+
+Now you need to learn.
+
+If you get a problem correct, does this really mean that everything you did is correct?
+If you get a problem wrong, is it really true that all the actions you have made are wrong?
+
+What you do is to reflect exactly which actions are good and bad.
+
+Good actions and bad actions are also relative.
+You want to focus on learning actions that can make a difference, instead of imitating what you would have done anyway.
+
+You also want to learn only actions that you could make.
+There is not much value in learning from actions that someone else could make, or from actions that could only be made with privileged information.
+
+In my corpus prize submission, I demonstrate how I write reflections, make annotations, and train the model.
+
+
+
+Corpus Creation Procedure
+
+Step 1: Problem Selection and Triage
+
+I curate the problem set from three sources:
+
+
+
+AIMO3 reference problems
+
+Project Euler problems
+
+IMO problems
+
+
+I selected these three sources because they have verified correct answers.
+
+I make minor modifications to the problem statements.
+
+
+
+For AIMO3 and IMO problems, I change numerical variables to create parametric variants.
+
+For Project Euler problems, I request mod 99991 as long as it does not confuse the answer requirement.
+
+
+The problem set is in problems.csv.
+
+View problems
+
+Step 2: Generate Solution Traces
+
+For each problem, I generate multiple solution attempts using gpt-oss-120b with the tool calling notebook notebook.py.
+
+The script is data/generate.py which calls notebook.py.
+
+View example trace
+
+Step 3: Generate Alternative Continuations
+
+At each paragraph boundary in a solution trace, I generate one to five alternative continuations.
+
+The script is data/roll_alternates.py.
+
+View example alternates
+
+Step 4: Write Reflections
+
+Based on the solution traces, I write reflections.
+
+I annotate critical points of the solution trace:
+
+
+
+[breakthrough] — The trace arrives at a key insight. This is an idea that meaningfully advances the solution.
+
+[insight] - This is the precursor leading to the [breakthrough].
+
+[mistake] — The trace makes a concrete mathematical or logical error.
+
+[questionable statement] - This is the precursor leading to the [mistake].
+
+[missed opportunity] — The trace had the information or context to take a better path but didn't.
+
+[wasted] — A span of tokens (use Token NNNN-MMMM) where the trace spends effort on something unproductive.
+
+[verification] - Productive rigorous check on a certain hypothesis.
+
+[final answer] — Where the trace commits to its final answer value.
+
+
+I research and write the reflections with AI coding agents.
+
+I record the reflection guidelines in data/REFLECTION_GUIDELINES.md.
+
+View example reflection
+
+Step 5: Annotate Comparisons
+
+Based on the reflections, I annotate the thinking traces.
+I also research and make the annotations with AI coding agents.
+
+At each paragraph boundary, I compare the original continuation against the generated alternatives and classify each completion as:
+
+
+
+better — More mathematically accurate, makes better progress toward the solution, provides clearer reasoning, or avoids errors present in other completions. An alternate does not need to be correct to be "better" — it just needs to show significantly better reasoning than the others.
+
+neutral — No meaningful difference between completions, or all completions make the same error. If all completions pursue the same wrong approach, they are all neutral.
+
+worse — Contains mathematical errors that others avoid, makes less progress, or misses key insights that other completions capture. A completion is only "worse" relative to a "better" alternative — if no better alternative exists, all completions are neutral.
+
+
+I focus annotations on lines identified in the reflections, where a difference could have occurred.
+The most valuable labels go to alternates that could have provided a better result.
+
+I record the annotation guidelines in data/ANNOTATION_GUIDELINES.md.
+
+View example annotation
+
+Step 6: Build Training Corpus
+
+I select the traces for training.
+
+Even though there are 6,096 entries, I include only 665 in training.
+I chose a small selection because of my limited budget on Tinker, and also to more reliably show that I can improve on the AIMO3 reference problems.
+Toggle the included column to see which entries are included.
+
+View corpus
+
+
+
+Model Training Procedure
+
+Step 7: Training with LoRA
+
+I use Tinker from Thinking Machines Lab to train the model via LoRA (Low-Rank Adaptation).
+
+The batch size chosen is 16, the LoRA rank chosen is 32. I trained for one epoch over the 665 training entries.
+
+I chose a starting learning rate of 2e-4 among 1e-4, 2e-4, 3e-4, 4e-4 and 5e-4. 
+I chose the learning rate to optimize the average logprob improvement on the completion text, after training on the same completion text.
+
+Step 8: Merge Adapter with LoRA
+
+After training, I merge the LoRA adapter weights back into the base model with merge_adapter.py.
+
+The merge handles mixed precision:
+
+
+
+BF16 for attention layers (q/k/v/o projections)
+
+MXFP4 for MoE expert layers (128 experts per layer)
+
+
+I calculated the merge statistics.
+Among the MXFP4 MoE weights, approximately 5% of the weights changed.
+Notably, the share of MXFP4 weights with absolute value 0.5 has increased from 16% to 23%.
+
+Step 9: Upload to Kaggle
+
+I upload the merged model to Kaggle via upload_model.py using the Kaggle API.
+
+Step 10: Run Kaggle notebook and submit
+
+I run the notebook by just replacing the reference to the original model with my model.
+
+
+
+Math Corpus Prize Requirements
+
+I cite the requirements and I write my responses.
+
+
+  
+The dataset must be publicly released either on Kaggle or on HuggingFace prior to February 9, 2026 11:59 PM UTC. Teams must create a Kaggle Discussion post until this date that explicitly links to their dataset and tags it as an entry for the Math Corpus Prize. All eligible datasets will be judged according to the criteria below, and the highest scoring dataset will be awarded the prize.
+
+
+
+
+Kaggle dataset: link
+
+Kaggle discussion post: link
+
+Comment in submission thread: link
+
+
+
+  
+Your Kaggle Discussion post will be used to judge your dataset submission based on the criteria below, and your claims will be independently verified by the Host Team.
+
+
+This document serves as the detailed write-up for the discussion post.
+
+
+  
+The dataset must be in English.
+
+
+All content is in English.
+
+
+  
+The earliest timestamped version of the dataset will be used for evaluation (later modifications will not be considered)
+
+
+I will release any subsequent improvements as separate datasets.
+
+
+  
+The dataset is not allowed to exceed 5M datapoints, which is an upper bound on common datasets used by prior AIMO winners to fine-tune their models. Each datapoint is not allowed to exceed more than 100k characters.
+
+
+The corpus contains:
+
+
+
+6,096 prompt-completion pairs (only 665 of them are included in training)
+
+All entries are under 100K characters (prompt + completion)
+
+Metadata includes token counts and trace identifiers
+
+
+
+  
+Each datapoint from the submitted dataset must come with an open source license that allows free dissemination of data.
+
+
+Licensing
+
+
+
+My original contributions — including the annotation methodology, reflection guidelines, training pipeline, code, merge scripts, and all associated tooling — are released under Apache 2.0 and may be freely redistributed, modified, and used for any purpose, including commercial use.
+
+Content derived from Project Euler: Subject to Project Euler's CC BY-NC-SA 4.0 license. These entries are identified by the problem_source field.
+
+Content derived from AIMO3 reference problems: Subject to AIMO3's CC BY-SA 4.0 as noted in the competition data
+
+Content derived from IMO: Users should verify the licensing terms of the original problem sources before redistribution.
+
+
+I encourage free use of this dataset for research and model training. The problem_source metadata field allows users to filter by source and apply the appropriate license terms.
+
+
+
+Math Corpus Prize Evaluation Criteria
+
+Data Novelty (25 points)
+
+
+  
+Is the dataset distinctly unique from other datasets found on the internet?
+
+
+What is different from other datasets:
+
+
+
+Performance evaluation of gpt-oss-120b
+
+Modification of some existing problems
+
+Reflection on solution traces and reflection on solution lines
+
+Very easily navigable data format (aimo.huikang.dev/annotations)
+
+I have proven that the included traces improve performance on the original version of the problem
+
+
+I decided not to invent problems because I need to verify them. I am satisfied with the current problem set until I can effectively train a model to solve them perfectly.
+
+Format (25 points)
+
+
+  
+Does the dataset comes in a format that makes it easy to handle and train a model?
+  Does each datapoint contain rich metadata?
+
+
+I provide the dataset in two formats:
+
+
+
+corpus.csv with problem_id, problem_source, prompt, completion, character_count, token_count, annotation_reason
+
+corpus_full.jsonl - I provide prompt and completion in token IDs, to avoid retokenization drift.
+
+
+I also provide HTML visualizations for browsing the corpus data at aimo.huikang.dev/corpus.
+
+Performance (50 points)
+
+
+  
+Does the dataset improve mathematical reasoning and aid in improving model performance during the AIMO3. How so and how much?
+
+
+I actually finetuned the frontier OSS model and made submissions.
+You may use my scripts to repeat my end-to-end process.
+
+I trained the model on solution traces solving the variants of the Q9 and Q10 AIMO3 problems.
+For Q9, the shifty function problem, instead of a support size of 8, I trained on problems with a support size other than 8.
+For Q10, the Norwegian number problem, I trained on problems requesting a small subset of the terms.
+
+Training on variants improves solve rates on the original problems.
+The answer to the original problems (160, 8687) does not appear in the training corpus.
+
+I also show that my training does not degrade the performance of the model on the public leaderboard.
+Unlike the highest scoring public notebooks, the notebook I am submitting for public leaderboard performance only considers the earliest boxed answer.
+
+This setup allows me to:
+
+
+
+Evaluate the model without tuning the time constraint parameters
+
+Observe the differences in time usage
+
+Saving Kaggle GPU quota because it takes faster to evaluate
+
+More easily observe improvements that generalize to the public leaderboard
+
+
+
+
+
+Model
+default gpt-oss-120b
+finetuned gpt-oss-120b-aimo3/160a/v9
+
+
+
+
+Q9 performance
+22/50 in 2h 24m
+35/50 in 3h 51m
+
+
+
+23/50 in 2h 24m
+31/50 in 3h 43m
+
+
+Q10 performance
+7/50 in 6h 14m
+19/50 in 7h 42m
+
+
+
+
+20/50 in 7h 57m
+
+
+Public leaderboard
+29/50 in 3h 37m
+32/50 in 4h 4m
+
+
+
+27/50 3h 27m
+33/50 in 3h 51m
+
+
+
+
+35/50 in 4h 11m
+
+
+
+
+My submission fits into several steps of a larger progression:
+
+
+
+Training on a sequence increases the probability of the sequence.
+
+Training on a sequence increases the probability of similar sequences. (I briefly looked at this)
+
+Training on the problem increases the probability of success on the problem.
+
+Training on very similar problems increases the probability of success on the problem (I did this).
+
+Training on problems using similar techniques increases the probability of success on the problem.
+
+Training on half of the Project Euler problem set improves performance on the other half of the Project Euler problem set.
+
+Getting a significantly better score in AIMO3 in a first-submission format (I have shown that my solution does not degrade public leaderboard performance.)
+
+Getting a significantly better score in AIMO3 on optimized notebooks.
+
+
+I hope my corpus prize submission can immediately serve you by:
+
+
+
+Displaying a list of Project Euler problems where gpt-oss-120b could have done better.
+
+Showing how you can modify problem statements and use them to augment the problems.
+
+Proving that you can improve on a problem with very similar problems, without degradation in overall performance.
+
+Providing reflections and annotations (and the process to generate the reflections and annotations) to help you teach your model.
+
+
+
+
+Thank you for reading.
+
+I would like to have much more GPU resources to test out my ideas, do reach out if you can help!
+
+I would like to thank Modal, Tinker, Fireworks (and Han Chung Lee) for providing compute thus far.
+
+Comments:
+├─ Sam Bealing (2026-04-30 16:11:44.280000) [+1]
+│  Following up on @philipvonderlind questions, I have some further questions to help us assess your dataset more closely, as described in the updated discussion post.
+│  
+│  
+│  
+│  
+│  You mention that you add mod...
+  ├─ Tong Hui Kang (2026-05-01 02:17:05.657000) [+0]
+  │  1) Modulo 99991
+  │  
+  │  Thanks for the sharp observations. My process when applying modulo is a heuristic and I err on not applying the modulo (if there is a mention of modulo anywhere in the question I d...
+    ├─ Sam Bealing (2026-05-07 13:28:08.070000) [+1]
+    │  Thanks for the response here. Some interesting observations, particularly around how performance scales (or perhaps doesn't) with the volume of data. I agree it's hard to find problems with paramet...
+├─ Philip Vonderlind (2026-04-29 13:55:31) [+1]
+│  Hi, thank you for your submission to the Math Corpus Prize. Me and @sambealing will post some questions below that help us in assessing your dataset more closely, as described in the updated discus...
+  ├─ Tong Hui Kang (2026-04-29 16:00:11.673000) [+0]
+  │  1) Problem curation
+  │  
+  │  Most problems were created from existing datasets. I did not validate the correctness of the answer because the problems are already reputable competition problems.
+  │  
+  │  There are ...
+├─ cm391 (2026-02-09 10:53:55.440000) [+2]
+│  I release all contents of my submission for the Math Corpus Prize under Apache 2.0.
+│  
+│  
+│  you cannot just say this… Project Euler is Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA ...
+  ├─ Simon Frieder (2026-02-09 17:28:02.607000) [+2]
+  │  Thanks for pointing this out! We'll follow up on this and I agree that the OP should fix this!
+  │  
+  │  I do want to copy two things from https://www.kaggle.com/competitions/ai-mathematical-olympiad-progre...
+    ├─ Tong Hui Kang (2026-02-09 18:58:15.813000) [+0]
+    │  Thanks for chiming in.
+    │  
+    │  My intention behind my original statement is that I do not intend to gatekeep anyone from using my contributions here to do anything in any way. I have updated the statement...
+    ├─ Jasper Dekoninck (2026-02-14 12:34:04.817000) [+2]
+    │  Just saw this dataset. While a think it's a great contribution by @huikang, it does directly violate the competition rules of Project Euler, which has a clear ban on the publication of answers and ...
+    ├─ Tong Hui Kang (2026-02-14 23:21:19.180000) [+0]
+    │  Thanks for reaching out.
+    │  
+    │  On this matter, I am happy to follow what the competition organizer suggests.
+    │  
+    │  On my website and Github, I have redacted Project Euler related traces and answers, leaving ...
+    ├─ Jasper Dekoninck (2026-02-15 10:33:32.270000) [+0]
+    │  Amazing! Thanks :)
+    ├─ Simon Frieder (2026-02-16 14:07:39.063000) [+1]
+    │  I think this ultimately on whether sharing the answer to the PE is a request rather than a licence-related requirement.
+    │  
+    │  
+    │  
+    │  
+    │  In the former case, it is up to you whether you want to share the answer ...
+├─ wenliangtlh (2026-02-12 06:50:21.847000) [+-2]
+│  Hello, could you please explain how you used corpus.csv for training? Did you take the prompt as the input and completion as the output? Did you apply loss masking to the prompt? In other words, ar...
+  ├─ Tong Hui Kang (2026-02-12 07:18:45.547000) [+-1]
+  │  Thank you for your interest!
+  │  
+  │  Yes, the training data is exactly the prompt completion pairs (also only those with included=True). Loss should not be computed on the prompt. You can see that the num...
+    ├─ wenliangtlh (2026-02-12 08:07:37.767000) [+0]
+    │  Okay, thanks a lot. I have one question: if we only train the model using  pairs, could this lead to incomplete responses from the model? Because your completion is only a single step, not the full...
+    ├─ Tong Hui Kang (2026-02-12 09:11:42.317000) [+-1]
+    │  This is an interesting question. Notice that my completion does not include the end of text token. This means I do not take a position on what happens after the completion that I am training.
+    │  
+    │  If y...

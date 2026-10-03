@@ -1,0 +1,326 @@
+# https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-3/discussion/703222
+
+Topic #703222: 1st Place Solution for the AIMO3 Competition
+  Author: Exalted Joseph
+  Posted: 2026-05-29 10:31:47.830000
+  Votes: 14  Comments: 10
+
+GPT-OSS-120B on a Single H100: Efficient Large-Scale Reasoning
+
+
+
+This work is the product of empirical research carried out through, benchmarking, observation, and analysis of publicly available notebooks, technical reports, and competition solutions. 
+
+Based on the work of Parthenos
+
+1. Introduction
+
+GPT-OSS-120B is a powerful open-weight Mixture-of-Experts (MoE) language model designed for high-performance reasoning and agentic workloads. Although the model contains approximately 117 billion parameters, only around 12 billion parameters are active per token, enabling efficient execution on a single NVIDIA H100 80GB GPU.
+
+This solution included:
+
+
+
+Memory optimization
+
+Prefix caching
+
+KV cache quantization
+
+Entropy-weighted self-consistency
+
+Verification-assisted reasoning
+
+Adaptive runtime scheduling
+
+
+
+
+2. System Architecture and Memory Optimization
+
+One of the most difficult engineering challenges was fitting a 120B-scale model within single-GPU memory constraints while preserving long-context reasoning performance.
+
+To solve this, the system relied on multiple layers of optimization.
+
+OS-Level Weight Preloading
+
+A deliberate file-read operation was used before model initialization to force weights into the Linux page cache. This significantly reduced repeated disk access and lowered startup latency during inference initialization.
+
+Disk Storage
+      ↓
+Linux Page Cache
+      ↓
+GPU Transfer
+      ↓
+Inference Runtime
+
+
+Prefix Caching
+
+Shared prompt prefixes were reused across multiple parallel generations to avoid redundant attention computation. Since many reasoning samples begin with identical system prompts and instruction templates, prefix caching substantially improved throughput efficiency.
+
+KV Cache Quantization
+
+The KV cache was quantized to 8-bit precision to reduce memory pressure during long-context inference.
+
+
+
+The Key and Value matrices belong to an n × d real-valued vector space.
+
+
+
+The original Key and Value matrices are transformed into their 8-bit quantized representations to reduce memory usage during inference.
+
+This enabled:
+
+
+
+Longer context windows
+
+Improved VRAM stability
+
+Reduced fragmentation
+
+Increased parallel generation capacity
+
+
+
+
+3. Prompt Engineering and Inference Strategy
+
+One of the most important findings during research was that prompt engineering consistently produced larger gains than several complex optimization techniques.
+
+Carefully refined prompts improved:
+
+
+
+Symbolic consistency
+
+Chain-of-thought stability
+
+Verification behavior
+
+Mathematical structure
+
+Formatting reliability
+
+
+Multiple prompt variants were analysed, including:
+
+
+
+
+Gemini-generated prompts
+
+
+
+Community reasoning templates
+
+
+
+Original notebook prompts
+
+
+
+However, the original notebook prompt was used eventually.
+
+External reference:
+
+https://www.kaggle.com/code/datasciencegrad/aimo-3-42-50-stable-lb-possible-43-luck
+
+Entropy-Weighted Self-Consistency
+
+Traditional majority voting was replaced with entropy-weighted aggregation.
+
+Instead of treating all generated samples equally, it estimated confidence using token-level probability distributions based on Shannon entropy.
+
+
+
+Lower entropy implied higher confidence and stronger reasoning stability.
+
+The inference pipeline operated as follows:
+
+Parallel Generations
+          ↓
+Entropy Scoring
+          ↓
+Confidence Weighting
+          ↓
+Final Aggregation
+
+
+Compared to standard majority voting, entropy-weighted aggregation reduced instability and penalized uncertain generations.
+
+
+
+4. Verification and Runtime Orchestration
+
+A major component of the architecture was a persistent sandbox verification system built around long-lived Jupyter kernels.
+
+Instead of repeatedly restarting Python environments, the system preserved:
+
+
+
+Variables
+
+Functions
+
+Intermediate reasoning states
+
+Mathematical objects
+
+Verification outputs
+
+
+Generated reasoning steps were executed programmatically, and execution outputs were fed back into the inference pipeline for refinement.
+
+Model Generation
+       ↓
+Code Execution
+       ↓
+Verification
+       ↓
+Feedback Injection
+       ↓
+Refined Solution
+
+
+Adaptive Runtime Scheduling
+
+To operate efficiently within Kaggle’s runtime constraints, the system implemented adaptive compute scheduling.
+
+Each remaining problem received a baseline compute allocation, while unused time was redistributed dynamically according to:
+
+
+
+Problem difficulty
+
+Verification complexity
+
+Reasoning depth
+
+Generation stability
+
+
+As execution approached the notebook timeout limit:
+
+
+
+Sampling depth was reduced
+
+Verification loops were shortened
+
+Best-valid partial outputs were returned
+
+
+This prevented runtime failures near deadline limits.
+
+
+
+5.  Findings
+
+A major observation was that inference engineering itself became a competitive advantage. The final system behaved less like a traditional language model and more like a coordinated reasoning engine.
+
+
+
+6. Future Direction
+
+One particularly promising direction comes from strategies described in the DeepSeek technical reports, where multiple specialized expert models are independently trained using reinforcement learning and later distilled back into a single unified system.
+
+Such a framework could significantly improve:
+
+
+
+Formal mathematical reasoning
+
+Verification planning
+
+Tool usage reliability
+
+Long-chain symbolic consistency
+
+Multi-domain specialization
+
+
+This type of multi-expert reinforcement learning followed by consolidation appears to be a powerful direction for future competition systems.
+
+
+
+
+
+7. Conclusion
+
+The final architecture combined:
+
+
+
+OS-level memory optimization
+
+Prefix caching
+
+KV cache quantization
+
+Entropy-weighted self-consistency
+
+Adaptive runtime scheduling
+
+Persistent sandbox verification
+
+Prompt-engineered reasoning orchestration
+
+
+One of the most important conclusions from this research is that careful inference design and prompt engineering can contribute more consistently to leaderboard performance than naive scaling strategies alone.
+
+
+
+References
+
+
+
+GPT-OSS-120B Technical Documentation
+
+Kaggle AIMO Competition Discussions
+
+DeepSeek Technical Reports
+
+Shannon, C. E. — A Mathematical Theory of Communication
+
+Sparse Mixture-of-Experts Transformer Literature
+
+Public Community Inference Implementations
+
+Bycloud: https://www.youtube.com/watch?v=gC76aeibdFA
+
+Comments:
+├─ Mohammad Shadab Alam (2026-05-29 11:13:55.260000) [+20]
+│  Congratulations and Thanks for sharing, so this is submission is an exact copy of [44/50] LET ME (over)COOK!!! version 1
+  ├─ JK-Piece (2026-05-29 11:16:49.327000) [+4]
+  │  I just confirmed this too🤣. I am not surprised. Congratulations @theexaltedone
+    ├─ zulfikar.khalwaniev (2026-06-04 03:13:55.487000) [+0]
+    │  really unchanged ?
+├─ Akagha Chimgozirim (2026-05-30 17:17:17.533000) [+0]
+│  Big Congratulations ma guy.
+│  
+│  I'm realy happy for you.
+│  
+│  Naija all the way!!!
+├─ Durga Kumari (2026-05-30 17:28:43.153000) [+-13]
+│  Amazing achievement. The entropy weighted self consistency idea is particularly interesting.
+├─ Taha (2026-05-30 11:54:21.227000) [+0]
+│  you received the prize?
+├─ Laureano Arcanio (2026-05-29 11:35:49.677000) [+0]
+│  Thanks for sharing, and congratulations on the result.
+│  
+│  I had a question about the “Adaptive Runtime Scheduling” section in your writeup. You mention:
+│  
+│  
+│    
+│  “Unused time redistributed according to p...
+  ├─ Exalted Joseph (2026-05-29 12:08:01.453000) [+-6]
+  │  The system is "adaptive" only to the ticking clock. If a problem finishes early (e.g., due to early stopping when 4 matching answers are found), the unused time naturally goes back into the global ...
+    ├─ Laureano Arcanio (2026-05-29 12:54:34.807000) [+0]
+    │  Thanks for clarifying.
+    │  
+    │  I think this is an important distinction. Your explanation sounds like a standard global time budget with early stopping, where unused time naturally remains available for l...
+    ├─ Exalted Joseph (2026-05-29 13:14:09.950000) [+-7]
+    │  You’re right about the mechanism, but the key point is what triggers the rollover. The system saves time through early stopping based on generation consensus. If the model reaches 4 matching answer...

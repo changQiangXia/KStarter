@@ -1,0 +1,88 @@
+<p>※Previously titled 12th Place Solution. It is now 11th due to the fixed ranking.</p>
+<p>Thank you to everyone who participated in the competition and to everyone involved in organizing it.<br>
+I learned a lot through this competition.</p>
+<h2>Score &amp; Result</h2>
+<ul>
+<li>My best submission<ul>
+<li>Local CV：0.79922</li>
+<li>Public: 0.80088</li>
+<li>Private: 0.80852</li></ul></li>
+<li>Results<ul>
+<li>Public:6th → Private 12th</li></ul></li>
+</ul>
+<h2>Feature Engineering</h2>
+<ul>
+<li>Base features are from public notebook<ul>
+<li><a href="https://www.kaggle.com/code/thedevastator/amex-features-the-best-of-both-worlds" target="_blank">https://www.kaggle.com/code/thedevastator/amex-features-the-best-of-both-worlds</a></li></ul></li>
+<li>Delete some features<ul>
+<li>Round up features</li>
+<li>Duplicate features (ex. groupby counts for all category features)</li></ul></li>
+<li>Add some features<ul>
+<li>Features aggregated by time period <ul>
+<li>min, max, mean, std for the last 3 and last 6 months</li></ul></li>
+<li>Rate and diff features in time series<ul>
+<li>ex. last - latest_3month_mean, last_3month_mean / last_6month_mean</li></ul></li>
+<li>Null count features</li>
+<li>Date features</li>
+<li><strong>Meta features (most important features!)</strong><ul>
+<li>how to make<ol>
+<li>Train_labels are assigned to train data (before aggregation by cid) and train model.</li>
+<li>Make oof prediction for train data.</li>
+<li>Aggregate oof prediction by time period.</li></ol></li>
+<li>Using this feature, I reached 0.800 PublicLB from 0.799 PublicLB in single model.</li>
+<li>Referring to the DSB2019's 2nd place solution method.<ul>
+<li><a href="https://www.kaggle.com/c/data-science-bowl-2019/discussion/127388" target="_blank">https://www.kaggle.com/c/data-science-bowl-2019/discussion/127388</a></li></ul></li></ul></li></ul></li>
+</ul>
+<h2>Validation strategy</h2>
+<ul>
+<li>Use stratfiedKfold(k=5).</li>
+<li>I think Public LB is more important than local CV to measure Private's performance.<ul>
+<li>Data size is about the same for train and public.</li>
+<li>In terms of time, public data is closer to private data than train data.</li>
+<li>Even after adversarial validation, train/private was farther away from the data than public/private.<ul>
+<li>train/private：AUC 0.99</li>
+<li>public/private：AUC 0.82</li></ul></li></ul></li>
+<li>While focusing on publicLB, we also looked at local CV to determine if there was any improvement.<ul>
+<li>Also checked local logloss because amex_metric was not stable.</li>
+<li>It was hard to find a few digits of publicLB.</li></ul></li>
+</ul>
+<h2>Model</h2>
+<ul>
+<li>LightGBM<ul>
+<li>Use dart.</li>
+<li>Hypyer_parameter is the same as base notebook.<ul>
+<li><a href="https://www.kaggle.com/code/thedevastator/amex-features-the-best-of-both-worlds" target="_blank">https://www.kaggle.com/code/thedevastator/amex-features-the-best-of-both-worlds</a></li></ul></li>
+<li>Get best amex metric model (use callback)<ul>
+<li><a href="https://www.kaggle.com/competitions/amex-default-prediction/discussion/332575" target="_blank">https://www.kaggle.com/competitions/amex-default-prediction/discussion/332575</a>    </li></ul></li></ul></li>
+</ul>
+<h2>Feature Selection</h2>
+<ul>
+<li>Adversarial validation<ul>
+<li>Delete features of high importance in train/private adversarial validation.<ul>
+<li>Drop_features: R_1, D59, S_11, B_29</li>
+<li>After the change, the AUC was 0.8.</li></ul></li></ul></li>
+<li>Null importance<ul>
+<li>Use features actual importance larger than mean importance with shuffled target.</li>
+<li>Before:4300 features → After:1300 features</li></ul></li>
+</ul>
+<h2>Ensemble</h2>
+<ul>
+<li>Use 3 LightGBM models and rank ensemble (weighted average).</li>
+<li>Each model use different feature set.<ul>
+<li>Model_1: Not use meta features.</li>
+<li>Model_2: Use meta features &amp; large features (not use null importance feature selection).</li>
+<li>Model_3: Use meta features &amp; small features (use null importance feature selection).</li></ul></li>
+<li>Ensemble weight<ul>
+<li>model_1:model_2:model_3 = 4:4:2</li>
+<li>weight decided while looking at public LB</li></ul></li>
+</ul>
+<h2>Select Submission</h2>
+<ul>
+<li>I chose two sub's: <ol>
+<li>BestLB sub</li>
+<li>Sub with risk of time-series changes in features.<ul>
+<li>Features that were not important in adversarial validation are not used. </li></ul></li></ol></li>
+<li>The second model was the best in privateLB.</li>
+<li>Perhaps the trend of some features changed over time. adversarial validation was very helpful.</li>
+</ul>
+<p>Thank you.</p>

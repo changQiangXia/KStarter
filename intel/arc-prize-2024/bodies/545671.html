@@ -1,0 +1,237 @@
+<p>Any feedback to improve this post or the <a href="https://ironbar.github.io/arc24/05_Solution_Summary/" target="_blank">paper</a> is very welcome 👍!</p>
+<p>This post is almost a duplicate of the <a href="https://ironbar.github.io/arc24/05_Solution_Summary/" target="_blank">paper</a>, I would recommend to go to the <a href="https://ironbar.github.io/arc24/05_Solution_Summary/" target="_blank">paper</a> directly because it has better formatting.</p>
+<h2>TLDR</h2>
+<p>My solution is an implementation of the MindsAI team approach (test-time fine-tuning) that in addition to train the model to generate the test outputs (the original ARC task) it also trains the model to do other tasks such as learning the input distribution by generating new inputs.</p>
+<h2>Context</h2>
+<ul>
+<li><a href="https://www.kaggle.com/competitions/arc-prize-2024/overview" target="_blank">Business context</a></li>
+<li><a href="https://www.kaggle.com/competitions/arc-prize-2024/data" target="_blank">Data context</a></li>
+</ul>
+<h2>Motivation of my approach</h2>
+<p>In the <a href="https://arcprize.org/arc" target="_blank">ARC challenge</a> we have to learn a transformation rule given a few high-dimensional pairs of input and output images. The images can have a size of up to 30x30 pixels and each pixel can take 10 different colors. The images are not as complex as real world images, but nevertheless they are high dimensional data.</p>
+<h3>How can we learn from few high-dimensional examples?</h3>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F264656%2F1872ebd8b23eeb052b5d0de5a20a5c9a%2F1.png?generation=1731337058067434&amp;alt=media" alt=""></p>
+<p>To solve each ARC problem we have to find the <strong>right representation</strong> of the data. When humans solve the tasks, the biggest challenge is to find the <strong>right perspective</strong> to look at the problem. Once we have the right perspective of the data the ARC problems are trivial to solve.</p>
+<p>The right representation of the data allows to decrease the dimensionality of the data and makes possible to learn the transformation from very few examples.</p>
+<h3>How can we learn a good representation of the ARC problems?</h3>
+<p>If we train a model to do tasks that require a good representation of the data, it's likely that the model will internally develop the required representation.</p>
+<p>My insight was that we could use the ARC problems in many different ways to learn that representation, not just in the original proposed task that asks to generate the output for an image given a few input-output pairs.</p>
+<h3>Omni-ARC: Training a single model to do multiple ARC-related tasks</h3>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F264656%2F0cfb88d56cdfe4d4448745507699d961%2F2.png?generation=1731337090400140&amp;alt=media" alt=""></p>
+<ul>
+<li><code>examples + input -&gt; output</code>. The original task of the ARC dataset.</li>
+<li><code>inputs -&gt; input</code>. Generating new inputs requires to understand the distribution of the grids. It could also be done with the outputs, that should also follow some distribution.</li>
+<li><code>examples -&gt; code</code>. This is the approach used by Ryan Greenblat with GPT-4o</li>
+<li><code>code + input -&gt; output</code>. This is equivalent to the first task, but instead of giving examples as input, it gives the code definition of the problem.</li>
+<li><code>code -&gt; inputs</code>. Each input to a task follows some distribution, given a description of the<br>
+distribution the model should be able to generate samples of that distribution.</li>
+<li><code>inputs -&gt; code</code>. We could also do the opposite task, given some inputs write code to generate that distribution.</li>
+<li><code>examples + input + output -&gt; is the output correct?</code>. It is possible to train the model to verify wether a proposed output is correct.</li>
+<li><code>examples + input + output options-&gt; select the correct output</code>. We can train a model to select the correct output between multiple options.</li>
+</ul>
+<p>All the listed tasks require that the model learns some useful representation of the ARC image. The idea behind the Omni-ARC approach is to train a single model to do all the tasks, with the expectation that a shared representation across all the tasks will generalize better than training the model to do a single task.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F264656%2Fd875023e376c6b32bfec4fcd9accdc46%2F3.png?generation=1731337101860834&amp;alt=media" alt=""></p>
+<p><em>Omni-ARC, a single model that does all the ARC-related tasks (and it has a very cool logo)</em></p>
+<h2>Overview of the Approach</h2>
+<p>The solution on a nutshell:</p>
+<ol>
+<li>Take <code>Qwen2.5-0.5B-Instruct</code> and fine-tune it on publicly available ARC datasets. The model was fine-tuned to:<ol>
+<li>generate the outputs for the test samples</li>
+<li>learn the inputs distribution and generate new inputs.</li></ol></li>
+<li>Do test-time fine-tuning with the private test data, only for the task of generating the test outputs.</li>
+<li>Inference with data augmentation, and voting to select the predictions</li>
+<li>Ensemble with the 2020 public solution</li>
+</ol>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F264656%2F6582e5414c30bcabeae4b4835b80a273%2F4.png?generation=1731337122415869&amp;alt=media" alt=""></p>
+<h3>Training</h3>
+<h4>Data</h4>
+<p>I used the following publicly available datasets for training:</p>
+<table>
+<thead>
+<tr>
+<th>dataset</th>
+<th>number of unique tasks</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://www.kaggle.com/competitions/arc-prize-2024/data" target="_blank">original ARC dataset</a></td>
+<td>800</td>
+</tr>
+<tr>
+<td>Michael Hodel's <a href="https://github.com/michaelhodel/re-arc" target="_blank">RE-ARC dataset</a></td>
+<td>400</td>
+</tr>
+<tr>
+<td>Simon Strandgaard's <a href="https://github.com/neoneye/arc-dataset-collection/tree/main/dataset/PQA" target="_blank">PQA dataset</a></td>
+<td>7</td>
+</tr>
+<tr>
+<td>Simon Strandgaard's <a href="https://github.com/neoneye/arc-dataset-tama" target="_blank">Tama dataset</a></td>
+<td>50</td>
+</tr>
+<tr>
+<td><a href="https://github.com/ksb21ST/Mini-ARC" target="_blank">Mini-ARC</a></td>
+<td>149</td>
+</tr>
+<tr>
+<td><a href="https://www.kaggle.com/datasets/zaharch/arc-nosound-tasks" target="_blank">nosound's hand crafted ARC tasks</a></td>
+<td>9</td>
+</tr>
+<tr>
+<td><a href="https://www.kaggle.com/datasets/andypenrose/extra-arc-tasks-for-testing" target="_blank">Andy Penrose's tasks</a></td>
+<td>5</td>
+</tr>
+<tr>
+<td>TOTAL</td>
+<td>1420</td>
+</tr>
+</tbody>
+</table>
+<p>For all the datasets I trained the model to do two tasks:</p>
+<ul>
+<li><code>examples + input -&gt; output</code>. The original task of the ARC dataset.</li>
+<li><code>inputs -&gt; input</code>. Generating new inputs requires to understand the distribution of the grids. It could also be done with the outputs, that should also follow some distribution.</li>
+</ul>
+<p><a href="https://ironbar.github.io/arc24/05_Solution_Summary/#data" target="_blank">Examples of newly generated inputs</a></p>
+<h4>Data augmentation</h4>
+<p>For each problem the same data augmentation was applied to all the inputs and outputs. Data augmentation was a composition of the following augmentations:</p>
+<ul>
+<li>Rotations</li>
+<li>Flips</li>
+<li>Color changes</li>
+<li>Swap between train and test examples</li>
+</ul>
+<h4>Problem augmentation</h4>
+<p>In addition to the data augmentation I also did problem augmentation by applying a transformation only to the inputs or to the outputs. This transformation created new ARC problems by composing the original ARC transformation with randomly chosen new ones.</p>
+<p>These new transformations needed to be reversible, otherwise the new generated problems might not be solvable. I used the following additional transformations:</p>
+<ul>
+<li>Rotations and/or flips</li>
+<li>Padding the image</li>
+<li>Upscale</li>
+<li>Mirror</li>
+</ul>
+<p><a href="https://ironbar.github.io/arc24/05_Solution_Summary/#problem-augmentation" target="_blank">Examples of problem augmentation in the paper</a></p>
+<h4>Problem representation</h4>
+<p>I used a very simple text representation of the ARC grids as an input to the LLMs. The grid was enclosed on a Markdown code snippet, the shape was defined at the first line and each row was numbered.</p>
+<pre><code>```grid shape: x3
+ 
+ 
+ 
+```
+</code></pre>
+<h4>Training hyperparameters</h4>
+<p>The model was fine-tuned using LoRA. No significative improvement was found when doing full model fine-tuning and also on test-time fine-tuning it seemed to be beneficial to just fine-tune the already trained LoRA adapter instead of creating a fresh new adapter.</p>
+<ul>
+<li>Model: <code>Qwen2.5-0.5B-Instruct</code></li>
+<li>LoRA rank: 128</li>
+<li>Learning rate: 5e-5, with a linear schedule with warmup</li>
+<li>Batch size: 16</li>
+<li>Training steps: 2e5</li>
+<li>Max sequence length: 8196</li>
+<li>Trained on 2xA6000 GPUs</li>
+</ul>
+<p>I used huggingface's trl and accelerate libraries for the training.</p>
+<h3>Test-time fine-tuning</h3>
+<p>Fine-tuning a model on ARC tasks is not enough to do well on the private test set. By applying test-time fine-tuning we could improve the number of solved problems from 11 to 33 for one of the models that I trained along the challenge.</p>
+<p>This is my interpretation of the test-time fine-tuning:</p>
+<ul>
+<li>For each test problem that had <code>n</code> train samples, I fine-tuned the model using <code>n-1</code> train samples and using the remaining sample as a test sample. The selection of the test sample was done randomly on the fly during training.</li>
+<li>I used <a href="#data-augmentation">data augmentation</a> just like in the previous training</li>
+<li>I fine-tuned a model for each of the test problems, so 100 fine-tuned models were generated on each submission.</li>
+<li>I used batch size 1 in the test-time fine-tuning to be able to learn the new problems as fast as possible.</li>
+<li>The model was fine-tuned for ~300 steps on each problem</li>
+<li>Suprisingly the best learning rate for test-time fine-tuning was 8e-5, higher than the one used for training (5e-5). It's very likely that better results could be obtained if more computation was available, training with a slower learning rate, with higher batch size and for longer.</li>
+</ul>
+<p>Due to the limited submission time test-time fine-tuning was only applied to the canonical ARC task of predicting the test outputs. But it could also be applied to the task of generating new inputs, or to the tasks of verifying the correctness of the outputs.</p>
+<p>The unusual configuration of training a single model for each task with batch size 1 arose due to the limitations of compute and submission time. It was the configuration that allowed to learn faster the new test problems.</p>
+<h3>Inference</h3>
+<p>Data augmentation was applied also at inference, and the data augmentation was reverted from the prediction to get the original output. 96 predictions were done for each problem and voting was used to select the most promising predictions. So just like MindsAI's AIRV (augment, inference, reverse augmentation, and vote).</p>
+<p>Inference was done using a temperature of 0.</p>
+<p>VLLM was used to generate the predictions. Each fine-tuned model was used to generate predictions for its problem.</p>
+<h3>Ensemble</h3>
+<p>I ensembled my model predictions with the <a href="https://www.kaggle.com/code/mehrankazeminia/3-arc24-developed-2020-winning-solutions" target="_blank">2020 solution</a>. Since the 2020 solution only requires CPU, I managed to run it on the background while I used the GPU for fine-tuning and inference with my model. I only had to be careful with the RAM usage because both jobs had to share the same memory.</p>
+<p>The ensemble strategy was very simple, just take the first attempt from each solution.</p>
+<h3>Results</h3>
+<p>This approach scored 40 on the ARC leaderboard.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F264656%2F6582e5414c30bcabeae4b4835b80a273%2F4.png?generation=1731337122415869&amp;alt=media" alt=""></p>
+<p>The same approach (without test-time fine-tuning) could solve 32% of the evaluation tasks, and when using voting with 32 predictions it achieved a top_2 accuracy of 22%. Due to limited hardware resources I didn't usually evaluated the models with test-time fine-tuning on the evaluation dataset. Kaggle provides 30 hours of GPU each week, but we could make 3 submissions a day which is equivalent to 36 hours of compute. Thus it was much cheaper to use the submissions to see the performance of the test-time fine-tuning where we had 7 times more compute available per week.</p>
+<h2>Details of the submission</h2>
+<h3>Prompting is not enough, test-time fine-tuning is needed</h3>
+<p>Clearly this competition has shown that LLMs need test-time fine-tuning to do new tasks. Few-shot prompting is not enough for the model to learn novel tasks.</p>
+<h3>It's possible to train the model to verify the correctness of the tasks</h3>
+<p>During the last weeks of the challenge I tried to continue with the Omni-ARC approach and train the model to:</p>
+<ol>
+<li>Verify if an output is correct</li>
+<li>Select the correct output between two options</li>
+</ol>
+<p>The idea was that we could improve the LB score if we replaced the voting selection mechanism by a more accurate one. Using trained models I generated wrong predictions for the original ARC dataset using a sampling temperature close to 1.</p>
+<table>
+<thead>
+<tr>
+<th>method</th>
+<th>top 1 accuracy</th>
+<th>top 2 accuracy</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>voting</td>
+<td>60.0%</td>
+<td>70.0%</td>
+</tr>
+<tr>
+<td>verification</td>
+<td>59.3%</td>
+<td>77.4%</td>
+</tr>
+<tr>
+<td>selection</td>
+<td><strong>68.7%</strong></td>
+<td><strong>81.0%</strong></td>
+</tr>
+</tbody>
+</table>
+<p>As the table above shows I was able to achieve promising results on the evaluation dataset. Those numbers are for 32 predictions.</p>
+<p>However I was not able to improve the LB score using this approach. My hypothesis is that the distribution of the predictions of a test-time fine-tuned model is different from the distribution of a frozen model. Thus the accuracy of voting for a test-time fine-tuned model might be much higher than the shown in the table for a frozen model.</p>
+<p>This verifier models could benefit from test-time fine-tuning, but I could not test the hypothesis due to the limited submission time.</p>
+<p>More information on <a href="https://ironbar.github.io/arc24/modeling/Iteration_47_select_instead_of_verify" target="_blank">Iteration 47</a> and <a href="https://ironbar.github.io/arc24/modeling/Iteration_45_improve_verifier" target="_blank">Iteration 45</a>.</p>
+<h3>Solving the tasks using code did not worked for me</h3>
+<p>I also tried to expand on the Omni-ARC approach by training the model to do the additional tasks:</p>
+<ul>
+<li><code>examples -&gt; code</code>. This is the approach used by Ryan Greenblat with GPT-4o</li>
+<li><code>code + input -&gt; output</code>. This is equivalent to the first task, but instead of giving examples as input, it gives the code definition of the problem.</li>
+</ul>
+<p>To do so I build a small domain specific language (DSL) and recreated 285 of the ARC training tasks with python code. This was a laborious process that took around 3 weeks.</p>
+<p>Unfortunately the model did not generalize well. It could only solve 5% of the evaluation tasks, and those tasks were very similar to the training tasks. On the private test set a lucky submission was able to solve 1 task.</p>
+<p>I believe this approach has great potential, but I had to change to other approaches because the end of the challenge was close and other teams were improving in the leaderboard.</p>
+<p>More info on <a href="https://ironbar.github.io/arc24/modeling/Iteration_26_dawn_of_omni_arc" target="_blank">Iteration 26</a>, <a href="https://ironbar.github.io/arc24/modeling/Iteration_40_try_coding_models" target="_blank">Iteration 40</a> and <a href="https://ironbar.github.io/arc24/modeling/Iteration_42_improve_omniarc" target="_blank">Iteration 42</a>.</p>
+<h3>The quality of the datasets is relevant</h3>
+<p>On the last weeks of the challenge I tried adding the <a href="https://huggingface.co/collections/barc0/synthetic-arc-dataset-6725aa6031376d3bacc34f76" target="_blank">BARC datasets</a> to the training data. Surprisingly despite the enormous claimed number of different tasks (400k) I did not see any significative improvement either on the evaluation dataset or in the leaderboard. More information on <a href="https://ironbar.github.io/arc24/modeling/Iteration_48_more_external_data" target="_blank">Iteration 48. More external data</a>.</p>
+<p>This is surprising because the original ARC dataset shows a clear trend when increasing the number of training tasks:</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F264656%2F52306f5322b2d0d43fabe1f752f44c7a%2F5.png?generation=1731337162581753&amp;alt=media" alt=""></p>
+<p>My guess is that the automatically generated tasks by GPT4 did not have too much novelty respect to the original ARC tasks.</p>
+<h3>The right model size</h3>
+<p><code>Qwen2.5-0.5B</code> was the right model size for my approach and the available compute for submission.</p>
+<p>On a first step I tried smaller models such as <code>SmolLM2-135M</code> and <code>NanoLM-0.3B</code> but they did not achieve the same accuracy as <code>Qwen2.5-0.5B</code>. More on <a href="https://ironbar.github.io/arc24/modeling/Iteration_46_revisit_small_llms" target="_blank">Iteration 46. Revisit small LLMs</a></p>
+<p>On my <a href="https://ironbar.github.io/arc24/modeling/Iteration_50_last_trainings" target="_blank">final attempt</a> I also tried bigger models such as <code>Qwen2.5-1.5B</code> and <code>Qwen2.5-7B</code>. These models exhibit a higher data efficiency, they reach a smaller training loss for the same amount<br>
+of training steps. The problem with these models is that they are slower to fine-tune and inference at submission. Moreover due to VRAM requirements we have to decrease the length of the training samples. It's very likely that LB score could be improved with this  bigger models if better hardware and more submission time is given.</p>
+<h2>Sources</h2>
+<ul>
+<li><a href="https://ironbar.github.io/arc24/" target="_blank">Documentation of all the work done during the challenge</a></li>
+<li><a href="https://github.com/ironbar/arc24" target="_blank">Github repo</a></li>
+<li><a href="https://www.kaggle.com/code/ironbar/single-task-test-time-fine-tuning-for-arc24?scriptVersionId=199282752" target="_blank">Submission notebook</a></li>
+<li><a href="https://notebooklm.google.com/notebook/cf13e950-4048-4ba6-a001-e3d03a577339/audio" target="_blank">NotebookLM of the solution</a></li>
+<li><a href="https://www.linkedin.com/in/guillermobarbadillo/" target="_blank">Linkedin profile</a></li>
+<li><a href="https://x.com/guille_bar" target="_blank">Twitter profile</a></li>
+</ul>
+<h2>Acknowledgments</h2>
+<ul>
+<li><a href="https://veridas.com/en/" target="_blank">Veridas</a> for providing me access to its compute cluster during all the challenge. Most of the experiments were done on Veridas cluster, using A6000 GPUs with 48GB of VRAM.</li>
+<li><a href="https://strongcompute.com/" target="_blank">Strong Compute</a> for providing compute for training the last models for the challenge. They gave me access to A100 GPUs with 80GB of VRAM, which allowed me to train bigger models.</li>
+<li><a href="https://huggingface.co/Qwen" target="_blank">Qwen</a> for training and releasing a family of very capable LLMs with many different sizes.</li>
+<li><a href="https://wandb.ai/home" target="_blank">Weigths and bias</a> I used it to track all the experiments in a single place. It's an amazing tool and free for individuals.</li>
+<li><a href="https://lambdalabs.com/" target="_blank">Lambdalabs</a>. I did some short (but expensive) experiments on the last week of the challenge in Lambdalabs. They provide me with some free credits that partially covered this experiments.</li>
+<li>ARC team. It's been a pleasure to work in this super interesting challenge for a few months. Thanks for creating the challenge and specially to Chollet for all his wisdom and teachings.</li>
+<li>Family. I couldn't have done all this work without the help of my wife and the appreciation from my children. My family followed my progress during the challenge and cheered me up when I advanced in the leaderboard.</li>
+</ul>

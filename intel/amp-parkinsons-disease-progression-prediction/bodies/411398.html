@@ -1,0 +1,42 @@
+<h1>AMP®-Parkinson's Disease Progression Prediction</h1>
+<p>Wow, this competition had a close finish at the top. I suspected this would be the case because I believe there was only 1 source of reliable signal (i.e. <code>patient visit dates</code>) and all the tops teams were working hard to extract an extra SMAPE 0.1 from it. The metric SMAPE is a percentage so <code>0.1</code> is actually <code>0.001</code>. That's how close the finish was!</p>
+<p>The final leaderboard is separated into two groups. The top 18 teams have <code>SMAPE &lt;= 62.5</code> and the next teams have <code>SMAPE &gt;= 68.4</code>. I believe the top 18 teams used signal from <code>patient visit dates</code> and the next teams <code>did not</code>.</p>
+<h1>Signal from Protein/Peptide data</h1>
+<p>In this competition, Kaggle provided 227 Protein NXP features and 968 Peptide PeptideAbundance features. That is 1195 features for each of 17 possible visit dates. We only have 248 train patients. And the <code>curse of dimensionality</code> begins when <code>number of features &gt; train samples / 10</code>. In other words we only have enough train data to reasonably train 25 features not 1195 features!</p>
+<p>I did an experiment where i made 1000 columns of random numbers. Using forward feature selection, I found that columns of <code>random numbers</code> would boost GroupKFold CV score <strong>the same amount that protein/peptide features did</strong>. This means that there may be signal hiding in the protein peptide data but it is too weak to detect patterns with only 248 patients (because no protein nor peptide boost CV more than random numbers can).</p>
+<h1>Signal from Patient Visit Dates</h1>
+<p>Next I searched patient visit dates for signal. Many Kagglers overlooked that we can engineer features from patient visit dates. Here are some example features</p>
+<ul>
+<li>when was patient's first blood work measured?</li>
+<li>did patient get blood work at their first doctor visit, yes or no?</li>
+<li>how many times did a patient visit the doctor?</li>
+<li>how long ago was the patient's last visit?</li>
+</ul>
+<p>Etc etc. We can create 100s of features about when a patient visited the doctor and when a patient had blood work done. I quickly noticed the following trend. <strong>Patients who visit the doctor more often have larger UPDR scores</strong>. This is shown in the following 3 plots. The first are patients who visited the doctor a normal number of times. The second are patients who visited 1 standard deviation less than normal. And the last are patients who visited 1 standard deviation more. In each plot, we display the average target value per visit month for these 3 groups of patients:<br>
+<img src="https://raw.githubusercontent.com/cdeotte/Kaggle_Images/main/May-2023/normal2.png" alt=""><br>
+<img src="https://raw.githubusercontent.com/cdeotte/Kaggle_Images/main/May-2023/less2.png" alt=""><br>
+<img src="https://raw.githubusercontent.com/cdeotte/Kaggle_Images/main/May-2023/more2.png" alt=""></p>
+<h1>Feature Engineering</h1>
+<p>The above plots show that there is signal in the <code>patient visit dates</code>. What is the best way to extract this signal? I generated 100s of features and used <code>for-loops</code> with <strong>RAPIDS cuML SVR</strong> to find which features extract the most signal.</p>
+<p>In the end, simple "booleans" worked best (and the model "created its own features internally"). For each visit month, i created a boolean variable. For example for visit month = 24, i created the following "boolean":</p>
+<ul>
+<li><code>v24 = 0</code> if we know that patient did <strong>not</strong> visit on visit month = 24</li>
+<li><code>v24 = 1</code> if we know that patient did visit on visit month = 24</li>
+<li><code>v24 = -1</code> if we <strong>do not</strong> know if patient visited on month = 24</li>
+</ul>
+<p>The reason for the third category is because at each time step of Kaggle's API we are asked to predict <code>0, 6, 12, 24</code> months into the future. So if the current visit month = 12 and we are predicting visit month 36, we do <strong>not</strong> know if the patient visited during visit month = 24.</p>
+<h1>Single Model RAPIDS cuML - 8th Place Gold</h1>
+<p>A single <strong>RAPIDS cuML SVR</strong> model trained with 11 features which are <code>visit_month</code> and <code>v0</code>, <code>v6</code>, <code>v12</code>, <code>v18</code>, <code>v24</code>, <code>v36</code>, <code>v48</code>, <code>v60</code>, <code>v72</code>, <code>v84</code> where the <code>v</code> features are described above achieves <code>CV = 55.5</code> and <code>Public LB = 55.4</code> and <code>Private LB = 60.5</code>. This is 8th place Gold. Using <strong>RAPIDS cuML</strong> was great because it allowed me to experiment dozens of models in minutes!</p>
+<h1>Single Model TensorFlow MLP - 4th Place Gold</h1>
+<p>After I found the above features, i tried different model types. I tried XGBoost with <code>PseudoHuber loss</code>. It's CV was not as good as <strong>RAPIDS cuML SVR</strong>. Next I tried TensorFlow MLP with <code>MeanAbsoluteError</code>. We built an MLP with 10 hidden layers where each hidden layer has 24 units and activation Relu. We used no Dropout and no BatchNormalization. We trained it for 15 epochs with Adam optimizer <code>LR = 1e-3</code> and then 15 epochs <code>LR = 1e-4</code>. This achieves <code>CV = 55.0</code> and <code>Public LB 54.9</code> and <code>Private LB 60.1</code>. This is 4th place Gold.</p>
+<h1>Creating Train Data</h1>
+<p>Our model trained with <code>train_clinical_data.csv</code> only. Creating proper train data for the above features was not trivial. We needed to convert each row from the original train data into <strong>4 new rows</strong>. If the original row was <code>patient_id = 55</code> and <code>visit_month = 24</code>. Then we needed to replace this row with 4 new rows:</p>
+<ul>
+<li>patient_id=55, visit_month=24, And v0=X1, v6=-1, v12=-1, v24=-1, v&gt;24=-1</li>
+<li>patient_id=55, visit_month=24, And v0=X1, v6=X6, v12=-1, v24=-1, v&gt;24=-1</li>
+<li>patient_id=55, visit_month=24, And v0=X1, v6=X6, v12=X12, v24=-1, v&gt;24=-1</li>
+<li>patient_id=55, visit_month=24, And v0=X1, v6=X6, v12=X12, v24=X24, v&gt;24=-1</li>
+</ul>
+<p>where <code>X1</code>, <code>X6</code>, <code>X12</code>, <code>X24</code> are the values <code>0</code> or <code>1</code> based on whether <code>patient_id=55</code> visited on months 0, 6, 12, 24 in the train data. The 4 new rows are current visit month minus 0, 6, 12, 24. If any of these subtractions are not valid visit months then we don't make that row.</p>
+<h1>4th Place Solution Code</h1>
+<p>I published my 4th place submission code using TensorFlow MLP <a href="https://www.kaggle.com/code/cdeotte/4th-place-solution-public-54-9-private-60-1" target="_blank">here</a>. Enjoy!</p>

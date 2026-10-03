@@ -1,0 +1,360 @@
+# https://www.kaggle.com/competitions/amex-default-prediction/discussion/328054
+
+Topic #328054: How To Reduce Data Size
+  Author: Chris Deotte
+  Posted: 2022-05-30 16:54:06.636000
+  Votes: 521  Comments: 137
+
+How To Reduce Data Size
+
+This competition's tabular data is 50GB! That's huge. To engineer features from this data and train models with this data, we need to reduce data size and efficiently use memory and disk first. Here are some tips
+
+Step 1 - Reduce Data Types!
+
+Many discussion topics discuss different file formats like Parquet, Feather, NumPy, Pickle, CSV, etc etc. This overlooks the most important point. The first step is reducing each column to the least data size possible. Afterward we can choose our file format and whether to save as multiple files or single file.
+
+Column customer_ID - Reduce 64 bytes to 4 bytes!
+
+This column is a string of length 64 which uses 64 bytes per row! That is too much! We can convert this int32 or int64 which only use 4 bytes or 8 bytes. My favorite technique is to take the last 16 letters of the hexadecimal string and convert that base16 number into base10 and save as int64. Discussion to explain this is here
+
+Column S_2 - Reduce 10 bytes to 3 bytes!
+
+This column is a date with time. This column is provided as a string of length 10 which uses 10 bytes per row! This is too much! If we convert this column with pd.to_datetime() then it becomes only 4 bytes. Or we can save this column as three columns of year_last_2_digits, month, and day as int8 each and only use 3 bytes per row.
+
+11 Categorical Columns - Reduce 88 bytes to 11 bytes!
+
+The 11 columns ['B_30', 'B_38', 'D_114', 'D_116', 'D_117', 'D_120', 'D_126', 'D_63', 'D_64', 'D_66', 'D_68'] are categorical with maximum 8 values. Therefore each of these columns can be converted into int8 which is 1 byte per row. Originally they are each 8 bytes per row.
+
+177 Numeric Columns - Reduce 1416 bytes to 353 bytes!
+
+Lastly there are 177 numerical columns. These columns are float64 with 8 bytes per row. At the bare minimum, we can convert float64 to float32 (4 bytes per row) without losing any important information. We are also discovering that we can convert these to float16 which is 2 bytes per row since we suspect that Amex has added uniform noise. (And column B_31 has only two values and can be converted to int8 1 byte per row)
+
+Step 2 - Choose Your File Format
+
+After making the above size reductions, we are now ready to save files to disk. The two important properties of the different options are compression ratio and save order. Some file formats like CSV save the data row by row. And some file formats like Parquet save the data column by column. This will affect reading the data later. If in the future we want to read a subset of rows. perhaps row order is better and faster. If in the future we want to read a subset of columns, perhaps column order is better and faster.
+
+The second property is compression. Above we talked about number of bytes per row. The train data has 5,531,451 rows. After the reductions above, we have 4 + 3 + 11 + 353 = 371 bytes per row. Therefore our uncompressed train data size is 2GB. And test data has 11,363,762 rows, therefore uncompressed test data is 4GB. Therefore uncompressed, all the competition data becomes 6GB instead of 50GB.  Wow!
+
+Certain file formats like Feather, Parquet, and Pickle compress the data. (And NumPy has an option np.savez() too). If we compress the data, then all the data can reduce to 4GB or 3GB, or 2GB. Wow! 
+
+UPDATE: A third property is whether the file format remembers the dtype. When saving as parquet, if you downcast an int64 to int8, then the file format remembers this and next time you read the file it loads as int8. However some formats like CSV do not remember this. And if you save as int8, it will still read as int64 unless you specify dtype in your read_csv() command.
+
+Step 3 - Choose Multiple Files or Not
+
+Our last decision is whether to save the data as multiple files or one large file. If we have trouble processing the entire train and test dataset at once, then we can consider processing in chunks and saving the data to disk as separate files.
+
+Step 4 - Read Raddar's Discussion
+
+UPDATE: Many of the variables are actually (low cardinality) integers with noise added. Therefore for some columns, if we remove noise, we can further reduce the float32 (4 bytes) into int8 (1 byte) columns and reduce the data more. For more info, read Raddar's discussion post here
+
+Conclusion
+
+In conclusion, there are many options to reduce the data and save it in a new file format. Many Kagglers have posted many discussion topics and many Kaggle datasets. Which is best depends on many factors and personal preference. 
+
+We certainly do not want to use the original 50GB CSV files provided in this competition in our pipeline. We will certainly want to do step-1 above and then we can pick our favorite step-2 and step-3. 
+
+I provide one example in my GRU starter notebook here. For step-3, I choose to load the original train data in 10 chunks and process each chunk separately and save as 10 separate files. First i perform step-1 above and for step-2, i choose to save the chunks as uncompressed NumPy files. I uploaded the result to a Kaggle dataset here and discussion here
+
+Comments:
+├─ Rob Mulla (2022-05-30 17:34:48.377000) [+21]
+│  Great tips @cdeotte as always! I've actually made some youtube videos on this exact topic. Hope it's okay to post the links here:
+│  
+│  
+│  
+│  This video explains how you can make your pandas dataframe more ...
+  ├─ Chris Deotte (2022-05-30 17:53:40.767000) [+5]
+  │  Great videos @robikscube Thanks for sharing the links
+  ├─ Gaju Ahmed (2022-06-14 19:49:03.680000) [+1]
+  │  Thanks both of you @robikscube and @cdeotte
+├─ Gunes Evitan (2022-05-31 08:38:30.917000) [+11]
+│  I don't know much about hex. Is there any chance that last 16 characters of the customer_ID can cause integer overflow for 64 bit integers? If I understand correctly, 64 bit signed integer type is ...
+  ├─ broccoli beef (2022-05-31 10:14:28.587000) [+1]
+  │  You can save even more if you cast the column to category instead of int64 by exploiting the duplication of customer_ID.
+  │  
+  │  print(train_data.customer_ID.apply(lambda x:int(x[-16:],16)).astype('int64'...
+  ├─ Chris Deotte (2022-05-31 13:32:04.370000) [+9]
+  │  @gunesevitan Great analysis Gunes. Each hexadecimal digit ( i.e. one character ) represents 16 values or 4 bits. So yes, 16 characters are 64 bits and 8 characters are 32 bits. The way you checked ...
+  ├─ wafflebufflo (2022-07-02 07:38:30.897000) [+0]
+  │  Is it ok to use unsigned integer, for example, if using pandas, leaving out the .astype(np.int64)?  It looks like np.uint64 has the same memory usage.
+├─ Shrinidhi Narasimhan (2022-06-26 04:51:51.367000) [+3]
+│  @cdeotte  Hi!Thank you for this!It is pretty helpful!Could you please elaborate on the reduction for customer_id column?
+  ├─ Chris Deotte (2022-06-26 06:15:21.553000) [+4]
+  │  Hi. The basic idea is that the dataset provides us with customer_ID that are strings of length 64. Each string takes 64 bytes per string. We note that there are only about 450k unique customers in ...
+  ├─ Adrian Faela (2022-07-20 02:56:09.617000) [+1]
+  │  How would you then go back to the real customer_IDs in the Test dataframe prior to the submit?
+├─ querty550 (2022-05-31 15:30:28.053000) [+3]
+│  All this is good, but how are you ever going to do all these transformations without first opening the data set?
+│  Which I can't open even with 16GB RAM?
+  ├─ Chris Deotte (2022-05-31 16:08:20.943000) [+11]
+  │  Pandas and cuDF allow you to read a subset of the data rows from the CSV. Therefore i suggest you read the train data as 10 chunks. And the test data as 20 chunks. Then each chunk only has around 5...
+  ├─ Anubhav Chhabra (2022-06-02 03:34:04.470000) [+2]
+  │  You can use the chunksize parameter to iterate multiple chunks in pandas. In the example below I am using a dummy value
+  │  
+  │  # make data chunks
+  │  data_chunks  = pd.read_csv("file.csv", chunksize=10000)
+  │  
+  │  ...
+  ├─ Aiden White (2022-06-04 05:05:32.350000) [+0]
+  │  Thank you, very helpful!
+  ├─ Jirka (2022-06-08 07:38:46.497000) [+0]
+  │  I have successfully loaded entire training data to the provided instance with 16GB with dask and while loading define the columns types as  following:
+  │   df_train = dd.read_csv("../input/amex-default...
+├─ Arandeep Dhillon (2022-06-13 23:36:39.070000) [+4]
+│  Great tips, especially for those working at home on personal hardware 😅
+  ├─ huan jun (2022-06-16 03:08:49.010000) [+1]
+  │  haha,I work at home with 16G memory
+├─ Mohsin (2022-06-01 21:37:34.153000) [+4]
+│  train_df['B_31'].unique()
+│  array([1, 0], dtype=int64)
+│  train_df['D_87'].unique()
+│  array([nan,  1.], dtype=float16)
+  ├─ Chris Deotte (2022-06-02 04:40:12.060000) [+0]
+  │  Great suggestions
+├─ Nathan George (2022-08-19 19:15:40.017000) [+1]
+│  So let's say you do df['customer_ID'] = df['customer_ID'].apply(lambda x: int(x[-16:],16) ).astype('int64'), then how do you get back to the original customer IDs?
+│  
+│  The original IDs are required fo...
+  ├─ Chris Deotte (2022-08-19 19:24:53.800000) [+4]
+  │  You need to create a mapping. To do this, load the original CSV file and make a new column called `code', then export a dictionary map:
+  │  
+  │  df = pd.read_csv('train_data.csv')
+  │  df['code'] = df['customer...
+  ├─ Nathan George (2022-08-19 19:54:39.677000) [+1]
+  │  Aha, that's a better idea than what I proposed.
+  ├─ Chris Deotte (2022-08-19 20:05:21.647000) [+1]
+  │  The best way is what i do in my stater notebook. After making test predictions, put those test predictions into a new dataframe that has column code and column prediction. Then load Kaggle's submis...
+├─ llllllkkkkkk (2022-08-14 06:43:33.190000) [+1]
+│  great discussion
+├─ Melvin (2022-07-15 11:47:11.323000) [+1]
+│  Good tips!
+├─ tianzizhao (2022-07-13 08:23:20.347000) [+1]
+│  very friendly to new guys，I learned a lot from the share，thank you very much
+├─ Sohail Ahmed (2022-07-04 10:41:44.960000) [+1]
+│  Thanks for sharing. however, I believe it depends on case to case. one technique may be good in one situation but not ideal for the second.
+├─ Tord Malmgren (2022-06-27 13:29:45.053000) [+1]
+│  By implementing a hash, you can reduce it to 8 (or whatever resolution you want) bits per feature, at the cost of some computational speed.
+├─ Ronny Daniel Taroreh (2022-06-27 09:09:35.883000) [+1]
+│  A very nice tips. Thanks a lot to share this here
+├─ Fatima HABIB (2022-06-26 12:52:45.357000) [+1]
+│  Thanks a lot for your great effort. what is the difference in practice between saving data in multiple files or in one file? can we say that one of them is better?
+├─ Shrinidhi Narasimhan (2022-06-26 04:50:41.337000) [+1]
+│  @cdeotte Hi!Thank you so much!This is extremely helpful. Could you please elaborate on transforming the customer_id column?
+├─ Sakshi Jha (2022-06-23 06:44:53.087000) [+1]
+│  It's very helpful. Thanks for sharing @cdeotte 👍
+├─ Apurba Pandey (2022-06-21 18:23:47.510000) [+1]
+│  @cdeotte While converting the categorical features into "int8", it gives an error saying cannot convert NA values to int. How do we best approach this error? Thanks
+  ├─ Chris Deotte (2022-06-26 06:10:35.910000) [+4]
+  │  hi @apurbapandey . When using Pandas, dtype int cannot be NA. Therefore we must fillna before converting to dtype like df[col] = df[col].fillna(-1).astype('int8'). Note that when using RAPIDS cuDF,...
+├─ huan jun (2022-06-16 03:09:20.280000) [+1]
+│  so useful!👍
+├─ Vandit (2022-06-14 20:06:13.763000) [+1]
+│  Very helpful,i will definetly utilise these tricks.thanks for posting.
+├─ Aneruth Mohanasundaram (2022-06-14 13:42:26.430000) [+1]
+│  This is quite helpful
+├─ Alaa Taha El Maria (2022-06-13 17:41:02.403000) [+1]
+│  @cdeotte Very useful informative post , Thanks for posting .
+├─ sampathsomayajula (2022-06-13 07:05:28.117000) [+1]
+│  This is very informative. Thanks a lot for this.
+├─ Kanha patil (2022-06-13 02:32:19.347000) [+1]
+│  Thanks a bunch for this informative post
+├─ Saber (2022-06-12 12:55:56.947000) [+1]
+│  Thanks a lot for sharing this technique dear @cdeotte .
+├─ querty550 (2022-06-11 10:51:24.343000) [+1]
+│  Thanks to the people who advised on this matter.
+│  
+│  But it's of no use for people who work with R, so here's something they might find useful:
+│  
+│  install.packages('sqldf')
+│  library('sqldf')
+│  
+│  Then use th...
+├─ wangyuan0619 (2022-06-10 13:23:56.443000) [+1]
+│  Thanks a lot for sharing this technique. It's great to learn such stuff that is useful not only for one competition but even in personal projects and professional work!
+├─ Vivek Chowdhury (2022-06-10 11:03:29.937000) [+1]
+│  This is great stuff Chris! I was able to reduce the size by adopting your advice! Also, I used Dask instead of Pandas. It helped me process the data fast :)
+├─ JiJung (2022-06-09 17:04:18.990000) [+1]
+│  Excellent advices. Will give it a go.
+├─ Dhamu (2022-06-09 15:03:56.860000) [+1]
+│  Great insight @cdeotte. You have taught me a new way of looking at data. Thanks for sharing
+├─ [deleted] (2022-06-09 09:02:14.490000) [+1]
+│  [deleted]
+├─ [deleted] (2022-06-08 08:39:43.533000) [+1]
+│  [deleted]
+├─ [deleted] (2022-06-06 03:01:02.030000) [+1]
+│  [deleted]
+├─ [deleted] (2022-06-03 09:33:50.820000) [+1]
+│  [deleted]
+├─ [deleted] (2022-06-03 08:33:51.773000) [+1]
+│  [deleted]
+├─ [deleted] (2022-06-03 06:03:24.047000) [+1]
+│  [deleted]
+├─ [deleted] (2022-06-02 16:32:27.297000) [+1]
+│  [deleted]
+├─ [deleted] (2022-06-02 09:02:29.523000) [+1]
+│  [deleted]
+├─ [deleted] (2022-06-02 05:22:44.367000) [+1]
+│  [deleted]
+├─ [deleted] (2022-06-02 03:31:48.820000) [+1]
+│  [deleted]
+├─ [deleted] (2022-06-01 16:59:22.650000) [+1]
+│  [deleted]
+├─ [deleted] (2022-06-01 09:11:41.707000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-31 14:57:17.143000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-31 14:03:02.320000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-31 05:18:33.283000) [+1]
+│  [deleted]
+├─ [deleted] (2022-08-03 06:31:09.653000) [+2]
+│  [deleted]
+├─ [deleted] (2022-06-15 04:41:22.390000) [+2]
+│  [deleted]
+├─ [deleted] (2022-06-12 14:51:35.590000) [+2]
+│  [deleted]
+├─ [deleted] (2022-06-08 07:33:05.503000) [+2]
+│  [deleted]
+├─ [deleted] (2022-06-02 03:35:14.087000) [+2]
+│  [deleted]
+  ├─ [deleted] (2022-06-02 04:40:39.627000) [+5]
+  │  [deleted]
+├─ [deleted] (2022-06-01 19:11:39.367000) [+2]
+│  [deleted]
+├─ [deleted] (2022-05-30 23:04:20.067000) [+2]
+│  [deleted]
+├─ [deleted] (2022-05-30 18:29:13.287000) [+2]
+│  [deleted]
+├─ [deleted] (2026-05-23 09:13:42.617000) [+0]
+│  [deleted]
+├─ [deleted] (2025-01-27 06:56:02.757000) [+0]
+│  [deleted]
+├─ [deleted] (2024-04-04 13:21:34.457000) [+0]
+│  [deleted]
+├─ [deleted] (2023-11-07 09:15:12.753000) [+0]
+│  [deleted]
+├─ [deleted] (2023-11-02 16:26:17.617000) [+0]
+│  [deleted]
+├─ [deleted] (2023-02-19 00:29:19.787000) [+0]
+│  [deleted]
+├─ [deleted] (2022-07-08 09:14:39.473000) [+0]
+│  [deleted]
+├─ [deleted] (2022-07-06 21:03:01.670000) [+0]
+│  [deleted]
+├─ [deleted] (2022-07-04 16:08:01.853000) [+0]
+│  [deleted]
+├─ [deleted] (2022-06-01 13:05:38.330000) [+0]
+│  [deleted]
+├─ [deleted] (2022-08-17 12:26:21.027000) [+1]
+│  [deleted]
+  ├─ [deleted] (2022-08-19 11:16:12.657000) [+2]
+  │  [deleted]
+  ├─ [deleted] (2022-08-19 13:39:40.343000) [+1]
+  │  [deleted]
+├─ [deleted] (2022-07-14 19:33:04.060000) [+0]
+│  [deleted]
+├─ [deleted] (2022-07-06 05:26:56.317000) [+0]
+│  [deleted]
+├─ [deleted] (2022-06-15 06:34:20.580000) [+0]
+│  [deleted]
+├─ [deleted] (2022-06-02 16:45:12.057000) [+1]
+│  [deleted]
+├─ [deleted] (2022-11-08 17:04:23.343000) [+1]
+│  [deleted]
+├─ [deleted] (2022-08-19 07:43:22.240000) [+1]
+│  [deleted]
+├─ [deleted] (2022-08-19 07:41:48.283000) [+1]
+│  [deleted]
+├─ [deleted] (2022-08-13 17:29:01.033000) [+1]
+│  [deleted]
+├─ [deleted] (2022-08-07 11:44:35.737000) [+1]
+│  [deleted]
+├─ [deleted] (2022-08-07 10:50:06.990000) [+1]
+│  [deleted]
+├─ [deleted] (2022-08-05 03:23:19.220000) [+1]
+│  [deleted]
+├─ [deleted] (2022-08-03 06:17:44.413000) [+1]
+│  [deleted]
+├─ [deleted] (2022-08-01 06:57:21.877000) [+1]
+│  [deleted]
+├─ [deleted] (2022-07-29 06:28:07.747000) [+1]
+│  [deleted]
+├─ [deleted] (2022-07-18 06:45:54.147000) [+1]
+│  [deleted]
+├─ [deleted] (2022-07-16 14:02:53.100000) [+1]
+│  [deleted]
+├─ [deleted] (2022-07-15 01:14:19.640000) [+1]
+│  [deleted]
+├─ [deleted] (2022-07-13 13:50:46.067000) [+1]
+│  [deleted]
+├─ [deleted] (2022-07-11 18:31:47.993000) [+1]
+│  [deleted]
+├─ [deleted] (2022-07-10 15:09:56.440000) [+1]
+│  [deleted]
+├─ [deleted] (2022-07-10 09:01:56.737000) [+1]
+│  [deleted]
+├─ [deleted] (2022-07-03 12:29:39.437000) [+1]
+│  [deleted]
+├─ [deleted] (2022-06-29 09:18:16.883000) [+1]
+│  [deleted]
+├─ [deleted] (2022-06-28 06:04:07.780000) [+1]
+│  [deleted]
+├─ [deleted] (2022-06-28 03:47:57.900000) [+1]
+│  [deleted]
+├─ [deleted] (2022-06-21 15:27:47.847000) [+1]
+│  [deleted]
+├─ [deleted] (2022-06-16 08:19:47.910000) [+1]
+│  [deleted]
+├─ [deleted] (2022-06-13 14:02:29) [+1]
+│  [deleted]
+├─ [deleted] (2022-06-12 09:43:08.283000) [+1]
+│  [deleted]
+├─ [deleted] (2022-06-07 01:52:19.403000) [+1]
+│  [deleted]
+├─ [deleted] (2022-06-05 10:49:23.323000) [+1]
+│  [deleted]
+├─ [deleted] (2022-06-05 08:09:15.117000) [+1]
+│  [deleted]
+├─ [deleted] (2022-06-05 01:02:58.703000) [+1]
+│  [deleted]
+├─ [deleted] (2022-06-04 13:41:58.773000) [+1]
+│  [deleted]
+├─ [deleted] (2022-06-04 08:44:38.013000) [+1]
+│  [deleted]
+├─ [deleted] (2022-06-04 07:09:43.700000) [+1]
+│  [deleted]
+├─ [deleted] (2022-06-03 18:41:04.233000) [+1]
+│  [deleted]
+├─ [deleted] (2022-06-03 10:49:42.653000) [+1]
+│  [deleted]
+├─ [deleted] (2022-06-03 05:05:07.353000) [+1]
+│  [deleted]
+├─ [deleted] (2022-06-03 02:33:31.897000) [+1]
+│  [deleted]
+├─ [deleted] (2022-06-02 23:26:42.043000) [+1]
+│  [deleted]
+├─ [deleted] (2022-06-02 15:29:12.960000) [+1]
+│  [deleted]
+├─ [deleted] (2022-06-02 09:07:23.400000) [+1]
+│  [deleted]
+├─ [deleted] (2022-06-02 08:30:41.003000) [+1]
+│  [deleted]
+├─ [deleted] (2022-06-01 08:34:00.990000) [+1]
+│  [deleted]
+├─ [deleted] (2022-06-01 06:00:35.063000) [+1]
+│  [deleted]
+├─ [deleted] (2022-06-01 02:17:27.910000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-31 19:09:59.877000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-31 18:57:06.113000) [+1]
+│  [deleted]
+├─ [deleted] (2022-08-09 09:24:56.383000) [+0]
+│  [deleted]
+├─ [deleted] (2022-07-20 04:33:34.240000) [+2]
+│  [deleted]
+├─ [deleted] (2024-09-13 06:22:15.680000) [+0]
+│  [deleted]
+├─ [deleted] (2023-08-07 08:54:21.183000) [+0]
+│  [deleted]
+├─ [deleted] (2022-07-04 10:31:25.860000) [+0]
+│  [deleted]

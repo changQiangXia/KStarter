@@ -1,0 +1,334 @@
+# https://www.kaggle.com/competitions/amex-default-prediction/discussion/328514
+
+Topic #328514: Integer columns in the data - here you go!
+  Author: raddar
+  Posted: 2022-06-01 16:04:05.623000
+  Votes: 834  Comments: 116
+
+As it is already clear - all float type columns have random uniform noise of [0,0.01] added to each column. Having this information it is clear that it is very easy to spot integer type columns in the raw data. This calls for detective work, which I really love and have done many times in previous competitions :) 
+
+It took me a couple of days, but I have it ready for you all to use!
+
+So, what's in it?
+
+
+
+originally we had 188 float/categorical type features. These were transformed into
+
+
+95 np.int8/np.int16 types
+
+93 np.float32 types
+
+Most float columns with [0, 0.01] and [1, 1.01] have these values rounded up at 0 and 1 respectively. This was done to ensure no data loss, as not all features could be rounded up safely.
+
+saved in parquet format (only 1.7GB training data!)
+
+
+Hopefully, this opens the door for many people to access this competition, as less RAM is required. 
+
+Also more interesting feature engineering will be available as it is much easier to work with integers (my experience).
+
+The cleaned dataset can be found as a dataset:
+https://www.kaggle.com/datasets/raddar/amex-data-integer-dtypes-parquet-format
+
+Notebooks used to transform the data:
+https://www.kaggle.com/code/raddar/amex-data-int-types-train
+https://www.kaggle.com/code/raddar/amex-data-int-types-test
+
+As many youtubers would say - please like and subscribe! This helps me to be motivated to share stuff with you all :) More things to come.
+
+UPDATE: 
+
+dataset was updated with 3 extra int conversions
+
+Comments:
+├─ The Devastator (2022-06-20 04:57:04.827000) [+68]
+├─ Chris Deotte (2022-06-01 23:49:45.287000) [+44]
+│  I published an XGB starter notebook using your data with CV 0.792 and LB 0.794 here. This data is great. It is so small, that both the feature engineering and model training can easily occur within...
+├─ Chris Deotte (2022-06-01 16:54:35.137000) [+41]
+│  Fantastic job raddar. I was just doing this myself today. When we zoom in on some variables, we see that without noise they are actually discrete values. 
+│  
+│  For example R_26. Below the histogram is ...
+  ├─ raddar (2022-06-01 17:12:43.163000) [+19]
+  │  makes you question why they added the noise in the first place. It was obvious this would happen :)
+  ├─ Lucas Morin (2022-06-01 18:11:49.853000) [+4]
+  │  My best  theory is that they had nans in their integer columns (using another langage maybe) and python didn't allow them to keep those columns as integers. There still is a question about adding n...
+  ├─ Tord Malmgren (2022-06-10 13:56:12.303000) [+2]
+  │  In association football, the extra time is usually in whole minutes (human ref), but it seldom lasts exactly on the minutes (human ref), so there are narrow distributions around the whole minutes. ...
+    ├─ [deleted] (2024-07-26 12:22:26.717000) [+0]
+    │  [deleted]
+├─ SRK (2022-06-02 09:57:16.710000) [+24]
+│  raddar - You are our Sherlock Holmes 🕵️
+├─ raddar (2022-06-03 10:36:45.123000) [+12]
+│  I just made an update to the dataset, with 3 new features converted to int: B_19, S_8 and S_13. notebooks updated as well :)
+  ├─ Chris Deotte (2022-06-03 15:11:38.037000) [+11]
+  │  Great work, i need to update my XGB notebook version. After each update, it would be interesting to take note of the XGB CV score. I wonder if the CV LB will keep improving as you remove noise from...
+├─ Fernando Delgado (2022-06-05 15:14:20.360000) [+8]
+│  Hey there! Thank a lot @raddar . 
+│  
+│  I aggregated your parquet datasets with @huseyincot 's method! In case its useful for anyone, it improved my score a little bit.
+│  
+│  You can find the aggregated data...
+├─ Fatima HABIB (2022-06-29 14:00:27.293000) [+5]
+│  Thanks a lot, I still do not understand the meaning of "random uniform noise"?
+│   please if anyone has a notebook that illustrates this idea, I would be glad if you share it with me.
+  ├─ raddar (2022-06-29 16:18:05.053000) [+13]
+  │  https://www.kaggle.com/code/raddar/the-data-has-random-uniform-noise-added
+├─ Felipe Loque (2022-07-07 16:46:18.600000) [+6]
+│  RADDAR: Read All Data, Denoise And Release
+├─ Gunes Evitan (2022-06-03 13:35:50.690000) [+6]
+│  Hello @raddar, I'm still trying to figure out how did you set those intervals for floorify_frac?
+│  
+│  Let's say we have this feature B_4 histogram.
+│  
+│  
+│  
+│  When we zoom in, we see those blocks.
+│  
+│  
+│  
+│  When we z...
+  ├─ raddar (2022-06-03 15:00:41.280000) [+14]
+  │  I did the very same thing you described - I zoomed in into very small interval space to identify these bins and then worked on that.
+  │  
+  │  We know that each bin is exactly 0.01 wide (due to uniform [0,0...
+  ├─ Gunes Evitan (2022-06-03 15:26:00.100000) [+2]
+  │  Thanks for the explanation. I thought the random uniform noise was between -0.01 and 0.01. Now it makes sense why you pick bins' minimum values.
+  │  
+  │  I checked steps of multiple bins in B_4 and I found...
+  ├─ raddar (2022-06-03 15:40:49.917000) [+0]
+  │  I guess you had B_4 in mind?
+  ├─ Gunes Evitan (2022-06-03 15:42:50.290000) [+0]
+  │  Yes, I meant B_4. I made a typo.
+  ├─ raddar (2022-06-03 16:16:10.777000) [+2]
+  │  Maybe you are working with float16? they do lose a lot of information.
+  │  
+  │  z = pd.read_csv('train_data.csv',usecols=['B_4'])
+  │  v = z.loc[(z.B_4&gt;0.615)].min() - z.loc[(z.B_4&gt;0.6)].min()
+  │  1/v
+  │  
+  │  &gt; B...
+  ├─ Gunes Evitan (2022-06-03 16:53:58.467000) [+1]
+  │  I tried with 32 and 64 bits but there wasn't any difference. I think the difference arises from the histogram function. Check the image below. I was using 0.6145 as the bin edge and step size was d...
+  ├─ [deleted] (2022-07-01 18:49:05.760000) [+1]
+  │  [deleted]
+├─ SchopenHacker75 (2022-06-29 11:06:04.197000) [+4]
+│  hello @raddar, very brilliant reverse engineering ("DeAnonymization")
+│  
+│  However there are some ambiguous passages for me:
+│  
+│  
+│  
+│  what do you mean by "each bin has AUC of 0.5" for the the B_19 feature ? ...
+  ├─ raddar (2022-06-29 16:22:10.497000) [+6]
+  │  I do not have code. The idea is: take a bin with values in range [0,0.01]. calculate AUC of that range. Then calculate AUC for range [0.01,0.02], etc. smth like roc_auc_score(x.loc[(x.B_19&gt;=0.01...
+  ├─ SchopenHacker75 (2022-06-30 14:20:58.683000) [+0]
+  │  Manyyy thanks it is pretty clear 🙏😊
+  ├─ [deleted] (2022-07-02 15:28:14.727000) [+0]
+  │  [deleted]
+  ├─ raddar (2022-07-02 15:38:31.673000) [+13]
+  │  If there was a signal (as in increasing/decreasing target rate) within each bin ([0,0.01], [0.01,0.02], etc.), then AUC!=0.5. 
+  │  
+  │  So by testing for AUC=0.5 we test the hypothesis that there is no tar...
+  ├─ [deleted] (2022-07-02 15:51:56.250000) [+0]
+  │  [deleted]
+├─ AmbrosM (2022-06-01 21:09:28.613000) [+3]
+│  HI @raddar It seems that B_19 would profit from floorify_frac(x['B_19']) as well. And the original values of S_13 are all multiples of 1/1034, but as 1/1034 &lt; 0.01, the added noise cannot be rem...
+  ├─ raddar (2022-06-01 21:29:20.917000) [+3]
+  │  They are both inconclusive to me as intervals may overlap, so I left them as is.
+  ├─ raddar (2022-06-02 13:31:09.013000) [+4]
+  │  I revisited your both var suggestions. I was able to convert them to int:)
+  │  
+  │  B_19 can be easily rounded every 0.01 (if you check AUC scores within each bin, AUC is ~0.5, so no target variance within...
+  ├─ Tonghui Li (2022-06-02 14:02:41.170000) [+1]
+  │  @raddar What you found out about S_13 is impressive! How did I you figure out S_13 can be split using S_11?
+  ├─ raddar (2022-06-02 14:41:08.870000) [+12]
+  │  Simply slicing that S_13 range, sorting, and opening that in excel. obvious pattern emerged
+├─ raddar (2022-06-01 19:28:28.427000) [+4]
+│  There are also many small tweaks that can be made on this dataset, for example:
+│  
+│  x.loc[(x.R_13==0) &amp; (x.R_17==0) &amp; (x.R_20==0) &amp; (x.R_8==0), 'R_6'] = 0
+│  x.loc[x.B_39==-1, 'B_36'] = 0
+│  
+│  
+│  D...
+├─ tomoo inubushi (2022-07-08 08:19:06.680000) [+1]
+│  Thank you for sharing this. It seems that D_128, D_130, B_8, and R_1 are also hidden int features.
+  ├─ tomoo inubushi (2022-07-11 02:30:19.823000) [+1]
+  │  Sorry, it was not true. ROCs are not 0.5.
+├─ Anubhav Chhabra (2022-06-02 21:43:26.367000) [+1]
+│  Great insight! Even @cdeotte worked on immensely reducing the size of data so that it can fit into our poor RAMs.
+├─ sc (2022-08-12 10:10:09.643000) [+2]
+│  Hi Radar. Kudos to you. This is not only good work but also saves us a lot of time for everyone.
+├─ Nikola Bacic (2022-06-04 17:15:36.567000) [+2]
+│  Looks like these 93 float32 features hold the majority of the signal. I get CV 0.78 easy by just using them.
+│  Thanks!
+├─ huseyincotel (2022-06-02 20:11:36.813000) [+2]
+│  Next step is to know what that features may be? 👀
+├─ Wassim (2022-06-02 13:02:51.480000) [+2]
+│  Wow ! You just saved for all of us a lot of hours finding the hidden denominator for every single variable and preprocess it for us in a super clean light dataset.
+│  
+│  Thanks a lot @raddar !
+├─ Ertuğrul Demir (2022-06-01 19:17:30.627000) [+2]
+│  Nice catch @raddar, I was worried about converting some of these variables into float16 since we were losing precision in the process, but at the same time thinking about models might converge fast...
+  ├─ raddar (2022-06-01 19:25:21.143000) [+2]
+  │  My current model is using the dataset I have provided in post. At this point it is similar to the model based on original dataset - but I haven't experimented with something specific about what int...
+  ├─ raddar (2022-06-01 19:29:47.417000) [+2]
+  │  Btw, float16 would not have allowed me to capture the integer types well - float32 was necessary. But after all int types have been discovered, float 16 is ok I think
+  ├─ Tonghui Li (2022-06-01 20:02:52.660000) [+1]
+  │  @raddar Thank you for sharing! Just curious, if you had looked at float16, what would have got in the way of capturing the integers?
+  ├─ raddar (2022-06-01 21:10:27.200000) [+2]
+  │  float16 values got rounded too much. although not impossible, but it was harder to work with
+  ├─ Luca Lanzendörfer (2022-08-03 11:51:38.633000) [+0]
+  │  I have been thinking the same. Were you able to obtain any insights?
+├─ Nikolai Malkamalov (2024-06-15 07:00:22.193000) [+0]
+│  Hello!
+│  This is my first comment.
+│  I need it to try find a team(on this you have inspired me, MANY THX!!)
+│  And also thank u million times for showing me the way to work with less RAM))
+├─ JubilLee (2024-06-04 05:08:28.547000) [+0]
+│  kudo for u
+├─ Aaron Frias (2024-04-03 15:14:23.447000) [+0]
+│  You just saved for all of us a lot of hours finding the hidden denominator for every single variable and preprocess it for us in a super clean light dataset.
+│  
+│  Thanks a lot @raddar !
+├─ Rukshar Alam (2022-11-06 03:21:09.777000) [+0]
+│  Oh wow! That's great! How did you figure this out? I'm a newb and want to know how you were able to learn there was random uniform noise of [0,0.01] added to each column.
+├─ fzefii (2022-09-15 17:44:15.093000) [+0]
+│  Great work!
+├─ meciwo (2022-08-30 07:31:59.003000) [+0]
+│  thanks a lot. saved me so much time. up vote.
+├─ NSDQ (2022-08-08 07:28:48.723000) [+0]
+│  Thanks a lot. It is always good to learn something :)
+├─ Tarrasque9 (2022-07-18 15:26:31.030000) [+0]
+│  Hi @raddar just wanted to know, how you were able to deal with columns like D_87 which has mostly null values. Do you think converting the D_87 columns to an integer (1 == values exist and 0 == nul...
+  ├─ raddar (2022-07-18 16:05:14.500000) [+1]
+  │  Rule of thumb - treat null just as any other number. That's what GBDT models do by default.
+  ├─ Tarrasque9 (2022-07-19 11:08:17.867000) [+0]
+  │  Thanks, thought would be interesting to try
+├─ yuuniee (2022-07-18 05:08:42.750000) [+0]
+│  great-grand master
+├─ Robert Hatch (2022-07-13 19:02:46.567000) [+0]
+│  Hi @raddar and @cdeotte : do either of you happen to know if there's an efficient way to do the below (-1 -&gt; nan) for cudf? It complains about data type, for cudf only.
+│  
+│  If not, I guess the work...
+  ├─ raddar (2022-07-13 20:08:30.667000) [+1]
+  │  I don't use cudf - useless for this competition.
+  │  
+  │  as for how to assign NA is actually the problem itself. I am using np.nanmean and other similar numpy aggregate funcs
+  ├─ Chris Deotte (2022-07-13 21:26:07.823000) [+4]
+  │  The following code will convert all -1 to NA in cudf
+  │  
+  │  for c in df.columns:
+  │      df.loc[df[c]==-1,c] = cudf.NA
+  ├─ Robert Hatch (2022-07-13 21:35:33.697000) [+1]
+  │  Awesome, thanks!
+├─ [deleted] (2022-07-13 18:55:05.323000) [+0]
+│  [deleted]
+├─ [deleted] (2022-07-12 15:38:12.910000) [+0]
+│  [deleted]
+  ├─ [deleted] (2022-07-12 18:03:18.277000) [+2]
+  │  [deleted]
+├─ [deleted] (2022-07-09 08:49:23.137000) [+0]
+│  [deleted]
+├─ [deleted] (2022-07-09 08:43:56.600000) [+0]
+│  [deleted]
+├─ [deleted] (2022-07-02 08:36:17.363000) [+0]
+│  [deleted]
+├─ [deleted] (2022-07-01 12:16:10.043000) [+0]
+│  [deleted]
+├─ [deleted] (2022-06-23 15:17:02.050000) [+0]
+│  [deleted]
+  ├─ [deleted] (2022-06-23 16:06:13.733000) [+2]
+  │  [deleted]
+├─ [deleted] (2022-06-23 08:53:01.207000) [+0]
+│  [deleted]
+├─ [deleted] (2022-06-23 01:56:30.640000) [+0]
+│  [deleted]
+├─ [deleted] (2022-06-19 09:02:39.023000) [+0]
+│  [deleted]
+├─ [deleted] (2022-06-10 19:10:05.070000) [+0]
+│  [deleted]
+├─ [deleted] (2022-06-09 07:30:44.857000) [+0]
+│  [deleted]
+  ├─ [deleted] (2022-06-09 07:54:10.817000) [+1]
+  │  [deleted]
+├─ [deleted] (2022-06-08 13:20:22.703000) [+0]
+│  [deleted]
+├─ [deleted] (2022-06-07 20:06:02.633000) [+0]
+│  [deleted]
+├─ [deleted] (2022-06-05 12:55:19.677000) [+0]
+│  [deleted]
+├─ [deleted] (2022-06-05 09:14:49.390000) [+0]
+│  [deleted]
+  ├─ [deleted] (2022-06-05 11:43:11.320000) [+3]
+  │  [deleted]
+├─ [deleted] (2022-06-05 00:08:02.823000) [+0]
+│  [deleted]
+├─ [deleted] (2022-06-04 09:51:09.180000) [+0]
+│  [deleted]
+├─ [deleted] (2022-06-04 05:06:54.283000) [+0]
+│  [deleted]
+├─ [deleted] (2023-01-18 12:09:58.020000) [+-1]
+│  [deleted]
+  ├─ [deleted] (2023-01-19 15:49:40.680000) [+0]
+  │  [deleted]
+├─ [deleted] (2022-07-27 09:09:07.333000) [+0]
+│  [deleted]
+├─ [deleted] (2022-06-30 09:01:33.650000) [+0]
+│  [deleted]
+  ├─ [deleted] (2022-06-30 09:34:40.830000) [+1]
+  │  [deleted]
+├─ [deleted] (2022-06-14 05:41:18.377000) [+0]
+│  [deleted]
+  ├─ [deleted] (2022-06-14 06:00:05.143000) [+3]
+  │  [deleted]
+  ├─ [deleted] (2022-06-14 06:05:15.710000) [+0]
+  │  [deleted]
+├─ [deleted] (2022-06-06 05:32:22.200000) [+-1]
+│  [deleted]
+├─ [deleted] (2022-06-05 11:39:21.120000) [+0]
+│  [deleted]
+  ├─ [deleted] (2022-06-05 11:51:21.087000) [+1]
+  │  [deleted]
+├─ [deleted] (2022-06-04 10:37:12.123000) [+0]
+│  [deleted]
+├─ [deleted] (2022-08-19 07:58:39.940000) [+0]
+│  [deleted]
+├─ [deleted] (2022-08-16 15:54:45.320000) [+0]
+│  [deleted]
+├─ [deleted] (2022-08-14 01:30:27.537000) [+0]
+│  [deleted]
+├─ [deleted] (2022-08-12 14:39:55.263000) [+0]
+│  [deleted]
+├─ [deleted] (2022-08-02 03:35:20.087000) [+0]
+│  [deleted]
+├─ [deleted] (2022-07-26 22:18:26.210000) [+0]
+│  [deleted]
+├─ [deleted] (2022-07-19 06:31:51.777000) [+0]
+│  [deleted]
+├─ [deleted] (2022-07-18 13:53:20.143000) [+0]
+│  [deleted]
+├─ [deleted] (2022-07-12 15:47:02.630000) [+0]
+│  [deleted]
+├─ [deleted] (2022-07-11 00:18:12.197000) [+0]
+│  [deleted]
+├─ [deleted] (2022-07-02 08:35:57.707000) [+0]
+│  [deleted]
+├─ [deleted] (2022-06-27 04:12:21.860000) [+0]
+│  [deleted]
+├─ [deleted] (2022-06-18 04:02:33.610000) [+0]
+│  [deleted]
+├─ [deleted] (2022-06-11 08:54:53.980000) [+0]
+│  [deleted]
+├─ [deleted] (2022-06-09 22:35:12.590000) [+0]
+│  [deleted]
+├─ [deleted] (2022-06-06 22:52:23.530000) [+0]
+│  [deleted]
+├─ [deleted] (2022-06-05 14:23:10.013000) [+0]
+│  [deleted]
+├─ [deleted] (2022-06-02 23:25:19.820000) [+0]
+│  [deleted]
+├─ [deleted] (2022-06-02 17:05:43.877000) [+0]
+│  [deleted]

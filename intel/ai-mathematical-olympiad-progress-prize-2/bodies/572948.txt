@@ -1,0 +1,428 @@
+# https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/572948
+
+Topic #572948: 2nd place solution (Team imagination-research)
+  Author: Yichen You
+  Posted: 2025-04-12 12:39:42.441000
+  Votes: 111  Comments: 59
+
+Repository: https://github.com/imagination-research/aimo2
+
+Models:
+https://huggingface.co/imagination-research/deepseek-14b-sft-dpo4
+https://huggingface.co/imagination-research/deepseek-14b-sft-dpo2
+https://huggingface.co/imagination-research/deepseek-14b-sft
+
+Notebook: https://www.kaggle.com/code/youyc22/imagination-research-2nd-place-solution/
+Thanks to Aimo and Kaggle for hosting this great competition. We are also grateful to all the competitors during the competition and all the open source projects for sharing their great ideas. Now it's time to share our ideas and experiences with the community!
+Our solution gets the 2nd place. It gets 34/50 on the public leaderboard (ranked 1st), and 31/50 (ranked 2nd) on the private leaderboard. 
+
+
+Solution Summary
+
+This competition required optimizing both efficiency and reasoning performance. Our final solution consists of three main parts:
+
+
+
+Part I: Reasoning-Oriented Training -- Improve the model's reasoning ability: Stage 1 - SFT and Stage 2 - DPO with selected data.
+
+Part II: Efficiency Optimization -- Improve inference efficiency: Selecting a suitable inference engine, weight quantization, and KV cache quantization.
+
+Part III: Inference-Time Strategies -- Improve efficiency-reasoning performance trade-off: Prompt design, self-consistency aggregation, sample-level/question-level early stopping, and some heuristic hyperparameter adjusting.
+For local validation, we used the AIME 2025 test set (30 problems) along with the reference set (10 problems), evaluating both average sample accuracy and aggregated accuracy (via self-consistency) to obtain preliminary judgments of our trial solutions.
+
+
+Part I: Reasoning-Oriented Training
+
+Our training scripts are based on Light-R1 project, we are really grateful to their work.
+
+Stage1: SFT
+
+We choose DeepSeek-R1-Distill-Qwen-14B as the base model considering its great performance in mathematics, coding and reasoning.
+We combine the stage2 data from Light-R1 and training data from Limo together (duplicates removed), which are both high-difficulty math problems' reasoning trajectories generated from deepseek-r1
+We finetune the base model for 8 epochs on single 8×A800 machine, taking 11 hours:
+
+The accuracy improves but the output length also improves significantly.
+
+Stage2: DPO
+
+We use DPO to reduce the output length of the model
+We choose the default subset of OpenR1-Math-220k to build our dataset
+Specifically, we try to use the following four criteria to construct DPO pairs (y_w, y_l means chosen response and rejected response):
+
+
+
+Correctness: y_w must be correct, y_l may be correct or incorrect
+
+Length ratio:  len(y_w) &lt; ratio_threshold * len(y_l)
+
+Min Length: len(y_w) &gt; min_threshold
+
+Similarity: sim(y_w,y_l) &lt; sim_threshold
+
+use sentence transformer model to calculate embeddings
+Applying the first three criteria, we construct the dataset dpo-1, which is used to train the models we submit.
+Applying the four criteria, we construct the dataset dpo-2, which is used to train another model, but its performance is similar to the model we submit.
+We use 360-LLaMA-Factory because they add sequence parallelism (SP) technology to support longer context training with limited memory.
+We use a single 8×A800 machine to train for 4 epochs on dpo-1 dataset(2k pairs), taking 40 hours.
+From the above process, we get two models we finally submitted:
+deepseek-14b-sft-dpo2 and deepseek-14b-sft-dpo4
+All our training data can be found here:
+training data
+
+Note: in the above table, we sample 32 times (direct reasoning 16 times and code solving 16 times) for each question. Pass@1 is computed on AIME 2025 dataset. More details on our inference method are discussed later.
+
+
+Part II: Efficiency Optimization
+
+Inference Engine
+
+We choose lmdeploy as the LLM inference framework. Compared with vllm, the lmdeploy framework with the TurboMind engine can provide higher throughput and shorter model initialization time.
+The lmdeploy version we use is  0.7.0.post1
+The first picture comes from here
+
+
+Quantization
+
+We apply 4-bit AWQ weight quantization, and 8-bit KV Cache quantization (setting the configuration main_model.inference_cfg.quant_policy to 8 to use 8-bit KV Cache quantization implemented by lmdeploy).
+Our two models for submissions can be found here: model1, model2
+Some efficiency results:
+
+
+
+Online test (4xL4, batch size=15): W4KV8 decreases the time per output token by about 20% compared with W4KV16, 55% compared with FP16.
+
+
+Local test (2xA800, batch size=32): W4KV8, W4KV16 decreases the overall latency by 40% and 20%-25% compared with FP16, respectively.
+Some reasoning performance results:
+
+Local test: The average sample accuracy (not aggregated accuracy) drops by 5%~10%, compared with FP16; W4KV8 is not worse than W4KV16. W4KV4 is worse.
+
+
+Part III: Inference-Time Strategies
+
+Overall Inference Workflow
+
+The inference workflow is shown in the figure below: A question is provided as the input. We first prepare two types of prompts, including the CoT prompt and the Code prompt ("Prompt Preparation Task"). Then, we let the LLM start batchify generation of multiple samples with lmdeploy ("LLM Generation Task"). In the mean time, we continuouly try extract the answer from the streaming output of each sample, aggregate the answers of multiple samples, and judge whether to early stop some generation:
+
+
+
+We do sample-level checking upon every N yields from the iterator got by the stream_infer(...) call, and judge whether to early stop the generation of the corresponding sample. The Python code executor and answer extractor components are used here.
+
+We do question-level checking upon the end of every sample, and judge whether to early stop the generation of all remaining samples of the current question. The answer aggregator component is used here.
+Finally, we return the aggregated answer.
+Note that, for each question, we adjust the speed-related hyperparameters (number of samples, sampling-level max time, question-level early-stop criterion) according to the remaining time, so that the time quota can be allocated in a more balanced way across the remaining questions when the remaining time is limited.
+
+
+
+Prompt Preparation
+
+Method:
+
+
+
+Initially, we use 15 samples for one question, and aggregate their answers by self-consistency.
+
+Note that we don't necessarily aggregate the answers of all samples, see discussions below for more details.
+
+Note that we decrease the number of samples when there is limited time left, see discussions below for more details.
+
+We use the commonly used code-based reasoning: (1) Prompt the model to provide Python code to solve the problem; (2) Extract Python code from the output, create a subprocess to execute the code; (3) Extract the answer from the execution results.
+
+We use two types of prompts - a CoT prompt and a Code prompt. Among 15 samples, 7 samples use the CoT prompt and 8 samples use the Code prompt:
+
+
+
+  
+ 
+
+  
+ 
+
+
+Some experiments:
+
+
+
+
+System prompt choice: We find diversifying the system prompt doesn't help for reasoning models.
+
+Prompt list choice: In the local test, we find only using our Code prompt result in a consistent (across seed and models) and small improvements than using half CoT and half code prompts. However, when we submit this (only once), it doesn't help with the public submission score, thus, we don't further test this empirical choice.
+
+Number of samples: In the local test, we find that using 32 samples achieve better results than using 16 samples. However, due to the limited computing power on the submission platform and limited submission quota, we do not thoroughly experiment with more samples on the submission platform to find a sweet point -- we just go with 15 samples.
+
+How frequently the code prompt lead to code output, code error, wrong answer (32 samples, 16 CoT Prompts, 16 Code Prompts):
+
+Cases where the code runs correctly but we cannot parse an integer from its output are rare and can be ignored.
+
+Before fine-tuning, the model is more inclined to output code: on average, in only 1.9 or 3.3 out of 16 cases where a code prompt is used, the model does not output code.
+
+After our fine-tuning with only math data, the model becomes less inclined to output code: on average, in about 11 out of 16 cases, the code prompt does not cause the model to output code. When the new model does output code, its conditional accuracy is slightly higher than the pre-fine-tuning model (45% and 55% vs. 42%).
+
+
+
+
+
+Model
+Quantization
+Total solving time
+Avg outlen
+Aggregated correct questions (/30)
+Average correct samples (/32)
+Code error break down (/16)
+
+
+
+
+
+dpsk-qwen-14b
+KV16
+11838.22
+9776.94
+20.00
+14.63
+No code: 1.93; Exec error: 2.97; Fail parseint: 0.13; Wrong number: 5.30
+
+
+
+dpsk-qwen-14b-awq
+AWQ4 KV8
+6844.75
+10118.54
+21.00
+14.40
+No code: 3.30; Exec error: 2.53; Fail parseint: 0.33; Wrong number: 4.57
+
+
+
+dpsk-qwen-14b-finetune-v1-epoch4
+KV16
+12971.18
+11151.10
+21.00
+18.90
+No code: 11.00; Exec error: 0.83; Fail parseint: 0.03; Wrong number: 1.43
+
+
+
+dpsk-qwen-14b-finetune-v1-epoch4-awq
+AWQ4 KV8
+7963.94
+11557.06
+21.00
+16.80
+No code: 11.07; Exec error: 1.30; Fail parseint: 0.03; Wrong number: 0.90
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Sample-level Answer Extraction &amp; Early Stopping
+
+
+
+
+
+
+
+
+
+
+
+Motivation: Usually, the reasoning model will self-doubt a lot after obtaining the answer early, even if it usually gives out the same answer finally. And in most cases, after giving the answer between &lt;think&gt;&lt;/think&gt;, the model will rewrite the solution again (at least twice). Can we reduce the wasting of tokens?
+Method: Although we experimented with the active probing method from "Fu et al., "Efficiently Serving LLM Reasoning Programs with Certaindex, arXiv 2412", we ultimately adopted a much simpler sample-level early stopping technique to simplify our inference workflow. Specifically, once we detect either the first successfully executable code or the first answer in "\boxed{…}", we stop the generation process for that sample.
+Some experiments: A natural question is whether this might harm the potential to revise an initially incorrect answer into a correct one later. In our local tests, we use scripts/analyze_early_stop.py to verify that such cases are relatively rare, as shown in the figure below.
+
+
+Question-level Answer Aggregation &amp; Early Stopping
+
+We use the commonly used self-consistency method for answer aggregation. We use a question-level early-stop strategy as follows.
+Motivation: The difficulty varies across problems, so we aim to avoid spending too much time on easy ones. As shown in the figure below, the output length varies considerably across samples for a single problem. This suggests that for some problems, we may obtain several correct answers early on but still need to wait for the longest sample to finish -- resulting in significant time waste (e.g., q1, q11, q16–q20, etc.).
+
+Method: We can stop generation early for a question if sufficient certainty is achieved by examining the existing answers. Specifically, we terminate generation at the question level when a majority of the outputs are consistent, e.g., if 5 out of 7 answers agree. See the configurations in early_stop_strategy.consistency_rules in imagination_aimo2/local_eval_kaggle.py.
+
+Speed Hyperparameter Adjusting
+
+Motivation: The time to solve questions of different difficulty levels varies greatly, we design a adjust_speed module to dynamically adjust some hyperparameters.
+Method: As reasoning progresses, our adjust_speed module calculates the remaining time and number of remaining questions, and dynamically adjusts the model's sampling number and early stopping strategy accordingly.
+For example, the default speed is 3(normal), if the system detects that the average remaining time for each question is less than 5 minutes, it automatically adjust the speed to 1(fastest) .This means the number of samples is decreased to 10 and the maximum reasoning time for each question is also decreased. Please refer to our code for detailed implementation.
+
+Other methods we tried but did not reach a conclusion and include in our final solution
+
+
+
+GRPO: we tried four training runs but did not observe significant improvement on accuracy.
+
+RAG: we use this dataset as a document bank. When solving a question, we fetch 1~2 most similar questions from the bank, use them and their corresponding solutions as the few-shot demonstrations. But we did not get improvement on AIME2025 nor online submission. 
+
+Model-based Aggregation: We give the LLM the 5 most frequent answers, and one representatitive rationale for each, ask the LLM to reason about the correct answer. But this aggregation method cannot stably achieve improvements. 
+
+Quantization-related trials: We try quantization-aware training (QAT) by finetuning the scales of an AWQ-quantized model with DPO on our 2k-sized DPO dataset, but that doesn't bring improvement. We also try to apply the reparametrization of W_k and W_q to get more channel-balanced key for better KV cache quantization. This brings a consistent but small reasoning performance improvement in our local test, especially in the KV4 setting. However, as we don't have enough submission quota to tune other hyperparameters for KV4 setting, our final solution doesn't use KV4.
+We decided to briefly share these preliminary trials, but please note that they are not thorough enough to provide a reliable negative signal. Our qualitative inspection of the above trials actually suggests potentials to further explore, but we simply lacked the capacity to explore them further.
+
+Comments:
+├─ SIRAJ AHMAD (2025-04-12 13:21:32.640000) [+3]
+│  Impressive work! A well-structured and innovative approach—great balance of reasoning optimization and inference efficiency. Congrats on the 2nd place win! 👏
+├─ tascj (2025-04-13 04:45:06.333000) [+4]
+│  Congratulations!
+│  
+│  I have to say this is one of the best solution write-ups I've ever read on Kaggle.
+  ├─ Yichen You (2025-04-13 05:02:26.983000) [+1]
+  │  Thanks a million!
+├─ Yuki (2025-04-15 19:41:57.103000) [+1]
+│  Congratulations to your team and thanks for this amazing write-up! I learnt a lot from your post-decision processing. I have one question regarding your training process, the training data extract ...
+  ├─ Yichen You (2025-04-21 03:41:19.140000) [+1]
+  │  Thanks! We did not find a suitable dataset (solving math problems with Python code), and when we tried to use deepseek-r1, we found it difficult to use prompts to let the model solve math problems ...
+├─ Quickpanda (2025-04-12 16:43:20.640000) [+1]
+│  great work! Thanks for sharing! Your work make this competition more meaningful, it is the real value of this competition! Really thanks for sharing. Thanks kaggle and organizer @friederrr !
+├─ Sangram Patil (2025-04-12 14:45:37.167000) [+1]
+│  First of all, congratulations to your team — you guys have built a great pipeline!
+│  Can I ask how you converted the models to triton_models format, because I didn’t see that code anywhere?
+  ├─ Yichen You (2025-04-12 14:57:25.890000) [+1]
+  │  We have updated: https://github.com/imagination-research/aimo2/blob/master/scripts/run_convert.sh
+├─ ducnh279 (2025-04-12 13:25:44.680000) [+1]
+│  Congrats on the great pipeline! 🙌
+│  
+│  I’m curious about your choice of 8 epochs for SFT. Given that Light-R1 and LIMO are high-quality datasets, I would think that more epochs might lead to additional...
+  ├─ Yichen You (2025-04-12 15:00:38.327000) [+5]
+  │  We found that fine-tuning too many epochs will significantly increase the output length of the model. 8 epochs is enough.
+├─ Vinu1729 (2025-04-21 12:47:25.043000) [+0]
+│  Thanks Guys for sharing your all analysis on this competition , the thing u tried i done some of them but due to lack of knowledge i got confused and this was my 1st competition , yet i dont submit...
+├─ Chan Kha Vu (2025-04-13 13:34:58.913000) [+2]
+│  Congratulations to your team, and thanks for the amazing write-up! One of the most thoughtful and clever solution I've ever seen on Kaggle. The attention to details and the effort your team has put...
+  ├─ Yichen You (2025-04-13 13:49:16.423000) [+3]
+  │  Thanks! This number is mixed with TIR, so pure COT may be lower, we mentioned it here.
+  │  Besides, we applied the sample-level early stop strategy (as we mentioned) for evaluation.
+    ├─ Chan Kha Vu (2025-04-13 13:51:51.907000) [+1]
+    │  Thanks, that makes a lot more sense. Now I feel silly for even trying your model with CoT only 😅
+├─ William Lien (2025-04-19 04:47:08.450000) [+0]
+│  Very impressive thought &amp; solution.
+├─ john (2025-04-17 10:52:08.413000) [+0]
+│  Congratulations.  Thanks for the write-up &amp; excellent plots!
+│  I have one question after read the quant_awq.py code.
+│  The default max_calib_seq_len of autoawq is 512. What's the reason for choosin...
+  ├─ Joe T (2025-04-21 01:05:46.853000) [+0]
+  │  Well done!
+├─ planet2020 (2025-04-17 02:12:16.843000) [+0]
+│  After spending hours reading the notebook and codes, I am still confused. Can you please share the original notebook used to submit for the private LB?
+  ├─ Yichen You (2025-04-17 02:39:40.807000) [+2]
+  │  This backup notebook is exactly the same as the notebook we finally scored 31, there may be some irregularities in the writing, we still recommend you to read our cleaned version, which is more str...
+    ├─ Chew Kok Wah (2025-04-17 17:57:02.227000) [+0]
+    │  Thanks you.
+    ├─ Yichen You (2025-04-18 00:34:41.533000) [+2]
+    │  version112 got 33/31 on public/private leaderboard and version94 got 34/29.
+    │  https://www.kaggle.com/code/youyc22/imagination-research-original-submission
+    ├─ planet2020 (2025-04-18 02:25:03.740000) [+0]
+    │  Thank you for sharing this notebook🙂
+├─ planet2020 (2025-04-16 00:12:56.353000) [+0]
+│  Congratulations! I copied your notebook and run it in Kaggle. The program was terminated very quickly, leaving only the following reply. Is it not possible to run it directly on Kaggle?
+│  
+│  2025-04-15...
+  ├─ Yichen You (2025-04-16 02:19:59.360000) [+0]
+  │  Thanks! You need to comment out the first three lines in predict function
+    ├─ planet2020 (2025-04-16 03:53:45.987000) [+0]
+    │  It works. Thank you very much. The outputs are so detailed👍
+  ├─ [deleted] (2025-05-30 08:12:20.890000) [+0]
+  │  [deleted]
+├─ GURRAM GOPICHANDH (2025-04-15 16:48:46.030000) [+0]
+│  Impressive thoughts and solution.
+├─ [deleted] (2025-04-15 15:59:29.057000) [+0]
+│  Thanks for sharing your solution. It was very helpful .
+├─ YANGJIAHUA (2025-04-14 08:53:59.600000) [+0]
+│  Congratulations to your team, and thank you for the excellent paper! I’ve learned a lot from it! Would it be possible for you to share the code for the SFT stage or the DPO stage? I’d be very grate...
+  ├─ Foxfi Ning (2025-04-14 10:31:25.723000) [+0]
+  │  Thanks. We use 360-LLama-Factory's code (a git submodule in our repository) to run SFT and DPO. You can check our repository https://github.com/imagination-research/aimo2, the scripts are given at ...
+├─ [deleted] (2025-04-14 05:58:53.590000) [+0]
+│  Congratulations!! This is really great, the way it's written is soo clean and it's spelled out well. For sure your work would be used to build and iterate in the future competitions. 
+│  I have a coup...
+  ├─ Foxfi Ning (2025-04-14 10:39:57.770000) [+1]
+  │  Thanks!
+  │  
+  │  About Q1, 8-epoch SFT is appropriately enough in our case. More epochs will lead to longer token length.
+  │  
+  │  About Q3, thank you for letting us to know this note. We don't know this note, so ...
+  ├─ Yichen You (2025-04-14 10:46:27.350000) [+3]
+  │  SFT loss curve is as follows
+    ├─ [deleted] (2025-04-14 11:16:07.643000) [+0]
+    │  [deleted]
+├─ xcape74 (2025-04-13 18:42:58.157000) [+0]
+│  Congratulations! Great job!
+│  Have you tried model merging ?
+  ├─ Foxfi Ning (2025-04-14 02:57:17.360000) [+0]
+  │  We have tried model merging, between the two checkpoints and another checkpoint of a new DPO run. We can get an FP16 model that has a slightly higher average sample accuracy and an obviously higher...
+├─ Chew Kok Wah (2025-04-13 14:23:05.743000) [+0]
+│  Can you share your original winning submission notebook. (Do understand the cleaned version could be similar but community might be able to learn something from the original one)
+├─ Wadiel Rahman (2025-04-13 12:14:56.563000) [+0]
+│  Fantastic work! I would love to see more of it!
+├─ Jason Bourne (2025-04-13 07:23:50.573000) [+0]
+│  最实至名归的一集。从前至后各阶段的实验安排条理清晰，模型提升的方法思路很让人受启发。期待你们下一次取得更好的成绩💪。
+│  羡慕8块A800啊，穷人真是玩不起大模型😂
+  ├─ Yichen You (2025-04-13 07:28:44.427000) [+0]
+  │  Thanks a lot!
+  │  感谢支持！
+├─ Chew Kok Wah (2025-04-13 07:11:20.517000) [+0]
+│  Congratulations!
+│  
+│  
+│  
+│  
+│  Can you provide the data deduplication script for dataset duplicates removal?
+│  
+│  
+│  Please share the FP16 model weight for Stage 1 SFT as well as Stage 2 DPO similar to the way AIM...
+  ├─ Yichen You (2025-04-13 09:29:07.680000) [+1]
+  │  We have updated here:https://github.com/imagination-research/aimo2/blob/master/scripts/run_deduplicate.sh
+  │  
+  │  Stage2 DPO model can be found on huggingface:https://huggingface.co/collections/imaginatio...
+├─ RabotniKuma (2025-04-13 01:09:37.850000) [+0]
+│  Congrats! Such a beautiful and well-designed solution.
+│  Do you have records of how Public LB improved after each tranining step?
+  ├─ Yichen You (2025-04-13 02:52:10.743000) [+5]
+  │  Thanks! We got 28 without any finetuning, scored 33 after sft (8 epochs) and dpo (2 epochs), scored 34 after dpo for 4 epochs(ranging between 32~34). We didn't submit the model that only had SFT ap...
+├─ Olabode James (2025-04-12 23:03:14.350000) [+0]
+│  This is an absolutely remarkable solution, and thank you more for sharing your approach to improve the quality of future contributions in the field. Looking forward to more works from you
+├─ xz (2025-04-12 15:43:50.377000) [+0]
+│  Congrats! What was the score with the stage 1 SFT model and did DPO give significant improvement over it?
+  ├─ Yichen You (2025-04-13 02:55:24.770000) [+1]
+  │  Thanks! We didn't submit the stage 1 SFT model, base model got 28, dpo-2 got 33 and dpo-4 got 34, but on private leaderboard they got 31 and 29 respectively.
+├─ Kawa (2025-04-12 15:19:56.043000) [+0]
+│  Amazing work, congratulations.
+│  
+│  I am interested in quantization-aware training, I had quite a bit of trouble setting up QAT. Can you share how you did it?
+  ├─ Foxfi Ning (2025-04-13 02:36:16.660000) [+1]
+  │  Thanks for your question. We just do a very cursory and incomplete trial, the following is just for your reference. We use the 360-LLama-Factory library, which uses autoawq to load the AWQ model. I...
+    ├─ Kawa (2025-04-13 09:36:32.430000) [+0]
+    │  Thanks for detail. Seems AWQ model so hard to finetune(especially reasoning model). My tests came out pretty bad, 15-18 on public lb.
+    ├─ Chan Kha Vu (2025-04-16 03:23:31.467000) [+0]
+    │  Wow! this is actually really cool, so much care going into each detail…
+├─ Danyal Abbas (2025-04-12 15:01:28.947000) [+0]
+│  Very incredibly structured approach
+│  Congratulations on the 2nd place win!
+├─ Timmy Juicehouse (2025-04-12 13:54:50.443000) [+0]
+│  It's a huge work for your team, and it takes a long time to ultimately win the 2nd place, truly well-deserved. Great performance your Tsinghua and Microsoft.
+│  
+│  
+│    
+│  RAG: we use this dataset as a docu...
+  ├─ [deleted] (2025-04-12 14:58:53.647000) [+0]
+  │  [deleted]
+  ├─ Foxfi Ning (2025-04-12 15:10:41.440000) [+3]
+  │  Thanks! 
+  │  
+  │  About RAG, we try RAG in an early stage of our experiments. Back then, we qualitatively inspect some runs (no statistics), and find out that the questions that have similar embedding not ...
+  ├─ [deleted] (2025-04-13 02:41:34.490000) [+0]
+  │  [deleted]
+├─ [deleted] (2025-04-17 16:07:19.640000) [+0]
+│  [deleted]
+├─ [deleted] (2025-04-13 19:32:39.093000) [+0]
+│  [deleted]
+├─ [deleted] (2025-04-14 15:11:50.600000) [+0]
+│  [deleted]

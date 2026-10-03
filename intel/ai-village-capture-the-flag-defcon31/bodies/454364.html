@@ -1,0 +1,85 @@
+<p>Congratz to everyone who competed. This was a cool challenge although really exhausting. Very happy to reach 24, I did not expect to do that well. The three challenges I did not solve are Hush (I did not spend more than 3 hours on it), CIFAR (spent a few hours but no luck) and Granny 3 (spent about 5 hours before coming to the conclusion that it is not doable).<br>
+Here are my solutions for some of the challenges, for which I have interesting stuff to share.</p>
+<h2>Pickle</h2>
+<p>Turns out a lot of things can be pickled. So, I basically tried submitting anything that was available.<br>
+For some reason, <code>request.post</code> worked. <br>
+This meant I could get the flag without using my keyboard (copy-paste what is in the cell + run cell) which somehow gave sense to the <em>waves keyboard</em> part of the hint.</p>
+<h2>Inversion</h2>
+<p>By submitting images with zeros everywhere but one at one pixel, we can generate activation maps of the classes and see letters appear. This was used last year and worked very efficiently. </p>
+<p><a href="https://ibb.co/2PNQQ6Z"><img src="https://i.ibb.co/1K655nz/Capture-d-cran-2023-10-14-123530.png" alt="Capture-d-cran-2023-10-14-123530"></a></p>
+<p>This year it was a bit trickier:</p>
+<ul>
+<li>Classes 4, 5 and 7 do not activate, hence the “trying” in the prompt</li>
+<li>What to read for classes 0 and 2 is far from obvious</li>
+<li>Even then, it is likely that the AI made a typo so even if 3 letters are visible maybe they’re wrong</li>
+</ul>
+<h4>Class #2</h4>
+<ul>
+<li>Good candidates were I, F and +</li>
+<li>Last year, a similar challenge was given and used leet speak, which led me to consider T as a great option.</li>
+</ul>
+<h4>Class #0</h4>
+<ul>
+<li>This one was the trickiest. From the image above I considered P and B to be good candidates, but could not figure anything out.</li>
+<li>I played around a bit more with activation maps and at one point got to consider the L as well</li>
+</ul>
+<h4>Putting everything together</h4>
+<ul>
+<li>No 8 letter words seemed reasonable: I used crosswords solver a lot. So there had to be a trick.</li>
+<li>However, considering the following sequence: L e t m _ _ _ _ led me to the answer pretty quick, thanks to my meme culture :</li>
+</ul>
+<p><a href="https://imgbb.com/"><img src="https://i.ibb.co/fdQfsgT/d1f612e33f2656c77f84268f13744907.jpg" alt="d1f612e33f2656c77f84268f13744907"></a></p>
+<p>Now replace the “in” with “out” and there comes the flag!</p>
+<h2>Pixelated</h2>
+<p>Submitting the <code>&lt;</code> character reveals that XML stuff is happening, and that you need to override the  false  with  true . <br>
+ pixelated  WHAT THE OCR READS  false </p>
+<p>Start by closing the text beacon, add your <code>is_admin</code> flag, and re-open the text beacon. Tricky thing that cost me hours is that the text cannot be empty, so the following works:  <br>
+<code>B &lt;/text&gt; &lt;is_admin&gt; true &lt;/is_admin&gt; &lt;text&gt;</code><br>
+My solution is the following image which is unnecessary complicated =) <br>
+<a href="https://ibb.co/2W6sYJ8"><img src="https://i.ibb.co/wBLwrtJ/output.png" alt="output"></a></p>
+<h2>Granny 1/2</h2>
+<p>I chose to reverse engineer the model, once this is done, both problems are simple adversarial attacks. The model is the torchvision one (you could figure this out with the class names!), as available <a href="https://pytorch.org/hub/pytorch_vision_mobilenet_v2/" target="_blank">here</a>. But scores still don't match so we need to figure out what changed in the preprocessing.<br>
+To reverse engineer the preprocessing few things could be done:</p>
+<ul>
+<li>Submitting a 768 image and a 256 one gave the same output (resizing is the same !)</li>
+<li>The pixels on the sides do not impact the result (cropping is the same)</li>
+<li>Finding the normalization parameters by gradient descent: did not work, something else changed</li>
+<li>Check other weights! With the right torchvision version you have access to <code>MobileNet_V2_Weights.IMAGENET1K_V2</code> weights, with which the API results were matched up to 1e-5</li>
+</ul>
+<p>Granny 3 is another story. I realized after one day of work on it that it was most likely not doable. Input of the model is <code>224x224</code> so you have a search space which is not that huge (<code>224x224xrgb</code>) but in which there is most likely a solution.<br>
+However, you submit a <code>768x768</code> image, which is downscaled by 3 using linear interpolation. This means that the maximum variation you can have in your resized image is +/- 20 – which seems too small to get a working attack. </p>
+<h2>Passphrase</h2>
+<p>It took me 2 weeks to solve passphrase, and I probably spent more time on it than all the other challenges together. <br>
+There are two things to consider:</p>
+<ul>
+<li>Which score are we trying to reach?</li>
+<li>Which additional constraint must be respected for the flag to be returned if the score is reached?</li>
+</ul>
+<h4>Which scores to reach ?</h4>
+<p>First one is already a huge gamble, good candidates are:</p>
+<ul>
+<li>[0.3333, 0.3333, 0.3333] since everything is equivalent</li>
+<li>[0, 0, 1] since we need to charm the model</li>
+<li>Scores given by sentences in the challenge prompt<ul>
+<li>“this notorious sauce” since we need to decipher the sentiment score of it</li>
+<li>“everything”  (everything is equivalent…)</li>
+<li>The score of the benchmark output - <code>My secret sauce is the best!</code> = <code>[0.0022, 0.0325, 0.9653]</code></li></ul></li>
+</ul>
+<p>I implemented hill climbing techniques with diverse word transformations, to give a few:</p>
+<ul>
+<li>Replace a word with a random or similar (using embeddings) one</li>
+<li>Add some emojis, or random characters</li>
+<li>Swap / append / remove words or characters</li>
+</ul>
+<p>Now, it turned out that it’s really hard to reach specific scores that are not in the model output "usual" distribution. Of all the above, I could only reach consistently the benchmark output scores, which led me to focus on reaching <code>[0.0022, 0.0325, 0.9653]</code>. This is a reasonable hypothesis, but it does not account for the “sentence where everything is equivalent” part of the prompt.</p>
+<h4>Equivalence</h4>
+<p>I considered some ideas:</p>
+<ul>
+<li>Use a sentence where the words are the same length as the input sentence (made a lot of sense but didn’t work)</li>
+<li>Use an anagram of the input sentence (made sense but quite far fetched, I couldn’t reach the target score)</li>
+<li>Words starting with <code>@</code> were replaced in the server preprocessing! So, I found a sentence with <a href="https://www.kaggle.com/xxx" target="_blank">@xxx</a> at the start but not flag</li>
+<li>Words of the same length, this was my last idea and it worked !</li>
+</ul>
+<p>I initialize the search space with the following string: <code>very cool best sauc</code>. The first 3 words are very polarized and it scores quite close to the target we are trying to reach. The last word is replaced with all the 4 letter words in <code>nltk</code>, until the target score is reached. Implementation is simple, but initializing the search correctly is key.<br>
+The following output gave the flag: <code>very cool best steg</code>. Not sure what steg is though.</p>
+<p><em>Thanks for reading!</em></p>

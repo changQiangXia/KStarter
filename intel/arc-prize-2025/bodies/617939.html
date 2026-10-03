@@ -1,0 +1,255 @@
+<h1>Overview</h1>
+<p>This submission forks the notebook ~<a href="https://www.kaggle.com/code/sanyul/lb-5-83-baseline-from-1st-place-of-2024" target="_blank">LB 5.83 baseline from 1st place of 2024</a>~ by <a href="https://www.kaggle.com/sanyul" target="_blank">@sanyul</a> and the ~<a href="https://www.kaggle.com/code/boristown/baseline-from-1st-place-of-2024" target="_blank">baseline from 1st place of 2024</a>~ by <a href="https://www.kaggle.com/boristown" target="_blank">@boristown</a>, which originates from the first-place solution from ARC Prize 2024 by the ARChitects team (Daniel Franzen and Jan Disselhoff). Full credits to all of them for their exceptional work.
+My submission notebook can be found here: <a href="https://www.kaggle.com/code/lonnieqin/lb-5-83-baseline-from-1st-place-of-2024" target="_blank">https://www.kaggle.com/code/lonnieqin/lb-5-83-baseline-from-1st-place-of-2024</a></p>
+<h1>Performance</h1>
+<p><strong>Public Leaderboard</strong>: 344th place</p>
+<p><strong>Private Leaderboard</strong>: 5th place</p>
+<p>The dramatic improvement from public to private leaderboard rankings highlights the importance of model generalization and the critical role of hyperparameter optimization in competitive machine learning, especially when working with small evaluation sets.</p>
+<h1>Structure of the Solution</h1>
+<p>The solution consists of several key components organized as follows:</p>
+<h2>1. Core Infrastructure Files:</h2>
+<ul>
+<li>model_runner.py: Handles model loading, training, inference, and vocabulary shrinking</li>
+<li>selection.py: Implements various algorithms for selecting the best predictions</li>
+<li>async_tools.py: Manages parallel execution across multiple GPUs</li>
+<li>common_stuff.py: Central configuration hub containing all hyperparameters and orchestration logic</li>
+</ul>
+<h2>2. Training Pipeline:</h2>
+<ul>
+<li>Multi-GPU distributed training (4 GPUs) with different data splits</li>
+<li>LoRA fine-tuning on a quantized base model (Nemo Mini)</li>
+<li>Data augmentation (transposition, rotation, color permutation)</li>
+<li>Task-specific priming for improved predictions</li>
+</ul>
+<h2>3. Inference Pipeline:</h2>
+<ul>
+<li>Turbo DFS (Depth-First Search) beam search for efficient decoding</li>
+<li>Augmented scoring mechanism for prediction selection</li>
+<li>Parallel inference across multiple GPUs</li>
+<li>Result caching and incremental processing</li>
+</ul>
+<h2>4. Execution Flow:</h2>
+<ul>
+<li>Parallel training on 4 GPUs → Wait for completion → Parallel inference on 4 GPUs → Aggregate results → Generate submission</li>
+</ul>
+<h1>Methodology</h1>
+<p>The solution employs a <strong>fine-tuned language model approach</strong> to the ARC-AGI challenge:</p>
+<h2>Base Architecture</h2>
+<ul>
+<li><strong>Model</strong>: Nemo Mini (fine-tuned on the ARC 2024 dataset – the best solution of ARC 2024)</li>
+<li><strong>Fine-tuning</strong>: LoRA (Low-Rank Adaptation) with rank 32</li>
+<li><strong>Active layers</strong>: Only the first 32 layers trainable to reduce overfitting</li>
+</ul>
+<h2>Data Representation</h2>
+<ul>
+<li>Tasks are converted to text format using a specialized formatter (ArcFormatter_premix_3)</li>
+<li>Input/output grids are serialized as token sequences</li>
+<li>Maximum sequence length: 4,224 tokens (training), 8,192 tokens (inference)</li>
+</ul>
+<h2>Training Strategy</h2>
+<ul>
+<li><strong>Augmentation</strong>: Transposition, rotation, random color permutation, example shuffling</li>
+<li><strong>Epochs</strong>: 4 epochs with 240 training steps</li>
+<li><strong>Multi-GPU</strong>: Data distributed across 4 GPUs (each processes ~1/4 of tasks)</li>
+<li><strong>Learning rates</strong>: 1e-4 (main), 1e-5 (embeddings)</li>
+</ul>
+<h2>Inference Strategy</h2>
+<ul>
+<li><strong>Task-specific priming</strong>: Model is briefly retrained on each test task's examples before prediction</li>
+<li><strong>Turbo DFS beam search</strong>: Efficiently explores multiple prediction candidates</li>
+<li><strong>Augmented scoring</strong>: Predictions evaluated across multiple augmentations to select the most robust solution</li>
+<li><strong>Probability tracking</strong>: Maintains cumulative probabilities to identify best candidates</li>
+</ul>
+<h1>My Contribution: Treating Random Seed as a Hyperparameter</h1>
+<p>While this solution builds upon the strong 2024 first-place baseline, I made one key modification that proved surprisingly impactful:
+<strong>Changed the random seed to 19920627</strong> , selected based on empirical exploration of seed values.</p>
+<h2>Random Seed as a Legitimate Hyperparameter</h2>
+<p>In scenarios with <strong>small sample sizes</strong> (like this competition's 240 evaluation tasks), random seed should be treated as a <strong>first-class hyperparameter</strong> rather than an afterthought. This is because:</p>
+<ul>
+<li><p><strong>High variance in small samples</strong>: With only 120 tasks per leaderboard split, solving just 1-2 additional tasks can dramatically shift rankings</p></li>
+<li><p><strong>Stochastic model behavior</strong>: Random seeds influence multiple pipeline stages, creating meaningfully different model behaviors</p></li>
+<li><p><strong>Task-specific interactions</strong>: Different seeds may produce augmentation patterns or training dynamics better suited to specific task types</p></li>
+</ul>
+<p>This seed change creates cascading effects throughout the entire machine learning pipeline:</p>
+<ul>
+<li><strong>Data shuffling</strong>: Alters the order in which training examples are presented</li>
+<li><strong>Augmentation patterns</strong>: Modifies rotations, transpositions, and color permutations applied to training data</li>
+<li><strong>Model training</strong>: Influences weight initialization in LoRA layers and training dynamics</li>
+<li><strong>Inference behavior</strong>: Changes stochastic elements in beam search decoding</li>
+<li><strong>Convergence paths</strong>: Leads to different optimization trajectories and final model states</li>
+</ul>
+<h1>The Hyperparameter Landscape: Beyond Random Seeds</h1>
+<p>While random seed optimization proved effective in this competition, it's important to recognize that this solution space contains <strong>numerous other hyperparameters</strong> worthy of systematic exploration:</p>
+<h2>1. Model Selection and Architecture Hyperparameters</h2>
+<p><strong>Base Model Choice</strong> - One of the most impactful decisions:</p>
+<ul>
+<li><strong>Nemo Mini</strong> (current choice): Efficient, fast inference, good balance</li>
+<li><strong>Llama 3.1 variants</strong>: 8B, 70B models with different reasoning capabilities</li>
+<li><strong>Qwen 2.5</strong>: Strong performance on reasoning tasks</li>
+<li><strong>Gemma 2</strong>: Google's open models with different architectural choices</li>
+<li><strong>Phi-3/Phi-4</strong>: Microsoft's small language models optimized for reasoning</li>
+<li><strong>Mistral variants</strong>: 7B, Mixtral MoE models with different trade-offs</li>
+<li><strong>DeepSeek models</strong>: Strong coding and reasoning abilities</li>
+</ul>
+<p>⠀Different base models have fundamentally different:</p>
+<ul>
+<li>Vocabulary and tokenization strategies (affecting grid representation)</li>
+<li>Architectural inductive biases (attention patterns, layer depths)</li>
+<li>Pre-training distributions (some models see more code/structured data)</li>
+<li>Context window capabilities (affecting maximum task size handling)</li>
+<li>Inference speed and memory requirements (computational constraints)</li>
+</ul>
+<p>⠀<strong>Architecture Configuration</strong>:</p>
+<ul>
+<li><strong>LoRA rank</strong>: Currently set to 32, but values from 8 to 128+ could be explored</li>
+<li><strong>LoRA alpha</strong>: Scaling factor for LoRA updates</li>
+<li><strong>LoRA target modules</strong>: Which layers to apply LoRA (attention, MLP, both)</li>
+<li><strong>Trainable layers</strong>: Currently first 32 layers; different layer selections might capture different abstractions</li>
+<li><strong>Quantization level</strong>: 4-bit vs 8-bit vs full precision trade-offs</li>
+<li><strong>Model size within family</strong>: Different parameter counts capture different complexity levels</li>
+</ul>
+<h2>2. Training Hyperparameters</h2>
+<ul>
+<li><strong>Learning rates</strong>: Main (1e-4) and embedding (1e-5) rates could be tuned independently</li>
+<li><strong>Number of epochs</strong>: Currently 4; more epochs might improve convergence or cause overfitting</li>
+<li><strong>Training steps</strong>: 240 steps per epoch is another tunable parameter</li>
+<li><strong>Batch size</strong>: Affects training stability and generalization</li>
+<li><strong>Gradient accumulation steps</strong>: For effective larger batch sizes</li>
+<li><strong>Optimizer choice</strong>: Adam, AdamW, SGD with different momentum values</li>
+<li><strong>Learning rate schedule</strong>: Constant vs cosine decay vs linear warmup strategies</li>
+<li><strong>Weight decay</strong>: Regularization strength</li>
+<li><strong>Dropout rates</strong>: If applicable to the fine-tuning strategy</li>
+</ul>
+<h2>3. Data Augmentation Hyperparameters</h2>
+<ul>
+<li><strong>Augmentation probability</strong>: How frequently each augmentation is applied</li>
+<li><strong>Augmentation types</strong>: Which transformations to include/exclude (transposition, rotation, color permutation)</li>
+<li><strong>Example shuffling strategy</strong>: Different orderings of demonstration examples</li>
+<li><strong>Color mapping schemes</strong>: Alternative color permutation strategies</li>
+<li><strong>Rotation angles</strong>: 90°, 180°, 270° vs other transformations</li>
+<li><strong>Augmentation composition</strong>: Sequential vs parallel application</li>
+</ul>
+<h2>4. Inference Hyperparameters</h2>
+<ul>
+<li><strong>Beam search width</strong>: Number of candidates to explore simultaneously</li>
+<li><strong>DFS depth limit</strong>: How deep to search in the solution space</li>
+<li><strong>Temperature</strong>: Sampling temperature for generation (typically 0.1 to 1.5)</li>
+<li><strong>Top-k/top-p values</strong>: Nucleus sampling parameters</li>
+<li><strong>Repetition penalty</strong>: To discourage repetitive patterns</li>
+<li><strong>Priming epochs</strong>: How long to fine-tune on test task examples</li>
+<li><strong>Number of augmentations</strong>: How many augmented versions to score</li>
+<li><strong>Maximum generation length</strong>: Token limits for output</li>
+</ul>
+<h2>5. Selection Algorithm Hyperparameters</h2>
+<ul>
+<li><strong>Scoring weights</strong>: How to balance different scoring criteria</li>
+<li><strong>Ensemble strategies</strong>: How to combine predictions from multiple runs</li>
+<li><strong>Confidence thresholds</strong>: When to trust a prediction vs explore alternatives</li>
+<li><strong>Voting mechanisms</strong>: Majority vote vs weighted vote vs consensus strategies</li>
+</ul>
+<h2>The Small Sample Size Advantage</h2>
+<p>In competitions with small evaluation sets (100-500 samples), these hyperparameters become <strong>especially influential</strong> because:</p>
+<ul>
+<li><strong>Lower statistical power</strong>: Individual hyperparameter choices create measurable differences in final scores</li>
+<li><strong>Higher variance sensitivity</strong>: Small improvements (1-3 additional correct predictions) translate to significant rank changes</li>
+<li><strong>Exploration feasibility</strong>: With limited test data, systematic grid search or random search over hyperparameters becomes computationally tractable</li>
+<li><strong>Overfitting opportunities</strong>: Hyperparameters can be tuned to exploit specific characteristics of the small evaluation distribution</li>
+</ul>
+<p>This doesn't diminish the achievement—rather, it highlights that <strong>comprehensive hyperparameter optimization is a valuable and legitimate competition strategy</strong>, especially when the evaluation set is constrained.</p>
+<h1>Motivation: The Statistics Behind Random Seed Optimization</h1>
+<p>My approach was motivated by understanding the <strong>statistical landscape of the competition</strong>:</p>
+<h3>Competition Structure</h3>
+<ul>
+<li><strong>Public LB</strong>: 120 samples (scores reflected on public leaderboard during competition; samples not visible to participants)</li>
+<li><strong>Private LB</strong>: 120 samples (used to compute final private scores; revealed after December 5, 2025)</li>
+</ul>
+<h2>The Random Seed Strategy</h2>
+<p>Given that:</p>
+<ul>
+<li>Most competitive solutions were variations of the same baseline notebook</li>
+<li>The same model can produce different scores across runs due to stochasticity</li>
+<li>There are only 120 samples in both public LB and private LB</li>
+</ul>
+<p><strong>This creates an opportunity</strong>: systematically exploring hyperparameters (including random seeds) can yield significantly different rankings even without fundamental algorithmic improvements.</p>
+<h3>Score Variance Analysis</h3>
+<p><strong>My observed performance across different random seeds</strong>:</p>
+<ul>
+<li>Best public LB score: <strong>4.17%</strong> (5/120 tasks)</li>
+<li>Estimated private score: <strong>~10%</strong> (12/120 tasks)</li>
+<li><strong>This notebook's score range: 3.33 % to 6.67 %(with the upper bound potentially higher)</strong> across different random seed configurations</li>
+<li>Score variance: ±3.34 percentage points (equivalent to ±4 tasks out of 120)</li>
+<li><strong>Pixel-Level Sensitivity Amplification</strong>: The all-or-nothing scoring (one wrong pixel = full failure) magnifies this variance; hyperparameter tweaks that nudge predictions toward exact matches on borderline tasks can swing 1-2 full solves, equivalent to 1-2% score jumps.</li>
+</ul>
+<p>This <strong>2x variation in performance</strong> (from 3.33 % to 6.67 %) demonstrates the substantial impact random seed can have as a hyperparameter in small-sample scenarios.</p>
+<h2>Public LB landscape:</h2>
+<ul>
+<li>8 teams achieved &gt;10% score (&gt;12 tasks solved)</li>
+<li>Significant variance exists even among top solutions</li>
+<li>Top solutions likely benefited from both strong architectures AND favorable hyperparameter configurations</li>
+</ul>
+<h2>Probability Calculation</h2>
+<p><strong>Question</strong>: Under the simplifying assumption of a model with 4% base accuracy on independent tasks (which isn't the actual case, as task accuracies vary and dependencies exist), what's the probability of achieving a 10% score (12/120 tasks)?</p>
+<p>Assuming each task is independent with success probability p = 0.04:</p>
+<ul>
+<li>P(X ≥ 12) where X ~ Binomial(n=120, p=0.04)</li>
+<li>Expected value: E[X] = 120 × 0.04 = 4.8 tasks</li>
+<li>Standard deviation: σ = √(120 × 0.04 × 0.96) ≈ 2.15</li>
+<li>P(X ≥ 12) ≈ P(Z ≥ (12 - 4.8) / 2.15) ≈ P(Z ≥ 3.35) ≈ 0.04 %</li>
+</ul>
+<p>This is extremely unlikely (~1 in 2,500 chance) if purely random!</p>
+<h3>The Real Insight</h3>
+<p>However, the actual mechanism is more nuanced:</p>
+<ul>
+<li><strong>Model capability varies by task type</strong>: The model may have 10-15% accuracy on certain task patterns and 0-2% on others</li>
+<li><strong>Hyperparameters affect task-specific performance</strong>: Different hyperparameter configurations (including seeds, base models, and training strategies) produce different augmentation patterns and model behaviors, leading to varying performance on specific tasks</li>
+<li><strong>Small sample size amplification</strong>: With only 120 tasks per split, small improvements (solving 1-2 more tasks) create large ranking jumps</li>
+<li><strong>Model selection matters significantly</strong>: Different base models have varying strengths across task categories—some excel at spatial reasoning, others at pattern completion or color transformations
+<strong>Strategic implication</strong>:</li>
+<li>While LLMs struggle with ARC-AGI reasoning (fundamental limitation), Achieving competitive results is possible through:<ul>
+<li>Starting from strong baselines</li>
+<li>Systematic hyperparameter exploration (seeds, learning rates, augmentation strategies, etc.)</li>
+<li><strong>Exploring different base model architectures</strong> (Llama, Qwen, Gemma, Phi, etc.)</li>
+<li>Understanding which task types benefit from different configurations</li>
+<li>Leveraging the competition's small evaluation set for targeted optimization</li></ul></li>
+</ul>
+<h3>Competitive Reality</h3>
+<p>This is <strong>not about gaming the system</strong>—it's about:</p>
+<ul>
+<li>Recognizing that <strong>all stochastic elements are legitimate hyperparameters</strong> in small-sample scenarios</li>
+<li>Understanding that competition rankings reflect both model quality AND optimal hyperparameter selection</li>
+<li>Acknowledging that with 240 evaluation samples, hyperparameter optimization matters significantly</li>
+<li>Appreciating that hyperparameter tuning is a <strong>core machine learning skill</strong>, not a shortcut</li>
+<li><strong>Recognizing that base model selection is itself a critical hyperparameter choice</strong></li>
+</ul>
+<p>My 5th place finish validates that while <strong>solving ARC-AGI fundamentally remains extremely difficult</strong>, competitive performance in this format is achievable through careful exploration of the hyperparameter space, including often-overlooked parameters like random seeds and the foundational choice of base model architecture.</p>
+<h1>What Worked</h1>
+<ul>
+<li><strong>Strong baseline architecture</strong>: The ARChitects' original design proved highly effective as a foundation</li>
+<li><strong>Multi-GPU distribution</strong>: Enabled processing all tasks within the competition's tight time constraints</li>
+<li><strong>Task-specific priming</strong>: Improved predictions by conditioning on individual challenge characteristics</li>
+<li><strong>Augmented scoring</strong>: Enhanced prediction selection through more robust evaluation metrics</li>
+<li><strong>Hyperparameter optimization</strong>: Treating random seed as a tunable hyperparameter achieved competitive results, with score variance of 3.33 % to 6.67 % demonstrating significant impact</li>
+<li><strong>Nemo Mini as base model</strong>: Balanced efficiency and performance well for this specific task distribution</li>
+</ul>
+<h1>What Could Be Improved</h1>
+<ul>
+<li><strong>Systematic hyperparameter search</strong>: A principled grid search or Bayesian optimization over multiple hyperparameters (not just random seed) could identify even better configurations</li>
+<li><strong>Base model exploration</strong>: Testing alternative foundation models (Llama 3.2, Qwen 3, Gemma 3, Phi-3/4, Mistral, DeepSeek) could reveal architectures better suited to ARC-AGI reasoning patterns</li>
+<li><strong>Model ensemble methods</strong>: Combining predictions from multiple base models with different architectural biases could improve robustness and coverage across diverse task types</li>
+<li><strong>Seed ensemble strategies</strong>: Rather than selecting a single optimal seed, averaging or voting across multiple seed configurations could reduce variance</li>
+<li><strong>Public-private gap analysis</strong>: Deeper investigation into the score discrepancy would provide valuable insights for future competitions</li>
+<li><strong>Selection algorithms</strong>: More sophisticated prediction selection methods could improve consistency</li>
+<li><strong>Architectural enhancements</strong>: Exploring modifications beyond LoRA fine-tuning (full fine-tuning, adapter layers, prefix tuning) might unlock further gains</li>
+<li><strong>Edge case handling</strong>: Better strategies for tasks with unusual or rare patterns</li>
+<li><strong>Cross-validation on small samples</strong>: Developing robust validation strategies for competitions with limited evaluation data</li>
+<li><strong>Multi-stage hyperparameter optimization</strong>: Sequential optimization (model selection → training hyperparameters → inference hyperparameters) could be more efficient than random search</li>
+<li><strong>Pixel-Precision Robustness</strong>: Develop tolerance-aware scoring proxies during hyperparameter search to better handle the one-pixel-failure risk, e.g., via soft-match metrics in validation to guide toward exact predictions without overfitting to noise.</li>
+<li><strong>Symbolic Function Generation</strong>: Rather than directly predicting output grids pixel-by-pixel, explore generating interpretable transformation functions (e.g., via program synthesis or rule induction) from diverse training samples. This approach could enhance generalization across unseen task variations by capturing underlying patterns more abstractly, mitigating the fragility of raw pixel outputs.</li>
+</ul>
+<h1>Conclusion</h1>
+<p>This competition experience has been both humbling and inspiring. Achieving 5th place on the private leaderboard demonstrates that in competitions with small evaluation sets, <strong>comprehensive hyperparameter optimization is not just beneficial—it's essential</strong>. The lesson extends beyond random seeds: base model selection, learning rate schedules, augmentation strategies, model architecture choices, and inference parameters all constitute a rich landscape worthy of systematic exploration.</p>
+<p>The observed score variance (3.33 % to 6.67 %) from random seed changes alone illustrates how impactful these seemingly minor decisions can be. When we consider the additional dimensions of model selection (Llama vs Qwen vs Gemma vs Phi vs Mistral vs DeepSeek) and the interactions between these choices and other hyperparameters, the potential solution space becomes even more expansive.</p>
+<p>The key insight is recognizing when hyperparameter variance becomes comparable to or exceeds model variance. In such scenarios, treating traditionally "fixed" parameters (like random seeds and base model choices) as first-class hyperparameters becomes a legitimate and powerful strategy.</p>
+<p>I want to express my sincere gratitude to <strong>Kaggle and the entire ARC Prize community</strong> for creating this challenging and thought-provoking competition. The opportunity to engage with abstract reasoning tasks and learn from world-class competitors has been invaluable. Special thanks to the ARChitects team for open-sourcing their solution, and to <a href="https://www.kaggle.com/sanyul" target="_blank">@sanyul</a> and <a href="https://www.kaggle.com/boristown" target="_blank">@boristown</a> for their excellent baseline implementations.</p>
+<p>This competition has motivated me to become more deeply involved in future ARC challenges. The problem of abstract reasoning represents one of the most fascinating frontiers in AI, and I'm excited to contribute to advancing this field. For future iterations, I plan to systematically explore the base model selection space alongside other hyperparameters to better understand which architectural choices align best with different types of abstract reasoning tasks.</p>
+<p><strong>To anyone reading this writeup</strong>: In small-sample competitions, never underestimate the importance of exploring every hyperparameter systematically, starting with the fundamental choice of base model architecture. What seems like a minor configuration choice—whether it's a random seed, a learning rate, or a model selection—may be the difference between a good solution and a winning one. The 2x performance variance I observed from seed changes alone (3.33 % to 6.67 %) suggests that comprehensive exploration of the full hyperparameter space could yield even more dramatic improvements.</p>

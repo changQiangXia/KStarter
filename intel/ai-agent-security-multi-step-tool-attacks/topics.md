@@ -1,0 +1,122 @@
+# ai-agent-security-multi-step-tool-attacks 讨论区（按票数排序，共 120 条）
+
+- [Validate Your Attack Locally to Save Submission Time](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/708186) — 93 票 / 23 评论 / 2026-06-14 
+- [1st place solution](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/739181) — 82 票 / 17 评论 / 2026-09-03 **write-up?**
+- [Feedback on Scoring Logic, Evaluation Flow, and Environment](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/711457) — 55 票 / 15 评论 / 2026-06-21 
+- [[IMPORTANT] Upcoming Evaluation Updates and Leaderboard Refresh](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/733058) — 31 票 / 39 评论 / 2026-08-05 
+- [Stale leaderboard](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/715259) — 30 票 / 15 评论 / 2026-06-28 
+- [59th Place - DeepSeek V4 Pro - NVIDIA Inference Hub](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/738890) — 29 票 / 9 评论 / 2026-09-02 **write-up?**
+- [Welcome to the AI Agent Security: Multi-Step Tool Attacks competition!](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/707811) — 27 票 / 16 评论 / 2026-06-11 
+- [4th Place Solution - Optimizing a Simple email.send Attack](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/739040) — 27 票 / 4 评论 / 2026-09-03 **write-up?**
+- [7th Place Solution: Transfer Was the Real Attack](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/738981) — 22 票 / 2 评论 / 2026-09-02 **write-up?**
+- [It would be funny if](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/738838) — 20 票 / 23 评论 / 2026-09-01 
+- [Evaluator update and FAQ](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/712642) — 19 票 / 30 评论 / 2026-06-23 
+- [One hint on crafting attacks](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/736099) — 18 票 / 21 评论 / 2026-08-19 
+- [On the public-private candidate-transfer setup: a concern + concrete proposals](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/711152) — 18 票 / 2 评论 / 2026-06-21 
+- [confirmation of exact model and CPU or GPU in evaluation](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/736246) — 16 票 / 19 评论 / 2026-08-20 
+- [11th place solution: Measure What You Can, Survive What You Cannot](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/739322) — 15 票 / 5 评论 / 2026-09-03 **write-up?**
+- [How to submit your Writeup for the Working Note Award](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/739078) — 14 票 / 76 评论 / 2026-09-02 **write-up?**
+- [Same notebook scored yesterday → "Submission Format Error" today; brand-new notebooks → "Kaggle Error"](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/725058) — 13 票 / 20 评论 / 2026-07-14 
+- [How to not get nerfed when using codex?](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/708063) — 13 票 / 11 评论 / 2026-06-13 
+- [My latest five commits have been running for 23 hours. Has anyone had a similar experience?](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/734961) — 13 票 / 11 评论 / 2026-08-13 
+- [[FIXED] Submission Scoring Delays/Errors Due to GPU Capacity Constraints](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/712828) — 13 票 / 9 评论 / 2026-06-23 
+- [[Working Note] How I went from 0.06 to 0.135, and what I learned on the way](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/729993) — 12 票 / 1 评论 / 2026-07-27 **write-up?**
+- [10th Place Solution](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/738946) — 12 票 / 1 评论 / 2026-09-02 **write-up?**
+- [Update on long-running submissions and runtime budgets](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/708272) — 12 票 / 20 评论 / 2026-06-14 
+- [All submissions returning "system error" since Aug 2 — evaluation queue issue](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/732447) — 12 票 / 12 评论 / 2026-08-03 
+- [Finally got a clean score (27.0) under v3.1.2 — format errors aren't the end](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/713946) — 12 票 / 4 评论 / 2026-06-25 
+- [Crossing 60 on v3.1.2: a throughput mental model, and a pile of things that didn't work](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/723698) — 11 票 / 4 评论 / 2026-07-07 
+- [270th Place — Working Note: When a Guardrail Erases Its Own Benchmark](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/727895) — 11 票 / 8 评论 / 2026-07-21 **write-up?**
+- [Private guardrail construction or how you were supposed to probe.](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/738915) — 11 票 / 4 评论 / 2026-09-02 
+- [Submission format error everywhere despite it being same as before ](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/713391) — 10 票 / 5 评论 / 2026-06-24 
+- [Evaluator update planned for Monday](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/710234) — 10 票 / 17 评论 / 2026-06-20 
+- [Public Score Is Not Security: The Confused-Deputy Transfer Result](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/738978) — 10 票 / 2 评论 / 2026-09-02 
+- [Double Gold Club 🥇🥇 ](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/738861) — 10 票 / 9 评论 / 2026-09-02 
+- [Difference between public/private env](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/708629) — 10 票 / 19 评论 / 2026-06-16 
+- [[AAS 2nd] No shake plz? No shake yes!](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/739208) — 10 票 / 3 评论 / 2026-09-06 
+- [(Score ~56.6 in v.3.1.2) Reverse-engineering the v3.1.2 scorer — I've mapped it end-to-end but plateau at ~50. What am I missing?](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/718209) — 9 票 / 18 评论 / 2026-07-03 
+- [How we won silver 🥈](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/738887) — 9 票 / 0 评论 / 2026-09-02 **write-up?**
+- [🥇 13th: Two families, opposite transfer: a within-team public→private ledger](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/738894) — 9 票 / 0 评论 / 2026-09-02 
+- [18th Place 🥇 - The journey to Confused Deputy](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/738902) — 9 票 / 0 评论 / 2026-09-02 **write-up?**
+- [Is Kaggle Becoming a Victim of Its Own Success? 🙂](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/737448) — 9 票 / 8 评论 / 2026-08-25 
+- [First Kaggle silver](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/738864) — 9 票 / 6 评论 / 2026-09-02 
+- [From 111.29 to Zero—and the 30-Minute Hedge That Saved My Final Result: How Should We Interpret This Public–Private Gap?](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/738867) — 9 票 / 12 评论 / 2026-09-02 
+- [Will we witness the biggest shake ever?!](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/731237) — 9 票 / 4 评论 / 2026-07-31 
+- [submission broken? not seeing it get completed from 12h+ now](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/708165) — 9 票 / 7 评论 / 2026-06-14 
+- [How it possible?](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/732973) — 9 票 / 13 评论 / 2026-08-05 
+- [Submission Format Error after Monday evaluator update](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/713157) — 9 票 / 5 评论 / 2026-06-24 
+- [Feedback: Structural impossibility of predicates + attack.py never sees private env](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/712371) — 9 票 / 11 评论 / 2026-06-22 
+- [6th Place Solution: From Ideal Output Back to Input](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/739291) — 8 票 / 2 评论 / 2026-09-03 **write-up?**
+- [Private env proxy - validate 1000 candidates in 5m](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/714273) — 8 票 / 1 评论 / 2026-06-26 
+- [Kaggle Error](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/715060) — 8 票 / 11 评论 / 2026-06-27 
+- [5th: Compiling User Messages into Faster Tool Calls](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/739630) — 8 票 / 0 评论 / 2026-09-05 
+- [Kaggle Error all the way: What are the hosts/Kaggle management doing about it?](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/735153) — 7 票 / 5 评论 / 2026-08-14 
+- [Stuck Under 90](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/737793) — 7 票 / 4 评论 / 2026-08-27 
+- [[Working Note] 79th Place Solution and Suggesting a Robust Guardrail Design](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/739970) — 6 票 / 0 评论 / 2026-09-07 **write-up?**
+- [ A few negative results + a throughput identity for the public surface](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/728947) — 6 票 / 0 评论 / 2026-07-24 
+- [Has this competition lost its significance and turned into merely a competition for optimizing time?](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/728352) — 6 票 / 5 评论 / 2026-07-23 
+- [76th place solution](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/738993) — 6 票 / 0 评论 / 2026-09-02 **write-up?**
+- [What exactly is Submission Format Error?](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/718901) — 6 票 / 14 评论 / 2026-07-04 
+- [Submission Format Error may actually be caused by timeout, not by a bad CSV format](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/725073) — 6 票 / 4 评论 / 2026-07-14 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/739100) — 5 票 / 3 评论 / 2026-09-02 
+- [How to get started + Competition's Official Discord](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/707785) — 5 票 / 0 评论 / 2026-06-11 
+- [Codex access deactivated while participating in competition — request for organizer clarification](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/711847) — 5 票 / 9 评论 / 2026-06-22 
+- [TEAM HITHERTO — From Productive-Region Localisation to Transfer Failure](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/740046) — 5 票 / 0 评论 / 2026-09-08 
+- [Anyone experiencing long queue time?](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/734863) — 5 票 / 3 评论 / 2026-08-12 
+- [9,000s Budget Depends on the Compute Environment, but a Token Budget Does Not](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/724915) — 5 票 / 1 评论 / 2026-07-13 
+- [Clarification needed: Errors in Overview vs Data sections on Time Budgets](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/708034) — 5 票 / 3 评论 / 2026-06-13 
+- [Destructive Write: Can we expect secret.txt to be the only file checked for destructive write?](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/726520) — 5 票 / 1 评论 / 2026-07-15 
+- [How exfiltration can be scored without cheating? (SECRET_MARKER)](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/733442) — 4 票 / 3 评论 / 2026-08-06 
+- [[Working Note] Toward the Real Threat: How Agents Behave Under Indirect Injection](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/737100) — 4 票 / 1 评论 / 2026-08-23 **write-up?**
+- [Is it normal for scoring to take over 20 hours?](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/735100) — 4 票 / 11 评论 / 2026-08-13 
+- [This content can't be shown 😅](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/727860) — 4 票 / 5 评论 / 2026-07-21 
+- [How Is the Leaderboard Score Calculated?](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/727714) — 4 票 / 3 评论 / 2026-07-20 
+- [Argument Order as an Attack Surface: measuring a held-out guardrail](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/738904) — 4 票 / 0 评论 / 2026-09-02 
+- [How a Last-Hour Deputy Hedge Won Gold #15](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/738955) — 4 票 / 0 评论 / 2026-09-02 
+- [Submission.csv errors!](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/717717) — 4 票 / 8 评论 / 2026-07-02 
+- [My understanding of this AI Agent Security competition — is this correct?](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/723650) — 4 票 / 3 评论 / 2026-07-07 
+- [41st Solution to AI Agent Security: Multi-Step Tool Attacks](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/740181) — 4 票 / 0 评论 / 2026-09-08 **write-up?**
+- [Solving JED's Hidden Walls: The GPU Paradox, 6x Sandbox Slowdown, and Static Replay Transfer](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/718210) — 4 票 / 2 评论 / 2026-07-03 
+- [Proposal to modify the scoring function used for the public leaderboard](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/709875) — 4 票 / 5 评论 / 2026-06-20 
+- [Before you burn a submission: what fires, and what it's worth](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/717335) — 4 票 / 0 评论 / 2026-07-01 
+- [Persistent "Kaggle Error" on all submissions — platform/scoring issue?](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/713764) — 4 票 / 5 评论 / 2026-06-25 
+- [How I can submit to this competition ?](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/707863) — 4 票 / 19 评论 / 2026-06-12 
+- [🥇13th place: two families, never mixed](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/738896) — 3 票 / 1 评论 / 2026-09-02 **write-up?**
+- [Silver with Two Specialists: Public Throughput, Private Transfer](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/738944) — 3 票 / 0 评论 / 2026-09-02 
+- [Could the top scorers from the public LB share their EXFIL trick?](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/738913) — 3 票 / 1 评论 / 2026-09-02 
+- [How is the final leaderboard scoring gonna work?](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/724875) — 3 票 / 1 评论 / 2026-07-13 
+- [Submission Writeup - 146th / 4,186](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/739338) — 3 票 / 0 评论 / 2026-09-03 **write-up?**
+- [Has This Competition Converged into a Stochastic Knapsack Problem?](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/728175) — 3 票 / 4 评论 / 2026-07-22 
+- [195th Place Solution for the AI Agent Security - Multi-Step Tool Attacks Competi](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/739428) — 3 票 / 0 评论 / 2026-09-04 **write-up?**
+- [A Different Perspective on This Competition](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/738578) — 3 票 / 23 评论 / 2026-08-31 
+- [What is difference have tops from the public ~60-66 recipes?](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/728174) — 3 票 / 2 评论 / 2026-07-22 
+- [The PUBLIC leaderboard is a mirage, and selection is where this is won](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/738287) — 3 票 / 29 评论 / 2026-08-31 
+- [Kaggle Error for almost every submission](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/708346) — 3 票 / 8 评论 / 2026-06-15 
+- [How much fluctuate can shake on score . in same notebook?](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/733345) — 3 票 / 6 评论 / 2026-08-06 
+- [Meme Thread](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/738281) — 3 票 / 11 评论 / 2026-08-31 
+- [Gemma malformed tool json](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/737781) — 3 票 / 16 评论 / 2026-08-27 
+- [Joined a month ago..](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/736232) — 3 票 / 0 评论 / 2026-08-19 
+- [Can same-day A/B comparisons be trusted in this competition?](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/735521) — 3 票 / 10 评论 / 2026-08-16 
+- [Private LB timeout](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/737089) — 3 票 / 3 评论 / 2026-08-23 
+- [Replay speed + prompt language](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/736602) — 3 票 / 3 评论 / 2026-08-21 
+- [Submit button unavailable when attack.py is copied from an attached Kaggle Dataset](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/707885) — 2 票 / 1 评论 / 2026-06-12 
+- [How much possibility of shakeup? ](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/738261) — 2 票 / 5 评论 / 2026-08-30 
+- [Time budget per model: 18,000 s (Overview) vs 9,000 s (Data tab + SDK) — which is authoritative?](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/737769) — 2 票 / 0 评论 / 2026-08-27 
+- [Clarification on Replay Runtime vs Published Time Budgets](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/709581) — 2 票 / 4 评论 / 2026-06-19 
+- [Testing Competition Models Locally with DGX Spark GB10 (fast iteration workflow)](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/713049) — 2 票 / 0 评论 / 2026-06-23 
+- [How to successfully use codex](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/735753) — 2 票 / 7 评论 / 2026-08-17 
+- [So, are the officials still not going to explain what's causing the Submission Format Error?](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/713843) — 2 票 / 4 评论 / 2026-06-25 
+- [Is there any change to update the leaderboard? It looks like it hasn't been refreshed in days.](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/714328) — 2 票 / 2 评论 / 2026-06-26 
+- [If the private guardrails and the scoring criteria correspond exactly one-to-one, does it mean it's impossible to ever score?](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/715887) — 2 票 / 0 评论 / 2026-06-29 
+- [Persistent "Kaggle Error" on AI Agent Security competition](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/718829) — 2 票 / 1 评论 / 2026-07-04 
+- [[Working Note] Reading the objective from source: a payload blind spot and reasoning-channel injection](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/734944) — 2 票 / 0 评论 / 2026-08-13 **write-up?**
+- [How can we trigger UNTRUSTED_TO_ACTION and DESTRUCTIVE_WRITE ?](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/717756) — 2 票 / 6 评论 / 2026-07-02 
+- [[Open Source] 88.875 LB JED Attack — Full Code + Reproducible Baseline](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/731518) — 2 票 / 1 评论 / 2026-07-31 
+- [Grader server is currently CPU?](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/707893) — 2 票 / 10 评论 / 2026-06-12 
+- [61st Place Solution](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/739154) — 2 票 / 0 评论 / 2026-09-02 **write-up?**
+- [46th Place Solution — Hedging the Hidden Guardrail](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/739009) — 2 票 / 0 评论 / 2026-09-02 **write-up?**
+- [Reachability, Robustness, and Measurement in a Multi-Step Tool-Attack Benchmark](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/738976) — 2 票 / 0 评论 / 2026-09-02 
+- [155th Place (Silver) Solution — EXFILTRATION=0 Privately, CD Survives](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/738945) — 2 票 / 0 评论 / 2026-09-02 **write-up?**
+- [What a Score Knows](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/740299) — 2 票 / 1 评论 / 2026-09-08 
+- [[Working Note] Throughput Is the Whole Game: a token-level replay cost model, a refuted-lever ladder, and the private collapse](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/739431) — 2 票 / 0 评论 / 2026-09-04 **write-up?**
+- [On why Private Leaderboard uses static replay...](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/714340) — -3 票 / 10 评论 / 2026-06-26 

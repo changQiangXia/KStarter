@@ -1,0 +1,160 @@
+<h1>GPT-OSS-120B on a Single H100: Efficient Large-Scale Reasoning</h1>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F21070744%2F96f1e57b11f516cfdce63beeaff1c9e4%2Fgpt-oss-120b.png?generation=1780048553192626&amp;alt=media" alt=""></p>
+<p>This work is the product of <strong>empirical research</strong> carried out through, benchmarking, observation, and analysis of publicly available notebooks, technical reports, and competition solutions. </p>
+<h2>Based on the work of Parthenos</h2>
+<h1>1. Introduction</h1>
+<p>GPT-OSS-120B is a powerful open-weight <strong>Mixture-of-Experts (MoE)</strong> language model designed for high-performance reasoning and agentic workloads. Although the model contains approximately <strong>117 billion parameters</strong>, only around <strong>12 billion parameters are active per token</strong>, enabling efficient execution on a single <strong>NVIDIA H100 80GB GPU</strong>.</p>
+<p>This solution included:</p>
+<ul>
+<li>Memory optimization</li>
+<li>Prefix caching</li>
+<li>KV cache quantization</li>
+<li>Entropy-weighted self-consistency</li>
+<li>Verification-assisted reasoning</li>
+<li>Adaptive runtime scheduling</li>
+</ul>
+<hr>
+<h1>2. System Architecture and Memory Optimization</h1>
+<p>One of the most difficult engineering challenges was fitting a 120B-scale model within single-GPU memory constraints while preserving long-context reasoning performance.</p>
+<p>To solve this, the system relied on multiple layers of optimization.</p>
+<h2><em>OS-Level Weight Preloading</em></h2>
+<p>A deliberate file-read operation was used before model initialization to force weights into the Linux page cache. This significantly reduced repeated disk access and lowered startup latency during inference initialization.</p>
+<pre><code>Disk Storage
+      ↓
+Linux Page Cache
+      ↓
+GPU Transfer
+      ↓
+Inference Runtime
+</code></pre>
+<h2><em>Prefix Caching</em></h2>
+<p>Shared prompt prefixes were reused across multiple parallel generations to avoid redundant attention computation. Since many reasoning samples begin with identical system prompts and instruction templates, prefix caching substantially improved throughput efficiency.</p>
+<h2><em>KV Cache Quantization</em></h2>
+<p>The KV cache was quantized to 8-bit precision to reduce memory pressure during long-context inference.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F21070744%2F60ef566e53c3dd2876e771219c0c7d59%2FScreenshot%202026-05-29%20110704.png?generation=1780049250466400&amp;alt=media" alt=""></p>
+<p><em>The Key and Value matrices belong to an n × d real-valued vector space.</em></p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F21070744%2F9c781128c5dba2ea0ba963a0f80a2727%2FScreenshot%202026-05-29%20110750.png?generation=1780049288266337&amp;alt=media" alt=""></p>
+<p><em>The original Key and Value matrices are transformed into their 8-bit quantized representations to reduce memory usage during inference.</em></p>
+<p><strong>This enabled:</strong></p>
+<ul>
+<li>Longer context windows</li>
+<li>Improved VRAM stability</li>
+<li>Reduced fragmentation</li>
+<li>Increased parallel generation capacity</li>
+</ul>
+<hr>
+<h1>3. Prompt Engineering and Inference Strategy</h1>
+<p>One of the most important findings during research was that <strong>prompt engineering consistently produced larger gains than several complex optimization techniques</strong>.</p>
+<p>Carefully refined prompts improved:</p>
+<ul>
+<li>Symbolic consistency</li>
+<li>Chain-of-thought stability</li>
+<li>Verification behavior</li>
+<li>Mathematical structure</li>
+<li>Formatting reliability</li>
+</ul>
+<p>Multiple prompt variants were analysed, including:</p>
+<ul>
+<li><p>Gemini-generated prompts
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F21070744%2F914f4f9b8eb0faade7508ea821259f30%2FScreenshot%202026-05-29%20093125.png?generation=1780049525246514&amp;alt=media" alt=""></p></li>
+<li><p>Community reasoning templates
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F21070744%2Fdbdcca5e5e88c3f760eed1b7839c3925%2FScreenshot%202026-05-29%20093631.png?generation=1780049548472486&amp;alt=media" alt=""></p></li>
+<li><p>Original notebook prompts
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F21070744%2Fef2cbb9d864aae126782c4039ae855af%2FScreenshot%202026-05-29%20092758.png?generation=1780049573228033&amp;alt=media" alt=""></p></li>
+</ul>
+<p>However, the original notebook prompt was used eventually.</p>
+<p>External reference:</p>
+<p><a href="https://www.kaggle.com/code/datasciencegrad/aimo-3-42-50-stable-lb-possible-43-luck" target="_blank">https://www.kaggle.com/code/datasciencegrad/aimo-3-42-50-stable-lb-possible-43-luck</a></p>
+<h2><em>Entropy-Weighted Self-Consistency</em></h2>
+<p>Traditional majority voting was replaced with entropy-weighted aggregation.</p>
+<p>Instead of treating all generated samples equally, it estimated confidence using token-level probability distributions based on Shannon entropy.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F21070744%2F31e767396da113bf7faeba0b3d885422%2FScreenshot%202026-05-29%20111440.png?generation=1780049699987385&amp;alt=media" alt=""></p>
+<p>Lower entropy implied higher confidence and stronger reasoning stability.</p>
+<p>The inference pipeline operated as follows:</p>
+<pre><code>Parallel Generations
+          ↓
+Entropy Scoring
+          ↓
+Confidence Weighting
+          ↓
+Final Aggregation
+</code></pre>
+<p>Compared to standard majority voting, entropy-weighted aggregation reduced instability and penalized uncertain generations.</p>
+<hr>
+<h1>4. Verification and Runtime Orchestration</h1>
+<p>A major component of the architecture was a persistent sandbox verification system built around long-lived Jupyter kernels.</p>
+<p>Instead of repeatedly restarting Python environments, the system preserved:</p>
+<ul>
+<li>Variables</li>
+<li>Functions</li>
+<li>Intermediate reasoning states</li>
+<li>Mathematical objects</li>
+<li>Verification outputs</li>
+</ul>
+<p>Generated reasoning steps were executed programmatically, and execution outputs were fed back into the inference pipeline for refinement.</p>
+<pre><code>Model Generation
+       ↓
+Code Execution
+       ↓
+Verification
+       ↓
+Feedback Injection
+       ↓
+Refined Solution
+</code></pre>
+<h2><em>Adaptive Runtime Scheduling</em></h2>
+<p>To operate efficiently within Kaggle’s runtime constraints, the system implemented adaptive compute scheduling.</p>
+<p>Each remaining problem received a baseline compute allocation, while unused time was redistributed dynamically according to:</p>
+<ul>
+<li>Problem difficulty</li>
+<li>Verification complexity</li>
+<li>Reasoning depth</li>
+<li>Generation stability</li>
+</ul>
+<p>As execution approached the notebook timeout limit:</p>
+<ul>
+<li>Sampling depth was reduced</li>
+<li>Verification loops were shortened</li>
+<li>Best-valid partial outputs were returned</li>
+</ul>
+<p>This prevented runtime failures near deadline limits.</p>
+<hr>
+<h1>5.  Findings</h1>
+<p>A major observation was that inference engineering itself became a competitive advantage. The final system behaved less like a traditional language model and more like a coordinated reasoning engine.</p>
+<hr>
+<h1>6. Future Direction</h1>
+<p>One particularly promising direction comes from strategies described in the DeepSeek technical reports, where multiple specialized expert models are independently trained using reinforcement learning and later distilled back into a single unified system.</p>
+<p>Such a framework could significantly improve:</p>
+<ul>
+<li>Formal mathematical reasoning</li>
+<li>Verification planning</li>
+<li>Tool usage reliability</li>
+<li>Long-chain symbolic consistency</li>
+<li>Multi-domain specialization</li>
+</ul>
+<p>This type of multi-expert reinforcement learning followed by consolidation appears to be a powerful direction for future competition systems.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F21070744%2F56eb9e85d8db9da0460a94be9e58ec81%2FScreenshot%202026-05-29%20111930.png?generation=1780049991374084&amp;alt=media" alt=""></p>
+<hr>
+<h1>7. Conclusion</h1>
+<p>The final architecture combined:</p>
+<ul>
+<li>OS-level memory optimization</li>
+<li>Prefix caching</li>
+<li>KV cache quantization</li>
+<li>Entropy-weighted self-consistency</li>
+<li>Adaptive runtime scheduling</li>
+<li>Persistent sandbox verification</li>
+<li>Prompt-engineered reasoning orchestration</li>
+</ul>
+<p>One of the most important conclusions from this research is that careful inference design and prompt engineering can contribute more consistently to leaderboard performance than naive scaling strategies alone.</p>
+<hr>
+<h1>References</h1>
+<ol>
+<li>GPT-OSS-120B Technical Documentation</li>
+<li>Kaggle AIMO Competition Discussions</li>
+<li>DeepSeek Technical Reports</li>
+<li>Shannon, C. E. — <em>A Mathematical Theory of Communication</em></li>
+<li>Sparse Mixture-of-Experts Transformer Literature</li>
+<li>Public Community Inference Implementations</li>
+<li>Bycloud: <a href="https://www.youtube.com/watch?v=gC76aeibdFA" target="_blank">https://www.youtube.com/watch?v=gC76aeibdFA</a></li>
+</ol>
