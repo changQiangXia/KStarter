@@ -23,8 +23,23 @@ Lux AI Season 2 的**公开测试预览**：无奖金/积分/奖牌，目标是�
 - 动作队列与两阶段设计对 agent 架构的要求：队列规划与阶段状态机，而非逐帧反应。
 - 提交限制类机制（3 活跃提交）引导策略把算力投给更少但更强的方案。
 
+## 轻读结论（2026-10 补）
+
+- **定位**：44 队、无现金/积分/奖牌，官方明确是"收集反馈、平衡机制"的预览，用于打磨随后的 Featured 正赛（362825）。
+- **机制/计划改动**：两阶段 + 两套动作空间 + 动作队列 + light/heavy 碰撞解算；计划把"能量不足即失败"改成"等待"，并改非对称地图 + **竞标 (desired_placement, amount) 决定放置顺序** + 任意位置放置（breaking change）（363366 / 365579）。
+- **平台试验**：最多 **3 个活跃提交**（新提交禁用旧的）；验证对局失败、spawn 崩溃、重复 transfer 复制 ice 等 bug 密集（363479 / 363556 / 365465 / 371151）。
+- **工具**：Lux Eye 2022（29 票）第三方可视化器，开源于 GitHub（367091）。
+
+## 图表证据
+
+本场 0 张归档图（0/0），**图证缺口已登记**（Lux Eye 截图为站外图床）。
+
 ## 出处
 
 - 官方资源与变更清单：https://www.kaggle.com/competitions/lux-ai-2022-beta/discussion/363366
 - 欢迎与定位（无奖金反馈场）：https://www.kaggle.com/competitions/lux-ai-2022-beta/discussion/362825
 - 活跃提交限制实验：https://www.kaggle.com/competitions/lux-ai-2022-beta/discussion/363479
+- 计划改动（breaking）：https://www.kaggle.com/competitions/lux-ai-2022-beta/discussion/365579
+- Lux Eye 2022：https://www.kaggle.com/competitions/lux-ai-2022-beta/discussion/367091
+- 验证对局失败：https://www.kaggle.com/competitions/lux-ai-2022-beta/discussion/363556
+- v1.1.1 大更新：https://www.kaggle.com/competitions/lux-ai-2022-beta/discussion/369935

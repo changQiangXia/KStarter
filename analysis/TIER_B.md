@@ -3,7 +3,7 @@
 > 选取规则：全部 264 场归档赛事减去 Tier A 60 场；按 `analysis/_tier_a_scored.csv` 的材料密度得分降序排列。
 > 轻量深读组件（4）：逐方案对照矩阵 ｜ 共识/分歧与裁决 ｜ 证据分级 ｜ 悬案/缺口；有归档图则内嵌图证。
 > 状态：⬜ 未开始 ｜ 🔄 进行中 ｜ ✅ 完成（轻读 + notes 回写）
-> 进度：**190/204**（2026-10-03；B01–B19 完成；B20 待开始）
+> 进度：**193/204**（2026-10-03；B01–B19 完成；B20 进行中 3/10）
 
 ## 批次 B01（1–10）
 
@@ -294,9 +294,9 @@
 
 | # | slug | 主题 | 类别 | 材料(正文/图) | 得分 | 状态 |
 | --- | --- | --- | --- | --- | --- | --- |
-| 191 | `maze-crawler` | sim-agent | Playground | 6/5 | 13.7 | ⬜ |
-| 192 | `geolifeclef-2022-lifeclef-2022-fgvc9` | cv | Research | 6/2 | 13.4 | ⬜ |
-| 193 | `lux-ai-2022-beta` | sim-agent | Playground | 6/0 | 12.6 | ⬜ |
+| 191 | `maze-crawler` | sim-agent | Playground | 6/5 | 13.7 | ✅ |
+| 192 | `geolifeclef-2022-lifeclef-2022-fgvc9` | cv | Research | 6/2 | 13.4 | ✅ |
+| 193 | `lux-ai-2022-beta` | sim-agent | Playground | 6/0 | 12.6 | ✅ |
 | 194 | `iwildcam2022-fgvc9` | cv | Research | 6/0 | 12.3 | ⬜ |
 | 195 | `phase-ii-widsdatathon2022` | science | Community | 6/3 | 11.6 | ⬜ |
 | 196 | `nfl-big-data-bowl-2026-analytics` | other | Featured | 6/0 | 11.3 | ⬜ |

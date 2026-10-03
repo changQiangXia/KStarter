@@ -24,8 +24,33 @@
 - 利用环境对称性（镜像补图）与时间维度的碰撞预约，是工程感很强的通用技巧。
 - 本场是 2026 年代 agent 赛生态的切片：人类规则、RL 流水线、LLM 工具链并存。
 
+## 轻读结论（2026-10 补）
+
+- **1st（Maksim Savelev 2006.5）**：三层 = first-move BFS 单一评分函数（jump-aware）+ 节点采矿经济（`node > bfs`，矿工变矿、工厂坐矿）+ **主动逼迫碰撞**；关键常数 `ENERGY_CAP=3000` 一锁存即停止采矿转猎杀、`TIEBREAK_DIST=5` 时在身后放 300 能量矿工、`TIEBREAK_MINER_LOOKAHEAD=2` 预判矿工死亡避免同 tick 双亡（717120）。
+- **近镜像教训**：只针对标准能量流调到 ~95% 胜率，未调镜像；对 bunterrrr 约 53/47（估计），最终 2006.5 vs 1953.4。
+- **3rd（Genematon 1796.4）**：JAX 环境移植 + 行为克隆 bootstrap + PPO 自对弈（小网络、最小奖励）；自述自对弈池同质导致战斗弱，建议 AlphaStar 式对抗对手（718158）。
+- **7th**：匈牙利匹配全局任务分配 + 时间片格子预留 + 对称补全 + 终局北撤（717177）。
+- 无奖牌/积分、环境本地与线上不一致、tiebreak 怪异等社区问题密集（696453 / 701737 / 702770）。
+
+## 图表证据
+
+![工厂坐在矿上收能](../../intel/maze-crawler/bodies/717120_img/01.png)
+
+**图**（topic 717120）：工厂停在矿上收能（经济层核心）。
+
+![终局回放](../../intel/maze-crawler/bodies/717120_img/04.png)
+
+**图**（topic 717120）：第 186 步 Maksim Savelev（E=331）击败 Genematon（E=300）。
+
+![最终排行榜](../../intel/maze-crawler/bodies/717120_img/05.png)
+
+**图**（topic 717120）：Maksim Savelev 2006.5 > bunterrrr 1953.4 > Genematon 1796.4。
+
 ## 出处
 
 - 1st：分数函数驱动的 BFS 三层架构：https://www.kaggle.com/competitions/maze-crawler/discussion/717120
 - 3rd：RL 流水线（JAX 模拟器 + BC + PPO）：https://www.kaggle.com/competitions/maze-crawler/discussion/718158
 - 7th：匈牙利匹配 + 时间步预约：https://www.kaggle.com/competitions/maze-crawler/discussion/717177
+- 无奖牌/积分询问：https://www.kaggle.com/competitions/maze-crawler/discussion/696453
+- 每日 episode 数据集：https://www.kaggle.com/competitions/maze-crawler/discussion/701822
+- 环境本地/线上不一致：https://www.kaggle.com/competitions/maze-crawler/discussion/701737
