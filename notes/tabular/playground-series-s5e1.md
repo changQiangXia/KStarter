@@ -41,8 +41,31 @@
 - 预测赛的最终分数常由 1–2 个外生假设决定——学会用"双提交对冲"表达不确定性。
 - Transformer 在时序上可以免手工特征，但自回归+伪标签这些训练技巧仍是必需品。
 
-## 7. 出处
+## 7. 轻读结论（2026-10 补）
+
+**一句话**：多年度销售预测里，**未来年份的整体倍率（trend）才是名次决定项**（2nd：误差倍率 ±6%，只能"猜"；3rd：**恒定轨迹（沿用 2016）胜过大举延续上升趋势**，这也是本场洗牌主因）；其次是假日效应处理。
+
+- 1st（560629）：基于 kdmitrie 起步模型 + 往届假日方案（细节在 notebook）。
+- 2nd（560549）：两条独立路线——**Transformer-only**（全商品联合 + 30 假日布尔 + **两轮伪标签** + 5 seed 中位数 + 不用倍率）→ 公 0.04867/私 0.04967（59 名）；**Linear Regression-only + 假日** → 公 0.04733/私 0.04650（**私榜第 6**，简单线性反超 Transformer）；最终提交 = 恒定 1.06 与温和线性上升两版对冲。
+- 3rd（560554）：分解（day-of-week/国家 GDP/门店/商品/day-of-year）→ 残差曲线预测；**恒定 vs 上升的两版对照中恒定大胜**；假日 = 上一年归一化假日值的中位数 + 处理滞后与浮动日期（图 1：Kenya/Norway/Singapore 权重差异巨大）。
+- 社区：Transformer 无 FE 0.052（80 票）、显然的分解（72 票）、holidays 新列（52 票）、四舍五入（30 票）、WaveNet starter（27 票）。
+
+**裁决**：趋势假设做成一等变量并用两份提交对冲；假日按国家/年份标定并处理漂移；当主信号是结构+假日+趋势时，线性模型性价比高于大网络。
+
+**悬案**：4th/6th–11th 方案缺失；1st 实现细节在 notebook；"正确的未来倍率"无客观依据。
+
+## 8. 图表证据
+
+![三国 2019 年的假日权重曲线](../../intel/playground-series-s5e1/bodies/560554_img/01.png)
+
+**图 1**（topic 560554）：Kenya/Norway/Singapore 2019 的假日权重与 day_of_year（红虚线为公共假日）——假日幅度/持续/滞后在国家间差异巨大。
+
+## 9. 出处
 
 - 1st：基于公开 starter 的改进：https://www.kaggle.com/competitions/playground-series-s5e1/discussion/560629
 - 2nd：Transformer 与 LR 的堆叠 + 乘数分析：https://www.kaggle.com/competitions/playground-series-s5e1/discussion/560549
-- Transformer 无特征工程教程：https://www.kaggle.com/competitions/playground-series-s5e1/discussion/559314
+  - Transformer 无特征工程教程：https://www.kaggle.com/competitions/playground-series-s5e1/discussion/559314
+  - 3rd（31 票）：https://www.kaggle.com/competitions/playground-series-s5e1/discussion/560554
+  - 显然的分解（72 票）：https://www.kaggle.com/competitions/playground-series-s5e1/discussion/554349
+  - 四舍五入（30 票）：https://www.kaggle.com/competitions/playground-series-s5e1/discussion/555149
+- 轻读全本：`analysis/deep/playground-series-s5e1.md`（Tier B 轻读：对照矩阵/裁决/证据分级/悬案 + 1 图证）
