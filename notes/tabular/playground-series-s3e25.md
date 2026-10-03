@@ -40,8 +40,27 @@
 - 遇到罕见指标（MedAE/分位损失），先问"它在奖励什么、忽略什么"，再写第一行代码。
 - 社区资源汇编（领域+指标+相似赛）是低成本入场路径。
 
-## 7. 出处
+## 7. 轻读结论（2026-10 补）
+
+- **MedAE 的结构性利用（74 票，455888）**：分数只取决于中位误差那一个样本；对 `AE ≤ 0.06` 或 `≥ 0.7` 的样本给 0.01 权重，同一 LGBM 的 CV **+0.03**。
+- **分箱事实（54 票，457631）**：9 个硬度档位覆盖 **89.5%（9533/10406）** 的样本在 ±0.25 内；测试同分布时"猜对约 56% 档位"即可 MedAE=0.25——解释了排行榜大量 0.25 与"零分"讨论。
+- **模型/基线**：LAD Stacker LB 0.49737；树模型最低约 0.49；NN 被报告明显更强（455289 / 456721 / 456417 / 458154 引用文化投诉）。
+- **CV 与数据**：CV 必须复刻 MedAE 口径（26 票提醒）；准重复/边界样本要审计（17 票）；提交报错帖 36 评论（457338 / 455519 / 456076）。
+
+## 8. 图表证据
+
+![排行榜 Solution 列](../../intel/playground-series-s3e25/bodies/460423_img/01.png)
+
+**图**（topic 460423）：前 8 名分数全部 0.25000，"Solution" 列被标出——分数高度聚集的直接证据。
+
+## 9. 出处
 
 - 别忘记调样本权重（MedAE 加权的证明）：https://www.kaggle.com/competitions/playground-series-s3e25/discussion/455888
 - 数据分箱的有趣事实（56% 命中即 0.25）：https://www.kaggle.com/competitions/playground-series-s3e25/discussion/457631
 - 入场资源汇编：https://www.kaggle.com/competitions/playground-series-s3e25/discussion/455241
+- 引用缺失抱怨：https://www.kaggle.com/competitions/playground-series-s3e25/discussion/458154
+- CV 策略提醒：https://www.kaggle.com/competitions/playground-series-s3e25/discussion/457338
+- 数据清洗与模型技巧：https://www.kaggle.com/competitions/playground-series-s3e25/discussion/455273
+- 准重复/边界警告：https://www.kaggle.com/competitions/playground-series-s3e25/discussion/455519
+- LAD Stacker 基线：https://www.kaggle.com/competitions/playground-series-s3e25/discussion/455289
+- 200+ 提交卡 0.25：https://www.kaggle.com/competitions/playground-series-s3e25/discussion/459308

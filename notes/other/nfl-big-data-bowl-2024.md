@@ -21,6 +21,19 @@
 - xRY 类指标的设计思路（用全场相对运动状态估计期望产出）可迁移到任何"多智能体追踪 + 单步产出"的场景。
 - 做同类赛前先吃透联盟公开术语与统计口径，避免连"什么算一次成功擒抱"都答错。
 
+## 轻读结论（2026-10 补）
+
+- **规模**：第六届 BDB（擒抱主题），**约 300 份提交（+15% 创记录）**；Metric/Undergrad/Coaching ≈ 45/30/25；NFL 球队分析人员评审，**规则与最终分数不公开**（468229 / 472712 / 472752）。
+- **高票帖都是"口径/指标"型**：术语表（阵型/位置/球衣号/传球统计）20 票；擒抱技术（In Line/Open Field/Engaged/Last Chance）与 solo/assist 计数 19 票；nflWAR 的 EP→WP→EPA/WPA→WAR 16 票；The Zoo（22 人相对位置+速度、不用预造特征）与 xRY/RYOE 生态 17 票。
+- **数据审计清单**：数据差异（14 票）、preSnap 胜率列命名错位、位置滞后、tackles 不一致、tracking/ball_snap/passresult 缺失、plays/tracking 矛盾（447639 / 447011 / 448035 / 461347 / 451985 / 452944）。
+- **交付/合规**：2000 词限制、GIF/SVG 报错、外部数据与 All-22 影片合法性问询（464862 / 466521 / 450982 / 461515）。
+
+## 图表证据
+
+![Types of Tackles](../../intel/nfl-big-data-bowl-2024/bodies/448833_img/01.webp)
+
+**图**（topic 448833）：Fordham 教练 Vincent DiGaetano 的四类擒抱技术——把教练语言翻译成数据标签的起点。
+
 ## 出处
 
 - 官方欢迎帖（赛道与评分流程）：https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/446943
@@ -29,3 +42,6 @@
 - 指标文献（nflWAR / EP / WP / EPA）：https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/447660
 - 历史冠军与工具生态（xRY / The Zoo / nflverse）：https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/446946
 - 赛后总结（提交量与赛道分布）：https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/468229
+- finalist 公告：https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/472712
+- 规则与分数不公开：https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/472752
+- 数据差异：https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/447639
