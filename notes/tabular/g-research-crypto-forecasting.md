@@ -55,7 +55,25 @@
 2. **同领域历史赛事是最快的方案来源**。
 3. **多阶段评测 = 稳健优先**：能活过多次更新比单次登顶更重要。
 
-## 7. 出处
+## 7. 轻读结论（2026-10 补）
+
+**一句话**：滚动评测的金融时序赛——**walk-forward 分组 CV（留 gap）+ 目标工程（beta 分解双模型）+ 不追公榜**是三大支点；最终名次含巨大抽样噪声。
+
+- 2nd（87 票）：单 LGBM、无集成/正则/增广；6 折重叠 walk-forward（group=timestamp、40 周折长/20 周步进/1 周 gap）；只提交 2 次；用"低分大师平台 ≈0.08"解读被 probing 抬高的公榜；Numba 加速特征；16GB/9h 内核内存优化。
+- 13th（91 票，前 6 周第 1）：17 特征 + LGBM/NN 集成；**TargetZero/TargetBeta 双目标双模型 + 按缺失窗口（3750 时间戳）切换**（图 1），+0.01；外部交易所数据小幅增益。
+- 事件：公榜 probing 严重（社区要求公开测试数据核验）；6 次滚动更新导致名次过山车。
+
+**裁决**：时序 CV 设计是决策基础；理解 target 的分支语义（缺失/停牌）；公榜只作锚不作优化目标；单模+好特征可胜集成。
+
+**悬案**：3rd/7th 未细读；2nd 拒绝公开特征（实盘敏感性）导致不可复核。
+
+## 8. 图表证据
+
+![Beta 分量随时间与缺失的关系](../../intel/g-research-crypto-forecasting/bodies/313386_img/01.jpg)
+
+**图 1**（topic 313386）：Beta 分量波动并在缺失时归零——target 双语义切换的证据。
+
+## 9. 出处
 
 - 讨论区索引：`intel/g-research-crypto-forecasting/topics.md`（120 条）
 - 已收录 write-up（8 篇）：
@@ -64,3 +82,4 @@
   - 时间序列获奖方案清单（58 票）：https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/284884
   - Jane Street 方案迁移（36 票）：https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/286676
   - 最终更新分析（12 票）：https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/322899
+- 轻读全本：`analysis/deep/g-research-crypto-forecasting.md`（Tier B 轻读：对照矩阵/裁决/证据分级/悬案 + 1 图证）
