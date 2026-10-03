@@ -56,3 +56,19 @@
 **神经网络** 13、**验证/CV** 10、**LLM/提示** 9、**集成/融合** 4、**后处理/校准** 2、**特征工程** 1、**GBDT 调参** 1、**AutoML** 1、**伪标签/蒸馏** 1、**RL/搜索** 1
 
 > 自动生成；匹配规则：公开榜 `TeamMemberUserNames` 与讨论区作者名按 handle/显示名归一化匹配，仅覆盖 KStarter 归档的 264 场近 5 年比赛。
+
+## 决策画像（P2/P3）
+
+- 断言产出：14 条（A 9 / B 5 / C 0）
+- 方法标签：提交/推理工程 7、验证设计 6、合成/生成数据 5、预训练/域适应 5、集成/融合 4、Agent/LLM 工具 3、混合精度/量化 3、信号/频谱处理 2
+- 验证习惯：验证设计 6
+- 迭代关注：集成/融合 4、数据增广 2、提交/推理工程 7
+- 迭代强度：公开榜提交数中位 64、最高 458；solo 场次 7/23
+- 前 50 内队友：@christofhenkel（同队 13 场）、@conjuring92（同队 1 场）、@aerdem4（同队 1 场）、@cpmpml（同队 1 场）
+- 近年领域迁移：2024: 表格/结构化×6、科学研究×2、文本 NLP×2；2025: 科学研究×2、文本 NLP×2、表格/结构化×2；2026: 文本 NLP×2
+- 代表断言：
+  - [ai-mathematical-olympiad-progress-prize-2#574765-03](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/574765)（A｜集成与融合）用 mergekit 试多种合并，最简单线性组合最优：CoT 0.3 加 TIR 0.7；maj@16 从 62.9/66.8 提升到 69.1，pass@16
+  - [ai-mathematical-olympiad-progress-prize-2#574765-05](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/574765)（A｜工程/流程）12 个异步生成；前 5 个里 4 个答案一致就取消其余；完成 10/12 也提前停；每题基础 350 秒，剩余时间进共享池，下一题最多借 210 秒（共 56
+  - [ai-mathematical-olympiad-progress-prize-2#574765-06](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/574765)（A｜验证设计）自建 Comp-Math-24-25 基准（256 题：AIME/HMMT）作主信号；同一模型不同设置 public 在 23 到 29 波动，最终 priva
+  - [linking-writing-processes-to-writing-quality#466906-01](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/466906)（A｜集成与融合）GBM 集成（165 个公开特征：LGB、XGB、CatBoost、LightAutoML、shallow NN）与 Deberta 集成（在 persuade
+  - [linking-writing-processes-to-writing-quality#466906-03](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/466906)（A｜特征与数据工程）把遮蔽字符 q 替换为 i 或 X：预训练 DeBERTa 对 i/X 有显式 token，tokenization 更好且序列更短；并训练自定义 tokeni

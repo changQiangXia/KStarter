@@ -57,3 +57,18 @@
 **神经网络** 4、**GBDT 调参** 3、**LLM/提示** 2、**集成/融合** 1、**特征工程** 1、**验证/CV** 1
 
 > 自动生成；匹配规则：公开榜 `TeamMemberUserNames` 与讨论区作者名按 handle/显示名归一化匹配，仅覆盖 KStarter 归档的 264 场近 5 年比赛。
+
+## 决策画像（P2/P3）
+
+- 断言产出：5 条（A 3 / B 1 / C 1）
+- 方法标签：集成/融合 3、缺失值/NAN 2、损失设计 1、泄漏检测/探针 1、长序列/上下文 1、验证设计 1、提交/推理工程 1
+- 验证习惯：验证设计 1、泄漏检测/探针 1
+- 迭代关注：集成/融合 3、提交/推理工程 1
+- 迭代强度：公开榜提交数中位 23、最高 6798；solo 场次 15/24
+- 前 50 内队友：@arc144（同队 4 场）、@cdeotte（同队 2 场）、@tonylica（同队 2 场）、@yiheng（同队 2 场）、@titericz（同队 1 场）
+- 近年领域迁移：2023: 生物/医疗×2、视觉 CV×1、表格/结构化×1；2025: 表格/结构化×4、文本 NLP×2、强化学习/博弈×1；2026: 表格/结构化×5、强化学习/博弈×3、文本 NLP×2
+- 代表断言：
+  - [amex-default-prediction#347668-02](https://www.kaggle.com/competitions/amex-default-prediction/discussion/347668)（A｜数据理解）CV 对比：全体 0.7990、长度 13 为 0.8214、其余仅 0.6724；推断短序列是删除了最近月份（保留早期），因此预测缺失月份可帮下游
+  - [amex-default-prediction#347668-03](https://www.kaggle.com/competitions/amex-default-prediction/discussion/347668)（A｜特征与数据工程）用 1 层 GRU 加 FC 自回归预测下一月特征（log 变换加 fillna(0)）；对 178 个数值特征验证 RMSE 0.019，naive 重复最后
+  - [amex-default-prediction#347668-04](https://www.kaggle.com/competitions/amex-default-prediction/discussion/347668)（A｜集成与融合）训练 7 个 XGB（不同 RNN/XGB 超参与特征组合）集成 CV 0.7993/public 0.799；与最佳公开方案平均后进金区
+  - [amex-default-prediction#347668-01](https://www.kaggle.com/competitions/amex-default-prediction/discussion/347668)（B｜数据理解）把测试集也用于特征生成（只预测特征不预测标签）；短序列因删除了最近的 profile 而信息不足

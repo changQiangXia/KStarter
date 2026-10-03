@@ -52,3 +52,17 @@
 **LLM/提示** 3、**验证/CV** 1、**集成/融合** 1、**RL/搜索** 1
 
 > 自动生成；匹配规则：公开榜 `TeamMemberUserNames` 与讨论区作者名按 handle/显示名归一化匹配，仅覆盖 KStarter 归档的 264 场近 5 年比赛。
+
+## 决策画像（P2/P3）
+
+- 断言产出：4 条（A 3 / B 1 / C 0）
+- 方法标签：泄漏检测/探针 1、规模/Scaling 1、验证设计 1、Agent/LLM 工具 1、合成/生成数据 1、后处理/校准 1、损失设计 1、目标编码/类别特征 1
+- 验证习惯：验证设计 1、泄漏检测/探针 1
+- 迭代关注：规模/Scaling 1、提交/推理工程 1
+- 迭代强度：公开榜提交数中位 4、最高 114；solo 场次 19/19
+- 近年领域迁移：2024: 文本 NLP×4、表格/结构化×3；2025: 表格/结构化×3、时间序列×2、生物/医疗×2；2026: 表格/结构化×2、强化学习/博弈×1、文本 NLP×1
+- 代表断言：
+  - [ai-agent-security-multi-step-tool-attacks#739181-02](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/739181)（A｜建模与训练）目标：保持 hop1 精确工具调用，同时让 hop2 首 token 为 EOG；损失为 hop1 目标 NLL 均值加 λ（非 EOG 最大 logit 减 
+  - [ai-agent-security-multi-step-tool-attacks#739181-03](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/739181)（A｜工程/流程）用 BF16 权重跑 GCG 生成候选，用 ridge 模型重排，再只在小子集上用真实 GGUF 评估；最终候选按真实 KV-cache 顺序评测；初始 mar
+  - [ai-agent-security-multi-step-tool-attacks#739181-04](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/739181)（A｜工程/流程）用 GCG 把 hop1 与 hop2 margin 都推到 +5 以上；用 0.3.23 重筛；在真实 KV-cache 下评测大 recipient 池、按
+  - [ai-agent-security-multi-step-tool-attacks#739181-01](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/discussion/739181)（B｜验证设计）探针：消息 1 发要测试的工具调用；消息 2 若成功且参数正确就停止，否则数 000 到 999；配合 clock 机制消除排队歧义；结论：参数含 secret

@@ -50,3 +50,19 @@
 **神经网络** 6、**集成/融合** 4、**验证/CV** 4、**伪标签/蒸馏** 3、**后处理/校准** 3、**特征工程** 2、**LLM/提示** 2、**RL/搜索** 2、**AutoML** 2、**GBDT 调参** 1
 
 > 自动生成；匹配规则：公开榜 `TeamMemberUserNames` 与讨论区作者名按 handle/显示名归一化匹配，仅覆盖 KStarter 归档的 264 场近 5 年比赛。
+
+## 决策画像（P2/P3）
+
+- 断言产出：10 条（A 8 / B 2 / C 0）
+- 方法标签：数据清洗/去噪 4、集成权重选择 4、后处理/校准 3、提交/推理工程 3、类别不平衡 3、集成/融合 3、预训练/域适应 3、Transformer/注意力 2
+- 验证习惯：泄漏检测/探针 1
+- 迭代关注：伪标签/自训练 1、集成/融合 3、规模/Scaling 2、数据增广 2、提交/推理工程 3
+- 迭代强度：公开榜提交数中位 71、最高 433；solo 场次 13/17
+- 前 50 内队友：@arunodhayan（同队 1 场）
+- 近年领域迁移：2024: 表格/结构化×3、文本 NLP×2、强化学习/博弈×1；2025: 视觉 CV×2、科学研究×1、强化学习/博弈×1；2026: 表格/结构化×2、时间序列×1、生物/医疗×1
+- 代表断言：
+  - [neurips-open-polymer-prediction-2025#607947-01](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/607947)（A｜后处理）用正负 0.1 倍标准差探针发现 Tg 异常；按 V 形曲线拟合最优偏移系数 0.5644，提交时给 Tg 预测整体加上标准差乘 0.5644
+  - [neurips-open-polymer-prediction-2025#607947-02](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/607947)（A｜建模与训练）用 BERT、Uni-Mol、AutoGluon、D-MPNN 集成给 PI1M 的 5 万个假想聚合物打伪标签；再用性质高低成对比较的排序分类任务预训练（相似
+  - [neurips-open-polymer-prediction-2025#607947-04](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/607947)（A｜特征与数据工程）训练期用随机非 canonical SMILES 每输入生成 10 个变体（数据约 10 倍）；测试期同法生成 50 个预测并取中位数（随机幅度 5 倍）
+  - [neurips-open-polymer-prediction-2025#607947-05](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/607947)（A｜建模与训练）对照：ChemBERTa CV 0.0634、polyBERT 0.592、ModernBERT-base 0.0584、ModernBERT-large 0.
+  - [llm-detect-ai-generated-text#470093-01](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/470093)（A｜数据工程）数据集：Pile completions（512k 对 512k）、SlimPajama（233k 对 233k）、Tricky Crawl（125k 人类）、

@@ -13,11 +13,15 @@
 | `competitions/coverage.csv` | 每场比赛的公开榜状态（`ok`/`no_zip`）与匹配人数，边界可审计 | ✅ |
 | `posts/gm_posts.jsonl` | 归档讨论区中这些人的主题帖与评论（含日期/票数/父节点/正文） | ✅ |
 | `posts/summary.csv` | 每人发言数（主题/评论）与时间跨度 | ✅ |
+| `posts/gm_comments_highvote.csv` | 高票评论层（≥10 票，85 条）：现场决策与追问 | ✅ |
 | `claims/gm_claims.csv` | GM 断言库：条件/动作/机制/结果 + 逐字引用 + 证据等级（无逐字引用不入库） | ✅ |
 | `claims/p1_coverage.csv` | P1 抽取台账：152 条 ≥50 票主题帖的进度与验收口径（覆盖率 ≥90%） | ✅ |
 | `claims/gm_claim_tags.csv` | P2 标签表：每条断言的受控标签与证据单位（同队合并） | ✅ |
 | `analysis/people/REPLICATION.md` | P2 复现报告：标签级证据单位/作者/比赛计数 + 领域门禁 | ✅ |
 | `analysis/people/TENSIONS.md` | P2 张力条目：张力 → 当前裁决 → 证据回链（≥10 组） | ✅ |
+| `claims/audit_sample.csv` / `AUDIT.md` | P3 分层审计：30 条抽样（票数档×领域×等级）与复核结果 | ✅ |
+| `analysis/people/DOSSIERS.md` | 94 场 dossier 索引；明细 `analysis/people/dossiers/<slug>.md` | ✅ |
+| `analysis/people/PLAYBOOK_DOMAINS.md` | 领域 playbook 增量索引；明细 `analysis/people/playbooks/<domain>.md` | ✅ |
 | `profiles/<handle>.md` | 个人档案：战绩表 + 比赛领域分布 + 公开言论 + 方法关键词（总览：`analysis/people/OVERVIEW.md`） | ✅ |
 | `analysis/people/PLAYBOOK.md` | 跨人专题：声音榜 / 领域×人 / 组队网络 / 高票经验帖 | ✅ |
 | `data/cache/people_lb/` | 原始 leaderboard zip/CSV 与抓取状态（脚本缓存） | ❌（gitignore） |
@@ -34,6 +38,10 @@ $PY scripts/people/build_people_playbook.py               # 跨人专题
 $PY scripts/people/verify_claims.py                       # 断言：引用/数字/链接/元数据校验
 $PY scripts/people/build_claim_coverage.py                # P1 台账：抽取覆盖率
 $PY scripts/people/build_claim_analysis.py                # P2 复现判定 + 张力扫描
+$PY scripts/people/extract_gm_comments.py                 # 高票评论层（≥10 票）
+$PY scripts/people/build_dossiers.py                      # 94 场 dossier
+$PY scripts/people/build_domain_playbooks.py              # 领域 playbook 增量
+$PY scripts/people/sample_claim_audit.py                  # 30 条分层审计抽样
 $PY scripts/verify_links.py                               # 校验 notes + 人档的讨论链接
 ```
 

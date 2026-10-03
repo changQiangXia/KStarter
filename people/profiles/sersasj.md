@@ -33,3 +33,18 @@
 **神经网络** 3、**伪标签/蒸馏** 1、**特征工程** 1、**验证/CV** 1、**检索/度量** 1、**LLM/提示** 1、**RL/搜索** 1、**后处理/校准** 1
 
 > 自动生成；匹配规则：公开榜 `TeamMemberUserNames` 与讨论区作者名按 handle/显示名归一化匹配，仅覆盖 KStarter 归档的 264 场近 5 年比赛。
+
+## 决策画像（P2/P3）
+
+- 断言产出：5 条（A 4 / B 1 / C 0）
+- 方法标签：Transformer/注意力 2、数据增广 2、预训练/域适应 2、损失设计 1、提交/推理工程 1、规模/Scaling 1、伪标签/自训练 1、泄漏检测/探针 1
+- 验证习惯：验证设计 1、泄漏检测/探针 1
+- 迭代关注：伪标签/自训练 1、集成/融合 1、规模/Scaling 1、数据增广 2、提交/推理工程 1
+- 迭代强度：公开榜提交数中位 304、最高 401；solo 场次 2/6
+- 近年领域迁移：2025: 生物/医疗×3、视觉 CV×3、表格/结构化×1；2026: 视觉 CV×2、生物/医疗×1、强化学习/博弈×1
+- 代表断言：
+  - [biohub-cell-tracking-during-development#744801-01](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/744801)（A｜建模与训练）三阶段加解码：检测（3D U-Net 加 Cellpose 风格头）→ Soon Net（看每细胞 3 帧预测分裂状态与走向）→ learned linker（
+  - [biohub-cell-tracking-during-development#744801-02](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/744801)（A｜建模与训练）3.1M 参数 3D U-Net，crop 128×128×64，3 次下采样（24/48/96 到 192），各向异性 pooling (1,2,2)、(1,
+  - [biohub-cell-tracking-during-development#744801-04](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/744801)（A｜工程/流程）第一轮用手绘约 1800 细胞加 133k GT 的 4.305 µm stamps 微调；再用 5-fold 平均加 4x flip TTA 给 195 部电
+  - [biohub-cell-tracking-during-development#744801-05](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/744801)（A｜建模与训练）Soon Net = 236K CNN encoder 加 508K transformer，看 3 帧预测 interphase / soon to divi
+  - [biohub-cell-tracking-during-development#744801-03](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/744801)（B｜建模与训练）掩掉 50% 体积但只用 2×4×4 小块（约 3.25 µm，约三分之一细胞核）；数据 180 部电影 18000 帧加 1500 外部帧；30 epochs

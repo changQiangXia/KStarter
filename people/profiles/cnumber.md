@@ -69,3 +69,19 @@
 **RL/搜索** 9、**LLM/提示** 7、**神经网络** 4、**集成/融合** 1、**特征工程** 1、**检索/度量** 1、**后处理/校准** 1
 
 > 自动生成；匹配规则：公开榜 `TeamMemberUserNames` 与讨论区作者名按 handle/显示名归一化匹配，仅覆盖 KStarter 归档的 264 场近 5 年比赛。
+
+## 决策画像（P2/P3）
+
+- 断言产出：17 条（A 6 / B 6 / C 5）
+- 方法标签：目标编码/类别特征 5、损失设计 4、Agent/LLM 工具 3、合成/生成数据 2、验证设计 2、规模/Scaling 2、dtype/内存优化 2、缺失值/NAN 1
+- 验证习惯：验证设计 2、多种子平均 1
+- 迭代关注：集成/融合 1、规模/Scaling 2
+- 迭代强度：公开榜提交数中位 10、最高 465；solo 场次 20/36
+- 前 50 内队友：@daiwakun（同队 5 场）
+- 近年领域迁移：2024: 文本 NLP×4、表格/结构化×3、科学研究×2；2025: 文本 NLP×5、强化学习/博弈×4、视觉 CV×3；2026: 强化学习/博弈×3、表格/结构化×1、文本 NLP×1
+- 代表断言：
+  - [drawing-with-llms#581024-01](https://www.kaggle.com/competitions/drawing-with-llms/discussion/581024)（A｜建模与训练）FLUX.1-schnell 按 4 个 prompt 模板各生成 2 张位图（共 8 候选）→ vtracer 转 SVG（二分搜索 PNG 分辨率满足大小限
+  - [llm-20-questions#531106-01](https://www.kaggle.com/competitions/llm-20-questions/discussion/531106)（A｜建模与训练）Guesser 开局直接问 Is it Agent Alpha?（而不是强制 Alpha 模式省一轮），因为非 Alpha 对局收益更大，且与低分 Agent 
+  - [llm-20-questions#531106-03](https://www.kaggle.com/competitions/llm-20-questions/discussion/531106)（A｜工程/流程）三类问题：26 个字母问题、约 3000 个来自公开胜局、约 10000 个 GPT-4o mini 生成；用 Meta-Llama-3-8B、Phi-3-sm
+  - [santa-2022#379167-01](https://www.kaggle.com/competitions/santa-2022/discussion/379167)（A｜建模与训练）阶段一：GA-EAX 解带路径依赖约束的 TSP；阶段二：beam search 构造臂配置；约束以惩罚成本加入而非硬排除，随 GA 进化逐渐减少违规路径
+  - [santa-2022#379167-02](https://www.kaggle.com/competitions/santa-2022/discussion/379167)（A｜工程/流程）选 GA-EAX：cost 计算次数少、易加约束、可保存与恢复种群；LKH 加约束难且差（约 74077），一天 LKH 无改进；Concorde 5000 顶

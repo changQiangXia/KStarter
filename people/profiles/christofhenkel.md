@@ -77,3 +77,19 @@
 **神经网络** 7、**验证/CV** 6、**集成/融合** 5、**LLM/提示** 5、**后处理/校准** 4、**RL/搜索** 2、**特征工程** 1、**伪标签/蒸馏** 1
 
 > 自动生成；匹配规则：公开榜 `TeamMemberUserNames` 与讨论区作者名按 handle/显示名归一化匹配，仅覆盖 KStarter 归档的 264 场近 5 年比赛。
+
+## 决策画像（P2/P3）
+
+- 断言产出：24 条（A 17 / B 6 / C 1）
+- 方法标签：信号/频谱处理 15、损失设计 13、集成权重选择 9、类别不平衡 8、后处理/校准 7、目标编码/类别特征 7、验证设计 7、提交/推理工程 6
+- 验证习惯：验证设计 7、时间/分组切分 1、泄漏检测/探针 2、多种子平均 2
+- 迭代关注：集成/融合 5、规模/Scaling 2、数据增广 6、提交/推理工程 6
+- 迭代强度：公开榜提交数中位 69、最高 5586；solo 场次 13/44
+- 前 50 内队友：@darraghdog（同队 13 场）、@cpmpml（同队 6 场）、@tomirol（同队 2 场）、@philippsinger（同队 2 场）、@tonylica（同队 1 场）
+- 近年领域迁移：2024: 表格/结构化×7、科学研究×2、文本 NLP×2；2025: 生物/医疗×4、视觉 CV×4、表格/结构化×4；2026: 强化学习/博弈×3、视觉 CV×1、科学研究×1
+- 代表断言：
+  - [asl-fingerspelling#434485-02](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/434485)（A｜建模与训练）用 Llama rotary embedding 替换相对位置编码；旋转嵌入缓存一次并在各层共享
+  - [asl-fingerspelling#434485-03](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/434485)（A｜建模与训练）组合增广：时间缩放/平移、左右翻转、同签名者内 CutMix、手指/面部/姿态 dropout、时间与空间 masking；多数增广作用 50% 样本，resi
+  - [asl-fingerspelling#434485-04](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/434485)（A｜后处理）额外预测 confidence（目标为历史 OOF 预测的归一化 Levenshtein 距离）；confidence<0.15 或序列<15 帧时替换为 du
+  - [asl-fingerspelling#434485-05](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/434485)（A｜建模与训练）用 mixed precision 训练（cosine 400 epochs、peak LR 0.0045、weight decay 0.08、10 epoch
+  - [hms-harmful-brain-activity-classification#492471-01](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/492471)（A｜数据工程）追溯原始数据点，过滤到 6350 行，既用于 4 折验证也用于主要训练，丢弃其余约 10 万行；验证只保留超过 9 票的行

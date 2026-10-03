@@ -66,3 +66,18 @@
 **LLM/提示** 8、**集成/融合** 4、**验证/CV** 4、**伪标签/蒸馏** 3、**特征工程** 2、**RL/搜索** 1、**神经网络** 1
 
 > 自动生成；匹配规则：公开榜 `TeamMemberUserNames` 与讨论区作者名按 handle/显示名归一化匹配，仅覆盖 KStarter 归档的 264 场近 5 年比赛。
+
+## 决策画像（P2/P3）
+
+- 断言产出：5 条（A 4 / B 1 / C 0）
+- 方法标签：检索/RAG 5、验证设计 4、提交/推理工程 3、集成/融合 3、分组聚合特征 2、合成/生成数据 2、度量学习/ArcFace 1、缺失值/NAN 1
+- 验证习惯：验证设计 4
+- 迭代关注：集成/融合 3、提交/推理工程 3
+- 迭代强度：公开榜提交数中位 6、最高 175；solo 场次 30/33
+- 近年领域迁移：2024: 文本 NLP×6、表格/结构化×5、视觉 CV×2；2025: 文本 NLP×4、表格/结构化×3、时间序列×1；2026: 强化学习/博弈×2、文本 NLP×1、生物/医疗×1
+- 代表断言：
+  - [eedi-mining-misconceptions-in-mathematics#551391-01](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/551391)（A｜验证设计）从 GroupKFold by QuestionId 改为 by SubjectId，让验证集包含更多仅出现在验证的 MisconceptionId，CV 更贴
+  - [eedi-mining-misconceptions-in-mathematics#551391-02](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/551391)（A｜特征与数据工程）对缺失的每个 MisconceptionId，用 gemini-1.5-pro 做 4-shot 生成 QuestionName、SubjectName、Con
+  - [eedi-mining-misconceptions-in-mathematics#551391-03](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/551391)（A｜特征与数据工程）把 questiontext、正确答案、错误答案喂 Qwen2.5-32B-Instruct 生成解释为什么选错的推理，作为 biencoder 与 listw
+  - [eedi-mining-misconceptions-in-mathematics#551391-04](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/551391)（A｜建模与训练）把 biencoder top 52 作为选项（52 个大小写字母），微调 Qwen2.5-32B-Instruct 只生成单个 token 取 logits 
+  - [eedi-mining-misconceptions-in-mathematics#551391-05](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/551391)（B｜复盘与流程）负结果：单 token 选项用双字母、字母加数字、日文假名都差于 52 个字母；QwQ-32B-preview、多步 rerank（7B 到 32B）、在 pr

@@ -48,3 +48,18 @@
 **集成/融合** 2、**后处理/校准** 2、**神经网络** 1、**伪标签/蒸馏** 1、**特征工程** 1、**LLM/提示** 1、**RL/搜索** 1
 
 > 自动生成；匹配规则：公开榜 `TeamMemberUserNames` 与讨论区作者名按 handle/显示名归一化匹配，仅覆盖 KStarter 归档的 264 场近 5 年比赛。
+
+## 决策画像（P2/P3）
+
+- 断言产出：6 条（A 3 / B 2 / C 1）
+- 方法标签：信号/频谱处理 6、伪标签/自训练 5、损失设计 5、知识蒸馏 4、类别不平衡 3、CNN/视觉架构 2、预训练/域适应 2、多种子平均 2
+- 验证习惯：多种子平均 2
+- 迭代关注：伪标签/自训练 5、集成/融合 1
+- 迭代强度：公开榜提交数中位 104、最高 408；solo 场次 17/19
+- 近年领域迁移：2024: 表格/结构化×5、文本 NLP×3、视觉 CV×2；2025: 表格/结构化×3、文本 NLP×3、生物/医疗×2；2026: 科学研究×1、表格/结构化×1、语音/音频×1
+- 代表断言：
+  - [birdclef-2026#704752-01](https://www.kaggle.com/competitions/birdclef-2026/discussion/704752)（A｜建模与训练）第一阶段用 cosine loss 蒸馏 backbone（11 epochs、LR 5e-4、one-cycle、batch 64）；第二阶段低 LR（2e-
+  - [birdclef-2026#704752-05](https://www.kaggle.com/competitions/birdclef-2026/discussion/704752)（A｜建模与训练）跟踪单种子 SED 模型：1 stage 0.935、1 iter 0.946、2 iter 0.950、3 iter 0.949，两轮最优
+  - [birdclef-2026#704752-06](https://www.kaggle.com/competitions/birdclef-2026/discussion/704752)（A｜集成与融合）集成不同 head、label space、输入与 CNN 家族；含 genus-level 专家（训练时同属标签取 max，预测时同属摊平），在 LB 0.9
+  - [birdclef-2026#704752-02](https://www.kaggle.com/competitions/birdclef-2026/discussion/704752)（B｜建模与训练）即使同 backbone 换 head 或 label 设计也重新蒸馏；蒸馏 loss 非零带来差异
+  - [birdclef-2026#704752-03](https://www.kaggle.com/competitions/birdclef-2026/discussion/704752)（B｜特征与数据工程）把采样 LSS 的标签和归一化到 0.5（而非每个标签给 1）；注入比例 0.25 到 0.75、每 batch 2 条干净 LSS

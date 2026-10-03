@@ -78,3 +78,19 @@
 **神经网络** 14、**验证/CV** 7、**集成/融合** 6、**特征工程** 4、**后处理/校准** 4、**GBDT 调参** 4、**LLM/提示** 2、**RL/搜索** 1
 
 > 自动生成；匹配规则：公开榜 `TeamMemberUserNames` 与讨论区作者名按 handle/显示名归一化匹配，仅覆盖 KStarter 归档的 264 场近 5 年比赛。
+
+## 决策画像（P2/P3）
+
+- 断言产出：17 条（A 5 / B 8 / C 4）
+- 方法标签：集成/融合 5、验证设计 4、损失设计 4、Transformer/注意力 4、提交/推理工程 3、后处理/校准 3、CNN/视觉架构 3、长序列/上下文 3
+- 验证习惯：验证设计 4、泄漏检测/探针 1、公开榜策略 2、多种子平均 1
+- 迭代关注：集成/融合 5、规模/Scaling 2、数据增广 1、提交/推理工程 3
+- 迭代强度：公开榜提交数中位 5、最高 288；solo 场次 39/45
+- 前 50 内队友：@dc5e964768ef56302a32（同队 3 场）、@titericz（同队 1 场）
+- 近年领域迁移：2024: 表格/结构化×6、文本 NLP×2、时间序列×2；2025: 表格/结构化×3、生物/医疗×2、文本 NLP×2；2026: 生物/医疗×1
+- 代表断言：
+  - [ubiquant-market-prediction#338561-01](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/338561)（A｜建模与训练）6 层 transformer、max_seq_length 3500、直接优化 PCCLoss；训练 10 epochs 比赛数据加 3 epochs 补充数
+  - [ubiquant-market-prediction#338561-02](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/338561)（A｜特征与数据工程）增广：特征级 random zero 加序列级 random mask；验证用最后 k 段（k=100、200、300）
+  - [ubiquant-market-prediction#338561-03](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/338561)（A｜集成与融合）5 seeds 集成；public LB 从 900+ 经过失败后到 7、7、4、3
+  - [AI4Code#360501-01](https://www.kaggle.com/competitions/AI4Code/discussion/360501)（A｜建模与训练）用单个 list-wise deberta-v3-large 在全部比赛数据上训练；输入为用 [SEP]/[CLS] 分隔的 cell 文本
+  - [AI4Code#360501-04](https://www.kaggle.com/competitions/AI4Code/discussion/360501)（A｜工程/流程）MLM 15 epochs max_len 1024 需 3 天；训练 10 epochs max_len 2048 需 7 天；作者判断 max_len 51

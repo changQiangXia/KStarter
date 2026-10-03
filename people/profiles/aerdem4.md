@@ -74,3 +74,19 @@
 **验证/CV** 7、**GBDT 调参** 6、**集成/融合** 5、**神经网络** 4、**特征工程** 4、**后处理/校准** 4、**检索/度量** 1、**RL/搜索** 1、**AutoML** 1、**LLM/提示** 1
 
 > 自动生成；匹配规则：公开榜 `TeamMemberUserNames` 与讨论区作者名按 handle/显示名归一化匹配，仅覆盖 KStarter 归档的 264 场近 5 年比赛。
+
+## 决策画像（P2/P3）
+
+- 断言产出：13 条（A 9 / B 4 / C 0）
+- 方法标签：目标编码/类别特征 6、后处理/校准 4、损失设计 3、提交/推理工程 3、集成/融合 3、验证设计 2、合成/生成数据 2、数据清洗/去噪 2
+- 验证习惯：验证设计 2、泄漏检测/探针 1、多种子平均 2
+- 迭代关注：集成/融合 3、提交/推理工程 3
+- 迭代强度：公开榜提交数中位 32、最高 405；solo 场次 22/41
+- 前 50 内队友：@conjuring92（同队 3 场）、@titericz（同队 2 场）、@cpmpml（同队 2 场）、@arc144（同队 1 场）、@tomirol（同队 1 场）
+- 近年领域迁移：2024: 表格/结构化×7、文本 NLP×6、科学研究×2；2025: 文本 NLP×3、表格/结构化×3、生物/医疗×2；2026: 文本 NLP×1
+- 代表断言：
+  - [learning-equality-curriculum-recommendations#394812-01](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/394812)（A｜建模与训练）content 作类别训练 ArcFace，topic 目标向量 l1 归一化；margin 0.1 到 0.5 线性退火 22 epochs，首尾各 2 ep
+  - [equity-post-HCT-survival-predictions#566522-03](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/566522)（A｜建模与训练）AutoGluon Medium/High/Best：OOF 0.6884/0.6910/0.6921；public 0.694/0.694/0.695；pri
+  - [predict-energy-behavior-of-prosumers#472537-02](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/472537)（A｜建模与训练）按 (is_business, is_consumption) 分 4 组；baseline = max(target_lag2, lag4, lag7)；新目
+  - [predict-energy-behavior-of-prosumers#472537-03](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/472537)（A｜后处理）对每个 prediction_unit_id 计算 lag2/3/4 误差均值，把 0.2×平均误差加回预测作为修正项
+  - [predict-energy-behavior-of-prosumers#472537-04](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/472537)（A｜工程/流程）每 8 天用 GPU 重训 XGB；最后 9 个月切 3 折验证 + public LB 当第 4 折（3 折 CV 35.73 对 public 61.32）

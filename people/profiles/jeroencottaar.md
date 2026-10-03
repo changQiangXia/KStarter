@@ -22,7 +22,7 @@
 
 > ⚠ 2 场公开榜分数全为 0（Kaggle 冻结榜），名次不可信、不计入统计。
 
-领域分布（按赛事标签）科学研究 3、表格/结构化 3、生物/医疗 3、视觉 CV 3、强化学习/博弈 2。
+领域分布（按赛事标签）表格/结构化 3、科学研究 3、视觉 CV 3、生物/医疗 3、强化学习/博弈 2。
 
 ## 公开区言论（归档讨论区）
 
@@ -44,3 +44,18 @@
 **LLM/提示** 6、**RL/搜索** 5、**验证/CV** 4、**神经网络** 3、**集成/融合** 2、**特征工程** 2、**后处理/校准** 2
 
 > 自动生成；匹配规则：公开榜 `TeamMemberUserNames` 与讨论区作者名按 handle/显示名归一化匹配，仅覆盖 KStarter 归档的 264 场近 5 年比赛。
+
+## 决策画像（P2/P3）
+
+- 断言产出：16 条（A 12 / B 2 / C 2）
+- 方法标签：后处理/校准 9、数据清洗/去噪 7、信号/频谱处理 5、规模/Scaling 5、贝叶斯/概率模型 4、提交/推理工程 4、目标编码/类别特征 3、损失设计 3
+- 验证习惯：泄漏检测/探针 3、多种子平均 1
+- 迭代关注：规模/Scaling 5、提交/推理工程 4
+- 迭代强度：公开榜提交数中位 45、最高 404；solo 场次 10/11
+- 近年领域迁移：2024: 科学研究×1、表格/结构化×1；2025: 科学研究×2、表格/结构化×2、生物/医疗×2；2026: 强化学习/博弈×1、文本 NLP×1、生物/医疗×1
+- 代表断言：
+  - [ariel-data-challenge-2024#543853-02](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/543853)（A｜建模与训练）用多个 squared-exponential kernel 组合的 GP（按长度尺度调 sigma）；光谱漂移用 KISS-GP 稀疏化（否则 100k × 
+  - [ariel-data-challenge-2024#543853-03](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/543853)（A｜建模与训练）迭代 7 次：初始猜测、在当前点线性化、标准 GP 求解、用后验均值作下一轮起点；推理期唯一调的超参（transit depth 幅度）用对数似然梯度下降，并设
+  - [ariel-data-challenge-2024#543853-04](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/543853)（A｜特征与数据工程）不能对训练标签做 PCA（测试分布不同）；先用全模型粗拟合 800 个行星，对结果做无中心 PCA（1 到 2 个形状，final 用 1 个），再带形状重拟合
+  - [ariel-data-challenge-2024#543853-05](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/543853)（A｜复盘与流程）训练集上利用该共享加 0.005，但测试灾难（0.110）；另有 fudge：均值乘 1.0064（关键但作者不明原因），后经 cnumber 指出是漏了常数背
+  - [santa-2025#672465-02](https://www.kaggle.com/competitions/santa-2025/discussion/672465)（A｜建模与训练）偶数棵树强制 180° 对称（genotype 只存一半，phenotype 展开）；再用 tessellated 种子（预定晶体加边缘随机），GA 只动边缘树

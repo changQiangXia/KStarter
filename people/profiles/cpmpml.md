@@ -79,3 +79,19 @@
 **神经网络** 28、**LLM/提示** 14、**集成/融合** 11、**验证/CV** 9、**伪标签/蒸馏** 7、**后处理/校准** 6、**RL/搜索** 4、**特征工程** 2、**检索/度量** 2
 
 > 自动生成；匹配规则：公开榜 `TeamMemberUserNames` 与讨论区作者名按 handle/显示名归一化匹配，仅覆盖 KStarter 归档的 264 场近 5 年比赛。
+
+## 决策画像（P2/P3）
+
+- 断言产出：15 条（A 5 / B 2 / C 8）
+- 方法标签：伪标签/自训练 6、损失设计 5、目标编码/类别特征 5、信号/频谱处理 5、后处理/校准 4、验证设计 4、数据清洗/去噪 3、类别不平衡 3
+- 验证习惯：验证设计 4、泄漏检测/探针 1、公开榜策略 1
+- 迭代关注：伪标签/自训练 6、集成/融合 1、提交/推理工程 3
+- 迭代强度：公开榜提交数中位 20、最高 344；solo 场次 31/46
+- 前 50 内队友：@christofhenkel（同队 6 场）、@aerdem4（同队 2 场）、@darraghdog（同队 1 场）
+- 近年领域迁移：2024: 表格/结构化×6、文本 NLP×5、语音/音频×1；2025: 科学研究×5、表格/结构化×4、强化学习/博弈×3；2026: 强化学习/博弈×1、视觉 CV×1、文本 NLP×1
+- 代表断言：
+  - [birdclef-2024#511905-01](https://www.kaggle.com/competitions/birdclef-2024/discussion/511905)（A｜建模与训练）一级大模型（efficientvit、CNN、SED、aves）预测无标注 soundscape 5 秒 clip 标签，加入训练数据训二级小模型（effici
+  - [birdclef-2024#511905-02](https://www.kaggle.com/competitions/birdclef-2024/discussion/511905)（A｜数据工程）今年数据加 Xeno Canto 加往年同物种记录（重名取最新）；每物种上限 500 条保留最新；低频类上采样到每折至少 10 条
+  - [birdclef-2024#511905-03](https://www.kaggle.com/competitions/birdclef-2024/discussion/511905)（A｜建模与训练）二级训练用大 batch 128；策略一：每 batch 加 48×4=192 个带伪标签的 soundscape clip；策略二：每 batch 随机加 1
+  - [birdclef-2024#511905-04](https://www.kaggle.com/competitions/birdclef-2024/discussion/511905)（A｜建模与训练）把 secondary labels 的 loss 乘以 0（不回传）；伪标签样本的 secondary 置空
+  - [birdclef-2024#511905-05](https://www.kaggle.com/competitions/birdclef-2024/discussion/511905)（A｜后处理与选模）soundscape 级 max 后处理（public 加 0.02，赛后验证变小甚至 -0.002）；时序平滑核 [0.1,0.2,0.4,0.2,0.1]（

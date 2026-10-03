@@ -70,3 +70,19 @@
 **LLM/提示** 21、**验证/CV** 18、**集成/融合** 14、**特征工程** 13、**神经网络** 10、**检索/度量** 9、**伪标签/蒸馏** 7、**后处理/校准** 4、**RL/搜索** 3
 
 > 自动生成；匹配规则：公开榜 `TeamMemberUserNames` 与讨论区作者名按 handle/显示名归一化匹配，仅覆盖 KStarter 归档的 264 场近 5 年比赛。
+
+## 决策画像（P2/P3）
+
+- 断言产出：29 条（A 20 / B 7 / C 2）
+- 方法标签：目标编码/类别特征 10、提交/推理工程 10、集成/融合 9、损失设计 9、验证设计 7、后处理/校准 7、检索/RAG 5、度量学习/ArcFace 4
+- 验证习惯：验证设计 7、泄漏检测/探针 2、公开榜策略 3、多种子平均 1
+- 迭代关注：伪标签/自训练 3、集成/融合 9、规模/Scaling 3、数据增广 1、提交/推理工程 10
+- 迭代强度：公开榜提交数中位 47、最高 435；solo 场次 18/37
+- 前 50 内队友：@christofhenkel（同队 2 场）
+- 近年领域迁移：2024: 文本 NLP×5、表格/结构化×2；2025: 表格/结构化×5、文本 NLP×3、时间序列×1；2026: 表格/结构化×9、生物/医疗×2
+- 代表断言：
+  - [kaggle-llm-science-exam#446240-01](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/446240)（A｜建模与训练）Wikipedia 分块 + e5 公开 embedding + 自写 PyTorch 余弦相似度（分块放 GPU，不用 FAISS）；每题 5 个 chunk
+  - [dfl-bundesliga-data-shootout#359932-01](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/359932)（A｜建模与训练）输入 1024x1024 灰度、3 帧堆叠为通道；5 个时间步各过 backbone，最后一层 3D 卷积加池化聚合，总感受野 15 帧；灰度优于彩色
+  - [dfl-bundesliga-data-shootout#359932-03](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/359932)（A｜验证设计）固定 4 个验证视频；local 0.857 与 public LB 强相关；最终用全量数据重训最佳模型
+  - [tensorflow-great-barrier-reef#307707-02](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/307707)（A｜数据理解）发现训练框平均大 3px；提高推理分辨率会生成更紧的框并在 public 提分；手动缩小框同样提分，但在训练数据上无效，据此推断 public 标注更紧而 pr
+  - [tensorflow-great-barrier-reef#307707-03](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/307707)（A｜后处理）用中心点欧氏距离找轨迹并保留低置信框；把低置信框置信度提升到该轨迹最大值（0.15 到 0.9）；比 Kalman 估计新框更好，约提升 0.01

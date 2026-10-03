@@ -37,3 +37,18 @@
 **RL/搜索** 12、**神经网络** 5、**特征工程** 4、**后处理/校准** 4、**LLM/提示** 3、**验证/CV** 1、**集成/融合** 1
 
 > 自动生成；匹配规则：公开榜 `TeamMemberUserNames` 与讨论区作者名按 handle/显示名归一化匹配，仅覆盖 KStarter 归档的 264 场近 5 年比赛。
+
+## 决策画像（P2/P3）
+
+- 断言产出：11 条（A 6 / B 1 / C 4）
+- 方法标签：dtype/内存优化 3、规模/Scaling 3、目标编码/类别特征 3、提交/推理工程 3、损失设计 2、后处理/校准 2、Transformer/注意力 1、Agent/LLM 工具 1
+- 验证习惯：验证设计 1、泄漏检测/探针 1、多种子平均 1
+- 迭代关注：集成/融合 1、规模/Scaling 3、提交/推理工程 3
+- 迭代强度：公开榜提交数中位 29、最高 208；solo 场次 2/6
+- 近年领域迁移：2022: 强化学习/博弈×2；2025: 强化学习/博弈×1；2026: 强化学习/博弈×1
+- 代表断言：
+  - [orbit-wars#714324-01](https://www.kaggle.com/competitions/orbit-wars/discussion/714324)（A｜建模与训练）200M 参数 transformer，纯 self-play RL 训练 15B 步，无模仿学习初始化；押注 Bitter Lesson：表达力足够的大模型加
+  - [orbit-wars#714324-04](https://www.kaggle.com/competitions/orbit-wars/discussion/714324)（A｜工程/流程）int8 量化线性层、限制可见 fleet 数并优先最大者；对约 8% 超时的 4p 局，在剩余 1 秒 overage 时切换到 5M 小模型收尾；用 4-b
+  - [lux-ai-season-3#568621-01](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/568621)（A｜工程/流程）用 Rust 重写规则引擎与全部特征工程；用严格 TDD：小组件单测 + 与真实引擎跨 seed 的集成测试；规则中途大改时测试能及时报警，作者称几乎不花时间 
+  - [lux-ai-season-3#568621-02](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/568621)（A｜特征与数据工程）特征按 global/spatial × temporal/nontemporal 四类；temporal 保留最近 10 帧；约 80 global + 10
+  - [lux-ai-season-3#568621-04](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/568621)（A｜建模与训练）残差 CNN + squeeze-excitation（也试过 RoPE ViT 但训练不稳）；spatial 输入 10 帧堆叠 + nontemporal 

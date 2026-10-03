@@ -68,6 +68,8 @@ def main() -> int:
     parser.add_argument("--roster-dir", default=str(ROOT / "people" / "roster"))
     parser.add_argument("--competitions", default=str(ROOT / "people" / "competitions" / "gm_competitions.csv"))
     parser.add_argument("--posts", default=str(ROOT / "people" / "posts" / "gm_posts.jsonl"))
+    parser.add_argument("--claims", default=str(ROOT / "people" / "claims" / "gm_claims.csv"))
+    parser.add_argument("--tags", default=str(ROOT / "people" / "claims" / "gm_claim_tags.csv"))
     parser.add_argument("--meta", default=str(ROOT / "data" / "competitions_last5y.csv"))
     parser.add_argument("--out-profiles", default=str(ROOT / "people" / "profiles"))
     parser.add_argument("--out-overview", default=str(ROOT / "analysis" / "people" / "OVERVIEW.md"))
@@ -93,6 +95,17 @@ def main() -> int:
             if line.strip():
                 rec = json.loads(line)
                 posts[rec["person"]].append(rec)
+
+    claims_rows = []
+    if pathlib.Path(args.claims).exists():
+        claims_rows = list(csv.DictReader(open(args.claims, encoding="utf-8")))
+    claims_by_person = defaultdict(list)
+    for c in claims_rows:
+        claims_by_person[c["person"]].append(c)
+    tags_by_claim = {}
+    if pathlib.Path(args.tags).exists():
+        for t in csv.DictReader(open(args.tags, encoding="utf-8")):
+            tags_by_claim[t["claim_id"]] = [x for x in t["tags"].split(";") if x]
 
     outdir = pathlib.Path(args.out_profiles)
     outdir.mkdir(parents=True, exist_ok=True)
@@ -192,6 +205,75 @@ def main() -> int:
             "> 自动生成；匹配规则：公开榜 `TeamMemberUserNames` 与讨论区作者名按 handle/显示名归一化匹配，"
             "仅覆盖 KStarter 归档的 264 场近 5 年比赛。"
         )
+
+        # ---- P2/P3 决策画像 ----
+        my_claims = claims_by_person.get(handle, [])
+        tag_counts = Counter()
+        for c in my_claims:
+            for t in tags_by_claim.get(c["claim_id"], []):
+                tag_counts[t] += 1
+        verif_keys = ["验证设计", "时间/分组切分", "泄漏检测/探针", "公开榜策略", "多种子平均"]
+        iter_keys = ["伪标签/自训练", "集成/融合", "规模/Scaling", "数据增广", "提交/推理工程"]
+        subs = [int(r["submission_count"]) for r in my_comps if str(r["submission_count"]).isdigit()]
+        solo = sum(1 for r in my_comps if "," not in r["team_members"])
+        teammates = Counter()
+        roster_handles = {p["handle"] for p in roster}
+        for r in my_comps:
+            for m in filter(None, (x.strip() for x in r["team_members"].split(","))):
+                if m != handle and m in roster_handles:
+                    teammates[m] += 1
+        migration = Counter()
+        for r in my_comps:
+            m = meta.get(r["slug"], {})
+            yr = (m.get("deadline") or "")[:4]
+            for d in sorted(domains_of(m.get("tags", ""))):
+                migration[(yr, d)] += 1
+
+        lines.append("")
+        lines.append("## 决策画像（P2/P3）")
+        lines.append("")
+        lines.append(
+            f"- 断言产出：{len(my_claims)} 条（A {sum(1 for c in my_claims if c['evidence_level']=='A')} / "
+            f"B {sum(1 for c in my_claims if c['evidence_level']=='B')} / C {sum(1 for c in my_claims if c['evidence_level']=='C')}）"
+        )
+        if tag_counts:
+            lines.append("- 方法标签：" + "、".join(f"{k} {v}" for k, v in tag_counts.most_common(8)))
+            verif = "、".join(f"{k} {tag_counts[k]}" for k in verif_keys if tag_counts.get(k))
+            iter_ = "、".join(f"{k} {tag_counts[k]}" for k in iter_keys if tag_counts.get(k))
+            if verif:
+                lines.append(f"- 验证习惯：{verif}")
+            if iter_:
+                lines.append(f"- 迭代关注：{iter_}")
+        if my_comps:
+            med = sorted(subs)[len(subs) // 2] if subs else 0
+            lines.append(
+                f"- 迭代强度：公开榜提交数中位 {med}、最高 {max(subs) if subs else 0}；solo 场次 {solo}/{len(my_comps)}"
+            )
+        if teammates:
+            lines.append("- 前 50 内队友：" + "、".join(f"@{k}（同队 {v} 场）" for k, v in teammates.most_common(5)))
+        if migration:
+            by_year = Counter()
+            for (yr, d), n in migration.items():
+                by_year[yr] += n
+            top_year = sorted(by_year.items())[-3:]
+            parts = []
+            for yr, _ in top_year:
+                doms = Counter()
+                for (y, d), n in migration.items():
+                    if y == yr:
+                        doms[d] += n
+                parts.append(f"{yr}: " + "、".join(f"{d}×{n}" for d, n in doms.most_common(3)))
+            lines.append("- 近年领域迁移：" + "；".join(parts))
+        top_claims = sorted(
+            [c for c in my_claims if c["evidence_level"] in ("A", "B")],
+            key=lambda c: ("A" != c["evidence_level"], -int(c["votes"])),
+        )[:5]
+        if top_claims:
+            lines.append("- 代表断言：")
+            for c in top_claims:
+                action = re.sub(r"\s+", " ", c["action"])[:80]
+                lines.append(f"  - [{c['claim_id']}]({c['source_url']})（{c['evidence_level']}｜{c['stage']}）{action}")
+
         (outdir / f"{handle}.md").write_text("\n".join(lines), encoding="utf-8")
 
         overview_rows.append(

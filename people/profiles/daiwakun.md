@@ -41,3 +41,19 @@
 **集成/融合** 2、**后处理/校准** 2、**验证/CV** 1、**LLM/提示** 1、**神经网络** 1、**伪标签/蒸馏** 1、**特征工程** 1
 
 > 自动生成；匹配规则：公开榜 `TeamMemberUserNames` 与讨论区作者名按 handle/显示名归一化匹配，仅覆盖 KStarter 归档的 264 场近 5 年比赛。
+
+## 决策画像（P2/P3）
+
+- 断言产出：10 条（A 8 / B 1 / C 1）
+- 方法标签：数据清洗/去噪 4、目标编码/类别特征 3、信号/频谱处理 3、规模/Scaling 2、后处理/校准 2、缺失值/NAN 1、TTA 1、数据增广 1
+- 验证习惯：泄漏检测/探针 1、公开榜策略 1
+- 迭代关注：伪标签/自训练 1、集成/融合 1、规模/Scaling 2、数据增广 1、提交/推理工程 1
+- 迭代强度：公开榜提交数中位 22、最高 122；solo 场次 6/15
+- 前 50 内队友：@cnumber（同队 5 场）
+- 近年领域迁移：2024: 科学研究×2、表格/结构化×2、强化学习/博弈×1；2025: 强化学习/博弈×2、科学研究×2、时间序列×1；2026: 强化学习/博弈×2
+- 代表断言：
+  - [cmi-detect-behavior-with-sensor-data#603594-01](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/603594)（A｜数据工程）按 IMU rotation 是否缺失乘以 THM/TOF 是否缺失训 4 个模型变体
+  - [cmi-detect-behavior-with-sensor-data#603594-04](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/603594)（A｜建模与训练）每积累一批测试序列就用小 LR（5e-5）做一步伪标签微调
+  - [cmi-detect-behavior-with-sensor-data#603594-05](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/603594)（A｜后处理）把 102 类联合概率加 no-repeat 约束建成分配问题（Hungarian 算法，负对数概率为成本），最大化联合对数概率而非逐条 argmax
+  - [ariel-data-challenge-2024#544317-01](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/544317)（A｜数据工程）只用 AIRS-CH0（依赖相邻波长相关）；关闭 hot pixel 处理带来最大跳跃（热像素处理丢失中间像素、时变 PSF 噪声无法校正）；用 [0:8] 与
+  - [ariel-data-challenge-2024#544317-02](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/544317)（A｜特征与数据工程）从 ExoSim2 代码得知 gain drift 形式为 (1 + f(t)×g(λ))，f 与 g 各 5 个参数多项式；直接拟合 y = I(λ)×Box

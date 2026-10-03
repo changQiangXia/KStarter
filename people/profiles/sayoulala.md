@@ -61,3 +61,16 @@
 **LLM/提示** 6、**伪标签/蒸馏** 5、**神经网络** 2、**集成/融合** 1、**验证/CV** 1
 
 > 自动生成；匹配规则：公开榜 `TeamMemberUserNames` 与讨论区作者名按 handle/显示名归一化匹配，仅覆盖 KStarter 归档的 264 场近 5 年比赛。
+
+## 决策画像（P2/P3）
+
+- 断言产出：5 条（A 3 / B 0 / C 2）
+- 方法标签：提交/推理工程 3、知识蒸馏 3、验证设计 3、损失设计 2、预训练/域适应 2、学习率调度 1、目标编码/类别特征 1、合成/生成数据 1
+- 验证习惯：验证设计 3
+- 迭代关注：集成/融合 1、提交/推理工程 3
+- 迭代强度：公开榜提交数中位 41、最高 357；solo 场次 19/28
+- 近年领域迁移：2024: 文本 NLP×7、表格/结构化×5、科学研究×1；2025: 文本 NLP×6、表格/结构化×3、视觉 CV×1；2026: 文本 NLP×1、表格/结构化×1
+- 代表断言：
+  - [lmsys-chatbot-arena#527629-01](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/527629)（A｜建模与训练）先用 ut 数据对 3 个模型 post-pretrain 1 epoch（lr=1e-5）；5 折训练 llama3-70b 与 qwen2-72b；再把大模
+  - [lmsys-chatbot-arena#527629-02](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/527629)（A｜集成与融合）5 折 LoRA 权重直接平均；GPTQ 量化 8bit；提交时 TTA（length 2000）
+  - [lmsys-chatbot-arena#527629-03](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/527629)（A｜验证设计）记录 5 折 CV：qwen72b 0.875/0.881/0.869/0.880/0.875；llama3-70b 0.874/0.877/0.877/0.8

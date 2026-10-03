@@ -134,3 +134,19 @@
 **GBDT 调参** 5、**伪标签/蒸馏** 3、**验证/CV** 3、**LLM/提示** 3、**神经网络** 2、**集成/融合** 2、**后处理/校准** 2、**特征工程** 1、**RL/搜索** 1
 
 > 自动生成；匹配规则：公开榜 `TeamMemberUserNames` 与讨论区作者名按 handle/显示名归一化匹配，仅覆盖 KStarter 归档的 264 场近 5 年比赛。
+
+## 决策画像（P2/P3）
+
+- 断言产出：6 条（A 5 / B 1 / C 0）
+- 方法标签：集成/融合 5、目标编码/类别特征 3、验证设计 3、提交/推理工程 2、数据清洗/去噪 2、度量学习/ArcFace 1、特征选择 1、线性/简单模型 1
+- 验证习惯：验证设计 3
+- 迭代关注：伪标签/自训练 1、集成/融合 5、提交/推理工程 2
+- 迭代强度：公开榜提交数中位 8、最高 6798；solo 场次 89/101
+- 前 50 内队友：@cdeotte（同队 2 场）、@aerdem4（同队 2 场）、@arc144（同队 1 场）、@jiweiliu（同队 1 场）、@conjuring92（同队 1 场）
+- 近年领域迁移：2024: 表格/结构化×12、文本 NLP×8、科学研究×3；2025: 表格/结构化×11、文本 NLP×6、时间序列×3；2026: 强化学习/博弈×4、表格/结构化×4、生物/医疗×3
+- 代表断言：
+  - [petfinder-pawpularity-score#301686-01](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/301686)（A｜特征与数据工程）用预训练模型做特征提取把图像回归转成表格回归：取 ImageNet-1k 线性头输出（优于内部 embedding 层）；cuML SVR 加前向爬山多起点选特
+  - [amex-default-prediction#348014-01](https://www.kaggle.com/competitions/amex-default-prediction/discussion/348014)（A｜数据工程）在 Raddar 数据基础上：按缺失模式为 B、D、P、R、S 特征簇聚类；发现部分连续变量在 (0, 0.01] 加了均匀噪声，用其他特征做滤波去噪（如 B_
+  - [amex-default-prediction#348014-02](https://www.kaggle.com/competitions/amex-default-prediction/discussion/348014)（A｜数据工程）清洗收益：LGBM 0.7976 到 0.7983、XGB 0.7978 到 0.7986、CatBoost 0.7964 到 0.7968；另 LGBM 5 
+  - [amex-default-prediction#348014-03](https://www.kaggle.com/competitions/amex-default-prediction/discussion/348014)（A｜集成与融合）两种集成：LGBM stacking 与 CMA 进化策略；最终提交是 3 个集成的平均（LGBM stack 61 模型加两个 CMA 54/55 模型），p
+  - [amex-default-prediction#348014-04](https://www.kaggle.com/competitions/amex-default-prediction/discussion/348014)（A｜复盘与流程）有效：知识蒸馏、更长 early stop（3000 到 10000）、大 kfold、全量训练、伪标签；无效：dow 平均后处理、LGBM 样本权重、foca

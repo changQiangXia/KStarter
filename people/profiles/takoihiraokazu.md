@@ -94,3 +94,18 @@
 **神经网络** 12、**验证/CV** 12、**集成/融合** 7、**GBDT 调参** 6、**LLM/提示** 6、**后处理/校准** 4、**特征工程** 3、**伪标签/蒸馏** 2、**检索/度量** 1、**RL/搜索** 1
 
 > 自动生成；匹配规则：公开榜 `TeamMemberUserNames` 与讨论区作者名按 handle/显示名归一化匹配，仅覆盖 KStarter 归档的 264 场近 5 年比赛。
+
+## 决策画像（P2/P3）
+
+- 断言产出：14 条（A 13 / B 1 / C 0）
+- 方法标签：目标编码/类别特征 8、提交/推理工程 7、损失设计 4、泄漏检测/探针 4、验证设计 4、检索/RAG 3、信号/频谱处理 3、Agent/LLM 工具 3
+- 验证习惯：验证设计 4、时间/分组切分 2、泄漏检测/探针 4、公开榜策略 2、多种子平均 2
+- 迭代关注：伪标签/自训练 1、集成/融合 1、提交/推理工程 7
+- 迭代强度：公开榜提交数中位 5、最高 363；solo 场次 47/61
+- 近年领域迁移：2024: 表格/结构化×10、文本 NLP×4、科学研究×2；2025: 表格/结构化×5、科学研究×4、文本 NLP×4；2026: 生物/医疗×3、科学研究×2、表格/结构化×2
+- 代表断言：
+  - [foursquare-location-matching#336055-01](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/336055)（A｜建模与训练）四阶段：1) 候选生成（经纬度欧氏距离加名称 embedding 余弦，各 top100，经 LGBM 各留 top20 共约 40）；2) 约 120 特征加
+  - [foursquare-location-matching#336055-02](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/336055)（A｜数据工程）把 train 与 test 按 name、lat、lon 绑定：加 train-train 真对（1）；移除与 train 绑定的假对（2）；移除 train
+  - [foursquare-location-matching#336055-04](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/336055)（A｜复盘与流程）最终提交同时包含三种版本：overfit with merge（private/public 0.976/0.976）、非 overfit v1 with me
+  - [tlvmc-parkinsons-freezing-gait-prediction#416057-01](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/416057)（A｜建模与训练）训练用短序列（tDCS FOG 1000、DeFog 5000）、推理用长序列（3000 到 5000、15000 到 30000），只用预测窗口中间段（如 7
+  - [tlvmc-parkinsons-freezing-gait-prediction#416057-02](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/416057)（A｜建模与训练）GRU + StratifiedGroupKFold by Subject + BCEWithLogits + AdamW 与 linear warmup（比 

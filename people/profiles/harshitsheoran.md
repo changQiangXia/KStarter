@@ -57,3 +57,19 @@
 **集成/融合** 5、**验证/CV** 5、**神经网络** 4、**特征工程** 1、**检索/度量** 1、**RL/搜索** 1、**LLM/提示** 1、**伪标签/蒸馏** 1
 
 > 自动生成；匹配规则：公开榜 `TeamMemberUserNames` 与讨论区作者名按 handle/显示名归一化匹配，仅覆盖 KStarter 归档的 264 场近 5 年比赛。
+
+## 决策画像（P2/P3）
+
+- 断言产出：7 条（A 4 / B 2 / C 1）
+- 方法标签：损失设计 2、提交/推理工程 2、目标编码/类别特征 2、TTA 2、信号/频谱处理 1、CNN/视觉架构 1、泄漏检测/探针 1、伪标签/自训练 1
+- 验证习惯：验证设计 1、泄漏检测/探针 1
+- 迭代关注：伪标签/自训练 1、集成/融合 1、规模/Scaling 1、数据增广 1、提交/推理工程 2
+- 迭代强度：公开榜提交数中位 51、最高 342；solo 场次 15/26
+- 前 50 内队友：@brendanartley（同队 1 场）
+- 近年领域迁移：2024: 表格/结构化×4、视觉 CV×3、生物/医疗×2；2025: 科学研究×1、生物/医疗×1、表格/结构化×1；2026: 生物/医疗×2、时间序列×1
+- 代表断言：
+  - [waveform-inversion#587388-01](https://www.kaggle.com/competitions/waveform-inversion/discussion/587388)（A｜数据理解）不做分割：把输入从 (5,1000,70) reshape 成 (1,350,350)，把通道铺成空间布局
+  - [waveform-inversion#587388-02](https://www.kaggle.com/competitions/waveform-inversion/discussion/587388)（A｜建模与训练）用无解码器 ViT 直接回归；对比 EVA02 与 ViT 后定位到 RoPE 是主要增益来源；最终 backbone 为 vit_small_patch14_
+  - [waveform-inversion#587388-03](https://www.kaggle.com/competitions/waveform-inversion/discussion/587388)（A｜特征与数据工程）用 FiveCrop/5xRandomAffine 在已有速度模型上生成 10 倍数据（4.7M seismic 样本）做预训练；迭代伪标签：每 epoch 预
+  - [waveform-inversion#587388-04](https://www.kaggle.com/competitions/waveform-inversion/discussion/587388)（A｜特征与数据工程）只保留 CurveFault_B/CurveVel_B/Style_A/Style_B 数据训练（移除过半数据、加速训练），推理时用该模型替换这 4 类预测；最
+  - [rsna-2022-cervical-spine-fracture-detection#340612-01](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/340612)（B｜数据理解）理解 DICOM 的 ImagePositionPatient：z 轴不是时间戳而是矢状面位置，用于确定当前轴位切片在脊柱中的位置

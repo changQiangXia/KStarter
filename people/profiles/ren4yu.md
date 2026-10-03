@@ -64,3 +64,19 @@
 **神经网络** 6、**验证/CV** 6、**LLM/提示** 6、**集成/融合** 4、**伪标签/蒸馏** 4、**后处理/校准** 4、**GBDT 调参** 1、**特征工程** 1、**检索/度量** 1、**RL/搜索** 1
 
 > 自动生成；匹配规则：公开榜 `TeamMemberUserNames` 与讨论区作者名按 handle/显示名归一化匹配，仅覆盖 KStarter 归档的 264 场近 5 年比赛。
+
+## 决策画像（P2/P3）
+
+- 断言产出：16 条（A 10 / B 5 / C 1）
+- 方法标签：后处理/校准 6、CNN/视觉架构 6、集成/融合 5、目标编码/类别特征 5、损失设计 4、提交/推理工程 4、类别不平衡 3、伪标签/自训练 3
+- 验证习惯：验证设计 2、泄漏检测/探针 1
+- 迭代关注：伪标签/自训练 3、集成/融合 5、规模/Scaling 1、数据增广 2、提交/推理工程 4
+- 迭代强度：公开榜提交数中位 93、最高 342；solo 场次 14/33
+- 前 50 内队友：@tatamikenn（同队 1 场）、@aerdem4（同队 1 场）
+- 近年领域迁移：2024: 表格/结构化×6、科学研究×4、视觉 CV×3；2025: 生物/医疗×5、视觉 CV×3、时间序列×2；2026: 视觉 CV×3、表格/结构化×3、生物/医疗×2
+- 代表断言：
+  - [biohub-cell-tracking-during-development#744484-01](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/744484)（A｜建模与训练）六阶段：检测（2.5D U-Net 集成加 3D SegResNet 热图）→ 稠密流 → 匹配 → 分裂识别 → 谱系图联合优化 → 后处理；检测占最终运行时
+  - [biohub-cell-tracking-during-development#744484-05](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/744484)（A｜复盘与流程）A0→A7 消融链：检测加 Hungarian 0.890211；加稠密流 0.901919；加匹配 0.901953；加分裂与联合优化 0.964493；加 
+  - [biohub-cell-tracking-during-development#744484-06](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/744484)（A｜数据理解）官方分数 = 节点数调整后的 edge Jaccard + 0.1 × Division Jaccard；未标注区域的链接不自动算 FP；只有与标注连接竞争的错
+  - [czii-cryo-et-object-identification#561401-01](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/561401)（A｜特征与数据工程）作者主张加 1.0（而非讨论里的 0.5），因为圆心平均落在像素中心 (0.5,0.5)；高斯 mask 中心为 1.0，yu4u 模型 sigma 取 6 像
+  - [czii-cryo-et-object-identification#561401-02](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/561401)（A｜建模与训练）2D backbone 各阶段输出沿深度池化以分层聚合深度特征；换成 strided 3D 卷积会掉分；编解码之间加 3D 卷积（借鉴 contrails 3r

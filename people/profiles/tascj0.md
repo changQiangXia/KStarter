@@ -62,3 +62,18 @@
 **LLM/提示** 12、**集成/融合** 11、**神经网络** 8、**后处理/校准** 7、**伪标签/蒸馏** 6、**验证/CV** 5、**RL/搜索** 4、**特征工程** 2
 
 > 自动生成；匹配规则：公开榜 `TeamMemberUserNames` 与讨论区作者名按 handle/显示名归一化匹配，仅覆盖 KStarter 归档的 264 场近 5 年比赛。
+
+## 决策画像（P2/P3）
+
+- 断言产出：30 条（A 22 / B 5 / C 3）
+- 方法标签：验证设计 11、损失设计 9、提交/推理工程 7、集成/融合 6、目标编码/类别特征 5、后处理/校准 5、dtype/内存优化 4、优化器 4
+- 验证习惯：验证设计 11、时间/分组切分 1、泄漏检测/探针 3、多种子平均 3
+- 迭代关注：伪标签/自训练 2、集成/融合 6、规模/Scaling 2、数据增广 4、提交/推理工程 7
+- 迭代强度：公开榜提交数中位 2、最高 164；solo 场次 21/29
+- 近年领域迁移：2024: 表格/结构化×4、文本 NLP×4、视觉 CV×1；2025: 文本 NLP×5、表格/结构化×3、视觉 CV×2；2026: 视觉 CV×1、文本 NLP×1、生物/医疗×1
+- 代表断言：
+  - [map-charting-student-math-misunderstandings#612268-03](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/612268)（A｜验证设计）先用 3 seeds 集成稳住验证（5 折 x 5 seeds 实验），再用最难 fold 加 3 runs 做后续实验；最终用 32B/GLM 全量数据 3 
+  - [map-charting-student-math-misunderstandings#612268-04](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/612268)（A｜建模与训练）对照 7B/8B/9B/14B/32B：loss 从 0.2716 降到 0.2589，MAP@3 从 0.9444 升到 0.9484；32B 加 32B 双
+  - [map-charting-student-math-misunderstandings#612268-05](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/612268)（A｜工程/流程）W8A8 INT8（LMDeploy 加 SmoothQuant alpha=0.75）替代 FP16：T4 实测约 20 TFLOPS 不稳定，INT8 稳定
+  - [feedback-prize-2021#313424-01](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/313424)（A｜建模与训练）TokenClassification 头输出 1 个 objectness 加 2 个回归（到 span 首尾距离）加 num_classes 分类；用 Ro
+  - [feedback-prize-2021#313424-03](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/313424)（A｜集成与融合）只集成 deberta-large 加 deberta-xlarge（各 2/5 folds）；后处理只用 NMS；尝试 WBF 但本地验证不 work

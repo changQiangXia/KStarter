@@ -7,7 +7,7 @@
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 1 | [@yuanzhezhou](https://www.kaggle.com/yuanzhezhou) | 123480 | 93 | 1 | 表格/结构化, 文本 NLP, 生物/医疗 | 34 | 2 | LLM/提示, 神经网络 |
 | 2 | [@christofhenkel](https://www.kaggle.com/christofhenkel) | 115315 | 44 | 1 | 视觉 CV, 表格/结构化, 文本 NLP | 36 | 6 | 神经网络, 验证/CV, 集成/融合 |
-| 3 | [@jeroencottaar](https://www.kaggle.com/jeroencottaar) | 99716 | 11 | 1 | 科学研究, 表格/结构化, 生物/医疗 | 69 | 5 | LLM/提示, RL/搜索, 验证/CV |
+| 3 | [@jeroencottaar](https://www.kaggle.com/jeroencottaar) | 99716 | 11 | 1 | 表格/结构化, 科学研究, 视觉 CV | 69 | 5 | LLM/提示, RL/搜索, 验证/CV |
 | 4 | [@nikitababich](https://www.kaggle.com/nikitababich) | 94856 | 19 | 1 | 表格/结构化, 文本 NLP, 生物/医疗 | 6 | 1 | 集成/融合, 后处理/校准, 神经网络 |
 | 5 | [@arc144](https://www.kaggle.com/arc144) | 92804 | 19 | 1 | 视觉 CV, 文本 NLP, 科学研究 | 36 | 3 | LLM/提示, RL/搜索, 神经网络 |
 | 6 | [@cnumber](https://www.kaggle.com/cnumber) | 89564 | 36 | 1 | 文本 NLP, 强化学习/博弈, 表格/结构化 | 69 | 9 | RL/搜索, LLM/提示, 神经网络 |
@@ -30,7 +30,7 @@
 | 23 | [@mathurinache](https://www.kaggle.com/mathurinache) | 60848 | 230 | 3 | 表格/结构化, 视觉 CV, 生物/医疗 | 10 | 2 | 伪标签/蒸馏, AutoML, GBDT 调参 |
 | 24 | [@ferdinandlimburg](https://www.kaggle.com/ferdinandlimburg) | 59783 | 15 | 3 | 强化学习/博弈, 视觉 CV, 文本 NLP | 22 | 3 | 神经网络, RL/搜索, 验证/CV |
 | 25 | [@titericz](https://www.kaggle.com/titericz) | 58966 | 101 | 1 | 表格/结构化, 文本 NLP, 生物/医疗 | 24 | 4 | GBDT 调参, 伪标签/蒸馏, 验证/CV |
-| 26 | [@tomoon33](https://www.kaggle.com/tomoon33) | 57875 | 8 | 3 | 生物/医疗, 视觉 CV, 表格/结构化 | 0 | 0 |  |
+| 26 | [@tomoon33](https://www.kaggle.com/tomoon33) | 57875 | 8 | 3 | 视觉 CV, 生物/医疗, 表格/结构化 | 0 | 0 |  |
 | 27 | [@cpmpml](https://www.kaggle.com/cpmpml) | 57296 | 46 | 1 | 表格/结构化, 文本 NLP, 科学研究 | 205 | 9 | 神经网络, LLM/提示, 集成/融合 |
 | 28 | [@yiheng](https://www.kaggle.com/yiheng) | 54865 | 16 | 1 | 视觉 CV, 表格/结构化, 强化学习/博弈 | 40 | 2 | LLM/提示, RL/搜索, 集成/融合 |
 | 29 | [@pingfan](https://www.kaggle.com/pingfan) | 54817 | 35 | 2 | 文本 NLP, 表格/结构化, 科学研究 | 1 | 0 |  |
@@ -50,7 +50,7 @@
 | 43 | [@jaejohn](https://www.kaggle.com/jaejohn) | 47551 | 57 | 3 | 表格/结构化, 文本 NLP, 视觉 CV | 17 | 1 | 检索/度量, LLM/提示, RL/搜索 |
 | 44 | [@aerdem4](https://www.kaggle.com/aerdem4) | 47338 | 41 | 1 | 表格/结构化, 文本 NLP, 生物/医疗 | 38 | 5 | 验证/CV, GBDT 调参, 集成/融合 |
 | 45 | [@darraghdog](https://www.kaggle.com/darraghdog) | 46754 | 23 | 1 | 表格/结构化, 文本 NLP, 视觉 CV | 69 | 3 | 神经网络, 验证/CV, LLM/提示 |
-| 46 | [@arunodhayan](https://www.kaggle.com/arunodhayan) | 46229 | 51 | 5 | 表格/结构化, 视觉 CV, 生物/医疗 | 5 | 0 |  |
+| 46 | [@arunodhayan](https://www.kaggle.com/arunodhayan) | 46229 | 51 | 5 | 视觉 CV, 表格/结构化, 生物/医疗 | 5 | 0 |  |
 | 47 | [@sayoulala](https://www.kaggle.com/sayoulala) | 43851 | 28 | 3 | 文本 NLP, 表格/结构化, 视觉 CV | 27 | 2 | LLM/提示, 伪标签/蒸馏, 神经网络 |
 | 48 | [@dc5e964768ef56302a32](https://www.kaggle.com/dc5e964768ef56302a32) | 43669 | 42 | 1 | 表格/结构化, 生物/医疗, 文本 NLP | 2 | 1 | 神经网络, 特征工程, 验证/CV |
 | 49 | [@philippsinger](https://www.kaggle.com/philippsinger) | 43520 | 37 | 1 | 表格/结构化, 文本 NLP, 视觉 CV | 133 | 9 | LLM/提示, 验证/CV, 集成/融合 |

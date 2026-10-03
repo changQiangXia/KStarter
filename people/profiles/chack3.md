@@ -53,3 +53,16 @@
 **神经网络** 5、**集成/融合** 2、**特征工程** 1、**验证/CV** 1、**LLM/提示** 1
 
 > 自动生成；匹配规则：公开榜 `TeamMemberUserNames` 与讨论区作者名按 handle/显示名归一化匹配，仅覆盖 KStarter 归档的 264 场近 5 年比赛。
+
+## 决策画像（P2/P3）
+
+- 断言产出：5 条（A 0 / B 3 / C 2）
+- 方法标签：dtype/内存优化 2、类别不平衡 2、集成权重选择 2、集成/融合 2、提交/推理工程 1、后处理/校准 1、损失设计 1、数据清洗/去噪 1
+- 验证习惯：验证设计 1
+- 迭代关注：集成/融合 2、数据增广 1、提交/推理工程 1
+- 迭代强度：公开榜提交数中位 31、最高 95；solo 场次 20/20
+- 近年领域迁移：2024: 表格/结构化×4、科学研究×2、生物/医疗×2；2025: 生物/医疗×3、视觉 CV×3、时间序列×1；2026: 强化学习/博弈×1
+- 代表断言：
+  - [nfl-big-data-bowl-2026-prediction#651604-03](https://www.kaggle.com/competitions/nfl-big-data-bowl-2026-prediction/discussion/651604)（B｜建模与训练）主损失用 GaussianNLLLoss（同时预测均值与方差，自动降低大方差样本权重，优于 SmoothL1；帧级加权无益）；辅助损失对预测 xy 的一阶/二阶
+  - [nfl-big-data-bowl-2026-prediction#651604-04](https://www.kaggle.com/competitions/nfl-big-data-bowl-2026-prediction/discussion/651604)（B｜特征与数据工程）50% 概率绕平均球员位置随机旋转 0-360°（先高斯 σ=5° 后改均匀更好）；从更早帧开始预测（最多提前 20 帧）并把提前帧数作为静态特征（测试时为 0
+  - [nfl-big-data-bowl-2026-prediction#651604-05](https://www.kaggle.com/competitions/nfl-big-data-bowl-2026-prediction/discussion/651604)（B｜集成与融合）100+ 个同架构模型简单平均；多样性来自不同特征配置与不同 CV 划分；Group 5-fold 按 game_id，跑 3 次不同划分；RAdam + EM

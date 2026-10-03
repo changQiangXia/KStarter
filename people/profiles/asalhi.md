@@ -136,3 +136,18 @@
 **LLM/提示** 3、**神经网络** 2、**集成/融合** 2、**特征工程** 1、**检索/度量** 1、**伪标签/蒸馏** 1、**验证/CV** 1
 
 > 自动生成；匹配规则：公开榜 `TeamMemberUserNames` 与讨论区作者名按 handle/显示名归一化匹配，仅覆盖 KStarter 归档的 264 场近 5 年比赛。
+
+## 决策画像（P2/P3）
+
+- 断言产出：4 条（A 3 / B 1 / C 0）
+- 方法标签：泄漏检测/探针 2、目标编码/类别特征 2、Agent/LLM 工具 1、时间/分组切分 1、dtype/内存优化 1、伪标签/自训练 1、知识蒸馏 1、验证设计 1
+- 验证习惯：验证设计 1、时间/分组切分 1、泄漏检测/探针 2
+- 迭代关注：伪标签/自训练 1
+- 迭代强度：公开榜提交数中位 29、最高 2232；solo 场次 101/103
+- 前 50 内队友：@yuanzhezhou（同队 1 场）
+- 近年领域迁移：2024: 表格/结构化×13、文本 NLP×10、科学研究×4；2025: 文本 NLP×6、强化学习/博弈×4、生物/医疗×4；2026: 强化学习/博弈×4、表格/结构化×3、视觉 CV×2
+- 代表断言：
+  - [llm-detect-ai-generated-text#470148-02](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/470148)（A｜特征与数据工程）用 LogisticRegression 预测 prompt_name，从 9000+ 测试文本里取重复次数最高的 Top N（N 等于唯一 prompt 数，
+  - [llm-detect-ai-generated-text#470148-03](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/470148)（A｜建模与训练）拼写纠错（Levenshtein）；BPE vocab 5000；TF-IDF 3 到 7 gram、min_df=2；MaxAbsScaler 加 Ridge
+  - [llm-detect-ai-generated-text#470148-04](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/470148)（A｜建模与训练）对集成打分：最高 X 行当 AI、最低 Y 行当人类加入训练（首轮 X=Y=1000，重复 4 到 5 次、每轮加 200 或 250）；再用中位 50 行在 
+  - [llm-detect-ai-generated-text#470148-01](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/470148)（B｜数据工程）合并 DAIGT V2、Mistral-7B texts、自产 Mistral、Gemini Pro 与比赛数据为 3 个集合：全部数据、仅 LLM 数据（la

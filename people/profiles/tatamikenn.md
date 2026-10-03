@@ -59,3 +59,16 @@
 **RL/搜索** 8、**神经网络** 8、**LLM/提示** 6、**特征工程** 5、**检索/度量** 4、**后处理/校准** 3、**集成/融合** 3、**验证/CV** 3、**伪标签/蒸馏** 2
 
 > 自动生成；匹配规则：公开榜 `TeamMemberUserNames` 与讨论区作者名按 handle/显示名归一化匹配，仅覆盖 KStarter 归档的 264 场近 5 年比赛。
+
+## 决策画像（P2/P3）
+
+- 断言产出：3 条（A 1 / B 2 / C 0）
+- 方法标签：检索/RAG 2、损失设计 1、预训练/域适应 1、dtype/内存优化 1、规模/Scaling 1、提交/推理工程 1、混合精度/量化 1
+- 迭代关注：规模/Scaling 1、提交/推理工程 1
+- 迭代强度：公开榜提交数中位 31、最高 246；solo 场次 24/26
+- 前 50 内队友：@ren4yu（同队 1 场）
+- 近年领域迁移：2024: 科学研究×3、表格/结构化×3、生物/医疗×1；2025: 生物/医疗×3、视觉 CV×3、文本 NLP×2；2026: 生物/医疗×2、表格/结构化×1、时间序列×1
+- 代表断言：
+  - [drawing-with-llms#565396-03](https://www.kaggle.com/competitions/drawing-with-llms/discussion/565396)（A｜报告结果）local CLIP 0.285 / LB 0.305；提交耗时 2527 秒（约 5.0 秒/实例）
+  - [drawing-with-llms#565396-01](https://www.kaggle.com/competitions/drawing-with-llms/discussion/565396)（B｜建模与训练）把描述文本直接画进 SVG 可提高与输入文本的相似度；因禁止直接文本渲染，用字体 glyph 转 SVG path 实现文本可视化
+  - [drawing-with-llms#565396-02](https://www.kaggle.com/competitions/drawing-with-llms/discussion/565396)（B｜工程/流程）在 10,000 字节限制内搜索最大有效文本长度；搜索 24 种背景色

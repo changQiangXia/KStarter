@@ -57,3 +57,18 @@
 **LLM/提示** 9、**神经网络** 5、**集成/融合** 3、**特征工程** 1、**验证/CV** 1、**RL/搜索** 1、**后处理/校准** 1
 
 > 自动生成；匹配规则：公开榜 `TeamMemberUserNames` 与讨论区作者名按 handle/显示名归一化匹配，仅覆盖 KStarter 归档的 264 场近 5 年比赛。
+
+## 决策画像（P2/P3）
+
+- 断言产出：11 条（A 4 / B 6 / C 1）
+- 方法标签：目标编码/类别特征 9、验证设计 4、预训练/域适应 4、集成/融合 3、集成权重选择 3、损失设计 3、合成/生成数据 3、提交/推理工程 2
+- 验证习惯：验证设计 4、泄漏检测/探针 2
+- 迭代关注：集成/融合 3、提交/推理工程 2
+- 迭代强度：公开榜提交数中位 9、最高 267；solo 场次 24/24
+- 近年领域迁移：2024: 文本 NLP×2、表格/结构化×1；2025: 文本 NLP×2、生物/医疗×2、视觉 CV×2；2026: 生物/医疗×2、科学研究×2、视觉 CV×1
+- 代表断言：
+  - [jigsaw-agile-community-rules#613305-01](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/613305)（A｜验证设计）用 public LB 验证：host 说明公私有随机划分（public 约 30%、方差低），所有模型在线微调并用 public LB 选型
+  - [jigsaw-agile-community-rules#613305-05](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/613305)（A｜集成与融合）对每个模型输出先按 rule 排名，再归一化到 [0,1] 后集成；最终 6 模型加权平均
+  - [llm-detect-ai-generated-text#470395-01](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/470395)（A｜建模与训练）先用 SlimPajama 造约 50 万 human/AI 对，deberta-v3-large 微调成通用人机分类器（0.916/0.967）；再在 Per
+  - [llm-detect-ai-generated-text#470395-02](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/470395)（A｜特征与数据工程）用 llm-studio 对学生作文做 LM 微调，让 LLM 生成含引用与拼写错误的模仿学生写作文本，再用这些文本适配分类器
+  - [jigsaw-toxic-severity-rating#306274-01](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/306274)（B｜集成与融合）15 个模型（roberta/deberta × jigsaw18/jigsaw19/ruddit）做加权秩平均作为最终提交

@@ -49,3 +49,19 @@
 **LLM/提示** 4、**RL/搜索** 4、**集成/融合** 3、**后处理/校准** 2、**神经网络** 1、**特征工程** 1、**检索/度量** 1
 
 > 自动生成；匹配规则：公开榜 `TeamMemberUserNames` 与讨论区作者名按 handle/显示名归一化匹配，仅覆盖 KStarter 归档的 264 场近 5 年比赛。
+
+## 决策画像（P2/P3）
+
+- 断言产出：8 条（A 5 / B 3 / C 0）
+- 方法标签：验证设计 5、损失设计 3、学习率调度 3、提交/推理工程 3、TTA 2、集成/融合 1、预训练/域适应 1、Agent/LLM 工具 1
+- 验证习惯：验证设计 5
+- 迭代关注：集成/融合 1、规模/Scaling 1、提交/推理工程 3
+- 迭代强度：公开榜提交数中位 39、最高 2713；solo 场次 11/16
+- 前 50 内队友：@tonylica（同队 4 场）、@jiweiliu（同队 2 场）、@cdeotte（同队 1 场）
+- 近年领域迁移：2023: 表格/结构化×1、视觉 CV×1；2025: 强化学习/博弈×1；2026: 强化学习/博弈×3、文本 NLP×2、视觉 CV×1
+- 代表断言：
+  - [neurogolf-2026#726653-01](https://www.kaggle.com/competitions/neurogolf-2026/discussion/726653)（A｜工程/流程）先构建优化系统而非逐任务优化：受 2025 Code Golf 第四名方案启发（并行采样、规则化 prompt 生成、候选验证、选最优、结构化 prompt 驱
+  - [neurogolf-2026#726653-02](https://www.kaggle.com/competitions/neurogolf-2026/discussion/726653)（A｜建模与训练）新口径 cost = memory + parameters，score = max(1, 25 - ln(max(1, cost)))，MACs 仅诊断 → 
+  - [neurogolf-2026#726653-03](https://www.kaggle.com/competitions/neurogolf-2026/discussion/726653)（A｜工程/流程）每任务固定三文件：ONNX（提交物）、attack 脚本（可读可复现构建器）、task 文档（语义、成本历史、验证证据、风险）；成功则三文件同时晋级、失败同时回
+  - [neurogolf-2026#726653-04](https://www.kaggle.com/competitions/neurogolf-2026/discussion/726653)（A｜工程/流程）worker 读取：任务样本（dataset/taskNNN.json）、当前实现（onnx、attack 脚本、任务文档）、共享优化知识（tricks.md 
+  - [neurogolf-2026#726653-05](https://www.kaggle.com/competitions/neurogolf-2026/discussion/726653)（A｜工程/流程）两条互补流水线：Codex 调度器做高吞吐实现与验证；ChatGPT 网页工作流做长上下文语义分析与架构发现

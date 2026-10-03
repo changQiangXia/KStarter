@@ -56,3 +56,19 @@
 **神经网络** 6、**集成/融合** 6、**验证/CV** 5、**LLM/提示** 2、**后处理/校准** 2、**特征工程** 1、**检索/度量** 1、**RL/搜索** 1
 
 > 自动生成；匹配规则：公开榜 `TeamMemberUserNames` 与讨论区作者名按 handle/显示名归一化匹配，仅覆盖 KStarter 归档的 264 场近 5 年比赛。
+
+## 决策画像（P2/P3）
+
+- 断言产出：6 条（A 3 / B 3 / C 0）
+- 方法标签：后处理/校准 3、损失设计 3、dtype/内存优化 2、提交/推理工程 2、信号/频谱处理 1、验证设计 1、分组聚合特征 1、时间/分组切分 1
+- 验证习惯：验证设计 1、时间/分组切分 1、泄漏检测/探针 1
+- 迭代关注：提交/推理工程 2
+- 迭代强度：公开榜提交数中位 22、最高 222；solo 场次 16/23
+- 前 50 内队友：@harshitsheoran（同队 1 场）、@guoooooooss（同队 1 场）
+- 近年领域迁移：2024: 表格/结构化×6、视觉 CV×2、生物/医疗×1；2025: 生物/医疗×3、视觉 CV×3、表格/结构化×1；2026: 时间序列×1、生物/医疗×1、视觉 CV×1
+- 代表断言：
+  - [byu-locating-bacterial-flagellar-motors-2025#583143-01](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/583143)（A｜验证设计）4 折划分；local CV 与 LB 强相关到约 0.93，之后改用 public LB 做验证；且必须配合分位数阈值才能得到可靠的 LB 反馈
+  - [byu-locating-bacterial-flagellar-motors-2025#583143-04](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/583143)（A｜工程/流程）匹配 patch 高宽、只沿深度滑窗：快 4 倍；用高 overlap 0.875 与更多 TTA；边缘预测用 roi_weight_map 降权（中间 40%
+  - [byu-locating-bacterial-flagellar-motors-2025#583143-05](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/583143)（A｜后处理）按 tomogram 的 max 预测值排名做分位数阈值：去掉最低分位；在 public LB 上调参
+  - [byu-locating-bacterial-flagellar-motors-2025#569921-01](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/569921)（B｜数据理解）数据集：1617 个 motor 标注、1288 个 tomograms、来自 CZII 的 62 个数据集；作者公开可视化与预处理管线
+  - [byu-locating-bacterial-flagellar-motors-2025#583143-02](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/583143)（B｜特征与数据工程）用高斯热图做标签并把热图分辨率降 8 倍（借鉴 CZII 方案）

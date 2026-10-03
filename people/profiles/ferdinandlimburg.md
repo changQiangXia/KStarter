@@ -46,3 +46,18 @@
 **神经网络** 6、**RL/搜索** 5、**验证/CV** 3、**后处理/校准** 3、**特征工程** 2、**LLM/提示** 2、**集成/融合** 2、**伪标签/蒸馏** 2、**GBDT 调参** 1
 
 > 自动生成；匹配规则：公开榜 `TeamMemberUserNames` 与讨论区作者名按 handle/显示名归一化匹配，仅覆盖 KStarter 归档的 264 场近 5 年比赛。
+
+## 决策画像（P2/P3）
+
+- 断言产出：11 条（A 10 / B 1 / C 0）
+- 方法标签：集成/融合 5、提交/推理工程 5、Agent/LLM 工具 3、信号/频谱处理 3、后处理/校准 3、多种子平均 3、数据清洗/去噪 3、预训练/域适应 2
+- 验证习惯：验证设计 2、时间/分组切分 1、泄漏检测/探针 1、多种子平均 3
+- 迭代关注：伪标签/自训练 1、集成/融合 5、提交/推理工程 5
+- 迭代强度：公开榜提交数中位 27、最高 211；solo 场次 15/15
+- 近年领域迁移：2024: 文本 NLP×3；2025: 强化学习/博弈×2；2026: 强化学习/博弈×2、生物/医疗×1、科学研究×1
+- 代表断言：
+  - [learning-agency-lab-automated-essay-scoring-2#516791-01](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/516791)（A｜验证设计）先 pretrain old 再 finetune new，阶段内用 prompt_id 加 score 分层 5 折；public LB 至少加 0.015，
+  - [learning-agency-lab-automated-essay-scoring-2#516791-02](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/516791)（A｜建模与训练）所有环节 3-seed 平均；只重做 fine-tune 阶段换 seed（不重跑预训练）省时间；模型目录约 2TB
+  - [learning-agency-lab-automated-essay-scoring-2#516791-04](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/516791)（A｜后处理）自定义阈值（如 1/2 用 1.7、5/6 用 4.9）同时：过拟合标签、纠正不平衡误差、优化 QWK；阈值随 seed 波动大，必须用 3 seeds 算，用
+  - [learning-agency-lab-automated-essay-scoring-2#516791-05](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/516791)（A｜集成与融合）预计算每模型自己的阈值（3 seeds），并把集成权重同时用于阈值；多数提交用简单平均；最大集成 7 模型 × 3 seeds 等于 21 个 Deberta 
+  - [lux-ai-season-2#406702-01](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/406702)（A｜建模与训练）动作空间分 7 类 actor：bid 10 档、spawn 位置 48×48、water/metal 各 7 档、工厂 Grid(4)、轻/重单位 Grid(

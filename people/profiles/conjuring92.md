@@ -54,3 +54,18 @@
 **LLM/提示** 25、**伪标签/蒸馏** 12、**神经网络** 10、**集成/融合** 7、**后处理/校准** 3、**RL/搜索** 3、**检索/度量** 3、**验证/CV** 2、**特征工程** 2
 
 > 自动生成；匹配规则：公开榜 `TeamMemberUserNames` 与讨论区作者名按 handle/显示名归一化匹配，仅覆盖 KStarter 归档的 264 场近 5 年比赛。
+
+## 决策画像（P2/P3）
+
+- 断言产出：23 条（A 18 / B 2 / C 3）
+- 方法标签：预训练/域适应 10、合成/生成数据 7、集成/融合 7、伪标签/自训练 7、后处理/校准 6、检索/RAG 6、Agent/LLM 工具 5、目标编码/类别特征 5
+- 迭代关注：伪标签/自训练 7、集成/融合 7、规模/Scaling 3、数据增广 5、提交/推理工程 1
+- 迭代强度：公开榜提交数中位 152、最高 384；solo 场次 6/21
+- 前 50 内队友：@aerdem4（同队 3 场）、@darraghdog（同队 1 场）、@titericz（同队 1 场）
+- 近年领域迁移：2024: 文本 NLP×5、表格/结构化×2；2025: 文本 NLP×5、表格/结构化×3；2026: 文本 NLP×1、强化学习/博弈×1
+- 代表断言：
+  - [llm-detect-ai-generated-text#470121-01](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/470121)（A｜特征与数据工程）datamix 约 160k 样本（约 40k 人类写作）：Persuade 全部 prompt + 大量通用文本 + 多 LLM/prompt/生成配置 + 
+  - [llm-detect-ai-generated-text#470121-04](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/470121)（A｜建模与训练）方案对照：Mistral-7B (Q)LoRA QKVO r=64 最佳；ghostbuster 变体（llama 7b + tiny llama 1.1B）；
+  - [eedi-mining-misconceptions-in-mathematics#551402-01](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/551402)（A｜建模与训练）集成 e5-mistral-7b-instruct、bge-en-icl、Qwen2.5-14B 三个检索器；保留 top32 加相似度在 top 0.06 内
+  - [eedi-mining-misconceptions-in-mathematics#551402-02](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/551402)（A｜建模与训练）14B 点式排序到 top8；32B 点式到 top5；72B 列表式最终排序；vLLM enable_prefix_caching=True 提效
+  - [eedi-mining-misconceptions-in-mathematics#551402-04](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/551402)（A｜特征与数据工程）对相关 misconception 聚类（如 linear 系列），让 Claude 生成更多例子并附 5 到 8 个相关 MCQ；先用竞赛数据微调两个 72B

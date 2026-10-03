@@ -100,3 +100,19 @@
 **验证/CV** 155、**神经网络** 146、**LLM/提示** 102、**集成/融合** 91、**GBDT 调参** 85、**特征工程** 60、**伪标签/蒸馏** 39、**后处理/校准** 25、**RL/搜索** 22、**检索/度量** 13
 
 > 自动生成；匹配规则：公开榜 `TeamMemberUserNames` 与讨论区作者名按 handle/显示名归一化匹配，仅覆盖 KStarter 归档的 264 场近 5 年比赛。
+
+## 决策画像（P2/P3）
+
+- 断言产出：172 条（A 95 / B 55 / C 22）
+- 方法标签：集成/融合 56、目标编码/类别特征 53、损失设计 44、信号/频谱处理 34、提交/推理工程 34、验证设计 32、dtype/内存优化 27、集成权重选择 24
+- 验证习惯：验证设计 32、时间/分组切分 6、泄漏检测/探针 20、公开榜策略 4、多种子平均 5
+- 迭代关注：伪标签/自训练 12、集成/融合 56、规模/Scaling 7、数据增广 5、提交/推理工程 34
+- 迭代强度：公开榜提交数中位 67、最高 6798；solo 场次 58/67
+- 前 50 内队友：@jiweiliu（同队 2 场）、@titericz（同队 2 场）、@arc144（同队 1 场）、@tonylica（同队 1 场）、@yiheng（同队 1 场）
+- 近年领域迁移：2024: 表格/结构化×5、文本 NLP×4、时间序列×2；2025: 表格/结构化×10、时间序列×3、文本 NLP×3；2026: 表格/结构化×10、强化学习/博弈×2、视觉 CV×2
+- 代表断言：
+  - [amex-default-prediction#347641-01](https://www.kaggle.com/competitions/amex-default-prediction/discussion/347641)（A｜建模与训练）先用 LGBM 的 OOF+test 软标签预训练 Transformer，再用硬标签微调；test 数据也参与蒸馏
+  - [amex-default-prediction#347641-03](https://www.kaggle.com/competitions/amex-default-prediction/discussion/347641)（A｜验证设计）10 outer × 10 inner；每个 outer fold 仅用折内标签生成 OOF/test 预测，共 100 个 GBT 模型
+  - [playground-series-s5e4#575784-01](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/575784)（A｜数据理解）用 target 约等于 0.72 x Episode_Length_minutes 建立先验，其余 9 个特征视为对该线性关系的调制
+  - [playground-series-s5e4#575784-02](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/575784)（A｜集成与融合）用非线性 stack 而非 hill climbing/ridge 做 level-2，让融合器按场景选择不同基模型
+  - [playground-series-s5e4#575784-03](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/575784)（A｜集成与融合）12 个基础模型各做约 6 种变体共 75 个模型；level1 CV 11.8-13.2；level2 用 XGB/MLP 在 73 个 level1 模型上
