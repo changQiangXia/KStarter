@@ -44,8 +44,8 @@
 
 ## 断点续跑指引
 
-- 当前进度（2026-10-03）：**Tier A 45/60 ✅**（Batch 1–4 收官；Batch 5 已完成 #41 ariel-2024、#42 leap-climsim、#43 g2net-continuous-gw、#44 deep-past、#45 kaggle-llm-science-exam，均已推送，图证可渲染）；
-  **THEORY.md 已扩 v0.4（L1–L58 + T1–T17）**；待办 Batch 5 其余 5 场（#46 commonlit → #50 pii-detection）→ Batch 6 → Tier B 204 场 → 阶段二三（images_index / OCR / claims / lineage / limitations）。
+- 当前进度（2026-10-03）：**Tier A 46/60 ✅**（Batch 1–4 收官；Batch 5 已完成 #41–#46：#41 ariel-2024、#42 leap-climsim、#43 g2net、#44 deep-past、#45 llm-science-exam、#46 commonlit，均已推送，图证可渲染）；
+  **THEORY.md 已扩 v0.4（L1–L58 + T1–T17）**；待办 Batch 5 其余 4 场（#47 eedi → #50 pii-detection）→ Batch 6 → Tier B 204 场 → 阶段二三（images_index / OCR / claims / lineage / limitations）。
 - 进度看 `analysis/TIER_A.md`（⬜ 未开始 / 🔄 进行中 / ✅ 完成）；已完成深读在 `analysis/deep/<slug>.md`；
   计分在 `analysis/_tier_a_scored.csv`。
 - 单场节奏：读 digest/原帖 → 写 `analysis/deep/<slug>.md`（11 组件）→ 回写 `notes/<theme>/<slug>.md`（新增"深读结论""图表证据"节）→
