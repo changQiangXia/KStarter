@@ -50,12 +50,12 @@
 | `llm-prompt-recovery` | Featured | LLM Nerd-Off Sharpened Cosine Similarity | 734 | 2175 | 0.6366 | 4 | 2024-04-16 13:34:28 |
 | `learning-agency-lab-automated-essay-scoring-2` | Featured | Cohen Kappa Score | 762 | 2706 | 0.82213 | 30 | 2024-07-02 12:29:29 |
 | `march-machine-learning-mania-2025` | Featured | Mean Squared Error | 905 | 1727 | 0.16603 | 2 | 2025-03-20 15:57:29 |
-| `predict-energy-behavior-of-prosumers` | Featured | Mean Absolute Error | 983 | 2731 | 0.0000 | 2 | 2024-01-13 06:38:47 |
+| `predict-energy-behavior-of-prosumers` | Featured | Mean Absolute Error | 983 ⚠ | 2731 | 0.0000 | 2 | 2024-01-13 06:38:47 |
 | `stanford-rna-3d-folding-2` | Featured | Ribonanza TM-Score PermuteChains | 1025 | 1867 | 0.38878 | 1 | 2026-03-25 18:14:50 |
 | `equity-post-HCT-survival-predictions` | Research | eefs_concordance_index | 1073 | 3325 | 0.69071 | 57 | 2025-03-05 20:34:19 |
 | `ai-village-capture-the-flag-defcon31` | Featured | Flag_Metric | 1186 | 1344 | 1 | 1 | 2023-11-04 13:47:17 |
-| `ai-mathematical-olympiad-progress-prize-3` | Featured | 118448 AIMO 3 Multirun-Accuracy | 1545 | 4138 | 0.0 | 1 | 2026-03-03 07:00:02 |
-| `ai-mathematical-olympiad-progress-prize-2` | Featured | Accuracy Score | 1680 | 2212 | 0 | 2 | 2025-04-01 09:04:12 |
+| `ai-mathematical-olympiad-progress-prize-3` | Featured | 118448 AIMO 3 Multirun-Accuracy | 1545 ⚠ | 4138 | 0.0 | 1 | 2026-03-03 07:00:02 |
+| `ai-mathematical-olympiad-progress-prize-2` | Featured | Accuracy Score | 1680 ⚠ | 2212 | 0 | 2 | 2025-04-01 09:04:12 |
 | `csiro-biomass` | Research | R2 Score | 1872 | 3805 | 0.60818 | 42 | 2026-01-11 19:01:13 |
 | `march-machine-learning-mania-2026` | Featured | Mean Squared Error | 1883 | 3462 | 0.1468051 | 1 | 2026-03-19 14:09:20 |
 | `playground-series-s4e5` | Playground | R2 Score | 2081 | 2788 | 0.84458 | 1 | 2024-05-15 18:18:20 |
@@ -63,10 +63,12 @@
 | `child-mind-institute-problematic-internet-use` | Featured | Cohen Kappa Score | 2205 | 3559 | 0.460 | 7 | 2024-12-19 19:58:18 |
 | `icr-identify-age-related-conditions` | Featured | Weighted Multiclass Loss | 2441 | 6430 | 0.16292 | 9 | 2023-08-09 18:04:10 |
 | `ai-agent-security-multi-step-tool-attacks` | Featured | Agents Security Metric | 2783 | 4186 | 33.70500 | 126 | 2026-09-01 06:42:05 |
-| `optiver-trading-at-the-close` | Featured | Mean Columnwise Mean Absolute Error | 3112 | 4436 | 0.0000 | 1 | 2023-12-20 12:38:42 |
+| `optiver-trading-at-the-close` | Featured | Mean Columnwise Mean Absolute Error | 3112 ⚠ | 4436 | 0.0000 | 1 | 2023-12-20 12:38:42 |
 | `orbit-wars` | Featured | orbit_wars | 4486 | 4729 | 310.1 | 1 | 2026-04-17 10:04:47 |
 
 共匹配 **59** 场；类别分布 Featured 35、Research 15、Playground 9。
+
+> ⚠ 4 场公开榜分数全为 0（Kaggle 冻结榜），名次不可信、不计入统计。
 
 领域分布（按赛事标签）表格/结构化 32、文本 NLP 15、生物/医疗 15、科学研究 9、视觉 CV 8。
 

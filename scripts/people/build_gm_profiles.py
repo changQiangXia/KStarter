@@ -127,17 +127,27 @@ def main() -> int:
         if my_comps:
             lines.append("| 比赛 | 类别 | 指标 | 名次 | 队伍数 | 分数 | 提交数 | 最后提交 |")
             lines.append("| --- | --- | --- | --- | --- | --- | --- | --- |")
+            flagged = 0
             for r in my_comps:
                 m = meta.get(r["slug"], {})
+                valid = r.get("lb_quality", "ok") == "ok"
+                if not valid:
+                    flagged += 1
                 lines.append(
                     f"| `{r['slug']}` | {m.get('category','')} | {m.get('metric','')} | "
-                    f"{r['rank']} | {m.get('teams','')} | {r['score']} | {r['submission_count']} | {r['last_submission']} |"
+                    f"{r['rank']}{'' if valid else ' ⚠'} | {m.get('teams','')} | {r['score']} | "
+                    f"{r['submission_count']} | {r['last_submission']} |"
                 )
             cats = Counter(meta.get(r["slug"], {}).get("category", "?") for r in my_comps)
             lines.append("")
             lines.append(
                 f"共匹配 **{len(my_comps)}** 场；类别分布 " + "、".join(f"{k} {v}" for k, v in cats.most_common()) + "。"
             )
+            if flagged:
+                lines.append("")
+                lines.append(
+                    f"> ⚠ {flagged} 场公开榜分数全为 0（Kaggle 冻结榜），名次不可信、不计入统计。"
+                )
             if domain_counts:
                 lines.append("")
                 lines.append(
@@ -191,7 +201,14 @@ def main() -> int:
                 "display_name": person["display_name"],
                 "points": person["points"],
                 "comps": len(my_comps),
-                "best_rank": min((int(r["rank"]) for r in my_comps if str(r["rank"]).isdigit()), default=""),
+                "best_rank": min(
+                    (
+                        int(r["rank"])
+                        for r in my_comps
+                        if r.get("lb_quality", "ok") == "ok" and str(r["rank"]).isdigit()
+                    ),
+                    default="",
+                ),
                 "posts": len(my_posts),
                 "topics": sum(1 for r in my_posts if r["kind"] == "topic"),
                 "top_kw": ", ".join(k for k, _ in kw_counts.most_common(3)),

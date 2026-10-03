@@ -67,14 +67,16 @@
 | `march-machine-learning-mania-2023` | Featured | Mean Squared Error | 348 | 1033 | 0.18997 | 2 | 2023-03-16 15:28:06 |
 | `playground-series-s6e1` | Playground | Root Mean Squared Error | 538 | 4317 | 8.56459 | 3 | 2026-01-09 18:47:41 |
 | `ai-agent-security-multi-step-tool-attacks` | Featured | Agents Security Metric | 623 | 4186 | 89.46000 | 64 | 2026-09-01 11:32:02 |
-| `ai-mathematical-olympiad-prize` | Featured | Accuracy Score | 832 | 1161 | 0 | 2 | 2024-06-19 07:42:45 |
+| `ai-mathematical-olympiad-prize` | Featured | Accuracy Score | 832 ⚠ | 1161 | 0 | 2 | 2024-06-19 07:42:45 |
 | `orbit-wars` | Featured | orbit_wars | 859 | 4729 | 1035.3 | 2 | 2026-06-23 22:12:01 |
 | `birdclef-2026` | Research | Birdclef ROC AUC | 863 | 4094 | 0.95086 | 16 | 2026-05-27 22:38:12 |
-| `ubiquant-market-prediction` | Featured | MeanPearson | 2032 | 2893 | 0.000000 | 2 | 2022-04-17 05:05:50 |
-| `ai-mathematical-olympiad-progress-prize-2` | Featured | Accuracy Score | 2065 | 2212 | 0 | 2 | 2025-03-31 21:35:56 |
+| `ubiquant-market-prediction` | Featured | MeanPearson | 2032 ⚠ | 2893 | 0.000000 | 2 | 2022-04-17 05:05:50 |
+| `ai-mathematical-olympiad-progress-prize-2` | Featured | Accuracy Score | 2065 ⚠ | 2212 | 0 | 2 | 2025-03-31 21:35:56 |
 | `biohub-cell-tracking-during-development` | Research | CZI Biohub Zebrafish 133605 | 2816 | 3947 | 0.87899 | 15 | 2026-09-17 22:02:40 |
 
 共匹配 **67** 场；类别分布 Featured 32、Playground 18、Research 17。
+
+> ⚠ 3 场公开榜分数全为 0（Kaggle 冻结榜），名次不可信、不计入统计。
 
 领域分布（按赛事标签）表格/结构化 36、文本 NLP 14、生物/医疗 9、视觉 CV 9、强化学习/博弈 7。
 
@@ -95,6 +97,6 @@
 
 ## 方法关键词（公开言论）
 
-**验证/CV** 161、**神经网络** 154、**LLM/提示** 117、**集成/融合** 99、**GBDT 调参** 92、**特征工程** 68、**伪标签/蒸馏** 43、**RL/搜索** 37、**后处理/校准** 36、**检索/度量** 16
+**验证/CV** 155、**神经网络** 146、**LLM/提示** 102、**集成/融合** 91、**GBDT 调参** 85、**特征工程** 60、**伪标签/蒸馏** 39、**后处理/校准** 25、**RL/搜索** 22、**检索/度量** 13
 
 > 自动生成；匹配规则：公开榜 `TeamMemberUserNames` 与讨论区作者名按 handle/显示名归一化匹配，仅覆盖 KStarter 归档的 264 场近 5 年比赛。

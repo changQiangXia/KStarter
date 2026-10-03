@@ -11,14 +11,14 @@
 | `mayo-clinic-strip-ai` | Research | Weighted Multiclass Loss | 7 | 888 | 0.41857 | 6 | 2022-10-05 06:20:56 |
 | `make-data-count-finding-data-references` | Research | 82370_MDC_Global_F1 | 9 | 1282 | 0.89095 | 389 | 2025-09-09 21:22:00 |
 | `ai-village-capture-the-flag-defcon31` | Featured | Flag_Metric | 17 | 1344 | 23 | 43 | 2023-11-09 23:24:14 |
-| `predict-energy-behavior-of-prosumers` | Featured | Mean Absolute Error | 17 | 2731 | 0.0000 | 2 | 2024-01-29 19:59:44 |
+| `predict-energy-behavior-of-prosumers` | Featured | Mean Absolute Error | 17 ⚠ | 2731 | 0.0000 | 2 | 2024-01-29 19:59:44 |
 | `autonomous-agent-prediction-beta` | Playground | Autonomous Agent Prediction Beta Metric | 18 | 570 | 0.825 | 15 | 2026-07-26 00:01:45 |
 | `march-machine-learning-mania-2023` | Featured | Mean Squared Error | 26 | 1033 | 0.18019 | 2 | 2023-03-15 09:09:41 |
 | `arc-prize-2024` | Featured | Abstraction and Reasoning Challenge | 30 | 1427 | 27.00 | 107 | 2024-10-09 16:56:05 |
 | `rogii-wellbore-geology-prediction` | Featured | Mean Squared Error | 32 | 6125 | 5.668 | 125 | 2026-08-05 06:41:14 |
 | `ai-village-ctf` | Research | Nvidia Defcon | 45 | 668 | 0.842 | 17 | 2022-08-29 05:32:26 |
 | `benetech-making-graphs-accessible` | Featured | Benetech Mixed Data Type Matching Score | 47 | 608 | 0.72 | 172 | 2023-06-19 20:02:17 |
-| `ai-mathematical-olympiad-prize` | Featured | Accuracy Score | 62 | 1161 | 0 | 1 | 2024-05-01 11:20:48 |
+| `ai-mathematical-olympiad-prize` | Featured | Accuracy Score | 62 ⚠ | 1161 | 0 | 1 | 2024-05-01 11:20:48 |
 | `nvidia-nemotron-model-reasoning-challenge` | Featured | NVIDIA Nemotron Metric | 70 | 4185 | 0.868 | 272 | 2026-06-15 10:06:31 |
 | `playground-series-s6e7` | Playground | Balanced Accuracy Score | 73 | 3355 | 0.95302 | 186 | 2026-07-31 03:37:49 |
 | `santa-2023` | Featured | Santa 2023 Metric | 77 | 1054 | 643577 | 178 | 2024-01-31 22:46:35 |
@@ -69,7 +69,7 @@
 | `llm-prompt-recovery` | Featured | LLM Nerd-Off Sharpened Cosine Similarity | 331 | 2175 | 0.6366 | 26 | 2024-04-14 09:41:42 |
 | `child-mind-institute-detect-sleep-states` | Featured | Event Detection AP | 338 | 1877 | 0.707 | 5 | 2023-11-21 15:09:46 |
 | `icecube-neutrinos-in-deep-ice` | Research | MeanAngularError | 342 | 812 | 1.017388 | 8 | 2023-04-09 05:41:18 |
-| `konwinski-prize` | Featured | K Prize Metric | 353 | 617 | 0.000000 | 2 | 2025-03-09 12:24:28 |
+| `konwinski-prize` | Featured | K Prize Metric | 353 ⚠ | 617 | 0.000000 | 2 | 2025-03-09 12:24:28 |
 | `march-machine-learning-mania-2024` | Featured | March Mania 2024 Metric | 353 | 820 | 0.08188 | 1 | 2024-03-09 10:35:58 |
 | `chaii-hindi-and-tamil-question-answering` | Research | Jaccard | 384 | 943 | 0.79270 | 48 | 2021-11-15 09:58:47 |
 | `vesuvius-challenge-surface-detection` | Research | Vesuvius 2025 Metric | 399 | 1391 | 0.55264 | 11 | 2026-02-15 05:06:46 |
@@ -88,17 +88,17 @@
 | `hubmap-hacking-the-human-vasculature` | Research | OpenImagesObjDetectionSegmentationAP | 607 | 1021 | 0.388 | 26 | 2023-06-27 22:48:04 |
 | `linking-writing-processes-to-writing-quality` | Featured | Mean Squared Error | 611 | 1876 | 0.580151 | 35 | 2024-01-03 06:46:41 |
 | `rsna-breast-cancer-detection` | Featured | Probabilistic F-Score Beta (Micro) | 649 | 1687 | 0.47 | 18 | 2023-02-05 08:46:16 |
-| `ubiquant-market-prediction` | Featured | MeanPearson | 652 | 2893 | 0.000000 | 2 | 2022-02-10 05:51:28 |
+| `ubiquant-market-prediction` | Featured | MeanPearson | 652 ⚠ | 2893 | 0.000000 | 2 | 2022-02-10 05:51:28 |
 | `child-mind-institute-problematic-internet-use` | Featured | Cohen Kappa Score | 683 | 3559 | 0.497 | 81 | 2024-12-18 23:07:51 |
 | `kaggle-llm-science-exam` | Featured | MAP@{K} | 693 | 2664 | 0.868289 | 25 | 2023-10-05 06:58:39 |
 | `feedback-prize-2021` | Featured | TextOverlapFBeta | 696 | 2058 | 0.690 | 7 | 2022-02-02 18:02:36 |
 | `predict-student-performance-from-game-play` | Featured | F-Score (Macro) | 744 | 2051 | 0.699 | 15 | 2023-06-08 23:46:08 |
 | `csiro-biomass` | Research | R2 Score | 773 | 3805 | 0.72043 | 17 | 2026-01-18 07:51:58 |
 | `um-game-playing-strength-of-mcts-variants` | Research | Mean Squared Error | 823 | 1608 | 0.43121 | 48 | 2024-10-10 07:07:06 |
-| `ai-mathematical-olympiad-progress-prize-3` | Featured | 118448 AIMO 3 Multirun-Accuracy | 833 | 4138 | 0.0 | 1 | 2026-01-27 19:20:58 |
+| `ai-mathematical-olympiad-progress-prize-3` | Featured | 118448 AIMO 3 Multirun-Accuracy | 833 ⚠ | 4138 | 0.0 | 1 | 2026-01-27 19:20:58 |
 | `waveform-inversion` | Research | Mean Absolute Error | 846 | 1365 | 33.28594 | 7 | 2025-05-28 08:22:19 |
 | `biohub-cell-tracking-during-development` | Research | CZI Biohub Zebrafish 133605 | 850 | 3947 | 0.95387 | 6 | 2026-09-26 20:23:04 |
-| `ai-mathematical-olympiad-progress-prize-2` | Featured | Accuracy Score | 866 | 2212 | 0 | 2 | 2025-04-01 08:06:37 |
+| `ai-mathematical-olympiad-progress-prize-2` | Featured | Accuracy Score | 866 ⚠ | 2212 | 0 | 2 | 2025-04-01 08:06:37 |
 | `petfinder-pawpularity-score` | Research | Root Mean Squared Error | 913 | 3537 | 17.90951 | 45 | 2022-01-12 11:14:31 |
 | `asl-fingerspelling` | Research | PostProcessorKernelDesc | 924 | 1314 | 0.561 | 2 | 2023-06-16 00:53:23 |
 | `jigsaw-agile-community-rules` | Featured | 94635_Jigsaw_Rules_AUC | 961 | 2445 | 0.91246 | 45 | 2025-08-24 23:08:13 |
@@ -108,9 +108,11 @@
 | `orbit-wars` | Featured | orbit_wars | 1361 | 4729 | 937.9 | 2 | 2026-06-23 09:05:03 |
 | `icr-identify-age-related-conditions` | Featured | Weighted Multiclass Loss | 1449 | 6430 | 0.07336 | 18 | 2023-06-27 22:53:39 |
 | `cmi-detect-behavior-with-sensor-data` | Featured | CMI_2025 | 1541 | 2657 | 0.792819 | 36 | 2025-06-28 06:24:05 |
-| `g-research-crypto-forecasting` | Featured | Weighted Correlation Coefficient | 1729 | 1946 | 0.0000 | 2 | 2022-01-31 12:24:53 |
+| `g-research-crypto-forecasting` | Featured | Weighted Correlation Coefficient | 1729 ⚠ | 1946 | 0.0000 | 2 | 2022-01-31 12:24:53 |
 
 共匹配 **103** 场；类别分布 Featured 70、Research 30、Playground 3。
+
+> ⚠ 7 场公开榜分数全为 0（Kaggle 冻结榜），名次不可信、不计入统计。
 
 领域分布（按赛事标签）表格/结构化 42、文本 NLP 28、视觉 CV 24、生物/医疗 22、科学研究 15。
 
@@ -131,6 +133,6 @@
 
 ## 方法关键词（公开言论）
 
-**LLM/提示** 3、**神经网络** 2、**集成/融合** 2、**伪标签/蒸馏** 2、**GBDT 调参** 1、**特征工程** 1、**检索/度量** 1、**验证/CV** 1
+**LLM/提示** 3、**神经网络** 2、**集成/融合** 2、**特征工程** 1、**检索/度量** 1、**伪标签/蒸馏** 1、**验证/CV** 1
 
 > 自动生成；匹配规则：公开榜 `TeamMemberUserNames` 与讨论区作者名按 handle/显示名归一化匹配，仅覆盖 KStarter 归档的 264 场近 5 年比赛。

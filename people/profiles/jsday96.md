@@ -20,11 +20,13 @@
 | `birdclef-2022` | Research | Weighted Categorization Accuracy | 90 | 801 | 0.7383 | 70 | 2022-05-24 01:43:02 |
 | `feedback-prize-effectiveness` | Featured | Multiclass Loss | 193 | 1557 | 0.60783 | 18 | 2022-07-19 04:42:57 |
 | `playground-series-s3e17` | Playground | Roc Auc Score | 273 | 1502 | 0.97587 | 13 | 2023-06-18 19:16:27 |
-| `hull-tactical-market-prediction` | Featured | Hull Competition Sharpe | 356 | 3677 | 0.000 | 2 | 2025-10-01 01:20:25 |
+| `hull-tactical-market-prediction` | Featured | Hull Competition Sharpe | 356 ⚠ | 3677 | 0.000 | 2 | 2025-10-01 01:20:25 |
 | `nvidia-nemotron-model-reasoning-challenge` | Featured | NVIDIA Nemotron Metric | 1624 | 4185 | 0.856 | 35 | 2026-04-21 00:00:51 |
 | `kaggle-llm-science-exam` | Featured | MAP@{K} | 1968 | 2664 | 0.674781 | 4 | 2023-07-17 11:12:15 |
 
 共匹配 **17** 场；类别分布 Featured 10、Research 6、Playground 1。
+
+> ⚠ 1 场公开榜分数全为 0（Kaggle 冻结榜），名次不可信、不计入统计。
 
 领域分布（按赛事标签）表格/结构化 7、文本 NLP 5、生物/医疗 3、科学研究 2、强化学习/博弈 2。
 

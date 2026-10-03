@@ -27,16 +27,18 @@
 | `jigsaw-agile-community-rules` | Featured | 94635_Jigsaw_Rules_AUC | 375 | 2445 | 0.91802 | 2 | 2025-10-23 14:38:54 |
 | `rsna-breast-cancer-detection` | Featured | Probabilistic F-Score Beta (Micro) | 640 | 1687 | 0.48 | 4 | 2023-02-27 14:47:30 |
 | `bengaliai-speech` | Research | Word Error Rate | 686 | 744 | 0.657 | 4 | 2023-10-17 21:37:06 |
-| `wsdm-cup-multilingual-chatbot-arena` | Featured | Accuracy Score | 882 | 950 | 0.000000 | 2 | 2025-02-03 18:01:30 |
+| `wsdm-cup-multilingual-chatbot-arena` | Featured | Accuracy Score | 882 ⚠ | 950 | 0.000000 | 2 | 2025-02-03 18:01:30 |
 | `tensorflow-great-barrier-reef` | Research | CSIROObjectDetectionFBeta | 1066 | 2025 | 0.608 | 89 | 2022-02-08 14:58:58 |
 | `learning-agency-lab-automated-essay-scoring-2` | Featured | Cohen Kappa Score | 1277 | 2706 | 0.81578 | 6 | 2024-07-02 13:14:55 |
 | `deep-past-initiative-machine-translation` | Featured | DPI BLEU / chrF++ | 1487 | 2674 | 31.8379 | 1 | 2026-03-23 23:13:01 |
 | `nvidia-nemotron-model-reasoning-challenge` | Featured | NVIDIA Nemotron Metric | 1617 | 4185 | 0.860 | 2 | 2026-06-15 20:49:53 |
 | `csiro-biomass` | Research | R2 Score | 1791 | 3805 | 0.62040 | 1 | 2026-01-28 18:13:34 |
-| `ai-mathematical-olympiad-progress-prize-2` | Featured | Accuracy Score | 2210 | 2212 | 0 | 1 | 2025-04-01 17:24:43 |
+| `ai-mathematical-olympiad-progress-prize-2` | Featured | Accuracy Score | 2210 ⚠ | 2212 | 0 | 1 | 2025-04-01 17:24:43 |
 | `ai-agent-security-multi-step-tool-attacks` | Featured | Agents Security Metric | 2905 | 4186 | 25.33500 | 1 | 2026-09-01 05:25:40 |
 
 共匹配 **29** 场；类别分布 Featured 15、Research 14。
+
+> ⚠ 2 场公开榜分数全为 0（Kaggle 冻结榜），名次不可信、不计入统计。
 
 领域分布（按赛事标签）文本 NLP 13、视觉 CV 11、表格/结构化 8、生物/医疗 6、科学研究 4。
 
@@ -57,6 +59,6 @@
 
 ## 方法关键词（公开言论）
 
-**LLM/提示** 12、**集成/融合** 12、**神经网络** 10、**验证/CV** 7、**后处理/校准** 7、**伪标签/蒸馏** 6、**特征工程** 4、**RL/搜索** 4、**AutoML** 1
+**LLM/提示** 12、**集成/融合** 11、**神经网络** 8、**后处理/校准** 7、**伪标签/蒸馏** 6、**验证/CV** 5、**RL/搜索** 4、**特征工程** 2
 
 > 自动生成；匹配规则：公开榜 `TeamMemberUserNames` 与讨论区作者名按 handle/显示名归一化匹配，仅覆盖 KStarter 归档的 264 场近 5 年比赛。

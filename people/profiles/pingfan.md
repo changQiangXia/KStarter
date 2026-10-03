@@ -25,24 +25,26 @@
 | `uspto-explainable-ai` | Featured | USPTO 59575 | 407 | 571 | 0.30660 | 1 | 2024-06-14 08:44:54 |
 | `drawing-with-llms` | Featured | SVG Image Fidelity | 413 | 1309 | 0.54628 | 25 | 2025-05-09 15:15:30 |
 | `arc-prize-2024` | Featured | Abstraction and Reasoning Challenge | 434 | 1427 | 26.00 | 109 | 2024-09-08 16:25:41 |
-| `ai-mathematical-olympiad-progress-prize-3` | Featured | 118448 AIMO 3 Multirun-Accuracy | 564 | 4138 | 0.0 | 1 | 2026-01-13 16:01:29 |
+| `ai-mathematical-olympiad-progress-prize-3` | Featured | 118448 AIMO 3 Multirun-Accuracy | 564 ⚠ | 4138 | 0.0 | 1 | 2026-01-13 16:01:29 |
 | `learning-agency-lab-automated-essay-scoring-2` | Featured | Cohen Kappa Score | 599 | 2706 | 0.82408 | 130 | 2024-06-29 15:58:49 |
 | `llms-you-cant-please-them-all` | Featured | LLMYCPTA metric 20241120 | 683 | 1692 | 20.609 | 5 | 2025-02-19 15:35:22 |
 | `home-credit-credit-risk-model-stability` | Featured | Home Credit 2023 - Gini Stability | 686 | 3856 | 0.65413 | 5 | 2024-05-23 16:52:15 |
 | `linking-writing-processes-to-writing-quality` | Featured | Mean Squared Error | 701 | 1876 | 0.582286 | 2 | 2023-12-09 14:24:43 |
 | `isic-2024-challenge` | Research | ISIC pAUC-aboveTPR | 706 | 2739 | 0.18446 | 4 | 2024-08-31 16:06:45 |
-| `wsdm-cup-multilingual-chatbot-arena` | Featured | Accuracy Score | 809 | 950 | 0.000000 | 2 | 2025-02-03 16:25:12 |
+| `wsdm-cup-multilingual-chatbot-arena` | Featured | Accuracy Score | 809 ⚠ | 950 | 0.000000 | 2 | 2025-02-03 16:25:12 |
 | `physionet-ecg-image-digitization` | Research | Physionet ECG Signal Extraction Metric | 834 | 1424 | 16.10920 | 1 | 2025-12-01 14:54:51 |
 | `feedback-prize-effectiveness` | Featured | Multiclass Loss | 846 | 1557 | 0.64990 | 1 | 2022-06-26 14:58:13 |
 | `um-game-playing-strength-of-mcts-variants` | Research | Mean Squared Error | 939 | 1608 | 0.43431 | 1 | 2024-09-20 14:27:10 |
 | `rsna-2024-lumbar-spine-degenerative-classification` | Featured | RSNA Lumbar Metric 71549 | 958 | 1874 | 0.579912 | 1 | 2024-08-06 06:02:34 |
 | `llm-prompt-recovery` | Featured | LLM Nerd-Off Sharpened Cosine Similarity | 973 | 2175 | 0.6214 | 2 | 2024-04-07 05:51:34 |
-| `ai-mathematical-olympiad-progress-prize-2` | Featured | Accuracy Score | 1353 | 2212 | 0 | 2 | 2025-03-23 15:51:15 |
+| `ai-mathematical-olympiad-progress-prize-2` | Featured | Accuracy Score | 1353 ⚠ | 2212 | 0 | 2 | 2025-03-23 15:51:15 |
 | `commonlit-evaluate-student-summaries` | Featured | Mean Weighted Columnwise Root Mean Squared Error | 1360 | 2064 | 0.52482 | 5 | 2023-07-21 12:19:03 |
 | `birdclef-2026` | Research | Birdclef ROC AUC | 2067 | 4094 | 0.92889 | 45 | 2026-05-19 15:03:42 |
 | `nvidia-nemotron-model-reasoning-challenge` | Featured | NVIDIA Nemotron Metric | 2397 | 4185 | 0.820 | 9 | 2026-04-24 15:03:38 |
 
 共匹配 **35** 场；类别分布 Featured 23、Research 12。
+
+> ⚠ 3 场公开榜分数全为 0（Kaggle 冻结榜），名次不可信、不计入统计。
 
 领域分布（按赛事标签）文本 NLP 19、表格/结构化 16、科学研究 5、生物/医疗 4、视觉 CV 4。
 

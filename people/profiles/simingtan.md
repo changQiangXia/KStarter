@@ -15,14 +15,16 @@
 | `nvidia-nemotron-model-reasoning-challenge` | Featured | NVIDIA Nemotron Metric | 451 | 4185 | 0.864 | 16 | 2026-06-14 05:24:24 |
 | `recodai-luc-scientific-image-forgery-detection` | Research | RecodAI F1 | 640 | 1564 | 0.31006 | 2 | 2026-01-13 17:40:19 |
 | `march-machine-learning-mania-2025` | Featured | Mean Squared Error | 926 | 1727 | 0.17171 | 2 | 2025-03-20 13:25:49 |
-| `mitsui-commodity-prediction-challenge` | Featured | MITSUI&CO. Commodity Prediction Metric | 975 | 1711 | 0.00000 | 1 | 2025-10-05 17:23:57 |
+| `mitsui-commodity-prediction-challenge` | Featured | MITSUI&CO. Commodity Prediction Metric | 975 ⚠ | 1711 | 0.00000 | 1 | 2025-10-05 17:23:57 |
 | `child-mind-institute-problematic-internet-use` | Featured | Cohen Kappa Score | 1867 | 3559 | 0.471 | 19 | 2024-11-06 07:27:56 |
 | `birdclef-2026` | Research | Birdclef ROC AUC | 2102 | 4094 | 0.92835 | 40 | 2026-04-12 03:01:20 |
 | `orbit-wars` | Featured | orbit_wars | 2571 | 4729 | 646.1 | 2 | 2026-05-15 11:04:49 |
 | `rogii-wellbore-geology-prediction` | Featured | Mean Squared Error | 3132 | 6125 | 8.179 | 40 | 2026-07-31 19:05:21 |
-| `hull-tactical-market-prediction` | Featured | Hull Competition Sharpe | 3164 | 3677 | 0.000 | 2 | 2025-12-15 14:46:40 |
+| `hull-tactical-market-prediction` | Featured | Hull Competition Sharpe | 3164 ⚠ | 3677 | 0.000 | 2 | 2025-12-15 14:46:40 |
 
 共匹配 **15** 场；类别分布 Featured 10、Research 5。
+
+> ⚠ 2 场公开榜分数全为 0（Kaggle 冻结榜），名次不可信、不计入统计。
 
 领域分布（按赛事标签）表格/结构化 5、生物/医疗 3、强化学习/博弈 2、科学研究 2、文本 NLP 1。
 

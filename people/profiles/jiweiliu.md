@@ -9,7 +9,7 @@
 | `neurogolf-2026` | Research | NeuroGolf Metric | 1 | 2963 | 8314.03 | 6798 | 2026-07-15 22:54:52 |
 | `santa-2025` | Featured | Santa 2025 Metric | 12 | 3357 | 69.131026324361 | 2713 | 2026-01-30 23:31:59 |
 | `google-code-golf-2025` | Research | Code Golf Metric | 18 | 1142 | 953336.000 | 1219 | 2025-10-30 21:06:23 |
-| `ai-mathematical-olympiad-progress-prize-3` | Featured | 118448 AIMO 3 Multirun-Accuracy | 22 | 4138 | 0.0 | 1 | 2025-11-23 19:29:07 |
+| `ai-mathematical-olympiad-progress-prize-3` | Featured | 118448 AIMO 3 Multirun-Accuracy | 22 ⚠ | 4138 | 0.0 | 1 | 2025-11-23 19:29:07 |
 | `rogii-wellbore-geology-prediction` | Featured | Mean Squared Error | 37 | 6125 | 5.732 | 198 | 2026-08-05 14:57:55 |
 | `amex-default-prediction` | Featured | Amex Custom Gini And X% Percentage Capture | 40 | 4874 | 0.80077 | 74 | 2022-08-24 23:46:12 |
 | `birdclef-2026` | Research | Birdclef ROC AUC | 78 | 4094 | 0.95378 | 236 | 2026-06-03 20:18:25 |
@@ -33,6 +33,8 @@
 
 共匹配 **24** 场；类别分布 Featured 11、Research 7、Playground 6。
 
+> ⚠ 1 场公开榜分数全为 0（Kaggle 冻结榜），名次不可信、不计入统计。
+
 领域分布（按赛事标签）表格/结构化 12、生物/医疗 5、强化学习/博弈 4、文本 NLP 4、科学研究 2。
 
 ## 公开区言论（归档讨论区）
@@ -52,6 +54,6 @@
 
 ## 方法关键词（公开言论）
 
-**神经网络** 4、**GBDT 调参** 3、**LLM/提示** 2、**集成/融合** 1、**特征工程** 1、**验证/CV** 1、**检索/度量** 1
+**神经网络** 4、**GBDT 调参** 3、**LLM/提示** 2、**集成/融合** 1、**特征工程** 1、**验证/CV** 1
 
 > 自动生成；匹配规则：公开榜 `TeamMemberUserNames` 与讨论区作者名按 handle/显示名归一化匹配，仅覆盖 KStarter 归档的 264 场近 5 年比赛。

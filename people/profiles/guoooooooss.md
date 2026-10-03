@@ -12,14 +12,16 @@
 | `make-data-count-finding-data-references` | Research | 82370_MDC_Global_F1 | 4 | 1282 | 0.90623 | 191 | 2025-09-09 19:21:44 |
 | `waveform-inversion` | Research | Mean Absolute Error | 21 | 1365 | 13.92448 | 153 | 2025-06-30 14:37:23 |
 | `cmi-detect-behavior-with-sensor-data` | Featured | CMI_2025 | 88 | 2657 | 0.859164 | 181 | 2025-08-31 20:00:06 |
-| `konwinski-prize` | Featured | K Prize Metric | 342 | 617 | 0.000000 | 2 | 2025-03-08 14:32:29 |
+| `konwinski-prize` | Featured | K Prize Metric | 342 ⚠ | 617 | 0.000000 | 2 | 2025-03-08 14:32:29 |
 | `jigsaw-agile-community-rules` | Featured | 94635_Jigsaw_Rules_AUC | 549 | 2445 | 0.91666 | 113 | 2025-10-23 09:10:19 |
 | `czii-cryo-et-object-identification` | Featured | CZI_CryoET_ 84969 | 631 | 931 | 0.62587 | 3 | 2024-12-30 23:47:30 |
-| `nfl-big-data-bowl-2026-prediction` | Featured | NFL_2025 | 633 | 1899 | 0.00000 | 2 | 2025-12-03 10:38:31 |
+| `nfl-big-data-bowl-2026-prediction` | Featured | NFL_2025 | 633 ⚠ | 1899 | 0.00000 | 2 | 2025-12-03 10:38:31 |
 | `equity-post-HCT-survival-predictions` | Research | eefs_concordance_index | 950 | 3325 | 0.69181 | 122 | 2025-03-03 16:07:02 |
-| `ai-mathematical-olympiad-progress-prize-2` | Featured | Accuracy Score | 1417 | 2212 | 0 | 2 | 2025-03-14 05:47:35 |
+| `ai-mathematical-olympiad-progress-prize-2` | Featured | Accuracy Score | 1417 ⚠ | 2212 | 0 | 2 | 2025-03-14 05:47:35 |
 
 共匹配 **12** 场；类别分布 Featured 9、Research 3。
+
+> ⚠ 3 场公开榜分数全为 0（Kaggle 冻结榜），名次不可信、不计入统计。
 
 领域分布（按赛事标签）文本 NLP 5、生物/医疗 3、视觉 CV 2、科学研究 2、表格/结构化 2。
 

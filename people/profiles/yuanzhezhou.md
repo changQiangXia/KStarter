@@ -58,14 +58,14 @@
 | `eedi-mining-misconceptions-in-mathematics` | Featured | MAP@{K} | 290 | 1446 | 0.47293 | 30 | 2024-12-09 09:08:23 |
 | `byu-locating-bacterial-flagellar-motors-2025` | Research | BYU_BioPhysics_91249 | 298 | 1136 | 0.81047 | 73 | 2025-06-04 08:11:24 |
 | `benetech-making-graphs-accessible` | Featured | Benetech Mixed Data Type Matching Score | 300 | 608 | 0.46 | 1 | 2023-05-17 13:07:08 |
-| `konwinski-prize` | Featured | K Prize Metric | 312 | 617 | 0.000000 | 2 | 2025-03-11 04:58:17 |
+| `konwinski-prize` | Featured | K Prize Metric | 312 ⚠ | 617 | 0.000000 | 2 | 2025-03-11 04:58:17 |
 | `map-charting-student-math-misunderstandings` | Featured | MAP@{K} | 340 | 1857 | 0.94837 | 14 | 2025-10-11 04:04:34 |
 | `g2net-detecting-continuous-gravitational-waves` | Research | Area Under Receiver Operating Characteristic Curve | 357 | 936 | 0.75335 | 5 | 2022-11-17 16:03:25 |
 | `child-mind-institute-problematic-internet-use` | Featured | Cohen Kappa Score | 360 | 3559 | 0.497 | 72 | 2024-12-17 13:13:16 |
 | `deep-past-initiative-machine-translation` | Featured | DPI BLEU / chrF++ | 375 | 2674 | 35.8090 | 10 | 2026-03-17 01:41:53 |
 | `csiro-biomass` | Research | R2 Score | 419 | 3805 | 0.72360 | 12 | 2026-01-28 15:22:11 |
 | `santa-2025` | Featured | Santa 2025 Metric | 423 | 3357 | 70.250339101851 | 15 | 2026-01-30 21:17:46 |
-| `ai-mathematical-olympiad-prize` | Featured | Accuracy Score | 430 | 1161 | 0 | 2 | 2024-05-27 18:57:34 |
+| `ai-mathematical-olympiad-prize` | Featured | Accuracy Score | 430 ⚠ | 1161 | 0 | 2 | 2024-05-27 18:57:34 |
 | `jigsaw-toxic-severity-rating` | Featured | Jigsaw Agreement with Annotators | 467 | 2301 | 0.89920 | 2 | 2022-02-07 06:16:00 |
 | `isic-2024-challenge` | Research | ISIC pAUC-aboveTPR | 521 | 2739 | 0.18468 | 19 | 2024-09-06 14:05:23 |
 | `amp-parkinsons-disease-progression-prediction` | Featured | smape_plus_1 | 527 | 1805 | 56.128 | 23 | 2023-05-14 16:33:07 |
@@ -77,30 +77,32 @@
 | `pii-detection-removal-from-educational-data` | Featured | TLAL_F_beta | 630 | 2048 | 0.96805 | 13 | 2024-04-23 16:08:21 |
 | `feedback-prize-english-language-learning` | Featured | Mean Weighted Columnwise Root Mean Squared Error | 646 | 2654 | 0.437475 | 5 | 2022-11-21 14:12:40 |
 | `jpx-tokyo-stock-exchange-prediction` | Featured | JPXSharpe | 667 | 2033 | 0.009 | 2 | 2022-07-05 18:24:32 |
-| `wsdm-cup-multilingual-chatbot-arena` | Featured | Accuracy Score | 690 | 950 | 0.000000 | 2 | 2025-01-30 10:19:48 |
+| `wsdm-cup-multilingual-chatbot-arena` | Featured | Accuracy Score | 690 ⚠ | 950 | 0.000000 | 2 | 2025-01-30 10:19:48 |
 | `predict-student-performance-from-game-play` | Featured | F-Score (Macro) | 730 | 2051 | 0.699 | 14 | 2023-06-06 15:51:57 |
-| `nfl-big-data-bowl-2026-prediction` | Featured | NFL_2025 | 747 | 1899 | 0.00000 | 1 | 2025-12-03 20:40:12 |
+| `nfl-big-data-bowl-2026-prediction` | Featured | NFL_2025 | 747 ⚠ | 1899 | 0.00000 | 1 | 2025-12-03 20:40:12 |
 | `us-patent-phrase-to-phrase-matching` | Featured | PearsonCorrelationCoefficient | 873 | 1889 | 0.8381 | 4 | 2022-06-07 04:19:48 |
 | `nbme-score-clinical-patient-notes` | Featured | Medical Board F-Beta | 883 | 1471 | 0.88155 | 1 | 2022-04-20 14:32:43 |
 | `amex-default-prediction` | Featured | Amex Custom Gini And X% Percentage Capture | 915 | 4874 | 0.79978 | 18 | 2022-08-11 20:09:49 |
-| `ai-mathematical-olympiad-progress-prize-2` | Featured | Accuracy Score | 992 | 2212 | 0 | 2 | 2025-04-01 09:24:14 |
+| `ai-mathematical-olympiad-progress-prize-2` | Featured | Accuracy Score | 992 ⚠ | 2212 | 0 | 2 | 2025-04-01 09:24:14 |
 | `orbit-wars` | Featured | orbit_wars | 1000 | 4729 | 1009.3 | 2 | 2026-06-22 09:56:58 |
-| `mitsui-commodity-prediction-challenge` | Featured | MITSUI&CO. Commodity Prediction Metric | 1020 | 1711 | 0.00000 | 2 | 2025-10-06 17:55:11 |
+| `mitsui-commodity-prediction-challenge` | Featured | MITSUI&CO. Commodity Prediction Metric | 1020 ⚠ | 1711 | 0.00000 | 2 | 2025-10-06 17:55:11 |
 | `cafa-6-protein-function-prediction` | Research | cafa6_metric_final | 1096 | 2259 | 0.32913 | 2 | 2026-02-01 18:12:20 |
 | `ventilator-pressure-prediction` | Research | Mean Absolute Error | 1201 | 2605 | 0.1530 | 12 | 2021-10-09 05:13:09 |
 | `feedback-prize-2021` | Featured | TextOverlapFBeta | 1507 | 2058 | 0.628 | 1 | 2022-01-07 03:50:32 |
 | `march-machine-learning-mania-2025` | Featured | Mean Squared Error | 1625 | 1727 | 0.35211 | 2 | 2025-03-13 15:36:07 |
-| `ai-mathematical-olympiad-progress-prize-3` | Featured | 118448 AIMO 3 Multirun-Accuracy | 1863 | 4138 | 0.0 | 1 | 2026-03-16 13:05:53 |
-| `g-research-crypto-forecasting` | Featured | Weighted Correlation Coefficient | 1875 | 1946 | 0.0000 | 2 | 2022-02-01 11:18:08 |
-| `predict-energy-behavior-of-prosumers` | Featured | Mean Absolute Error | 2073 | 2731 | 0.0000 | 2 | 2024-01-31 07:40:39 |
+| `ai-mathematical-olympiad-progress-prize-3` | Featured | 118448 AIMO 3 Multirun-Accuracy | 1863 ⚠ | 4138 | 0.0 | 1 | 2026-03-16 13:05:53 |
+| `g-research-crypto-forecasting` | Featured | Weighted Correlation Coefficient | 1875 ⚠ | 1946 | 0.0000 | 2 | 2022-02-01 11:18:08 |
+| `predict-energy-behavior-of-prosumers` | Featured | Mean Absolute Error | 2073 ⚠ | 2731 | 0.0000 | 2 | 2024-01-31 07:40:39 |
 | `llm-detect-ai-generated-text` | Featured | Roc Auc Score | 2150 | 4358 | 0.955869 | 1 | 2024-01-10 03:39:52 |
-| `ubiquant-market-prediction` | Featured | MeanPearson | 2409 | 2893 | 0.000000 | 2 | 2022-04-20 17:38:36 |
+| `ubiquant-market-prediction` | Featured | MeanPearson | 2409 ⚠ | 2893 | 0.000000 | 2 | 2022-04-20 17:38:36 |
 | `march-machine-learning-mania-2026` | Featured | Mean Squared Error | 2472 | 3462 | 0.1750539 | 1 | 2026-03-15 12:33:28 |
 | `godaddy-microbusiness-density-forecasting` | Featured | SMAPE | 2523 | 3547 | 4.0170 | 1 | 2022-12-18 04:09:05 |
-| `optiver-trading-at-the-close` | Featured | Mean Columnwise Mean Absolute Error | 3069 | 4436 | 0.0000 | 2 | 2023-12-20 18:24:47 |
-| `optiver-realized-volatility-prediction` | Featured | Root Mean Square Percentage Error | 3749 | 3852 | 0.00000 | 2 | 2021-09-27 18:24:19 |
+| `optiver-trading-at-the-close` | Featured | Mean Columnwise Mean Absolute Error | 3069 ⚠ | 4436 | 0.0000 | 2 | 2023-12-20 18:24:47 |
+| `optiver-realized-volatility-prediction` | Featured | Root Mean Square Percentage Error | 3749 ⚠ | 3852 | 0.00000 | 2 | 2021-09-27 18:24:19 |
 
 共匹配 **93** 场；类别分布 Featured 65、Research 28。
+
+> ⚠ 12 场公开榜分数全为 0（Kaggle 冻结榜），名次不可信、不计入统计。
 
 领域分布（按赛事标签）表格/结构化 43、文本 NLP 25、生物/医疗 19、视觉 CV 18、科学研究 15。
 
@@ -110,7 +112,7 @@
 
 | 日期 | 类型 | 比赛 | 主题 | 票 | 摘录 |
 | --- | --- | --- | --- | --- | --- |
-| 2025-09-18 | topic | `hull-tactical-market-prediction` | [the possiblity of a random submission wi](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/608135) | 44 | Comments: kenyeung.tech (2025-09-18 01:14:55.807000) [+2] 50/50. it either is or it isn't :) EL Younes (2025-09-18 16:30:50.497000 |
+| 2025-09-18 | topic | `hull-tactical-market-prediction` | [the possiblity of a random submission wi](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/608135) | 44 |  |
 | 2025-07-24 | topic | `konwinski-prize` | [8th place solution](https://www.kaggle.com/competitions/konwinski-prize/discussion/590920) | 13 | My solution follows a straightforward yet intentional logic. During the competition, I observed that many top-performing teams had |
 | 2025-02-14 | comment | `llms-you-cant-please-them-all` | [Solution leak or Problem Statement too e](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/562972) | 7 | Well, it is also interesting that some people were changing kaggle profile natiionalities, using different IP and using rare names |
 | 2025-09-18 | comment | `hull-tactical-market-prediction` | [the possiblity of a random submission wi](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/608135) | 7 | The more participants, the harder a good model to win. That's why I make this discussion. It will be more interesting to estimate  |
@@ -121,6 +123,6 @@
 
 ## 方法关键词（公开言论）
 
-**LLM/提示** 3、**神经网络** 2、**验证/CV** 1
+**LLM/提示** 3、**神经网络** 2
 
 > 自动生成；匹配规则：公开榜 `TeamMemberUserNames` 与讨论区作者名按 handle/显示名归一化匹配，仅覆盖 KStarter 归档的 264 场近 5 年比赛。

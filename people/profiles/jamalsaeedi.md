@@ -45,19 +45,21 @@
 | `map-charting-student-math-misunderstandings` | Featured | MAP@{K} | 640 | 1857 | 0.94801 | 11 | 2025-10-15 13:25:17 |
 | `cafa-6-protein-function-prediction` | Research | cafa6_metric_final | 650 | 2259 | 0.34067 | 2 | 2026-02-02 10:17:17 |
 | `equity-post-HCT-survival-predictions` | Research | eefs_concordance_index | 697 | 3325 | 0.69330 | 6 | 2025-02-28 18:16:18 |
-| `nfl-big-data-bowl-2026-prediction` | Featured | NFL_2025 | 742 | 1899 | 0.00000 | 1 | 2025-12-03 19:44:14 |
+| `nfl-big-data-bowl-2026-prediction` | Featured | NFL_2025 | 742 ⚠ | 1899 | 0.00000 | 1 | 2025-12-03 19:44:14 |
 | `czii-cryo-et-object-identification` | Featured | CZI_CryoET_ 84969 | 819 | 931 | 0.41575 | 6 | 2024-12-08 21:39:21 |
 | `orbit-wars` | Featured | orbit_wars | 972 | 4729 | 1014.4 | 2 | 2026-06-23 21:56:56 |
-| `mitsui-commodity-prediction-challenge` | Featured | MITSUI&CO. Commodity Prediction Metric | 1060 | 1711 | 0.00000 | 2 | 2025-10-06 16:41:03 |
+| `mitsui-commodity-prediction-challenge` | Featured | MITSUI&CO. Commodity Prediction Metric | 1060 ⚠ | 1711 | 0.00000 | 2 | 2025-10-06 16:41:03 |
 | `hms-harmful-brain-activity-classification` | Research | Kullback Leibler Divergence | 1110 | 2767 | 0.345625 | 9 | 2024-03-05 14:14:14 |
 | `rogii-wellbore-geology-prediction` | Featured | Mean Squared Error | 1348 | 6125 | 6.470 | 130 | 2026-08-05 14:40:13 |
 | `nvidia-nemotron-model-reasoning-challenge` | Featured | NVIDIA Nemotron Metric | 1602 | 4185 | 0.860 | 36 | 2026-06-15 14:12:58 |
-| `ai-mathematical-olympiad-progress-prize-2` | Featured | Accuracy Score | 1833 | 2212 | 0 | 2 | 2025-04-01 14:45:46 |
-| `optiver-trading-at-the-close` | Featured | Mean Columnwise Mean Absolute Error | 2795 | 4436 | 0.0000 | 2 | 2023-12-18 19:04:38 |
-| `ai-mathematical-olympiad-progress-prize-3` | Featured | 118448 AIMO 3 Multirun-Accuracy | 3128 | 4138 | 0.0 | 1 | 2026-04-13 10:41:37 |
-| `hull-tactical-market-prediction` | Featured | Hull Competition Sharpe | 3239 | 3677 | 0.000 | 2 | 2025-12-15 20:35:42 |
+| `ai-mathematical-olympiad-progress-prize-2` | Featured | Accuracy Score | 1833 ⚠ | 2212 | 0 | 2 | 2025-04-01 14:45:46 |
+| `optiver-trading-at-the-close` | Featured | Mean Columnwise Mean Absolute Error | 2795 ⚠ | 4436 | 0.0000 | 2 | 2023-12-18 19:04:38 |
+| `ai-mathematical-olympiad-progress-prize-3` | Featured | 118448 AIMO 3 Multirun-Accuracy | 3128 ⚠ | 4138 | 0.0 | 1 | 2026-04-13 10:41:37 |
+| `hull-tactical-market-prediction` | Featured | Hull Competition Sharpe | 3239 ⚠ | 3677 | 0.000 | 2 | 2025-12-15 20:35:42 |
 
 共匹配 **50** 场；类别分布 Featured 32、Research 18。
+
+> ⚠ 6 场公开榜分数全为 0（Kaggle 冻结榜），名次不可信、不计入统计。
 
 领域分布（按赛事标签）表格/结构化 18、生物/医疗 15、视觉 CV 12、科学研究 10、文本 NLP 9。
 

@@ -47,11 +47,11 @@
 | `open-problems-multimodal` | Featured | MeanPearsonOld | 550 | 1220 | 0.812410 | 8 | 2022-11-10 13:36:18 |
 | `google-research-identify-contrails-reduce-global-warming` | Research | contrails_global_dice | 596 | 954 | 0.63230 | 3 | 2023-08-02 04:58:33 |
 | `march-machine-learning-mania-2025` | Featured | Mean Squared Error | 604 | 1727 | 0.12731 | 2 | 2025-03-19 06:24:01 |
-| `nfl-big-data-bowl-2026-prediction` | Featured | NFL_2025 | 614 | 1899 | 0.00000 | 2 | 2025-12-02 10:50:06 |
+| `nfl-big-data-bowl-2026-prediction` | Featured | NFL_2025 | 614 ⚠ | 1899 | 0.00000 | 2 | 2025-12-02 10:50:06 |
 | `make-data-count-finding-data-references` | Research | 82370_MDC_Global_F1 | 615 | 1282 | 0.58734 | 1 | 2025-09-09 07:52:05 |
 | `llm-detect-ai-generated-text` | Featured | Roc Auc Score | 625 | 4358 | 0.963037 | 2 | 2024-01-15 22:12:45 |
 | `waveform-inversion` | Research | Mean Absolute Error | 648 | 1365 | 28.23467 | 1 | 2025-06-15 00:59:06 |
-| `wsdm-cup-multilingual-chatbot-arena` | Featured | Accuracy Score | 785 | 950 | 0.000000 | 2 | 2025-02-03 10:37:01 |
+| `wsdm-cup-multilingual-chatbot-arena` | Featured | Accuracy Score | 785 ⚠ | 950 | 0.000000 | 2 | 2025-02-03 10:37:01 |
 | `petfinder-pawpularity-score` | Research | Root Mean Squared Error | 793 | 3537 | 17.88080 | 38 | 2022-01-03 21:19:25 |
 | `image-matching-challenge-2025` | Research | IMC 2025 Metric | 797 | 943 | 25.86 | 1 | 2025-06-02 04:00:31 |
 | `equity-post-HCT-survival-predictions` | Research | eefs_concordance_index | 935 | 3325 | 0.69199 | 18 | 2025-02-18 01:41:41 |
@@ -64,11 +64,13 @@
 | `ai-village-capture-the-flag-defcon31` | Featured | Flag_Metric | 1328 | 1344 | 0 | 1 | 2023-11-06 01:31:00 |
 | `nvidia-nemotron-model-reasoning-challenge` | Featured | NVIDIA Nemotron Metric | 1354 | 4185 | 0.860 | 1 | 2026-06-05 21:28:28 |
 | `march-machine-learning-mania-2026` | Featured | Mean Squared Error | 1704 | 3462 | 0.1429972 | 1 | 2026-03-19 12:04:37 |
-| `predict-energy-behavior-of-prosumers` | Featured | Mean Absolute Error | 1978 | 2731 | 0.0000 | 2 | 2024-01-31 00:28:42 |
+| `predict-energy-behavior-of-prosumers` | Featured | Mean Absolute Error | 1978 ⚠ | 2731 | 0.0000 | 2 | 2024-01-31 00:28:42 |
 | `child-mind-institute-problematic-internet-use` | Featured | Cohen Kappa Score | 2388 | 3559 | 0.452 | 5 | 2024-10-18 12:16:56 |
 | `icr-identify-age-related-conditions` | Featured | Weighted Multiclass Loss | 3270 | 6430 | 0.21248 | 4 | 2023-05-22 11:11:13 |
 
 共匹配 **61** 场；类别分布 Featured 38、Research 23。
+
+> ⚠ 3 场公开榜分数全为 0（Kaggle 冻结榜），名次不可信、不计入统计。
 
 领域分布（按赛事标签）表格/结构化 28、生物/医疗 18、文本 NLP 14、视觉 CV 11、科学研究 10。
 
@@ -89,6 +91,6 @@
 
 ## 方法关键词（公开言论）
 
-**神经网络** 12、**验证/CV** 12、**GBDT 调参** 7、**集成/融合** 7、**LLM/提示** 6、**特征工程** 5、**后处理/校准** 5、**伪标签/蒸馏** 2、**检索/度量** 1、**RL/搜索** 1
+**神经网络** 12、**验证/CV** 12、**集成/融合** 7、**GBDT 调参** 6、**LLM/提示** 6、**后处理/校准** 4、**特征工程** 3、**伪标签/蒸馏** 2、**检索/度量** 1、**RL/搜索** 1
 
 > 自动生成；匹配规则：公开榜 `TeamMemberUserNames` 与讨论区作者名按 handle/显示名归一化匹配，仅覆盖 KStarter 归档的 264 场近 5 年比赛。

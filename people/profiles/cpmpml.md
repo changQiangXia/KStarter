@@ -28,9 +28,9 @@
 | `lmsys-chatbot-arena` | Research | Log Loss | 102 | 1849 | 0.87807 | 2 | 2024-08-04 23:51:33 |
 | `image-matching-challenge-2022` | Research | Image Matching Challenge pose mAA | 114 | 642 | 0.73636 | 29 | 2022-05-28 20:45:07 |
 | `commonlit-evaluate-student-summaries` | Featured | Mean Weighted Columnwise Root Mean Squared Error | 120 | 2064 | 0.43826 | 90 | 2023-09-01 14:36:54 |
-| `ai-mathematical-olympiad-prize` | Featured | Accuracy Score | 162 | 1161 | 0 | 1 | 2024-05-11 20:44:31 |
+| `ai-mathematical-olympiad-prize` | Featured | Accuracy Score | 162 ⚠ | 1161 | 0 | 1 | 2024-05-11 20:44:31 |
 | `kaggle-llm-science-exam` | Featured | MAP@{K} | 271 | 2664 | 0.895339 | 118 | 2023-10-10 15:31:57 |
-| `konwinski-prize` | Featured | K Prize Metric | 279 | 617 | 0.000000 | 2 | 2025-03-07 16:18:12 |
+| `konwinski-prize` | Featured | K Prize Metric | 279 ⚠ | 617 | 0.000000 | 2 | 2025-03-07 16:18:12 |
 | `playground-series-s4e7` | Playground | Roc Auc Score | 453 | 2234 | 0.89183 | 1 | 2024-07-05 20:14:55 |
 | `stanford-rna-3d-folding` | Featured | Ribonanza TM-Score | 501 | 1516 | 0.36420 | 2 | 2025-04-18 13:06:50 |
 | `birdclef-2022` | Research | Weighted Categorization Accuracy | 509 | 801 | 0.6142 | 8 | 2022-02-25 21:18:59 |
@@ -55,6 +55,8 @@
 
 共匹配 **46** 场；类别分布 Featured 34、Research 10、Playground 2。
 
+> ⚠ 2 场公开榜分数全为 0（Kaggle 冻结榜），名次不可信、不计入统计。
+
 领域分布（按赛事标签）表格/结构化 18、文本 NLP 17、科学研究 10、生物/医疗 8、视觉 CV 6。
 
 ## 公开区言论（归档讨论区）
@@ -74,6 +76,6 @@
 
 ## 方法关键词（公开言论）
 
-**神经网络** 30、**LLM/提示** 15、**集成/融合** 11、**验证/CV** 10、**后处理/校准** 7、**伪标签/蒸馏** 7、**RL/搜索** 5、**特征工程** 2、**检索/度量** 2
+**神经网络** 28、**LLM/提示** 14、**集成/融合** 11、**验证/CV** 9、**伪标签/蒸馏** 7、**后处理/校准** 6、**RL/搜索** 4、**特征工程** 2、**检索/度量** 2
 
 > 自动生成；匹配规则：公开榜 `TeamMemberUserNames` 与讨论区作者名按 handle/显示名归一化匹配，仅覆盖 KStarter 归档的 264 场近 5 年比赛。

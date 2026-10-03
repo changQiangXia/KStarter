@@ -24,11 +24,13 @@
 | `feedback-prize-english-language-learning` | Featured | Mean Weighted Columnwise Root Mean Squared Error | 33 | 2654 | 0.435420 | 159 | 2022-11-29 15:13:36 |
 | `llm-prompt-recovery` | Featured | LLM Nerd-Off Sharpened Cosine Similarity | 70 | 2175 | 0.6611 | 78 | 2024-04-16 09:00:50 |
 | `rsna-breast-cancer-detection` | Featured | Probabilistic F-Score Beta (Micro) | 672 | 1687 | 0.47 | 8 | 2022-12-16 01:53:00 |
-| `wsdm-cup-multilingual-chatbot-arena` | Featured | Accuracy Score | 805 | 950 | 0.000000 | 2 | 2025-02-03 16:40:02 |
+| `wsdm-cup-multilingual-chatbot-arena` | Featured | Accuracy Score | 805 ⚠ | 950 | 0.000000 | 2 | 2025-02-03 16:40:02 |
 | `jigsaw-toxic-severity-rating` | Featured | Jigsaw Agreement with Annotators | 1596 | 2301 | 0.82257 | 14 | 2022-02-06 06:13:04 |
-| `ai-mathematical-olympiad-progress-prize-2` | Featured | Accuracy Score | 2176 | 2212 | 0 | 2 | 2025-04-01 05:34:33 |
+| `ai-mathematical-olympiad-progress-prize-2` | Featured | Accuracy Score | 2176 ⚠ | 2212 | 0 | 2 | 2025-04-01 05:34:33 |
 
 共匹配 **21** 场；类别分布 Featured 19、Research 2。
+
+> ⚠ 2 场公开榜分数全为 0（Kaggle 冻结榜），名次不可信、不计入统计。
 
 领域分布（按赛事标签）文本 NLP 17、表格/结构化 7、视觉 CV 2、科学研究 1、强化学习/博弈 1。
 
@@ -49,6 +51,6 @@
 
 ## 方法关键词（公开言论）
 
-**LLM/提示** 25、**伪标签/蒸馏** 12、**神经网络** 11、**集成/融合** 7、**RL/搜索** 5、**特征工程** 4、**后处理/校准** 3、**检索/度量** 3、**验证/CV** 2
+**LLM/提示** 25、**伪标签/蒸馏** 12、**神经网络** 10、**集成/融合** 7、**后处理/校准** 3、**RL/搜索** 3、**检索/度量** 3、**验证/CV** 2、**特征工程** 2
 
 > 自动生成；匹配规则：公开榜 `TeamMemberUserNames` 与讨论区作者名按 handle/显示名归一化匹配，仅覆盖 KStarter 归档的 264 场近 5 年比赛。

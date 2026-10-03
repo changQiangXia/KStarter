@@ -13,6 +13,7 @@
 | `competitions/coverage.csv` | 每场比赛的公开榜状态（`ok`/`no_zip`）与匹配人数，边界可审计 | ✅ |
 | `posts/gm_posts.jsonl` | 归档讨论区中这些人的主题帖与评论（含日期/票数/父节点/正文） | ✅ |
 | `posts/summary.csv` | 每人发言数（主题/评论）与时间跨度 | ✅ |
+| `claims/gm_claims.csv` | GM 断言库：条件/动作/机制/结果 + 逐字引用 + 证据等级（无逐字引用不入库） | ✅ |
 | `profiles/<handle>.md` | 个人档案：战绩表 + 比赛领域分布 + 公开言论 + 方法关键词（总览：`analysis/people/OVERVIEW.md`） | ✅ |
 | `analysis/people/PLAYBOOK.md` | 跨人专题：声音榜 / 领域×人 / 组队网络 / 高票经验帖 | ✅ |
 | `data/cache/people_lb/` | 原始 leaderboard zip/CSV 与抓取状态（脚本缓存） | ❌（gitignore） |
@@ -26,8 +27,18 @@ $PY scripts/people/fetch_leaderboards.py                  # 264 场公开榜（�
 $PY scripts/people/extract_gm_posts.py                    # 归档讨论区发言
 $PY scripts/people/build_gm_profiles.py                   # 人档 + 总览
 $PY scripts/people/build_people_playbook.py               # 跨人专题
+$PY scripts/people/verify_claims.py                       # 断言：引用/数字/链接/元数据校验
 $PY scripts/verify_links.py                               # 校验 notes + 人档的讨论链接
 ```
+
+## 断言库（claims/）
+
+- 粒度：一条断言 = 一个可执行动作（含适用条件、机制、结果数字），不是一段摘要。
+- 必填溯源：`quote` 必须是原文正文的逐字子串，`source_url`/`topic_id`/`date`/`votes` 与归档一致，
+  `result` 中的数字必须能在原文复现；`evidence_type` 沿用 `analysis/claims.csv` 词表。
+- 证据等级：A（原文可复算数字 + 名次/团队背书）、B（有数字无独立背书）、C（无数字的经验判断）。
+- 口径：`quote` 只取主题帖正文（不含评论）；`lb_unusable` 标记 Kaggle 冻结榜（分数全 0）涉及的断言。
+- P1 范围：≥50 票的主题帖；先 10 条校准样例，确认后全量抽取。
 
 ## 数据规模（2026-10-04 快照）
 

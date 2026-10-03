@@ -17,13 +17,15 @@
 | `pokemon-tcg-ai-battle` | Featured | cabt_bo1 | 119 | 6807 | 1005.0 | 2 | 2026-08-16 20:36:42 |
 | `deep-past-initiative-machine-translation` | Featured | DPI BLEU / chrF++ | 377 | 2674 | 35.8079 | 39 | 2026-03-19 02:18:32 |
 | `ai-agent-security-multi-step-tool-attacks` | Featured | Agents Security Metric | 564 | 4186 | 89.76000 | 14 | 2026-08-20 04:49:37 |
-| `ai-mathematical-olympiad-progress-prize-3` | Featured | 118448 AIMO 3 Multirun-Accuracy | 569 | 4138 | 0.0 | 1 | 2026-01-14 00:00:25 |
+| `ai-mathematical-olympiad-progress-prize-3` | Featured | 118448 AIMO 3 Multirun-Accuracy | 569 ⚠ | 4138 | 0.0 | 1 | 2026-01-14 00:00:25 |
 | `rsna-breast-cancer-detection` | Featured | Probabilistic F-Score Beta (Micro) | 614 | 1687 | 0.48 | 16 | 2023-02-20 06:40:34 |
 | `mayo-clinic-strip-ai` | Research | Weighted Multiclass Loss | 642 | 888 | 0.71695 | 2 | 2022-08-17 03:49:11 |
 | `petfinder-pawpularity-score` | Research | Root Mean Squared Error | 1456 | 3537 | 18.03771 | 3 | 2021-12-16 08:58:27 |
 | `march-machine-learning-mania-2026` | Featured | Mean Squared Error | 1575 | 3462 | 0.1405990 | 1 | 2026-03-19 05:09:36 |
 
 共匹配 **16** 场；类别分布 Research 8、Featured 8。
+
+> ⚠ 1 场公开榜分数全为 0（Kaggle 冻结榜），名次不可信、不计入统计。
 
 领域分布（按赛事标签）视觉 CV 5、表格/结构化 4、强化学习/博弈 4、生物/医疗 3、文本 NLP 2。
 
@@ -44,6 +46,6 @@
 
 ## 方法关键词（公开言论）
 
-**RL/搜索** 5、**集成/融合** 4、**LLM/提示** 4、**神经网络** 2、**特征工程** 2、**后处理/校准** 2、**检索/度量** 1
+**LLM/提示** 4、**RL/搜索** 4、**集成/融合** 3、**后处理/校准** 2、**神经网络** 1、**特征工程** 1、**检索/度量** 1
 
 > 自动生成；匹配规则：公开榜 `TeamMemberUserNames` 与讨论区作者名按 handle/显示名归一化匹配，仅覆盖 KStarter 归档的 264 场近 5 年比赛。

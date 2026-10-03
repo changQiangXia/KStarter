@@ -73,9 +73,16 @@ def parse_file(path: pathlib.Path, slug: str, people: dict[str, dict], min_chars
         if m:
             votes = int(m.group(1))
 
+    body_lines = lines[8:]
+    body_end = len(body_lines)
+    for idx, line in enumerate(body_lines):
+        if re.match(r"^\s*Comments:\s*$", line) or COMMENT.match(line):
+            body_end = idx
+            break
+
     if author and normalize(author) in people:
         person = people[normalize(author)]
-        body = clean_lines(lines[8:])
+        body = clean_lines(body_lines[:body_end])
         yield {
             "person": person["handle"],
             "display_name": person["display_name"],

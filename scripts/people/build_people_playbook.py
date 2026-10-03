@@ -79,13 +79,17 @@ def main() -> int:
         for handle, recs in comps.items():
             agg: dict[str, list[int]] = defaultdict(list)
             for r in recs:
+                valid = r.get("lb_quality", "ok") == "ok"
+                rank = int(r["rank"]) if valid and str(r["rank"]).isdigit() else 10**9
                 for d in domains_of(meta.get(r["slug"], {}).get("tags", "")):
-                    agg[d].append(int(r["rank"]) if str(r["rank"]).isdigit() else 10**9)
+                    agg[d].append(rank)
             for d, ranks in agg.items():
                 domain_people.setdefault(d, []).append((handle, len(ranks), min(ranks)))
         for d, people in sorted(domain_people.items(), key=lambda kv: -len(kv[1])):
             people.sort(key=lambda x: (-x[1], x[2]))
-            shown = "、".join(f"[@{h}]({url[h]})（{n} 场/最佳 {b}）" for h, n, b in people[:8])
+            shown = "、".join(
+                f"[@{h}]({url[h]})（{n} 场/最佳 {b if b < 10**9 else '—'}）" for h, n, b in people[:8]
+            )
             lines.append(f"- **{d}**：{shown}")
         lines.append("")
         lines.append("> 计数为该领域已匹配的参赛场次，最佳为该领域内的最小名次；同一个人可出现在多个领域。")

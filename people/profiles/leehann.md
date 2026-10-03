@@ -38,13 +38,13 @@
 | `lmsys-chatbot-arena` | Research | Log Loss | 169 | 1849 | 0.89462 | 1 | 2024-08-04 17:20:21 |
 | `child-mind-institute-detect-sleep-states` | Featured | Event Detection AP | 192 | 1877 | 0.724 | 12 | 2023-11-22 12:11:30 |
 | `learning-equality-curriculum-recommendations` | Featured | F-Score Beta (Micro) | 199 | 1057 | 0.47743 | 60 | 2023-03-07 02:55:58 |
-| `ai-mathematical-olympiad-progress-prize-3` | Featured | 118448 AIMO 3 Multirun-Accuracy | 210 | 4138 | 0.0 | 1 | 2025-12-15 06:46:29 |
+| `ai-mathematical-olympiad-progress-prize-3` | Featured | 118448 AIMO 3 Multirun-Accuracy | 210 ⚠ | 4138 | 0.0 | 1 | 2025-12-15 06:46:29 |
 | `icr-identify-age-related-conditions` | Featured | Weighted Multiclass Loss | 221 | 6430 | 0.06518 | 18 | 2023-08-09 17:53:15 |
 | `feedback-prize-2021` | Featured | TextOverlapFBeta | 233 | 2058 | 0.691 | 79 | 2022-02-25 02:20:18 |
 | `tabular-playground-series-nov-2022` | Playground | Log Loss | 274 | 689 | 0.51737 | 1 | 2022-11-22 11:14:12 |
 | `tabular-playground-series-aug-2022` | Playground | Area Under Receiver Operating Characteristic Curve | 284 | 1888 | 0.59056 | 9 | 2022-08-27 09:15:37 |
 | `vesuvius-challenge-ink-detection` | Featured | DiceFBeta | 301 | 1249 | 0.620813 | 7 | 2023-05-29 02:53:10 |
-| `ai-mathematical-olympiad-prize` | Featured | Accuracy Score | 303 | 1161 | 0 | 2 | 2024-05-21 14:53:30 |
+| `ai-mathematical-olympiad-prize` | Featured | Accuracy Score | 303 ⚠ | 1161 | 0 | 2 | 2024-05-21 14:53:30 |
 | `open-problems-multimodal` | Featured | MeanPearsonOld | 471 | 1220 | 0.812515 | 19 | 2022-11-04 01:04:06 |
 | `asl-signs` | Research | PostProcessorKernelDesc | 504 | 1165 | 0.7180402 | 2 | 2023-04-16 05:33:44 |
 | `stable-diffusion-image-to-prompts` | Featured | MeanCosineSimilarity | 586 | 1231 | 0.54998 | 43 | 2023-05-04 02:41:46 |
@@ -52,7 +52,7 @@
 | `home-credit-credit-risk-model-stability` | Featured | Home Credit 2023 - Gini Stability | 672 | 3856 | 0.65429 | 127 | 2024-05-27 16:29:33 |
 | `hubmap-hacking-the-human-vasculature` | Research | OpenImagesObjDetectionSegmentationAP | 707 | 1021 | 0.344 | 36 | 2023-07-20 14:54:31 |
 | `cmi-detect-behavior-with-sensor-data` | Featured | CMI_2025 | 822 | 2657 | 0.852521 | 306 | 2025-09-02 15:34:55 |
-| `wsdm-cup-multilingual-chatbot-arena` | Featured | Accuracy Score | 846 | 950 | 0.000000 | 2 | 2025-02-03 06:24:41 |
+| `wsdm-cup-multilingual-chatbot-arena` | Featured | Accuracy Score | 846 ⚠ | 950 | 0.000000 | 2 | 2025-02-03 06:24:41 |
 | `uw-madison-gi-tract-image-segmentation` | Research | Dice3DHausdorff | 865 | 1548 | 0.86084 | 6 | 2022-05-28 13:39:04 |
 | `isic-2024-challenge` | Research | ISIC pAUC-aboveTPR | 936 | 2739 | 0.18412 | 36 | 2024-09-03 11:07:25 |
 | `drawing-with-llms` | Featured | SVG Image Fidelity | 1011 | 1309 | 0.45266 | 3 | 2025-03-08 21:48:20 |
@@ -61,11 +61,13 @@
 | `llm-detect-ai-generated-text` | Featured | Roc Auc Score | 1156 | 4358 | 0.962109 | 88 | 2024-01-22 11:09:55 |
 | `equity-post-HCT-survival-predictions` | Research | eefs_concordance_index | 1196 | 3325 | 0.68952 | 1 | 2025-02-05 08:50:19 |
 | `ai-agent-security-multi-step-tool-attacks` | Featured | Agents Security Metric | 1573 | 4186 | 85.09500 | 2 | 2026-07-21 01:09:31 |
-| `ai-mathematical-olympiad-progress-prize-2` | Featured | Accuracy Score | 1758 | 2212 | 0 | 1 | 2025-03-21 18:28:34 |
+| `ai-mathematical-olympiad-progress-prize-2` | Featured | Accuracy Score | 1758 ⚠ | 2212 | 0 | 1 | 2025-03-21 18:28:34 |
 | `godaddy-microbusiness-density-forecasting` | Featured | SMAPE | 1822 | 3547 | 3.9665 | 1 | 2023-01-23 14:45:51 |
-| `optiver-trading-at-the-close` | Featured | Mean Columnwise Mean Absolute Error | 3109 | 4436 | 0.0000 | 1 | 2023-12-20 12:28:20 |
+| `optiver-trading-at-the-close` | Featured | Mean Columnwise Mean Absolute Error | 3109 ⚠ | 4436 | 0.0000 | 1 | 2023-12-20 12:28:20 |
 
 共匹配 **58** 场；类别分布 Featured 37、Research 19、Playground 2。
+
+> ⚠ 5 场公开榜分数全为 0（Kaggle 冻结榜），名次不可信、不计入统计。
 
 领域分布（按赛事标签）文本 NLP 24、表格/结构化 24、视觉 CV 14、生物/医疗 13、科学研究 6。
 

@@ -21,7 +21,7 @@
 | `byu-locating-bacterial-flagellar-motors-2025` | Research | BYU_BioPhysics_91249 | 151 | 1136 | 0.82051 | 99 | 2025-05-30 14:01:04 |
 | `map-charting-student-math-misunderstandings` | Featured | MAP@{K} | 280 | 1857 | 0.94852 | 21 | 2025-10-15 13:52:43 |
 | `kaggle-llm-science-exam` | Featured | MAP@{K} | 350 | 2664 | 0.881190 | 17 | 2023-10-10 19:11:22 |
-| `neurips-2023-machine-unlearning` | Research | 56167-unlearn-metric | 749 | 1188 | 0.0000000000 | 2 | 2023-10-25 22:49:26 |
+| `neurips-2023-machine-unlearning` | Research | 56167-unlearn-metric | 749 ⚠ | 1188 | 0.0000000000 | 2 | 2023-10-25 22:49:26 |
 | `stanford-rna-3d-folding` | Featured | Ribonanza TM-Score | 754 | 1516 | 0.27391 | 2 | 2025-03-30 17:46:24 |
 | `cmi-detect-behavior-with-sensor-data` | Featured | CMI_2025 | 755 | 2657 | 0.853970 | 24 | 2025-09-02 22:23:33 |
 | `ariel-data-challenge-2024` | Featured | Ariel Gaussian Log Likelihood | 764 | 1151 | 0.5194495 | 26 | 2024-08-23 08:03:46 |
@@ -31,9 +31,11 @@
 | `physionet-ecg-image-digitization` | Research | Physionet ECG Signal Extraction Metric | 1263 | 1424 | 0.09360 | 4 | 2025-12-31 12:15:43 |
 | `drawing-with-llms` | Featured | SVG Image Fidelity | 1276 | 1309 | 0.00000 | 7 | 2025-03-04 10:12:23 |
 | `biohub-cell-tracking-during-development` | Research | CZI Biohub Zebrafish 133605 | 2524 | 3947 | 0.89670 | 6 | 2026-09-29 22:27:55 |
-| `ai-mathematical-olympiad-progress-prize-3` | Featured | 118448 AIMO 3 Multirun-Accuracy | 3428 | 4138 | 0.0 | 1 | 2026-04-15 10:41:43 |
+| `ai-mathematical-olympiad-progress-prize-3` | Featured | 118448 AIMO 3 Multirun-Accuracy | 3428 ⚠ | 4138 | 0.0 | 1 | 2026-04-15 10:41:43 |
 
 共匹配 **26** 场；类别分布 Featured 14、Research 12。
+
+> ⚠ 2 场公开榜分数全为 0（Kaggle 冻结榜），名次不可信、不计入统计。
 
 领域分布（按赛事标签）科学研究 10、视觉 CV 9、生物/医疗 8、表格/结构化 8、文本 NLP 6。
 
@@ -54,6 +56,6 @@
 
 ## 方法关键词（公开言论）
 
-**神经网络** 9、**RL/搜索** 8、**LLM/提示** 6、**特征工程** 5、**检索/度量** 4、**集成/融合** 4、**后处理/校准** 3、**验证/CV** 3、**伪标签/蒸馏** 2
+**RL/搜索** 8、**神经网络** 8、**LLM/提示** 6、**特征工程** 5、**检索/度量** 4、**后处理/校准** 3、**集成/融合** 3、**验证/CV** 3、**伪标签/蒸馏** 2
 
 > 自动生成；匹配规则：公开榜 `TeamMemberUserNames` 与讨论区作者名按 handle/显示名归一化匹配，仅覆盖 KStarter 归档的 264 场近 5 年比赛。

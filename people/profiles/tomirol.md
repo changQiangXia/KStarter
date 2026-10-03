@@ -20,13 +20,15 @@
 | `lmsys-chatbot-arena` | Research | Log Loss | 129 | 1849 | 0.88677 | 2 | 2024-07-19 19:49:11 |
 | `kaggle-llm-science-exam` | Featured | MAP@{K} | 188 | 2664 | 0.905326 | 111 | 2023-10-05 00:29:15 |
 | `santa-2024` | Featured | Santa 2024 Metric | 822 | 1514 | 268.91297 | 5 | 2024-11-28 10:25:12 |
-| `ai-mathematical-olympiad-prize` | Featured | Accuracy Score | 906 | 1161 | 0 | 2 | 2024-06-26 23:08:36 |
+| `ai-mathematical-olympiad-prize` | Featured | Accuracy Score | 906 ⚠ | 1161 | 0 | 2 | 2024-06-26 23:08:36 |
 | `deep-past-initiative-machine-translation` | Featured | DPI BLEU / chrF++ | 1347 | 2674 | 32.6482 | 29 | 2026-03-20 23:40:58 |
 | `ai-agent-security-multi-step-tool-attacks` | Featured | Agents Security Metric | 2141 | 4186 | 78.48000 | 4 | 2026-08-21 22:06:41 |
-| `ai-mathematical-olympiad-progress-prize-3` | Featured | 118448 AIMO 3 Multirun-Accuracy | 3082 | 4138 | 0.0 | 1 | 2026-04-13 00:04:54 |
+| `ai-mathematical-olympiad-progress-prize-3` | Featured | 118448 AIMO 3 Multirun-Accuracy | 3082 ⚠ | 4138 | 0.0 | 1 | 2026-04-13 00:04:54 |
 | `rogii-wellbore-geology-prediction` | Featured | Mean Squared Error | 3370 | 6125 | 8.966 | 1 | 2026-08-05 12:21:56 |
 
 共匹配 **19** 场；类别分布 Featured 12、Research 7。
+
+> ⚠ 2 场公开榜分数全为 0（Kaggle 冻结榜），名次不可信、不计入统计。
 
 领域分布（按赛事标签）文本 NLP 8、表格/结构化 5、强化学习/博弈 3、视觉 CV 3、生物/医疗 3。
 

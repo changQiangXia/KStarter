@@ -117,7 +117,7 @@
 | `rsna-miccai-brain-tumor-radiogenomic-classification` | Featured | Area Under Receiver Operating Characteristic Curve | 145 | 1555 | 0.73202 | 33 | 2021-10-14 15:58:02 |
 | `benetech-making-graphs-accessible` | Featured | Benetech Mixed Data Type Matching Score | 151 | 608 | 0.48 | 16 | 2023-06-12 12:13:35 |
 | `playground-series-s5e8` | Playground | Roc Auc Score | 151 | 3365 | 0.97763 | 6 | 2025-08-28 06:17:23 |
-| `hull-tactical-market-prediction` | Featured | Hull Competition Sharpe | 154 | 3677 | 0.000 | 2 | 2025-11-10 07:12:21 |
+| `hull-tactical-market-prediction` | Featured | Hull Competition Sharpe | 154 ⚠ | 3677 | 0.000 | 2 | 2025-11-10 07:12:21 |
 | `czii-cryo-et-object-identification` | Featured | CZI_CryoET_ 84969 | 156 | 931 | 0.71540 | 37 | 2025-02-05 12:56:53 |
 | `uspto-explainable-ai` | Featured | USPTO 59575 | 156 | 571 | 0.31998 | 15 | 2024-06-18 06:36:08 |
 | `playground-series-s3e13` | Playground | MAP@{K} | 157 | 934 | 0.41059 | 1 | 2023-04-20 18:48:59 |
@@ -188,9 +188,9 @@
 | `amp-parkinsons-disease-progression-prediction` | Featured | smape_plus_1 | 316 | 1805 | 56.056 | 21 | 2023-05-12 11:53:27 |
 | `llms-you-cant-please-them-all` | Featured | LLMYCPTA metric 20241120 | 316 | 1692 | 22.946 | 50 | 2025-02-26 07:00:52 |
 | `us-patent-phrase-to-phrase-matching` | Featured | PearsonCorrelationCoefficient | 319 | 1889 | 0.8465 | 35 | 2022-06-20 12:58:22 |
-| `konwinski-prize` | Featured | K Prize Metric | 321 | 617 | 0.000000 | 2 | 2025-03-12 06:56:43 |
+| `konwinski-prize` | Featured | K Prize Metric | 321 ⚠ | 617 | 0.000000 | 2 | 2025-03-12 06:56:43 |
 | `feedback-prize-english-language-learning` | Featured | Mean Weighted Columnwise Root Mean Squared Error | 327 | 2654 | 0.437237 | 26 | 2022-11-21 08:37:43 |
-| `nfl-big-data-bowl-2026-prediction` | Featured | NFL_2025 | 328 | 1899 | 0.00000 | 2 | 2025-12-01 21:58:30 |
+| `nfl-big-data-bowl-2026-prediction` | Featured | NFL_2025 | 328 ⚠ | 1899 | 0.00000 | 2 | 2025-12-01 21:58:30 |
 | `uw-madison-gi-tract-image-segmentation` | Research | Dice3DHausdorff | 331 | 1548 | 0.87175 | 12 | 2022-07-11 06:54:01 |
 | `playground-series-s6e7` | Playground | Balanced Accuracy Score | 336 | 3355 | 0.95112 | 9 | 2026-07-07 07:58:53 |
 | `rsna-2023-abdominal-trauma-detection` | Featured | RSNA Trauma Metric | 341 | 1125 | 0.65565 | 10 | 2023-09-20 06:19:24 |
@@ -208,7 +208,7 @@
 | `llm-20-questions` | Featured | llm_20_questions | 485 | 832 | 594.1 | 2 | 2024-07-21 19:39:40 |
 | `map-charting-student-math-misunderstandings` | Featured | MAP@{K} | 494 | 1857 | 0.94803 | 13 | 2025-10-15 06:36:02 |
 | `equity-post-HCT-survival-predictions` | Research | eefs_concordance_index | 495 | 3325 | 0.69330 | 25 | 2025-02-25 07:56:09 |
-| `neurips-2023-machine-unlearning` | Research | 56167-unlearn-metric | 507 | 1188 | 0.0000000000 | 2 | 2023-11-17 08:34:04 |
+| `neurips-2023-machine-unlearning` | Research | 56167-unlearn-metric | 507 ⚠ | 1188 | 0.0000000000 | 2 | 2023-11-17 08:34:04 |
 | `icr-identify-age-related-conditions` | Featured | Weighted Multiclass Loss | 519 | 6430 | 0.06613 | 19 | 2023-07-27 14:39:01 |
 | `birdclef-2026` | Research | Birdclef ROC AUC | 524 | 4094 | 0.95089 | 161 | 2026-05-30 15:21:16 |
 | `ai-village-ctf` | Research | Nvidia Defcon | 550 | 668 | 0.026 | 2 | 2022-08-25 12:38:01 |
@@ -218,26 +218,28 @@
 | `ai-agent-security-multi-step-tool-attacks` | Featured | Agents Security Metric | 591 | 4186 | 89.59500 | 55 | 2026-09-01 06:16:32 |
 | `tlvmc-parkinsons-freezing-gait-prediction` | Research | sklearn_average_precision_score | 602 | 1379 | 0.289694 | 18 | 2023-06-08 17:39:53 |
 | `neurogolf-2026` | Research | NeuroGolf Metric | 612 | 2963 | 7302.22 | 285 | 2026-07-15 21:28:16 |
-| `wsdm-cup-multilingual-chatbot-arena` | Featured | Accuracy Score | 637 | 950 | 0.000000 | 2 | 2025-01-27 15:59:12 |
+| `wsdm-cup-multilingual-chatbot-arena` | Featured | Accuracy Score | 637 ⚠ | 950 | 0.000000 | 2 | 2025-01-27 15:59:12 |
 | `jpx-tokyo-stock-exchange-prediction` | Featured | JPXSharpe | 639 | 2033 | 0.023 | 2 | 2022-07-01 12:43:01 |
 | `rsna-2024-lumbar-spine-degenerative-classification` | Featured | RSNA Lumbar Metric 71549 | 656 | 1874 | 0.482171 | 29 | 2024-09-14 06:52:13 |
 | `jane-street-real-time-market-data-forecasting` | Featured | Jane Street Zero-Mean R2 | 658 | 3757 | 0.007607 | 1 | 2025-06-16 20:22:55 |
 | `deep-past-initiative-machine-translation` | Featured | DPI BLEU / chrF++ | 678 | 2674 | 35.5112 | 31 | 2026-03-23 10:51:41 |
 | `march-machine-learning-mania-2023` | Featured | Mean Squared Error | 745 | 1033 | 0.22262 | 1 | 2023-02-16 16:09:18 |
 | `stanford-rna-3d-folding-2` | Featured | Ribonanza TM-Score PermuteChains | 754 | 1867 | 0.41712 | 2 | 2026-03-25 16:04:00 |
-| `ai-mathematical-olympiad-progress-prize-3` | Featured | 118448 AIMO 3 Multirun-Accuracy | 841 | 4138 | 0.0 | 1 | 2026-01-28 07:01:29 |
-| `ai-mathematical-olympiad-progress-prize-2` | Featured | Accuracy Score | 1030 | 2212 | 0 | 2 | 2025-03-08 08:25:43 |
+| `ai-mathematical-olympiad-progress-prize-3` | Featured | 118448 AIMO 3 Multirun-Accuracy | 841 ⚠ | 4138 | 0.0 | 1 | 2026-01-28 07:01:29 |
+| `ai-mathematical-olympiad-progress-prize-2` | Featured | Accuracy Score | 1030 ⚠ | 2212 | 0 | 2 | 2025-03-08 08:25:43 |
 | `march-machine-learning-mania-2025` | Featured | Mean Squared Error | 1034 | 1727 | 0.19368 | 2 | 2025-02-21 09:34:41 |
 | `pokemon-tcg-ai-battle` | Featured | cabt_bo1 | 1072 | 6807 | 810.4 | 2 | 2026-08-12 12:00:08 |
 | `cafa-6-protein-function-prediction` | Research | cafa6_metric_final | 1111 | 2259 | 0.32910 | 2 | 2026-02-02 13:25:30 |
 | `ai-village-capture-the-flag-defcon31` | Featured | Flag_Metric | 1137 | 1344 | 1 | 3 | 2023-10-27 06:36:22 |
-| `predict-energy-behavior-of-prosumers` | Featured | Mean Absolute Error | 1657 | 2731 | 0.0000 | 2 | 2024-01-30 11:15:53 |
-| `ubiquant-market-prediction` | Featured | MeanPearson | 2026 | 2893 | 0.000000 | 2 | 2022-04-18 10:11:14 |
+| `predict-energy-behavior-of-prosumers` | Featured | Mean Absolute Error | 1657 ⚠ | 2731 | 0.0000 | 2 | 2024-01-30 11:15:53 |
+| `ubiquant-market-prediction` | Featured | MeanPearson | 2026 ⚠ | 2893 | 0.000000 | 2 | 2022-04-18 10:11:14 |
 | `march-machine-learning-mania-2026` | Featured | Mean Squared Error | 2526 | 3462 | 0.1787567 | 1 | 2026-03-18 15:29:47 |
-| `optiver-trading-at-the-close` | Featured | Mean Columnwise Mean Absolute Error | 3202 | 4436 | 0.0000 | 1 | 2023-12-20 19:46:20 |
-| `optiver-realized-volatility-prediction` | Featured | Root Mean Square Percentage Error | 3515 | 3852 | 0.00000 | 2 | 2021-09-27 19:04:23 |
+| `optiver-trading-at-the-close` | Featured | Mean Columnwise Mean Absolute Error | 3202 ⚠ | 4436 | 0.0000 | 1 | 2023-12-20 19:46:20 |
+| `optiver-realized-volatility-prediction` | Featured | Root Mean Square Percentage Error | 3515 ⚠ | 3852 | 0.00000 | 2 | 2021-09-27 19:04:23 |
 
 共匹配 **230** 场；类别分布 Featured 94、Playground 78、Research 58。
+
+> ⚠ 11 场公开榜分数全为 0（Kaggle 冻结榜），名次不可信、不计入统计。
 
 领域分布（按赛事标签）表格/结构化 135、视觉 CV 50、生物/医疗 38、文本 NLP 31、科学研究 27。
 
@@ -258,6 +260,6 @@
 
 ## 方法关键词（公开言论）
 
-**伪标签/蒸馏** 2、**AutoML** 2、**GBDT 调参** 1、**神经网络** 1、**集成/融合** 1
+**伪标签/蒸馏** 2、**AutoML** 2、**GBDT 调参** 1、**神经网络** 1
 
 > 自动生成；匹配规则：公开榜 `TeamMemberUserNames` 与讨论区作者名按 handle/显示名归一化匹配，仅覆盖 KStarter 归档的 264 场近 5 年比赛。

@@ -30,25 +30,27 @@
 | `petfinder-pawpularity-score` | Research | Root Mean Squared Error | 98 | 3537 | 17.77644 | 24 | 2022-01-04 09:29:15 |
 | `ai-village-ctf` | Research | Nvidia Defcon | 172 | 668 | 0.328 | 5 | 2022-08-13 05:15:45 |
 | `march-machine-learning-mania-2025` | Featured | Mean Squared Error | 253 | 1727 | 0.11755 | 2 | 2025-03-19 07:22:55 |
-| `konwinski-prize` | Featured | K Prize Metric | 279 | 617 | 0.000000 | 2 | 2025-03-07 16:18:12 |
+| `konwinski-prize` | Featured | K Prize Metric | 279 ⚠ | 617 | 0.000000 | 2 | 2025-03-07 16:18:12 |
 | `ai-village-capture-the-flag-defcon31` | Featured | Flag_Metric | 406 | 1344 | 10 | 11 | 2023-10-10 09:52:31 |
 | `womens-march-mania-2022` | Featured | Log Loss | 605 | 651 | 0.72617 | 2 | 2022-03-16 07:05:56 |
 | `open-problems-single-cell-perturbations` | Featured | Weighted Rowwise Root Mean Squared Error | 609 | 1097 | 0.599 | 28 | 2023-11-28 07:59:18 |
 | `mens-march-mania-2022` | Featured | Log Loss | 667 | 930 | 0.69453 | 2 | 2022-03-15 08:28:34 |
 | `AI4Code` | Featured | AI4CodeKendallTau | 710 | 1135 | 0.7665 | 2 | 2022-05-12 11:48:09 |
 | `foursquare-location-matching` | Featured | Jaccard | 839 | 1079 | 0.76260 | 4 | 2022-04-25 12:37:07 |
-| `optiver-realized-volatility-prediction` | Featured | Root Mean Square Percentage Error | 886 | 3852 | 0.00000 | 2 | 2021-08-27 18:38:54 |
+| `optiver-realized-volatility-prediction` | Featured | Root Mean Square Percentage Error | 886 ⚠ | 3852 | 0.00000 | 2 | 2021-08-27 18:38:54 |
 | `commonlit-evaluate-student-summaries` | Featured | Mean Weighted Columnwise Root Mean Squared Error | 1048 | 2064 | 0.47377 | 5 | 2023-07-27 14:12:30 |
-| `mitsui-commodity-prediction-challenge` | Featured | MITSUI&CO. Commodity Prediction Metric | 1091 | 1711 | 0.00000 | 2 | 2025-10-06 19:38:29 |
+| `mitsui-commodity-prediction-challenge` | Featured | MITSUI&CO. Commodity Prediction Metric | 1091 ⚠ | 1711 | 0.00000 | 2 | 2025-10-06 19:38:29 |
 | `ventilator-pressure-prediction` | Research | Mean Absolute Error | 1133 | 2605 | 0.1521 | 2 | 2021-10-14 11:38:13 |
 | `h-and-m-personalized-fashion-recommendations` | Featured | MAP@{K} | 1211 | 2952 | 0.02291 | 13 | 2022-03-23 11:02:21 |
 | `learning-agency-lab-automated-essay-scoring-2` | Featured | Cohen Kappa Score | 1309 | 2706 | 0.81528 | 32 | 2024-06-27 11:58:28 |
 | `isic-2024-challenge` | Research | ISIC pAUC-aboveTPR | 1333 | 2739 | 0.17974 | 25 | 2024-08-12 17:53:33 |
-| `predict-energy-behavior-of-prosumers` | Featured | Mean Absolute Error | 1952 | 2731 | 0.0000 | 2 | 2024-01-30 10:39:17 |
-| `ubiquant-market-prediction` | Featured | MeanPearson | 2009 | 2893 | 0.000000 | 2 | 2022-04-18 10:50:41 |
-| `optiver-trading-at-the-close` | Featured | Mean Columnwise Mean Absolute Error | 2534 | 4436 | 0.0000 | 2 | 2023-12-20 13:36:39 |
+| `predict-energy-behavior-of-prosumers` | Featured | Mean Absolute Error | 1952 ⚠ | 2731 | 0.0000 | 2 | 2024-01-30 10:39:17 |
+| `ubiquant-market-prediction` | Featured | MeanPearson | 2009 ⚠ | 2893 | 0.000000 | 2 | 2022-04-18 10:50:41 |
+| `optiver-trading-at-the-close` | Featured | Mean Columnwise Mean Absolute Error | 2534 ⚠ | 4436 | 0.0000 | 2 | 2023-12-20 13:36:39 |
 
 共匹配 **41** 场；类别分布 Featured 30、Research 11。
+
+> ⚠ 6 场公开榜分数全为 0（Kaggle 冻结榜），名次不可信、不计入统计。
 
 领域分布（按赛事标签）表格/结构化 19、文本 NLP 13、生物/医疗 7、科学研究 5、视觉 CV 5。
 
@@ -62,13 +64,13 @@
 | 2025-03-06 | topic | `equity-post-HCT-survival-predictions` | [2nd Place Solution](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/566522) | 115 | Since we knew that the data is synthetic and how it was produced, we had a look at the SurvivalGAN paper. As you can see in this i |
 | 2024-02-01 | topic | `predict-energy-behavior-of-prosumers` | [Public 10th Place Solution (Private 11th](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/472537) | 78 | Stacking Trained 2 separate models: Weather forecast features only model with target/installed_capacity as target Weather history  |
 | 2023-12-06 | topic | `child-mind-institute-detect-sleep-states` | [7th Place Solution - Wavenet and Some Tr](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/459598) | 70 | Our main model is a wavenet with some modifications. It works on a sequence of minutely aggregated 3 days. (nn.Module): (): (Sleep |
-| 2025-03-21 | topic | `march-machine-learning-mania-2025` | [Current first place scares me](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/569369) | 29 | Comments: [deleted] (2025-03-25 20:00:14.557000) [+7] It got 4 upsets correct yesterday, in games where the experts predicted 25%, |
+| 2025-03-21 | topic | `march-machine-learning-mania-2025` | [Current first place scares me](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/569369) | 29 |  |
 | 2025-06-10 | comment | `cmi-detect-behavior-with-sensor-data` | [My impressions of the experiment through](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/583863) | 15 | This could be more impressive if you didnt reach that score by yourself first. It feels like you designed your agent to reach your |
 | 2024-02-01 | comment | `predict-energy-behavior-of-prosumers` | [Public 10th Place Solution (Private 11th](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/472537) | 5 | Thank you! When I take the max, my target is usually between 0 and 1. When it makes an error, it doesn't cause such huge outliers  |
 | 2025-03-21 | comment | `march-machine-learning-mania-2025` | [Current first place scares me](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/569369) | 5 | Bro should stop working and make money by gambling |
 
 ## 方法关键词（公开言论）
 
-**验证/CV** 7、**GBDT 调参** 6、**神经网络** 6、**集成/融合** 5、**后处理/校准** 5、**特征工程** 4、**LLM/提示** 2、**RL/搜索** 2、**检索/度量** 1、**AutoML** 1
+**验证/CV** 7、**GBDT 调参** 6、**集成/融合** 5、**神经网络** 4、**特征工程** 4、**后处理/校准** 4、**检索/度量** 1、**RL/搜索** 1、**AutoML** 1、**LLM/提示** 1
 
 > 自动生成；匹配规则：公开榜 `TeamMemberUserNames` 与讨论区作者名按 handle/显示名归一化匹配，仅覆盖 KStarter 归档的 264 场近 5 年比赛。

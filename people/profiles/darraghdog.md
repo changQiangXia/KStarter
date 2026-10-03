@@ -23,14 +23,16 @@
 | `nbme-score-clinical-patient-notes` | Featured | Medical Board F-Beta | 15 | 1471 | 0.89360 | 81 | 2022-05-03 16:12:12 |
 | `waveform-inversion` | Research | Mean Absolute Error | 29 | 1365 | 18.42576 | 23 | 2025-06-29 17:44:05 |
 | `uw-madison-gi-tract-image-segmentation` | Research | Dice3DHausdorff | 162 | 1548 | 0.87654 | 39 | 2022-06-11 23:09:25 |
-| `konwinski-prize` | Featured | K Prize Metric | 279 | 617 | 0.000000 | 2 | 2025-03-07 16:18:12 |
-| `ai-mathematical-olympiad-progress-prize-2` | Featured | Accuracy Score | 1048 | 2212 | 0 | 2 | 2025-03-20 23:13:39 |
+| `konwinski-prize` | Featured | K Prize Metric | 279 ⚠ | 617 | 0.000000 | 2 | 2025-03-07 16:18:12 |
+| `ai-mathematical-olympiad-progress-prize-2` | Featured | Accuracy Score | 1048 ⚠ | 2212 | 0 | 2 | 2025-03-20 23:13:39 |
 | `feedback-prize-english-language-learning` | Featured | Mean Weighted Columnwise Root Mean Squared Error | 1220 | 2654 | 0.441152 | 1 | 2022-09-03 14:46:55 |
 | `jigsaw-agile-community-rules` | Featured | 94635_Jigsaw_Rules_AUC | 1741 | 2445 | 0.61589 | 25 | 2025-09-16 08:46:11 |
-| `ai-mathematical-olympiad-progress-prize-3` | Featured | 118448 AIMO 3 Multirun-Accuracy | 2368 | 4138 | 0.0 | 1 | 2026-04-01 21:05:34 |
+| `ai-mathematical-olympiad-progress-prize-3` | Featured | 118448 AIMO 3 Multirun-Accuracy | 2368 ⚠ | 4138 | 0.0 | 1 | 2026-04-01 21:05:34 |
 | `child-mind-institute-problematic-internet-use` | Featured | Cohen Kappa Score | 2566 | 3559 | 0.439 | 2 | 2024-10-23 16:16:43 |
 
 共匹配 **23** 场；类别分布 Featured 17、Research 6。
+
+> ⚠ 3 场公开榜分数全为 0（Kaggle 冻结榜），名次不可信、不计入统计。
 
 领域分布（按赛事标签）表格/结构化 12、文本 NLP 11、视觉 CV 7、科学研究 4、生物/医疗 4。
 
@@ -51,6 +53,6 @@
 
 ## 方法关键词（公开言论）
 
-**神经网络** 13、**验证/CV** 10、**LLM/提示** 9、**集成/融合** 4、**RL/搜索** 2、**后处理/校准** 2、**特征工程** 1、**GBDT 调参** 1、**AutoML** 1、**伪标签/蒸馏** 1
+**神经网络** 13、**验证/CV** 10、**LLM/提示** 9、**集成/融合** 4、**后处理/校准** 2、**特征工程** 1、**GBDT 调参** 1、**AutoML** 1、**伪标签/蒸馏** 1、**RL/搜索** 1
 
 > 自动生成；匹配规则：公开榜 `TeamMemberUserNames` 与讨论区作者名按 handle/显示名归一化匹配，仅覆盖 KStarter 归档的 264 场近 5 年比赛。

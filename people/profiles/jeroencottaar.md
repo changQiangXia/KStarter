@@ -13,12 +13,14 @@
 | `czii-cryo-et-object-identification` | Featured | CZI_CryoET_ 84969 | 14 | 931 | 0.77490 | 404 | 2025-02-05 17:40:12 |
 | `byu-locating-bacterial-flagellar-motors-2025` | Research | BYU_BioPhysics_91249 | 46 | 1136 | 0.84577 | 393 | 2025-06-04 07:15:46 |
 | `google-code-golf-2025` | Research | Code Golf Metric | 918 | 1142 | 55448.001 | 12 | 2025-08-06 17:38:10 |
-| `ai-mathematical-olympiad-progress-prize-2` | Featured | Accuracy Score | 1100 | 2212 | 0 | 2 | 2025-03-31 05:28:59 |
-| `ai-mathematical-olympiad-progress-prize-3` | Featured | 118448 AIMO 3 Multirun-Accuracy | 1773 | 4138 | 0.0 | 1 | 2026-03-12 17:34:09 |
+| `ai-mathematical-olympiad-progress-prize-2` | Featured | Accuracy Score | 1100 ⚠ | 2212 | 0 | 2 | 2025-03-31 05:28:59 |
+| `ai-mathematical-olympiad-progress-prize-3` | Featured | 118448 AIMO 3 Multirun-Accuracy | 1773 ⚠ | 4138 | 0.0 | 1 | 2026-03-12 17:34:09 |
 | `biohub-cell-tracking-during-development` | Research | CZI Biohub Zebrafish 133605 | 2620 | 3947 | 0.88990 | 19 | 2026-09-24 03:19:30 |
 | `nvidia-nemotron-model-reasoning-challenge` | Featured | NVIDIA Nemotron Metric | 3942 | 4185 | 0.504 | 1 | 2026-03-17 13:25:37 |
 
 共匹配 **11** 场；类别分布 Featured 7、Research 4。
+
+> ⚠ 2 场公开榜分数全为 0（Kaggle 冻结榜），名次不可信、不计入统计。
 
 领域分布（按赛事标签）科学研究 3、表格/结构化 3、生物/医疗 3、视觉 CV 3、强化学习/博弈 2。
 
@@ -39,6 +41,6 @@
 
 ## 方法关键词（公开言论）
 
-**LLM/提示** 8、**神经网络** 6、**RL/搜索** 6、**验证/CV** 5、**特征工程** 3、**后处理/校准** 3、**集成/融合** 2
+**LLM/提示** 6、**RL/搜索** 5、**验证/CV** 4、**神经网络** 3、**集成/融合** 2、**特征工程** 2、**后处理/校准** 2
 
 > 自动生成；匹配规则：公开榜 `TeamMemberUserNames` 与讨论区作者名按 handle/显示名归一化匹配，仅覆盖 KStarter 归档的 264 场近 5 年比赛。

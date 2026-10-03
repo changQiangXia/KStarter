@@ -103,6 +103,27 @@ def parse_leaderboard(path: pathlib.Path, slug: str, roster: dict[str, dict]):
     return records
 
 
+def score_quality(path: pathlib.Path) -> str:
+    """公开榜可用性：分数列全为 0 -> Kaggle 冻结榜，名次不可信。"""
+    try:
+        rows = list(csv.DictReader(path.open(encoding="utf-8-sig")))
+    except OSError:
+        return "unreadable"
+    if not rows:
+        return "empty"
+    scores = []
+    for row in rows:
+        try:
+            scores.append(float(row.get("Score") or ""))
+        except ValueError:
+            pass
+    if not scores:
+        return "empty"
+    if sum(1 for s in scores if abs(s) < 1e-12) / len(scores) > 0.9:
+        return "zero_score"
+    return "ok"
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--roster", default="")
@@ -162,16 +183,20 @@ def main() -> int:
 
     # 从缓存重建派生结果（确定性）
     all_records = []
+    quality: dict[str, str] = {}
     for slug, info in sorted(state.items()):
         if info.get("status") != "ok":
             continue
         csv_path = cache / slug / info["csv"]
         if csv_path.exists():
+            quality[slug] = score_quality(csv_path)
             all_records.extend(parse_leaderboard(csv_path, slug, roster))
+    for rec in all_records:
+        rec["lb_quality"] = quality.get(rec["slug"], "missing")
 
     out_path = pathlib.Path(args.out)
     out_path.parent.mkdir(parents=True, exist_ok=True)
-    fields = ["handle", "display_name", "slug", "rank", "team_name", "score", "submission_count", "last_submission", "team_members"]
+    fields = ["handle", "display_name", "slug", "rank", "team_name", "score", "submission_count", "last_submission", "team_members", "lb_quality"]
     with out_path.open("w", newline="", encoding="utf-8") as fh:
         writer = csv.DictWriter(fh, fieldnames=fields)
         writer.writeheader()
@@ -183,11 +208,13 @@ def main() -> int:
     coverage_path = pathlib.Path(args.coverage)
     with coverage_path.open("w", newline="", encoding="utf-8") as fh:
         writer = csv.writer(fh)
-        writer.writerow(["slug", "status", "matched_people", "matched_records"])
+        writer.writerow(["slug", "status", "lb_quality", "matched_people", "matched_records"])
         for slug in slugs:
             info = state.get(slug, {})
             matched_people = len({r["handle"] for r in all_records if r["slug"] == slug})
-            writer.writerow([slug, info.get("status", "missing"), matched_people, per_slug.get(slug, 0)])
+            writer.writerow([
+                slug, info.get("status", "missing"), quality.get(slug, ""), matched_people, per_slug.get(slug, 0),
+            ])
 
     summary_path = pathlib.Path(args.summary)
     with summary_path.open("w", newline="", encoding="utf-8") as fh:
@@ -195,11 +222,16 @@ def main() -> int:
         writer.writerow(["handle", "display_name", "competitions", "best_rank"])
         display = {r["handle"]: r["display_name"] for r in roster_rows}
         for handle, n in per_person.most_common():
-            ranks = [int(r["rank"]) for r in all_records if r["handle"] == handle and str(r["rank"]).isdigit()]
+            ranks = [
+                int(r["rank"])
+                for r in all_records
+                if r["handle"] == handle and r["lb_quality"] == "ok" and str(r["rank"]).isdigit()
+            ]
             writer.writerow([handle, display.get(handle, ""), n, min(ranks) if ranks else ""])
 
     print(f"roster: {roster_path.name} ({len(roster_rows)} people)")
     print(f"slugs: {len(slugs)} | status: {dict(status_counter)}")
+    print(f"lb_quality: {dict(Counter(quality.values()))}")
     print(f"matched records: {len(all_records)} | people: {len(per_person)} | competitions: {len(per_slug)}")
     print(f"coverage -> {coverage_path}")
     for handle, n in per_person.most_common(10):

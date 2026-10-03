@@ -33,9 +33,11 @@
 | `orbit-wars` | Featured | orbit_wars | 647 | 4729 | 1064.9 | 2 | 2026-06-23 23:06:13 |
 | `cmi-detect-behavior-with-sensor-data` | Featured | CMI_2025 | 720 | 2657 | 0.854539 | 13 | 2025-08-30 21:28:04 |
 | `march-machine-learning-mania-2026` | Featured | Mean Squared Error | 1462 | 3462 | 0.1391788 | 1 | 2026-03-19 08:30:17 |
-| `ai-mathematical-olympiad-progress-prize-3` | Featured | 118448 AIMO 3 Multirun-Accuracy | 2911 | 4138 | 0.0 | 1 | 2026-04-10 23:52:22 |
+| `ai-mathematical-olympiad-progress-prize-3` | Featured | 118448 AIMO 3 Multirun-Accuracy | 2911 ⚠ | 4138 | 0.0 | 1 | 2026-04-10 23:52:22 |
 
 共匹配 **28** 场；类别分布 Featured 17、Research 11。
+
+> ⚠ 1 场公开榜分数全为 0（Kaggle 冻结榜），名次不可信、不计入统计。
 
 领域分布（按赛事标签）生物/医疗 9、表格/结构化 8、强化学习/博弈 6、视觉 CV 5、科学研究 5。
 

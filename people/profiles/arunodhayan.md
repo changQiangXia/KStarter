@@ -26,7 +26,7 @@
 | `hubmap-organ-segmentation` | Research | Dice | 111 | 1174 | 0.79229 | 325 | 2022-09-22 16:40:30 |
 | `predict-ai-model-runtime` | Research | 58266_TpuGraphsEval | 128 | 616 | 0.39619 | 18 | 2023-10-30 14:27:52 |
 | `2023-kaggle-ai-report` | Community | Mean Absolute Error | 136 | 220 | 136 | 1 | 2023-06-18 19:50:16 |
-| `konwinski-prize` | Featured | K Prize Metric | 136 | 617 | 0.000000 | 2 | 2025-03-06 04:27:53 |
+| `konwinski-prize` | Featured | K Prize Metric | 136 ⚠ | 617 | 0.000000 | 2 | 2025-03-06 04:27:53 |
 | `UBC-OCEAN` | Research | Balanced Accuracy Score | 149 | 1326 | 0.45 | 112 | 2023-12-27 08:00:29 |
 | `asl-fingerspelling` | Research | PostProcessorKernelDesc | 154 | 1314 | 0.701 | 24 | 2023-08-17 14:06:21 |
 | `stanford-rna-3d-folding-2` | Featured | Ribonanza TM-Score PermuteChains | 177 | 1867 | 0.43072 | 2 | 2026-03-16 17:20:37 |
@@ -49,16 +49,18 @@
 | `benetech-making-graphs-accessible` | Featured | Benetech Mixed Data Type Matching Score | 522 | 608 | 0.42 | 3 | 2023-04-12 21:04:21 |
 | `amex-default-prediction` | Featured | Amex Custom Gini And X% Percentage Capture | 637 | 4874 | 0.79987 | 49 | 2022-08-22 02:51:48 |
 | `rsna-2024-lumbar-spine-degenerative-classification` | Featured | RSNA Lumbar Metric 71549 | 649 | 1874 | 0.481846 | 43 | 2024-09-21 06:42:39 |
-| `predict-energy-behavior-of-prosumers` | Featured | Mean Absolute Error | 732 | 2731 | 0.0000 | 2 | 2024-01-04 10:58:25 |
+| `predict-energy-behavior-of-prosumers` | Featured | Mean Absolute Error | 732 ⚠ | 2731 | 0.0000 | 2 | 2024-01-04 10:58:25 |
 | `ariel-data-challenge-2024` | Featured | Ariel Gaussian Log Likelihood | 771 | 1151 | 0.5176069 | 9 | 2024-09-10 12:18:23 |
 | `eedi-mining-misconceptions-in-mathematics` | Featured | MAP@{K} | 930 | 1446 | 0.30397 | 70 | 2024-10-12 12:37:34 |
 | `neurips-open-polymer-prediction-2025` | Featured | open_polymer_2025 | 970 | 2240 | 0.07190 | 9 | 2025-07-28 15:09:32 |
 | `drawing-with-llms` | Featured | SVG Image Fidelity | 993 | 1309 | 0.46012 | 23 | 2025-03-10 13:16:29 |
 | `isic-2024-challenge` | Research | ISIC pAUC-aboveTPR | 1087 | 2739 | 0.18345 | 234 | 2024-09-05 21:09:11 |
-| `ai-mathematical-olympiad-progress-prize-3` | Featured | 118448 AIMO 3 Multirun-Accuracy | 1255 | 4138 | 0.0 | 1 | 2026-02-15 11:00:29 |
+| `ai-mathematical-olympiad-progress-prize-3` | Featured | 118448 AIMO 3 Multirun-Accuracy | 1255 ⚠ | 4138 | 0.0 | 1 | 2026-02-15 11:00:29 |
 | `nvidia-nemotron-model-reasoning-challenge` | Featured | NVIDIA Nemotron Metric | 1279 | 4185 | 0.860 | 111 | 2026-06-08 08:06:59 |
 
 共匹配 **51** 场；类别分布 Featured 28、Research 22、Community 1。
+
+> ⚠ 3 场公开榜分数全为 0（Kaggle 冻结榜），名次不可信、不计入统计。
 
 领域分布（按赛事标签）表格/结构化 23、视觉 CV 23、生物/医疗 15、科学研究 13、文本 NLP 7。
 

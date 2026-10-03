@@ -29,11 +29,11 @@
 | `playground-series-s5e7` | Playground | Accuracy Score | 88 | 4329 | 0.976518 | 8 | 2025-07-09 07:51:41 |
 | `feedback-prize-english-language-learning` | Featured | Mean Weighted Columnwise Root Mean Squared Error | 159 | 2654 | 0.436588 | 76 | 2022-11-29 21:45:51 |
 | `playground-series-s6e2` | Playground | Roc Auc Score | 206 | 4370 | 0.95406 | 9 | 2026-02-26 12:18:13 |
-| `wsdm-cup-multilingual-chatbot-arena` | Featured | Accuracy Score | 385 | 950 | 0.000000 | 2 | 2025-02-01 20:02:47 |
+| `wsdm-cup-multilingual-chatbot-arena` | Featured | Accuracy Score | 385 ⚠ | 950 | 0.000000 | 2 | 2025-02-01 20:02:47 |
 | `playground-series-s6e8` | Playground | Roc Auc Score | 489 | 3531 | 0.97101 | 46 | 2026-08-31 11:33:33 |
 | `playground-series-s6e6` | Playground | Balanced Accuracy Score | 516 | 2816 | 0.97061 | 12 | 2026-06-05 17:52:21 |
 | `playground-series-s5e12` | Playground | Roc Auc Score | 517 | 4206 | 0.70242 | 11 | 2025-12-31 15:06:02 |
-| `nfl-big-data-bowl-2026-prediction` | Featured | NFL_2025 | 541 | 1899 | 0.00000 | 2 | 2025-12-03 21:01:24 |
+| `nfl-big-data-bowl-2026-prediction` | Featured | NFL_2025 | 541 ⚠ | 1899 | 0.00000 | 2 | 2025-12-03 21:01:24 |
 | `playground-series-s5e8` | Playground | Roc Auc Score | 591 | 3365 | 0.97438 | 3 | 2025-08-30 17:09:43 |
 | `playground-series-s6e1` | Playground | Root Mean Squared Error | 665 | 4317 | 8.59265 | 27 | 2026-01-12 19:40:50 |
 | `march-machine-learning-mania-2026` | Featured | Mean Squared Error | 701 | 3462 | 0.1313502 | 1 | 2026-03-17 15:57:00 |
@@ -45,6 +45,8 @@
 | `playground-series-s6e3` | Playground | Roc Auc Score | 2888 | 4142 | 0.91229 | 4 | 2026-03-24 14:30:48 |
 
 共匹配 **37** 场；类别分布 Featured 21、Playground 11、Research 5。
+
+> ⚠ 2 场公开榜分数全为 0（Kaggle 冻结榜），名次不可信、不计入统计。
 
 领域分布（按赛事标签）表格/结构化 21、文本 NLP 12、视觉 CV 7、生物/医疗 5、科学研究 2。
 
@@ -65,6 +67,6 @@
 
 ## 方法关键词（公开言论）
 
-**LLM/提示** 23、**验证/CV** 18、**集成/融合** 14、**神经网络** 13、**特征工程** 13、**检索/度量** 9、**伪标签/蒸馏** 7、**RL/搜索** 7、**后处理/校准** 4
+**LLM/提示** 21、**验证/CV** 18、**集成/融合** 14、**特征工程** 13、**神经网络** 10、**检索/度量** 9、**伪标签/蒸馏** 7、**后处理/校准** 4、**RL/搜索** 3
 
 > 自动生成；匹配规则：公开榜 `TeamMemberUserNames` 与讨论区作者名按 handle/显示名归一化匹配，仅覆盖 KStarter 归档的 264 场近 5 年比赛。

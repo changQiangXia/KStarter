@@ -30,17 +30,19 @@
 | `rsna-breast-cancer-detection` | Featured | Probabilistic F-Score Beta (Micro) | 697 | 1687 | 0.44 | 3 | 2022-12-30 07:56:34 |
 | `open-problems-multimodal` | Featured | MeanPearsonOld | 922 | 1220 | 0.802866 | 6 | 2022-08-28 06:07:12 |
 | `pii-detection-removal-from-educational-data` | Featured | TLAL_F_beta | 1222 | 2048 | 0.95032 | 4 | 2024-04-08 15:40:07 |
-| `ai-mathematical-olympiad-progress-prize-2` | Featured | Accuracy Score | 1351 | 2212 | 0 | 2 | 2025-03-29 12:05:33 |
+| `ai-mathematical-olympiad-progress-prize-2` | Featured | Accuracy Score | 1351 ⚠ | 2212 | 0 | 2 | 2025-03-29 12:05:33 |
 | `hms-harmful-brain-activity-classification` | Research | Kullback Leibler Divergence | 1492 | 2767 | 0.401179 | 9 | 2024-02-20 13:57:44 |
 | `biohub-cell-tracking-during-development` | Research | CZI Biohub Zebrafish 133605 | 1511 | 3947 | 0.94633 | 2 | 2026-09-19 22:07:02 |
 | `llm-prompt-recovery` | Featured | LLM Nerd-Off Sharpened Cosine Similarity | 1544 | 2175 | 0.6011 | 4 | 2024-03-20 08:29:38 |
-| `predict-energy-behavior-of-prosumers` | Featured | Mean Absolute Error | 1711 | 2731 | 0.0000 | 2 | 2024-01-31 01:18:27 |
+| `predict-energy-behavior-of-prosumers` | Featured | Mean Absolute Error | 1711 ⚠ | 2731 | 0.0000 | 2 | 2024-01-31 01:18:27 |
 | `otto-recommender-system` | Featured | WeightedRecall@{K} | 1829 | 2574 | 0.55764 | 1 | 2022-11-30 14:27:24 |
 | `novozymes-enzyme-stability-prediction` | Featured | SpearmanR | 2399 | 2482 | -0.03977 | 1 | 2022-09-26 04:54:09 |
 | `llm-detect-ai-generated-text` | Featured | Roc Auc Score | 2556 | 4358 | 0.932773 | 3 | 2023-12-23 12:19:04 |
 | `nvidia-nemotron-model-reasoning-challenge` | Featured | NVIDIA Nemotron Metric | 3241 | 4185 | 0.620 | 1 | 2026-04-07 03:28:22 |
 
 共匹配 **33** 场；类别分布 Featured 19、Research 14。
+
+> ⚠ 2 场公开榜分数全为 0（Kaggle 冻结榜），名次不可信、不计入统计。
 
 领域分布（按赛事标签）表格/结构化 14、文本 NLP 11、视觉 CV 9、生物/医疗 7、科学研究 4。
 
@@ -61,6 +63,6 @@
 
 ## 方法关键词（公开言论）
 
-**LLM/提示** 8、**集成/融合** 4、**验证/CV** 4、**伪标签/蒸馏** 3、**特征工程** 3、**检索/度量** 1、**RL/搜索** 1、**神经网络** 1
+**LLM/提示** 8、**集成/融合** 4、**验证/CV** 4、**伪标签/蒸馏** 3、**特征工程** 2、**RL/搜索** 1、**神经网络** 1
 
 > 自动生成；匹配规则：公开榜 `TeamMemberUserNames` 与讨论区作者名按 handle/显示名归一化匹配，仅覆盖 KStarter 归档的 264 场近 5 年比赛。

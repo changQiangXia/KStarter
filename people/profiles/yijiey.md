@@ -19,9 +19,11 @@
 | `march-machine-learning-mania-2026` | Featured | Mean Squared Error | 1653 | 3462 | 0.1420077 | 1 | 2026-03-18 02:16:38 |
 | `deep-past-initiative-machine-translation` | Featured | DPI BLEU / chrF++ | 1751 | 2674 | 27.4283 | 5 | 2026-03-18 18:50:57 |
 | `rogii-wellbore-geology-prediction` | Featured | Mean Squared Error | 2744 | 6125 | 7.596 | 7 | 2026-07-12 23:11:57 |
-| `hull-tactical-market-prediction` | Featured | Hull Competition Sharpe | 3056 | 3677 | 0.000 | 2 | 2025-12-15 06:10:59 |
+| `hull-tactical-market-prediction` | Featured | Hull Competition Sharpe | 3056 ⚠ | 3677 | 0.000 | 2 | 2025-12-15 06:10:59 |
 
 共匹配 **14** 场；类别分布 Featured 11、Research 3。
+
+> ⚠ 1 场公开榜分数全为 0（Kaggle 冻结榜），名次不可信、不计入统计。
 
 领域分布（按赛事标签）表格/结构化 8、强化学习/博弈 3、生物/医疗 3、文本 NLP 3、视觉 CV 2。
 
@@ -41,6 +43,6 @@
 
 ## 方法关键词（公开言论）
 
-**RL/搜索** 2、**集成/融合** 2、**LLM/提示** 2、**神经网络** 1、**特征工程** 1、**检索/度量** 1、**后处理/校准** 1
+**RL/搜索** 2、**LLM/提示** 2、**神经网络** 1、**特征工程** 1、**检索/度量** 1、**后处理/校准** 1、**集成/融合** 1
 
 > 自动生成；匹配规则：公开榜 `TeamMemberUserNames` 与讨论区作者名按 handle/显示名归一化匹配，仅覆盖 KStarter 归档的 264 场近 5 年比赛。

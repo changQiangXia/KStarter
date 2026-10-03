@@ -7,7 +7,7 @@
 | 比赛 | 类别 | 指标 | 名次 | 队伍数 | 分数 | 提交数 | 最后提交 |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | `stanford-rna-3d-folding` | Featured | Ribonanza TM-Score | 3 | 1516 | 0.60388 | 2 | 2025-05-29 15:47:10 |
-| `ai-mathematical-olympiad-progress-prize-3` | Featured | 118448 AIMO 3 Multirun-Accuracy | 26 | 4138 | 0.0 | 1 | 2025-11-24 03:45:27 |
+| `ai-mathematical-olympiad-progress-prize-3` | Featured | 118448 AIMO 3 Multirun-Accuracy | 26 ⚠ | 4138 | 0.0 | 1 | 2025-11-24 03:45:27 |
 | `um-game-playing-strength-of-mcts-variants` | Research | Mean Squared Error | 34 | 1608 | 0.42020 | 189 | 2024-11-26 04:27:29 |
 | `google-code-golf-2025` | Research | Code Golf Metric | 67 | 1142 | 926267.000 | 168 | 2025-10-15 16:11:41 |
 | `isic-2024-challenge` | Research | ISIC pAUC-aboveTPR | 68 | 2739 | 0.18571 | 59 | 2024-09-06 16:43:10 |
@@ -22,7 +22,7 @@
 | `uspto-explainable-ai` | Featured | USPTO 59575 | 237 | 571 | 0.31703 | 20 | 2024-07-22 16:22:35 |
 | `lux-ai-season-3` | Featured | Lux AI Season 3 | 240 | 701 | 789.8 | 2 | 2025-03-10 07:05:50 |
 | `leash-BELKA` | Featured | Leash Average mAP | 260 | 1950 | 0.45002 | 10 | 2024-06-29 11:00:07 |
-| `ai-mathematical-olympiad-prize` | Featured | Accuracy Score | 266 | 1161 | 0 | 1 | 2024-05-18 14:17:59 |
+| `ai-mathematical-olympiad-prize` | Featured | Accuracy Score | 266 ⚠ | 1161 | 0 | 1 | 2024-05-18 14:17:59 |
 | `santa-2024` | Featured | Santa 2024 Metric | 290 | 1514 | 250.07098 | 41 | 2025-01-30 15:57:02 |
 | `fide-google-efficiency-chess-ai-challenge` | Featured | Chess | 291 | 1120 | 865.7 | 2 | 2025-02-11 21:47:24 |
 | `image-matching-challenge-2024` | Research | mAA-on-camera-centers-with-registration | 311 | 929 | 0.134057 | 21 | 2024-06-02 07:09:14 |
@@ -43,7 +43,7 @@
 | `lmsys-chatbot-arena` | Research | Log Loss | 708 | 1849 | 0.93006 | 2 | 2024-07-26 08:23:22 |
 | `waveform-inversion` | Research | Mean Absolute Error | 751 | 1365 | 28.86923 | 7 | 2025-06-07 03:53:18 |
 | `neurogolf-2026` | Research | NeuroGolf Metric | 760 | 2963 | 7271.04 | 110 | 2026-07-10 21:54:30 |
-| `ai-mathematical-olympiad-progress-prize-2` | Featured | Accuracy Score | 819 | 2212 | 0 | 2 | 2025-03-11 13:48:18 |
+| `ai-mathematical-olympiad-progress-prize-2` | Featured | Accuracy Score | 819 ⚠ | 2212 | 0 | 2 | 2025-03-11 13:48:18 |
 | `drawing-with-llms` | Featured | SVG Image Fidelity | 850 | 1309 | 0.47986 | 11 | 2025-05-27 19:04:04 |
 | `byu-locating-bacterial-flagellar-motors-2025` | Research | BYU_BioPhysics_91249 | 855 | 1136 | 0.56910 | 6 | 2025-04-10 13:42:20 |
 | `rsna-intracranial-aneurysm-detection` | Featured | Mean Weighted Columnwise AUCROC | 936 | 1147 | 0.55353 | 6 | 2025-07-30 23:39:43 |
@@ -66,7 +66,9 @@
 
 共匹配 **57** 场；类别分布 Featured 35、Research 18、Playground 4。
 
-领域分布（按赛事标签）表格/结构化 23、文本 NLP 14、视觉 CV 12、科学研究 11、强化学习/博弈 11。
+> ⚠ 3 场公开榜分数全为 0（Kaggle 冻结榜），名次不可信、不计入统计。
+
+领域分布（按赛事标签）表格/结构化 23、文本 NLP 14、视觉 CV 12、生物/医疗 11、科学研究 11。
 
 ## 公开区言论（归档讨论区）
 

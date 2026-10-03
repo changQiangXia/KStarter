@@ -19,23 +19,25 @@
 | `commonlit-evaluate-student-summaries` | Featured | Mean Weighted Columnwise Root Mean Squared Error | 56 | 2064 | 0.43230 | 186 | 2023-10-11 10:24:25 |
 | `jigsaw-agile-community-rules` | Featured | 94635_Jigsaw_Rules_AUC | 101 | 2445 | 0.92811 | 79 | 2025-10-23 12:08:28 |
 | `asl-signs` | Research | PostProcessorKernelDesc | 560 | 1165 | 0.6983288 | 41 | 2023-04-17 16:44:50 |
-| `nfl-big-data-bowl-2026-prediction` | Featured | NFL_2025 | 600 | 1899 | 0.00000 | 2 | 2025-12-03 21:49:03 |
+| `nfl-big-data-bowl-2026-prediction` | Featured | NFL_2025 | 600 ⚠ | 1899 | 0.00000 | 2 | 2025-12-03 21:49:03 |
 | `leap-atmospheric-physics-ai-climsim` | Research | R2 Score | 620 | 693 | 0.48296 | 3 | 2024-06-30 02:11:01 |
 | `arc-prize-2024` | Featured | Abstraction and Reasoning Challenge | 662 | 1427 | 26.00 | 1 | 2024-10-10 07:40:20 |
 | `drawing-with-llms` | Featured | SVG Image Fidelity | 718 | 1309 | 0.49731 | 1 | 2025-05-20 11:03:39 |
 | `make-data-count-finding-data-references` | Research | 82370_MDC_Global_F1 | 743 | 1282 | 0.54865 | 23 | 2025-08-06 09:23:03 |
-| `wsdm-cup-multilingual-chatbot-arena` | Featured | Accuracy Score | 791 | 950 | 0.000000 | 2 | 2025-02-03 19:11:11 |
+| `wsdm-cup-multilingual-chatbot-arena` | Featured | Accuracy Score | 791 ⚠ | 950 | 0.000000 | 2 | 2025-02-03 19:11:11 |
 | `linking-writing-processes-to-writing-quality` | Featured | Mean Squared Error | 929 | 1876 | 0.584787 | 7 | 2023-12-28 10:04:38 |
 | `pii-detection-removal-from-educational-data` | Featured | TLAL_F_beta | 1061 | 2048 | 0.96439 | 63 | 2024-04-23 16:29:06 |
 | `godaddy-microbusiness-density-forecasting` | Featured | SMAPE | 1223 | 3547 | 1.7143 | 1 | 2023-02-25 05:39:56 |
 | `jigsaw-toxic-severity-rating` | Featured | Jigsaw Agreement with Annotators | 1610 | 2301 | 0.82148 | 30 | 2021-12-07 11:53:21 |
 | `otto-recommender-system` | Featured | WeightedRecall@{K} | 1632 | 2574 | 0.57491 | 7 | 2022-12-08 12:56:04 |
 | `llm-detect-ai-generated-text` | Featured | Roc Auc Score | 1883 | 4358 | 0.960109 | 43 | 2024-01-21 12:24:54 |
-| `predict-energy-behavior-of-prosumers` | Featured | Mean Absolute Error | 2125 | 2731 | 0.0000 | 2 | 2024-01-31 10:49:56 |
-| `ai-mathematical-olympiad-progress-prize-2` | Featured | Accuracy Score | 2142 | 2212 | 0 | 2 | 2025-04-01 09:44:54 |
-| `hull-tactical-market-prediction` | Featured | Hull Competition Sharpe | 3167 | 3677 | 0.000 | 2 | 2025-12-15 14:53:40 |
+| `predict-energy-behavior-of-prosumers` | Featured | Mean Absolute Error | 2125 ⚠ | 2731 | 0.0000 | 2 | 2024-01-31 10:49:56 |
+| `ai-mathematical-olympiad-progress-prize-2` | Featured | Accuracy Score | 2142 ⚠ | 2212 | 0 | 2 | 2025-04-01 09:44:54 |
+| `hull-tactical-market-prediction` | Featured | Hull Competition Sharpe | 3167 ⚠ | 3677 | 0.000 | 2 | 2025-12-15 14:53:40 |
 
 共匹配 **28** 场；类别分布 Featured 23、Research 5。
+
+> ⚠ 5 场公开榜分数全为 0（Kaggle 冻结榜），名次不可信、不计入统计。
 
 领域分布（按赛事标签）文本 NLP 17、表格/结构化 14、视觉 CV 3、科学研究 2、时间序列 2。
 
@@ -56,6 +58,6 @@
 
 ## 方法关键词（公开言论）
 
-**LLM/提示** 6、**伪标签/蒸馏** 5、**神经网络** 2、**集成/融合** 1、**验证/CV** 1、**检索/度量** 1
+**LLM/提示** 6、**伪标签/蒸馏** 5、**神经网络** 2、**集成/融合** 1、**验证/CV** 1
 
 > 自动生成；匹配规则：公开榜 `TeamMemberUserNames` 与讨论区作者名按 handle/显示名归一化匹配，仅覆盖 KStarter 归档的 264 场近 5 年比赛。

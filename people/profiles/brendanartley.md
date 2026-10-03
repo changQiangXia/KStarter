@@ -25,12 +25,14 @@
 | `um-game-playing-strength-of-mcts-variants` | Research | Mean Squared Error | 848 | 1608 | 0.43190 | 19 | 2024-11-16 14:57:03 |
 | `linking-writing-processes-to-writing-quality` | Featured | Mean Squared Error | 1087 | 1876 | 0.591106 | 9 | 2024-01-09 23:32:04 |
 | `godaddy-microbusiness-density-forecasting` | Featured | SMAPE | 1316 | 3547 | 2.2553 | 2 | 2023-03-14 20:55:16 |
-| `g-research-crypto-forecasting` | Featured | Weighted Correlation Coefficient | 1764 | 1946 | 0.0000 | 2 | 2022-01-31 14:23:02 |
+| `g-research-crypto-forecasting` | Featured | Weighted Correlation Coefficient | 1764 ⚠ | 1946 | 0.0000 | 2 | 2022-01-31 14:23:02 |
 | `nvidia-nemotron-model-reasoning-challenge` | Featured | NVIDIA Nemotron Metric | 1767 | 4185 | 0.856 | 3 | 2026-05-21 17:33:56 |
-| `ai-mathematical-olympiad-progress-prize-3` | Featured | 118448 AIMO 3 Multirun-Accuracy | 1876 | 4138 | 0.0 | 1 | 2026-03-16 23:41:05 |
+| `ai-mathematical-olympiad-progress-prize-3` | Featured | 118448 AIMO 3 Multirun-Accuracy | 1876 ⚠ | 4138 | 0.0 | 1 | 2026-03-16 23:41:05 |
 | `icr-identify-age-related-conditions` | Featured | Weighted Multiclass Loss | 3528 | 6430 | 0.22826 | 2 | 2023-07-27 00:02:37 |
 
 共匹配 **23** 场；类别分布 Featured 13、Research 10。
+
+> ⚠ 2 场公开榜分数全为 0（Kaggle 冻结榜），名次不可信、不计入统计。
 
 领域分布（按赛事标签）表格/结构化 11、视觉 CV 9、生物/医疗 6、科学研究 4、文本 NLP 4。
 
@@ -51,6 +53,6 @@
 
 ## 方法关键词（公开言论）
 
-**神经网络** 7、**集成/融合** 6、**验证/CV** 5、**LLM/提示** 3、**后处理/校准** 2、**特征工程** 1、**检索/度量** 1、**RL/搜索** 1
+**神经网络** 6、**集成/融合** 6、**验证/CV** 5、**LLM/提示** 2、**后处理/校准** 2、**特征工程** 1、**检索/度量** 1、**RL/搜索** 1
 
 > 自动生成；匹配规则：公开榜 `TeamMemberUserNames` 与讨论区作者名按 handle/显示名归一化匹配，仅覆盖 KStarter 归档的 264 场近 5 年比赛。

@@ -41,17 +41,19 @@
 | `happy-whale-and-dolphin` | Research | MAP@{K} | 54 | 1588 | 0.84451 | 32 | 2022-04-18 20:21:55 |
 | `orbit-wars` | Featured | orbit_wars | 311 | 4729 | 1118.3 | 2 | 2026-06-20 11:11:00 |
 | `image-matching-challenge-2023` | Research | imc2023 | 393 | 494 | 0.016 | 1 | 2023-04-29 15:40:01 |
-| `nfl-big-data-bowl-2026-prediction` | Featured | NFL_2025 | 613 | 1899 | 0.00000 | 2 | 2025-12-02 23:27:15 |
+| `nfl-big-data-bowl-2026-prediction` | Featured | NFL_2025 | 613 ⚠ | 1899 | 0.00000 | 2 | 2025-12-02 23:27:15 |
 | `feedback-prize-english-language-learning` | Featured | Mean Weighted Columnwise Root Mean Squared Error | 654 | 2654 | 0.437507 | 67 | 2022-11-29 17:08:19 |
 | `ai-village-capture-the-flag-defcon31` | Featured | Flag_Metric | 657 | 1344 | 3 | 2 | 2023-10-10 19:18:18 |
 | `deep-past-initiative-machine-translation` | Featured | DPI BLEU / chrF++ | 785 | 2674 | 34.9837 | 44 | 2026-03-17 21:35:13 |
 | `stanford-rna-3d-folding` | Featured | Ribonanza TM-Score | 925 | 1516 | 0.19983 | 2 | 2025-04-08 19:53:14 |
-| `ai-mathematical-olympiad-progress-prize-2` | Featured | Accuracy Score | 1048 | 2212 | 0 | 2 | 2025-03-20 23:13:39 |
+| `ai-mathematical-olympiad-progress-prize-2` | Featured | Accuracy Score | 1048 ⚠ | 2212 | 0 | 2 | 2025-03-20 23:13:39 |
 | `novozymes-enzyme-stability-prediction` | Featured | SpearmanR | 1098 | 2482 | 0.46525 | 37 | 2022-11-29 18:47:31 |
 | `jigsaw-toxic-severity-rating` | Featured | Jigsaw Agreement with Annotators | 1510 | 2301 | 0.83585 | 70 | 2022-02-07 16:47:05 |
 | `isic-2024-challenge` | Research | ISIC pAUC-aboveTPR | 2170 | 2739 | 0.15813 | 3 | 2024-07-15 18:13:52 |
 
 共匹配 **44** 场；类别分布 Featured 29、Research 15。
+
+> ⚠ 2 场公开榜分数全为 0（Kaggle 冻结榜），名次不可信、不计入统计。
 
 领域分布（按赛事标签）视觉 CV 19、表格/结构化 17、文本 NLP 13、生物/医疗 9、科学研究 9。
 
@@ -72,6 +74,6 @@
 
 ## 方法关键词（公开言论）
 
-**神经网络** 7、**验证/CV** 6、**集成/融合** 5、**LLM/提示** 5、**后处理/校准** 5、**RL/搜索** 3、**特征工程** 2、**伪标签/蒸馏** 1
+**神经网络** 7、**验证/CV** 6、**集成/融合** 5、**LLM/提示** 5、**后处理/校准** 4、**RL/搜索** 2、**特征工程** 1、**伪标签/蒸馏** 1
 
 > 自动生成；匹配规则：公开榜 `TeamMemberUserNames` 与讨论区作者名按 handle/显示名归一化匹配，仅覆盖 KStarter 归档的 264 场近 5 年比赛。

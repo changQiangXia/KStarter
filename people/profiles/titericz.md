@@ -41,7 +41,7 @@
 | `llm-detect-ai-generated-text` | Featured | Roc Auc Score | 208 | 4358 | 0.964391 | 228 | 2024-01-22 21:45:12 |
 | `linking-writing-processes-to-writing-quality` | Featured | Mean Squared Error | 218 | 1876 | 0.578713 | 15 | 2024-01-09 19:00:15 |
 | `santa-2021` | Featured | Santa's Superpermutations 2021 | 230 | 867 | 2446 | 10 | 2022-01-11 17:33:30 |
-| `ai-mathematical-olympiad-progress-prize-3` | Featured | 118448 AIMO 3 Multirun-Accuracy | 233 | 4138 | 0.0 | 1 | 2025-12-17 19:35:16 |
+| `ai-mathematical-olympiad-progress-prize-3` | Featured | 118448 AIMO 3 Multirun-Accuracy | 233 ⚠ | 4138 | 0.0 | 1 | 2025-12-17 19:35:16 |
 | `g2net-detecting-continuous-gravitational-waves` | Research | Area Under Receiver Operating Characteristic Curve | 238 | 936 | 0.76129 | 27 | 2022-12-20 14:52:30 |
 | `vesuvius-challenge-surface-detection` | Research | Vesuvius 2025 Metric | 245 | 1391 | 0.55710 | 16 | 2026-02-27 14:10:57 |
 | `AI4Code` | Featured | AI4CodeKendallTau | 256 | 1135 | 0.8482 | 2 | 2022-08-04 23:44:39 |
@@ -94,21 +94,23 @@
 | `feedback-prize-english-language-learning` | Featured | Mean Weighted Columnwise Root Mean Squared Error | 832 | 2654 | 0.438548 | 5 | 2022-11-29 15:36:04 |
 | `learning-agency-lab-automated-essay-scoring-2` | Featured | Cohen Kappa Score | 991 | 2706 | 0.82033 | 5 | 2024-06-05 13:48:31 |
 | `godaddy-microbusiness-density-forecasting` | Featured | SMAPE | 1055 | 3547 | 1.6629 | 2 | 2023-03-14 20:01:05 |
-| `neurips-2023-machine-unlearning` | Research | 56167-unlearn-metric | 1081 | 1188 | 0.0000000000 | 2 | 2023-11-27 01:24:51 |
-| `mitsui-commodity-prediction-challenge` | Featured | MITSUI&CO. Commodity Prediction Metric | 1122 | 1711 | 0.00000 | 1 | 2025-10-06 23:16:06 |
+| `neurips-2023-machine-unlearning` | Research | 56167-unlearn-metric | 1081 ⚠ | 1188 | 0.0000000000 | 2 | 2023-11-27 01:24:51 |
+| `mitsui-commodity-prediction-challenge` | Featured | MITSUI&CO. Commodity Prediction Metric | 1122 ⚠ | 1711 | 0.00000 | 1 | 2025-10-06 23:16:06 |
 | `orbit-wars` | Featured | orbit_wars | 1136 | 4729 | 979.3 | 2 | 2026-06-23 21:36:57 |
 | `birdclef-2025` | Research | Birdclef ROC AUC | 1161 | 2031 | 0.80530 | 2 | 2025-03-26 21:40:27 |
 | `csiro-biomass` | Research | R2 Score | 1187 | 3805 | 0.68283 | 1 | 2026-01-10 17:28:05 |
-| `g-research-crypto-forecasting` | Featured | Weighted Correlation Coefficient | 1412 | 1946 | 0.0000 | 2 | 2022-01-22 18:15:08 |
-| `ai-mathematical-olympiad-progress-prize-2` | Featured | Accuracy Score | 1479 | 2212 | 0 | 1 | 2025-03-14 17:32:42 |
+| `g-research-crypto-forecasting` | Featured | Weighted Correlation Coefficient | 1412 ⚠ | 1946 | 0.0000 | 2 | 2022-01-22 18:15:08 |
+| `ai-mathematical-olympiad-progress-prize-2` | Featured | Accuracy Score | 1479 ⚠ | 2212 | 0 | 1 | 2025-03-14 17:32:42 |
 | `child-mind-institute-problematic-internet-use` | Featured | Cohen Kappa Score | 1696 | 3559 | 0.475 | 2 | 2024-10-29 23:10:51 |
-| `predict-energy-behavior-of-prosumers` | Featured | Mean Absolute Error | 2248 | 2731 | 0.0000 | 2 | 2024-01-31 16:43:22 |
-| `optiver-realized-volatility-prediction` | Featured | Root Mean Square Percentage Error | 2390 | 3852 | 0.00000 | 2 | 2021-09-18 22:50:43 |
+| `predict-energy-behavior-of-prosumers` | Featured | Mean Absolute Error | 2248 ⚠ | 2731 | 0.0000 | 2 | 2024-01-31 16:43:22 |
+| `optiver-realized-volatility-prediction` | Featured | Root Mean Square Percentage Error | 2390 ⚠ | 3852 | 0.00000 | 2 | 2021-09-18 22:50:43 |
 | `rogii-wellbore-geology-prediction` | Featured | Mean Squared Error | 2483 | 6125 | 7.277 | 51 | 2026-07-04 19:08:47 |
 | `march-machine-learning-mania-2026` | Featured | Mean Squared Error | 3333 | 3462 | 0.2820958 | 1 | 2026-03-19 15:52:08 |
 | `playground-series-s5e3` | Playground | Roc Auc Score | 4381 | 4381 | 0.00000 | 2 | 2025-03-31 18:09:00 |
 
 共匹配 **101** 场；类别分布 Featured 62、Research 29、Playground 10。
+
+> ⚠ 7 场公开榜分数全为 0（Kaggle 冻结榜），名次不可信、不计入统计。
 
 领域分布（按赛事标签）表格/结构化 48、文本 NLP 26、生物/医疗 20、视觉 CV 17、科学研究 15。
 
@@ -129,6 +131,6 @@
 
 ## 方法关键词（公开言论）
 
-**GBDT 调参** 5、**验证/CV** 4、**伪标签/蒸馏** 3、**LLM/提示** 3、**神经网络** 2、**集成/融合** 2、**后处理/校准** 2、**特征工程** 1、**RL/搜索** 1
+**GBDT 调参** 5、**伪标签/蒸馏** 3、**验证/CV** 3、**LLM/提示** 3、**神经网络** 2、**集成/融合** 2、**后处理/校准** 2、**特征工程** 1、**RL/搜索** 1
 
 > 自动生成；匹配规则：公开榜 `TeamMemberUserNames` 与讨论区作者名按 handle/显示名归一化匹配，仅覆盖 KStarter 归档的 264 场近 5 年比赛。

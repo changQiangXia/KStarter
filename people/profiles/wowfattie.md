@@ -27,11 +27,13 @@
 | `google-universal-image-embedding` | Research | PostProcessorKernelDesc | 695 | 1022 | 0.407 | 59 | 2022-09-15 16:11:10 |
 | `waveform-inversion` | Research | Mean Absolute Error | 931 | 1365 | 47.15623 | 6 | 2025-06-05 01:36:51 |
 | `stable-diffusion-image-to-prompts` | Featured | MeanCosineSimilarity | 1148 | 1231 | 0.37466 | 1 | 2023-03-10 20:56:31 |
-| `ai-mathematical-olympiad-progress-prize-3` | Featured | 118448 AIMO 3 Multirun-Accuracy | 1280 | 4138 | 0.0 | 1 | 2026-02-17 00:21:30 |
+| `ai-mathematical-olympiad-progress-prize-3` | Featured | 118448 AIMO 3 Multirun-Accuracy | 1280 ⚠ | 4138 | 0.0 | 1 | 2026-02-17 00:21:30 |
 | `jigsaw-toxic-severity-rating` | Featured | Jigsaw Agreement with Annotators | 1853 | 2301 | 0.78796 | 2 | 2022-02-07 14:52:30 |
 | `birdclef-2026` | Research | Birdclef ROC AUC | 3076 | 4094 | 0.83077 | 4 | 2026-03-29 00:55:27 |
 
 共匹配 **24** 场；类别分布 Featured 18、Research 6。
+
+> ⚠ 1 场公开榜分数全为 0（Kaggle 冻结榜），名次不可信、不计入统计。
 
 领域分布（按赛事标签）文本 NLP 11、表格/结构化 6、视觉 CV 6、科学研究 5、生物/医疗 4。
 
@@ -52,6 +54,6 @@
 
 ## 方法关键词（公开言论）
 
-**LLM/提示** 9、**神经网络** 5、**集成/融合** 3、**GBDT 调参** 1、**特征工程** 1、**验证/CV** 1、**RL/搜索** 1、**后处理/校准** 1
+**LLM/提示** 9、**神经网络** 5、**集成/融合** 3、**特征工程** 1、**验证/CV** 1、**RL/搜索** 1、**后处理/校准** 1
 
 > 自动生成；匹配规则：公开榜 `TeamMemberUserNames` 与讨论区作者名按 handle/显示名归一化匹配，仅覆盖 KStarter 归档的 264 场近 5 年比赛。

@@ -20,7 +20,7 @@
 | `foursquare-location-matching` | Featured | Jaccard | 463 | 1079 | 0.84293 | 15 | 2022-07-02 07:03:16 |
 | `image-matching-challenge-2025` | Research | IMC 2025 Metric | 609 | 943 | 29.46 | 7 | 2025-05-01 11:30:44 |
 | `byu-locating-bacterial-flagellar-motors-2025` | Research | BYU_BioPhysics_91249 | 641 | 1136 | 0.70754 | 39 | 2025-04-18 12:01:26 |
-| `nfl-big-data-bowl-2026-prediction` | Featured | NFL_2025 | 752 | 1899 | 0.00000 | 2 | 2025-12-03 21:19:51 |
+| `nfl-big-data-bowl-2026-prediction` | Featured | NFL_2025 | 752 ⚠ | 1899 | 0.00000 | 2 | 2025-12-03 21:19:51 |
 | `waveform-inversion` | Research | Mean Absolute Error | 803 | 1365 | 29.48383 | 22 | 2025-06-24 22:18:33 |
 | `tabular-playground-series-jul-2022` | Playground | Adjusted Rand Index | 1253 | 1253 | -0.00060 | 1 | 2022-07-02 10:11:24 |
 | `orbit-wars` | Featured | orbit_wars | 1756 | 4729 | 784.1 | 2 | 2026-05-16 04:51:41 |
@@ -28,6 +28,8 @@
 | `h-and-m-personalized-fashion-recommendations` | Featured | MAP@{K} | 2774 | 2952 | 0.00009 | 1 | 2022-04-08 00:24:53 |
 
 共匹配 **20** 场；类别分布 Featured 10、Research 9、Playground 1。
+
+> ⚠ 1 场公开榜分数全为 0（Kaggle 冻结榜），名次不可信、不计入统计。
 
 领域分布（按赛事标签）表格/结构化 10、视觉 CV 8、生物/医疗 7、科学研究 3、时间序列 3。
 

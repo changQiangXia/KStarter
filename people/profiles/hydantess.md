@@ -37,22 +37,24 @@
 | `linking-writing-processes-to-writing-quality` | Featured | Mean Squared Error | 531 | 1876 | 0.579020 | 36 | 2024-01-05 09:28:51 |
 | `predict-ai-model-runtime` | Research | 58266_TpuGraphsEval | 590 | 616 | 0.11900 | 2 | 2023-09-28 17:43:44 |
 | `jigsaw-toxic-severity-rating` | Featured | Jigsaw Agreement with Annotators | 619 | 2301 | 0.89158 | 288 | 2022-02-06 05:25:19 |
-| `nfl-big-data-bowl-2026-prediction` | Featured | NFL_2025 | 632 | 1899 | 0.00000 | 2 | 2025-12-03 14:41:02 |
+| `nfl-big-data-bowl-2026-prediction` | Featured | NFL_2025 | 632 ⚠ | 1899 | 0.00000 | 2 | 2025-12-03 14:41:02 |
 | `equity-post-HCT-survival-predictions` | Research | eefs_concordance_index | 792 | 3325 | 0.69288 | 5 | 2025-03-05 23:42:17 |
 | `learning-equality-curriculum-recommendations` | Featured | F-Score Beta (Micro) | 1031 | 1057 | 0.00000 | 1 | 2022-12-26 12:08:44 |
-| `mitsui-commodity-prediction-challenge` | Featured | MITSUI&CO. Commodity Prediction Metric | 1071 | 1711 | 0.00000 | 2 | 2025-10-06 23:02:15 |
+| `mitsui-commodity-prediction-challenge` | Featured | MITSUI&CO. Commodity Prediction Metric | 1071 ⚠ | 1711 | 0.00000 | 2 | 2025-10-06 23:02:15 |
 | `godaddy-microbusiness-density-forecasting` | Featured | SMAPE | 1099 | 3547 | 1.6782 | 2 | 2023-03-14 12:17:42 |
 | `open-problems-multimodal` | Featured | MeanPearsonOld | 1201 | 1220 | -1.000000 | 1 | 2022-08-27 17:05:34 |
 | `child-mind-institute-problematic-internet-use` | Featured | Cohen Kappa Score | 1739 | 3559 | 0.474 | 157 | 2024-12-19 15:45:40 |
-| `predict-energy-behavior-of-prosumers` | Featured | Mean Absolute Error | 2028 | 2731 | 0.0000 | 2 | 2024-01-30 18:38:00 |
-| `ai-mathematical-olympiad-progress-prize-2` | Featured | Accuracy Score | 2069 | 2212 | 0 | 2 | 2025-04-01 18:01:17 |
+| `predict-energy-behavior-of-prosumers` | Featured | Mean Absolute Error | 2028 ⚠ | 2731 | 0.0000 | 2 | 2024-01-30 18:38:00 |
+| `ai-mathematical-olympiad-progress-prize-2` | Featured | Accuracy Score | 2069 ⚠ | 2212 | 0 | 2 | 2025-04-01 18:01:17 |
 | `icr-identify-age-related-conditions` | Featured | Weighted Multiclass Loss | 2129 | 6430 | 0.13945 | 32 | 2023-08-10 12:25:44 |
-| `ubiquant-market-prediction` | Featured | MeanPearson | 2179 | 2893 | 0.000000 | 2 | 2022-04-19 12:12:23 |
+| `ubiquant-market-prediction` | Featured | MeanPearson | 2179 ⚠ | 2893 | 0.000000 | 2 | 2022-04-19 12:12:23 |
 | `csiro-biomass` | Research | R2 Score | 2234 | 3805 | 0.56748 | 10 | 2026-01-09 11:12:08 |
 | `march-machine-learning-mania-2026` | Featured | Mean Squared Error | 2533 | 3462 | 0.1791479 | 1 | 2026-03-19 04:54:05 |
-| `optiver-trading-at-the-close` | Featured | Mean Columnwise Mean Absolute Error | 3124 | 4436 | 0.0000 | 2 | 2023-12-20 14:57:15 |
+| `optiver-trading-at-the-close` | Featured | Mean Columnwise Mean Absolute Error | 3124 ⚠ | 4436 | 0.0000 | 2 | 2023-12-20 14:57:15 |
 
 共匹配 **45** 场；类别分布 Featured 36、Research 9。
+
+> ⚠ 6 场公开榜分数全为 0（Kaggle 冻结榜），名次不可信、不计入统计。
 
 领域分布（按赛事标签）表格/结构化 23、文本 NLP 11、生物/医疗 11、时间序列 5、视觉 CV 4。
 
@@ -73,6 +75,6 @@
 
 ## 方法关键词（公开言论）
 
-**神经网络** 14、**验证/CV** 7、**集成/融合** 6、**特征工程** 5、**后处理/校准** 4、**GBDT 调参** 4、**LLM/提示** 3、**RL/搜索** 1
+**神经网络** 14、**验证/CV** 7、**集成/融合** 6、**特征工程** 4、**后处理/校准** 4、**GBDT 调参** 4、**LLM/提示** 2、**RL/搜索** 1
 
 > 自动生成；匹配规则：公开榜 `TeamMemberUserNames` 与讨论区作者名按 handle/显示名归一化匹配，仅覆盖 KStarter 归档的 264 场近 5 年比赛。
