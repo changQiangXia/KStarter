@@ -40,7 +40,7 @@ $PY scripts/verify_links.py                               # 校验 notes + 人�
   `result` 中的数字必须能在原文复现；`evidence_type` 沿用 `analysis/claims.csv` 词表。
 - 证据等级：A（原文可复算数字 + 名次/团队背书）、B（有数字无独立背书）、C（无数字的经验判断）。
 - 口径：`quote` 只取主题帖正文（不含评论）；`lb_unusable` 标记 Kaggle 冻结榜（分数全 0）涉及的断言。
-- P1 范围：≥50 票的主题帖；先 10 条校准样例，确认后全量抽取。
+- P1 范围：≥50 票的主题帖；10 条校准样例已交付，随后按票数从高到低分批全量抽取（进度见 `p1_coverage.csv`）。
 - 验收：`build_claim_coverage.py --min-coverage 0.9` 返回零（status=done 比例 ≥90%）；全量后按票数档 × 领域 × 证据等级分层抽 30 条人工审计。
 
 ## 数据规模（2026-10-04 快照）
