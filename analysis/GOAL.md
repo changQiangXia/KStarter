@@ -45,7 +45,9 @@
 ## 断点续跑指引
 
 - 当前进度（2026-10-03）：**Tier A 60/60 ✅ 收官**（Batch 1–6 全部完成并推送，含 #60 tps-dec-2021）；
-  **THEORY.md 已扩 v0.6（L1–L113 + T1–T27，Batch 6 归纳完成）**；**Tier B 轻读 204/204 全部完成 ✅**（B01–B21 收官）已推送；下一步阶段二三（images_index / claims / lineage / limitations 四件套 + OCR/图表索引）。
+  **THEORY.md 已扩 v0.6（L1–L113 + T1–T27，Batch 6 归纳完成）**；**Tier B 轻读 204/204 全部完成 ✅**（B01–B21 收官）已推送；
+  **四件套已完成 ✅**：`analysis/images_index.csv`（1666 行）、`analysis/claims.csv`（1850 行）、`analysis/lineage.md`（52 节点）、`analysis/limitations.md`；
+  可选后续（非本轮验收项）：图内文字 OCR sidecar、playbook 尾节修订、THEORY v0.7。
 - 推送认证（2026-10-03 复核）：`/root/.gh_push_token`（600，PAT）+ 仓库级 credential.helper，直连 `git push` 可用；
   AutoDL 学术加速 = `source /etc/network_turbo`（代理 172.29.51.4:12798，仅 github/hf），用完 `unset http_proxy https_proxy`；直连失败时再走代理。
 - 进度看 `analysis/TIER_A.md`（⬜ 未开始 / 🔄 进行中 / ✅ 完成）；已完成深读在 `analysis/deep/<slug>.md`；
