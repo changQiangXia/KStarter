@@ -1,0 +1,402 @@
+# https://www.kaggle.com/competitions/lux-ai-season-2/discussion/406702
+
+Topic #406702: FLG's Approach - Deep Reinforcement Learning with a Focus on Performance - 4th place
+  Author: flg
+  Posted: 2023-05-03 13:24:46.154000
+  Votes: 51  Comments: 19
+
+1. Introduction
+
+Lux Season 2
+
+LuxS2 is a two player, zero-sum game in which each participant controls a swarm of robots racing to terraform Mars faster than their opponent. It is played on a 48x48 square map in multiple phases:
+
+
+
+A simultaneous-move bidding phase to decide who goes first,
+
+A sequential placement phase in which players place 2-5 factories (number chosen randomly) and
+
+A simultaneous-move main phase.
+
+
+During main phase players acquire metal to create robots, water to grow lichen and clear rubble to make space for the lichen farms. At then end of 1000 turns the player with the larger lichen amount wins. 
+
+The main phase is split into 20 day-night-cycles, each lasting 50 turns out of which 30 are day and 20 night.
+There are three types of actors:
+
+
+
+Factories grow lichen, produce robots and turn raw ore/ice into usable metal/water,
+
+Heavy units excel at combat and resource gathering but are somewhat sluggish to move around especially in high-rubble areas,
+
+Light units are good at moving around efficiently but mine less resources and lose in combat to heavies.
+
+
+Units require power for almost all actions. Power is gained each turn by factories, slowly by all units during the day and by growing lichen. A unit without power cannot take any actions and needs to (slowly) recharge.
+
+When two units collide (move to the same target position), heavies destroy lights and among same units of the same type the one with more power wins. This collision handling also applies to your own units!
+
+On top of these mechanics there is also a planning component: players can send a queue of up to 20 actions to each of their units. This is useful since each time the action queue is updated, a small power charge needs to be paid by the affected unit. Example:
+
+
+
+A heavy unit digs 20 times (60 power each) and the dig action is sent each turn anew (10 power per update): power cost: 20 * 60 + 20 * 10 = 1400.
+
+Same case but a queue of 20 dig actions is sent once: 20 * 60 + 10 = 1210.
+
+
+The unit used almost 15% less power in the second case. Power is pretty much the scarcest resource so this efficiency gain makes a very big difference.
+
+Comparison with last season
+
+The game increased in complexity compared to last year quite a bit:
+
+
+
+the map is 2.2x as large,
+
+a match lasts 3x as many turns,
+
+there are three different game phases,
+
+for learning approaches, like mine, the power system (especially in combination with the need to clear rubble to gather resources and grow lichen) made random exploration a lot harder,
+
+the action queue system changed the game from a single-step problem to a multistep  planning one.
+
+
+2. Method
+
+Plan
+
+The matches of the competition are run on Kaggle using CPU-only VMs that seemed to have varying performance but mostly be single-core machines. Because of this performance was the main consideration on every decision and I came up with a plan focused on it:
+
+
+
+Simplify the action and observation space to manageable size,
+
+Handle collisions and action queues,
+
+Use imitation learning and small map RL to find a neural network architecture that combines CPU-performance, large receptive field and sample efficiency,
+
+Train a small model using RL,
+
+Train a larger main model using the small one as a teacher,
+
+Optimize the final model for cpu inference.
+
+
+Action and observation space
+
+Action space
+
+I structured my model to have seven different actors:
+
+
+
+Bid: Discrete(10): [0, 10, 20, 30, 40, 50, 70, 100, 150, 200],
+
+Spawn location: Discrete(48*48),
+
+Spawn resource amount for water: Discrete(7): [50, 100, 120, 150, 200, 250, 300],
+
+Spawn resource amount for metal: Discrete(7): [50, 100, 120, 150, 200, 250, 300],
+
+Factories: Grid(4): [noop, build light, build heavy, grow lichen],
+
+Light units: Grid(23): [moves in 5 directions (incl. noop), dig, self-destruct, pick-up all power available, transfers in 5 directions for [ore, ice, power]]
+
+Heavy units: Grid(23): same as light units.
+
+
+Grid(k) means a 48x48xk action space in which for each position of the 48x48 map one of k actions is sampled independently.
+On transfer actions a unit transfers everything it holds for ice and ore and 90% of it’s current value for power. When performing a spawn action, a location and a starting resource amount for water and metal need to be selected at the same time. I first sample a location then predict the water/metal amounts for all locations in parallel and sample one of the 7 actions at the chosen spawn location.
+Note: there are no actions for transferring or picking up refined resources like metal and water. So the agent could only use unrefined resources for transferring over long distances.
+
+Observation space
+
+I encoded  the positions of all actors using 0/1 variables, most other quantities (power, resources, rubble) were taken as continuous variables normalized to usually be in the -1 – 1 range. I tried using explicit embeddings for all discrete observations but couldn’t find any difference in performance. The one exception to this was the lichen ownership: each factory has its own lichen strain. With up to five factories per player that’s eleven discrete values when you add one more for “no lichen”. I embedded these using a 16 dimensional embedding layer and summed the result with a 16-dim embedding of the player id to indicate the owner of  that lichen.
+Global features like the current turn or the spawn resources remaining are encoded as separate feature layers (with the same value repeated for every position in the 48x48 feature layer).
+In total this gave me 54 different features. To these I added historic information: the positions and resources of all actors as well as lichen and rubble values on the board for the last three turns (17 features per turn). The final observation space had a shape of 48x48x105 (54 + 3*17=105).
+
+Collisions and action queues
+
+Collisions
+
+Self collisions were very punishing this season since all but one of the colliding units died. During early RL I realized that my agent avoided having units work next to each other and in general didn’t like making many units. This seemed to be caused by the fact that a somewhat random policy (which is needed for exploration) will cause many harmful self collisions. To counteract this I canceled all moves that would result in self collisions, so that units performed a noop instead. This required reproducing quite a bit of game logic but it increased (early) learning speed a lot.
+
+Action queues
+
+To fill the action queues with multiple actions at inference time I used forward prediction: the agent predicts actions for itself and the opponent then steps the environment and repeats the process. Since the opponent’s action queue is part of the public game observation, I had one agent on the LB that used it for forward prediction (and falling back to its own prediction if no move from the queue is available) – it performed similar to just using predictions.
+
+During training I did not use action queues and only had the agent predict its next action. This method only had one problem: the amount of power used to update action queues differs in both cases. This causes the agent’s expectations about how long it can mine, which parts of the map it can reach etc. to be off for longer sequences. To combat this I used an expected communications cost approach: I randomly applied the comm cost with p=0.2, simulating an average length five action queue (which was pretty close to the effective action queue length that the agent achieved after all optimizations).
+
+Neural network architecture search
+
+I used some beta agents and later a few early submissions to create a dataset for imitation learning (IL). More precisly, I:
+
+
+
+downloaded around 2000 matches from top-scoring agents via MetaKaggle
+
+transformed the obs and actions into the spaces mentioned above when creating the dataset
+
+stored everything as compressed HDF5 dataset (the final dataset was around 300GB and HDF5 allows for very fast random access without loading everything into RAM).
+
+
+Submissions that used actions I did not support were excluded (some agents were trasferring water between factories).
+
+I evaluated different NN architectures based on their unit-accuracy on this dataset (I also trained and evaluated for factory- and spawn-locaction-accuracy but these were much easier to learn). The main traits I was looking for were:
+
+
+
+CPU performance
+
+Receptive field (“see the whole board quickly”)
+
+GPU-Memory usage
+
+Sample efficiency.
+
+
+The best result I got was a “DoubleCone” network, a DoubleCone(4, 6, 4) is depicted below. It performed a decent share of its compute  at a downscaled resolution of 12x12 (instead of 48x48) which helped with respect to all goals above except sample efficiency. To avoid a loss of fine grained control there is a skip connection around the DoubleCone-block. Additionally before and after that block there are multiple full resolution ResBlocks. The actor heads are simple 3x3 convolution layers without activations, the one exception to this is the bidding head, which uses the critic architecture (minus one Conv-Layer).
+
+
+
+
+
+The critic is depicted above, its architecture did not seem to be very important in my tests. The slightly unusual AdaptiveAveragePool is there since many of my early RL tests were done with 16x16 and 24x24 maps and I wanted a truly resolution-independent architecture.
+
+I also experimented with layer optimizations, especially ResBlock design. Here I tested recent advances from computer vision (e.g. ConvNext) with some task specific optimizations. Some results:
+
+
+
+I did not use any Bottleneck or InverseBottleneck blocks as the 1x1 convolutions are fairly GPU-intensive but do not provide receptive field. 
+
+I used way less activations, in particular there is no activation at all after the second convolution, only SqueezeAndExcitation.
+
+With my compute budget I couldn’t find real differences between ReLU, LeakyReLU or GELU.
+
+3x3 and 5x5 convolutions performed similarly if you roughly double the depth when using 3x3s (lower parameters / receptive field).
+
+There are no normalization layers as I couldn’t find any benefit in them, as long as there are SqueezeAndExcitation layers. Without these performance dropped significantly but part of this could be recovered e.g. with LayerNorm.
+
+
+A comparison between my final architecture and a ResNet can be seen here:
+
+
+
+Reinforcement Learning
+
+My agent was trained using self-play and reinforcement learning. I used shaped rewards that were strongly focused on the game result to avoid biasing the agent as much as possible.
+
+Rewards
+
+In a set-up phase (around 65M steps) the agent was trained using heavily shaped rewards focusing on gathering resources. It received rewards for:
+
+
+
+moving towards its closest resources
+
+clearing rubble from resources
+
+mining resources
+
+moving to closest factory when carrying e.g. &gt; 100 resources
+
+dropping resources on factories
+
+bonus for mining ore and ice
+
+making units
+
+growing lichen
+
+placing factories near resources.
+
+
+These rewards were “selfish” for each agent (not zero-sum).
+
+After this phase, I switchted to zero-sum rewards:
+
+
+
+{-1, 0, 1} for game result
+
+[-1, 1] for relative lichen advantage at the end of the game
+
+0.3 for each factory
+
+[-0.8, 0.8] relative unit advantage
+
+[-0.1, 0.1] for relative lichen power production.
+
+
+Each reward was given relative to its opponent's performance to yield a zero-sum reward in the range of [-1, 1]. One exception was the factory reward: here the agent received a flat + or - 0.3 for each factory it had more / less than its opponent. Rewards were only given when a change was made (e.g. when the factory was lost), not each turn afterwards. This way the (undiscounted) sum of all relative rewards equals the relative advantage at the end of the game.
+I tested many different reward weightings over the course of training and the agent seemed very robust to changes, probably because the game result and lichen advantage dominate the reward.
+
+Reinforcement learning method
+
+My RL method uses a single-learner-multiple-actor approach. I implement everything using Python’s Multiprocessing: each actor  and evaluator is its own process and all processes communicate via queues. The architecture can be seen below. I use Pytorch for all NNs and vectorized compute but no RL framework.
+
+
+
+In the beginning I tested PPO and Vtrace for advantage calculation on 16x16 and 24x24 maps and achieved similar results. I went with Vtrace. All in all my agent learned using the following losses:
+
+
+
+
+Type of loss
+Method
+Count
+Main parameters
+
+
+
+
+Value
+TD(λ)
+1
+λ=0.95, γ=0.9995, weighting coef: 1.0
+
+
+Policy gradient / advantages
+Vtrace
+7 (1 per actor)
+λ=1.0, γ=0.9995, clipping c/ρ = 1, weighting coef: 1.0
+
+
+Entropy
+KL
+7
+Weighting coef: 1e-5 .. 1e-4, depending on actor
+
+
+Teacher
+KL
+7
+Weighting coef: ~5e-3
+
+
+
+
+I lowered the entropy very slowly over training and updated the teacher regularly, keeping it around 30M steps behind the agent.
+
+One problem with my approach was that bidding and spawning factories are fairly rare events, they only occur on ~1% of all steps. This meant that a typical batch of size ~500 contained 0-2 of these events which didn’t allow stable learning. To counteract this I “upsampled” spawns and bidding by having a dedicated spawn actor. Every 16 update steps this actor played around ten matches from the starting position for roughly 50 steps each then abandoned these games.
+
+Training larger models
+
+It was my plan to only use the DoubleCone(4, 6, 4) network shown above as a teacher for a second and maybe third generation of larger models. However due to problems described below with runtime performance, I had to cancel the training of a DoubleCone(6, 8, 6) model after around 100M steps. I then continued finetuning the smaller model. Its training performance can be seen here:
+
+
+
+Optimizing Kaggle Performance
+
+The fact that each unit had to pay an engergy cost when updating its action queue meant that solutions that only predicted few steps ahead had a strong disadvantage. Over the course of the competition I ran many local and leaderboard tests to evaluate the impact of energy efficiency. Results were fairly consistent: one should aim for at least 4-6 step predictions, below that performance was crippling (especially single step). Getting more steps only provided modest advantages in my tests. Some results can be seen here:
+
+ 
+
+When you compare these results with prediction performance of ResNet and DoubleCone architectures, you can see that large models were very hard to use. See below. The 24 block ResNet is similar to what was used by last year’s winner and it would barely be able to predict a single step. 
+
+
+
+One very important detail is that no fast inference runtime (like onnxruntime with platform-specific execution providers like OpenVino mentioned above) was available in the Kaggle environment. Since it wasn’t possible to install any packages, me and a couple of other competitors tried packaging onnxruntime ourselves but as far as I know no one was successful. The fast execution providers like OpenVine somehow weren’t working on the competition environment (although it worked everywhere else including Kaggle notebooks). It also was close to impossible to debug this as all error logs were 404 for me. 
+
+When looking at the performance numbers above and the fact that for example OpenVino doubled/tripled performance in all my tests, it was clear it was make or break for using larger models on Kaggle hardware. After unsuccessfully debugging the issue for a couple of days, I decided to give up on it, cancel the DoubleCone(6, 8, 6) model I was training and went back to fine tuning the smaller one.
+
+After this I tried many other approaches for speeding up inference:
+
+
+
+static post-train quantization
+
+dynamic post-train quantization
+
+model compression
+
+jit trace and script.
+
+
+Most of these either failed as they had some kind of setup time which was too long on Kaggle hardware or they had unfavorable accuracy-performance trade-off compared to using a tiny model to fill up action queues:
+
+Filling up action queues
+
+My agent usually managed to predict 3-5 steps ahead using a DoubleCone(4, 6, 4). To improve on this, I used transfer learning with a DoubleCone(2, 6, 2) network with only 64 (instead of 128) channels. The action queues were then built as follows:
+
+
+
+Predict up to 3 step with the DoubleCone(4, 6, 4) network.
+
+Fill up with predictions from the tiny net until time runs out.
+
+Use pattern matching to fill the queue to 20 actions.
+
+
+Always doing 1-3 slow predictions meant that any mistakes made by the tiny net during previous predictions would be corrected. This way the agent usually managed 6-8 predictions, with effective (corrected) queue length between 5 and 6.
+
+The pattern matching used common behaviors to naivly fill the queue: units moving constantly back and forth in combat, (light) units picking up power and transferring it to adjacent mining units and digging. If none of these worked, it just copied the last action.
+
+For switching between these stages I used predictive time management. This was necessary as VM performance was somewhat unreliable. 
+
+Transfer learning was done with a (Q)Dagger-inspired approach: first training on the teacher’s trajectories and then switching to the student’s to correct remaining mistakes. The strength of the teacher was reduced over the course of training.
+
+3. Conclusion
+
+The competition was a bit of up and down for me. On the one hand the lack of fast deployment options for NNs was a huge letdown and the debugging problems made it very frustrating to work with. On the other hand the environment was very interesting and fun to work with. My solution worked quite well and I had a chance to use a wide array of tools from IL and architecture search over RL to transfer learning and performance optimization. But most importantly the community especially on Discord is just amazing. Lots of thanks to Stone Tao, Bovard and the sponsors for running this competition! Thanks to Agenlu for helping with performance optimization, Tigga, ry_andy_, Harm and SiestaGuru for being the people I battled with the most and finally thanks to ry_andy_ and loh-maa for (unknowingly) providing an IL dataset.
+
+Comments:
+├─ Bohdan Forostianyi (2023-10-11 22:05:23.737000) [+1]
+│  Hello,
+│  
+│  Thank you for a great write up!
+│  
+│  Can you please elaborate on why you've decided to select Grid space for sampling actions for factories?
+│  
+│  If I understood correctly an actor head which outpu...
+  ├─ flg (2023-10-16 12:44:55.730000) [+1]
+  │  Hey, you are right, you don't need the factories to be a grid, since there number is very limited. 
+  │  I use the grid, since all actors (units, spawns, factories) share the same torso, which has the s...
+    ├─ Bohdan Forostianyi (2023-10-16 21:35:34.367000) [+0]
+    │  I see, thanks for the answer!
+├─ Damien Mourot (2023-05-03 15:38:43.153000) [+1]
+│  Nice write-up ! Congrats on your results, it's impressive. I wished RL would won this competition. 
+│  
+│  I can relate to the frustration you experienced with the OpenVINO issue – I, too, spent entire d...
+  ├─ flg (2023-05-04 08:52:15.257000) [+0]
+  │  Thanks, that's very good to know. I didn't try that at all. Maybe it was better though - in terms of happiness 😄
+├─ loh-maa (2023-05-05 14:02:47.150000) [+2]
+│  Thanks for the awesome read! I'm a bit lost on the framework, though. I understand that Imitation Learning could be done using just any framework, because it was based on pure data. However once yo...
+  ├─ flg (2023-05-08 09:13:06.307000) [+2]
+  │  Hey loh-maa,
+  │  I created a wrapper around the regular python environment. The wrapper transformed the dict / list observations of units, factories etc. into one large 48x48x105 array (see the "observ...
+├─ LebronDurant (2023-07-19 02:48:23.687000) [+0]
+│  why your action space is 4848k？Are you deciding all the robots independently?
+│  I think if you make all the robots centralized to decide,the action space may be k^{robots number}？
+  ├─ flg (2023-07-19 14:41:10.817000) [+0]
+  │  Yes, all the actions are sampled independently. However, the model providing these probabilities controls all robots / factories at once and has global vision. Because of that it can decide e.g. ro...
+    ├─ LebronDurant (2023-07-20 04:01:11.453000) [+0]
+    │  How did you deal with the coordinating？by what model？
+├─ Aisuluu Ulan kyzy (2023-05-13 04:31:11.250000) [+0]
+│  great post, i found it very impressive
+├─ Saumon B. (2023-05-10 02:31:26.937000) [+0]
+│  Hi, congrats for your solution, I found it very elegant. I am somehow surprised the action space was not too big in order to make a model learn and converge, I think you split the action space simp...
+├─ agenlu (2023-05-05 08:35:56.910000) [+0]
+│  Hi @ferdinandlimburg, thanks for the acknowledgment. Just a question, how much time does each training phase take?
+  ├─ flg (2023-05-08 09:03:57.093000) [+1]
+  │  The training of the agent itself was 2-3 days for the starting agent (IL or RL with heavily shaped reward) and afterwards it was a little over a month training time for the main phase.
+  │  The NN archi...
+├─ Valentin (2023-05-04 14:42:56.780000) [+0]
+│  very nice write up and great solution.
+│  
+│  Would you say this would not be possible without IL?
+│  
+│  I have spent a lot of time with PPO but I got feeling without IL it is impossible to learn here and doi...
+  ├─ flg (2023-05-08 09:00:08.267000) [+0]
+  │  Hey, yes it's definitely possible without IL. In then end I only needed IL for architecture search. Training worked fine from scratch with RL if you used very shaped rewards (like go to resource, m...
+├─ romoratin (2023-05-03 19:49:58.757000) [+0]
+│  Great work and thank you for your extensive write up, helped me a lot. I experimented a little with RL, but the size of the board as well as the length of the game deterred me from going further.
+├─ Panpan Zhou (2023-05-03 15:57:30.587000) [+0]
+│  Great work and thanks for so many details on the design of the RL framework for the complex multi-agent problem! I tried to use RL in the beginning but failed due to the complexity of this game and...
+├─ CodeHacker (2023-05-03 14:36:21.290000) [+0]
+│  I read it with a deep impression. I was particularly impressed with the transfer learning which is submitted by reducing the network and normalization of the observation space.

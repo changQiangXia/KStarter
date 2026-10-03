@@ -17,7 +17,7 @@
 | 7 | `petfinder-pawpularity-score` | cv | 增强配方；元数据辅助任务 | ⬜ |
 | 8 | `rogii-wellbore-geology-prediction` | science | 物理混合 + 问题重构 + 大洗牌 | ⬜ |
 | 9 | `orbit-wars` | sim-agent | 推理预算决定方法；联盟自对弈 | ⬜ |
-| 10 | `hms-harmful-brain-activity-classification` | tabular | 弱标注信号→频谱→视觉模型；校准 | ⬜ |
+| 10 | `hms-harmful-brain-activity-classification` | tabular | 弱标注信号→频谱→视觉模型；校准；标签来源双位移 | ✅ |
 
 ## 批次 2（10）
 
@@ -98,5 +98,5 @@
 
 ## 进度小结
 
-- Tier A 完成：**4/60**（nov-2022、feb-2022、s5e12、jigsaw-toxic）
+- Tier A 完成：**5/60**（nov-2022、feb-2022、s5e12、jigsaw-toxic、hms）
 - 图证样板：rsna-2024（4th 管线图）、UBC-OCEAN（13th 双骨干图）已内嵌

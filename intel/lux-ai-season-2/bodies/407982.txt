@@ -1,0 +1,168 @@
+# https://www.kaggle.com/competitions/lux-ai-season-2/discussion/407982
+
+Topic #407982: 1st place solution
+  Author: Ryan Anderson
+  Posted: 2023-05-08 23:21:32.079000
+  Votes: 43  Comments: 6
+
+First of all, I have to acknowledge @ttigga and @danmctree for co-producing the most uncertain and stressful race to the finish I could have imagined. Huge congrats to both of you.
+
+Background
+
+The Lux game specification can be found here.
+
+Overall Strategy
+
+I competed in the Lux Beta just before this competition began, but threw out most of my strategic code when the post-beta rule changes were announced. The major change was that lichen now produced power. I decided then that I'd really push lichen growth early and often to generate as much power as possible. That mostly stayed true throughout the competition, even when robot-produced solar power was being promoted as a viable alternative. I just didn't have the discipline necessary to keep a robot stationary for long - there are so many other things for it to be doing!
+
+My state-of-the-art visualizer
+
+
+
+Forward simulation
+
+I would determine actions for all units and factories, update state, then do it all over again. I'd do that for about 2.9 seconds every invocation, which gave me anywhere from 5 to 50+ steps worth of planning, depending on unit count and pathfinding complexity. I simulated just about everything including my future units. I tried to guess at opponent unit movement in limited combat situations. I never added logic for handling self-collisions or my factory explosions - probably due to optimism that maybe it'll work out differently when we get there! I assumed opponent lichen values were static, which was never correct, but never too far off.
+
+Factory placement
+
+Basically: adjacent to ice, close to ore, close to no-/low-rubble territory. I went back and forth on the relative value of nearby ore vs nearby flatland. Flatland can be incredibly valuable during the early game. Instead of digging (expensive), my light robots can go antagonize nearby opponent lights (cheap), throwing off their early plans. But I can't just avoid ore and end up completely outnumbered by mid-game. I eventually added some logic for measuring ore scarcity and comparing my current factories' ore situations vs my opponent's to determine a dynamic bonus for ore proximity. There's also the matter of ice vulnerability/security (i.e. can this location readily be denied access to ice), but I'll cover that in more detail shortly.
+
+Mining resources and building robots
+
+My strategy largely depended on growing lichen until my power income was greater than my current (estimated) power usage. Then I'd build some units and go back to mining ice and growing lichen - until my power income was ready for more units. This was definitely not a perfect strategy but it worked ok. I tended to err on the side of under-building units so that I always had plenty of power to hand out. I never knew for sure how to decide when to build a light vs save metal to build a heavy. I tried to maintain some minimum number of lights per factory and then build heavies beyond that point.
+
+On chains
+
+I used chains heavily during the beta, to limited success. My code was error-prone, and it seemed too easy to disturb a whole chain of activity with only a single light robot. I decided early on I would avoid chains except in the trivial factory-adjacent case. Clearly Tigga and Siesta proved me wrong in the end. Their economic system based on chains is definitely superior. I was rarely able to adequately disturb a chain for long. And using chains allows for more flexible factory spawn locations - ice no longer necessarily needs to be factory-adjacent. All resources are just 1 chain away! Very powerful.
+
+Roles and Goals
+
+For every step I simulated, I would set or update a "role" and "goal" for each unit. A role is a long-term but non-permanent job/responsibility. A goal is a single multi-step objective that typically involves movement and/or hitting some resource or power threshold. Each role controlled a different goal state machine. The current role and goal would be persisted between invocations. Every step I would:
+
+
+
+Check each unit to see that the current role is still valid
+
+Check each unit for special role transition situations
+
+Iterate over all units, assigning roles to units without one, until all units had a role
+
+Update goals for all units
+
+
+I ended up with about 10 unique roles: antagonizer, attacker, blockade, cow, miner, pillager, protector, recharge, relocate, power_transporter, water_transporter.
+
+Role selection looked something like this, and would depend on unit type and factory situation:
+
+new_role = (
+    
+     RolePillager.from_lichen_cell(step, unit, max_dist=, max_count=)
+     RoleAntagonizer.from_chain(step, unit, max_dist=, max_count=)
+     RoleRelocate.from_assist_ice_conflict(step, unit)
+     RoleAntagonizer.from_mine(step, unit, max_dist=, ice=, max_water=)
+     RoleAntagonizer.from_mine(step, unit, max_dist=, max_count=)
+     RoleCow.from_lowland_route(step, unit, max_dist=, min_size=)
+    
+)
+
+
+Prioritizing Action Selection
+
+Not all units are created equal. I didn't want a low-priority light robot to claim a cell that a heavy robot urgently needed to move to, or pick up power that could be better used elsewhere. I used a list of prioritized situations to ensure a reasonable order that units (and factories) locked their actions into place. I wrote some nifty python to do this in a relatively clean way.
+
+ :
+     ():
+        self.step = step
+        self.entities = entities
+
+     ():
+         attr   self.__dict__:
+             ():
+                 e  self.entities:
+                     e.last_action_step &lt; self.step:
+                        e.action = (e, attr)(self.step, *args, **kwargs)
+                         e.action   :
+                            e.last_action_step = self.step
+             func
+         ().__getattr__(attr)
+
+
+group = EntityGroup(step, board.player.units() + board.player.factories())
+
+group.do_pickup_resource_from_exploding_factory()
+group.do_move_win_collision()
+
+group.do_protector_transfer(heavy=)
+group.do_protector_pickup(heavy=)
+group.do_protector_move(heavy=)
+
+group.do_factory_end_phase_water()
+group.do_factory_build()
+
+
+
+
+Ice Conflicts
+
+During sprint 2, I noticed some matchups would incidentally result in two factories fighting over ice. It felt like a crazy idea at the time, but I figured it might be worth purposely choosing an otherwise suboptimal factory spawn position if it meant I was well-positioned to deny ice to an opponent’s factory, while using light water transporters to outlast them. I called this strategy “ice conflicts”. I started doing this during sprint 2 by giving a huge boost to my final factory placement if it was within 4 distance or so of all nearby ice deposits around an opponent factory. This led to my agent winning sprint 2, and temporarily breaking Kaggle’s matchmaking algorithm, sending my score to 36k+ (RIP Homeostat). I figured this strategy would be copied or countered but it never really was. While Bovard was fixing the matchmaking algorithm, I deactivated the ice conflict logic from my “production” build to save it for a rainy day (i.e. the last day). I continued to make improvements to this strategy, including using a pair of light "blockade" units to block opponent water transporters. In the end, ice conflict spawning is the only thing that kept me competitive with Siesta's and Tigga’s improved economic strategy. Interestingly, this did not work at all against flg, who tended to use heavies to flexibly move ice around the map wherever it was needed. This resulted in very few factory kills, and I just had to live with the otherwise suboptimal factory placements. This weak matchup really hurt my final score.
+
+Coordination Among Units and Factories
+
+There were a few situations where units and factories needed to coordinate with one another to make sure they weren't trying to do/use the same thing.
+
+
+
+Enforce unique unit-&gt;cell assignments
+
+
+Units would claim a cell whenever they were tasked with digging/antagonizing/standing there.
+
+Some units could “displace” another unit’s assignment, invalidating its role and forcing a new role to be determined. This usually happened when a heavy took over a job from a light.
+
+Enforce unique unit-&gt;unit assignments
+
+
+Only really relevant for units with the attacker role. I didn't need more than one unit pursuing an opponent unit at a time.
+
+Enforce unique cell-&gt;factory assignments
+
+
+Ice cells are assigned to my various factories over time, determined by whichever factory sends a heavy robot there first.
+
+This ensures factories can rely on relatively stable ice income over time (no risk of “losing” an ice cell to a friendly factory)
+
+Any unit can mine any ice cell if its available, but if a unit belonging to the owner factory wants it, they get it, displacing whoever was there previously.
+
+Collision avoidance
+
+
+As described earlier, units determine their actions in priority order. This means I often needed to determine if a high priority unit could safely move to a cell currently occupied by a lower priority unit. Eventually I settled on simply comparing the low-priority unit's power to the power necessary to move anywhere, assuming at least one safe move was possible. Similarly, I needed to check for situations where a high-priority unit might move onto a cell that was the only remaining safe option for a lower-priority unit to move to. These checks were a little messy, and there were still small gaps in the logic, but it worked most of the time.
+
+
+Reflection / Looking Ahead
+
+I had very few expectations coming into this competition. I had no idea how much time I was going to put into it, and I was mostly under the impression that RL was going to reign supreme as in season 1. The game proved to be very challenging, surprisingly deep, and well balanced. I so enjoyed tinkering on this project for 3+ months. Thanks to @stonet2000 and @bovard for putting this all together. And a special shout out to the folks who were constantly pushing the bounds of the game/meta: @harmbuisman, @danmctree, and @ttigga. And to @ferdinandlimburg and @philippkostuch who pushed radically different and competitive solutions over the last month or so. I look forward to seeing you all on future leaderboards.
+
+Edit:
+
+My open sourced code for Season 2 (Python) can be found here. And Season 2 NeurIPS Edition (C++) here.
+
+Comments:
+├─ Stone Tao (2023-05-09 00:13:07.590000) [+3]
+│  A great writeup and lovely visualizer :)
+│  
+│  Congratulations on first place! Never expected any of this 🎉
+│  
+│  (you can now title this "Winning bot" 😃)
+├─ Harm Buisman (2023-05-10 19:12:59.160000) [+1]
+│  Congratulations on your well-deserved win! Thanks a lot for sharing this, very interesting to read. Could you elaborate the pattern for two light bots to always be able to block a water carrier? I ...
+  ├─ Ryan Anderson (2023-05-11 00:30:42.413000) [+0]
+  │  Congrats to you too, Master Harm!
+  │  
+  │  I started working on the blockade role with about 3 weeks remaining. I originally thought it wouldn't be too terribly challenging.. I had already done a thing whe...
+    ├─ SiestaGuru (2023-05-11 07:27:53.967000) [+1]
+    │  Well done on actually getting the blocking to work! I realized the same strategy, but was unable to get it properly working in games reliably in time, so abandoned it near the end and had been secr...
+├─ Benjamin Saade (2023-05-18 16:08:17.247000) [+0]
+│  Congrats to you. You came out first among the rest. Keep pressing on
+├─ Aisuluu Ulan kyzy (2023-05-13 20:39:27.243000) [+0]
+│  woow sound so impresive, my congrats and keep going
