@@ -3,7 +3,7 @@
 > 选取规则：材料密度（正文数/方案帖数/机制帖数/图片数）× 系列重要性 × 主题平衡。
 > 计分明细见 `analysis/_tier_a_scored.csv`（票数项已封顶）。
 > 状态：⬜ 未开始 ｜ 🔄 进行中 ｜ ✅ 完成（深读 + 笔记回写 + 图证内嵌）
-> 进度：Batch 1–5 ✅ 50/50 ｜ Batch 6 🔄 3/10 ｜ 总计 **53/60**（2026-10-03）
+> 进度：Batch 1–5 ✅ 50/50 ｜ Batch 6 🔄 4/10 ｜ 总计 **54/60**（2026-10-03）
 
 ## 批次 1（10）
 
@@ -87,7 +87,7 @@
 | 51 | `birdclef-2022` | audio | 弱标签起步年的方法考古 | ✅ |
 | 52 | `birdclef-2025` | audio | 多轮伪标签流程化 | ✅ |
 | 53 | `nfl-health-and-safety-helmet-assignment` | cv | 检测→几何映射→配准三段式（已做图证样板） | ✅ |
-| 54 | `foursquare-location-matching` | tabular | 实体匹配四阶段 | ⬜ |
+| 54 | `foursquare-location-matching` | tabular | 实体匹配四阶段 | ✅ |
 | 55 | `predict-energy-behavior-of-prosumers` | tabular | 在线学习机制 | ⬜ |
 | 56 | `home-credit-credit-risk-model-stability` | tabular | 自定义指标拆解；分组分层 CV | ⬜ |
 | 57 | `santa-2024` | sim-agent | 本地复现打分函数；k-opt/ILS/SA | ⬜ |
@@ -99,6 +99,6 @@
 
 ## 进度小结
 
-- Tier A 完成：**53/60**；Batch 6：#51 birdclef-2022 ✅、#52 birdclef-2025 ✅、#53 nfl-helmet ✅（配准四路线+身份层融合，图证 5 张）
-- Batch 6 待办：#54 foursquare → #60 tabular-playground-dec-2021（共 7 场）
+- Tier A 完成：**54/60**；Batch 6：#51 birdclef-2022 ✅、#52 birdclef-2025 ✅、#53 nfl-helmet ✅、#54 foursquare ✅（实体匹配四段式+泄漏三步+图后处理，图证 5 张）
+- Batch 6 待办：#55 predict-energy-behavior → #60 tabular-playground-dec-2021（共 6 场）
 - 图证样板：nfl-helmet（shape context 流程/回归配准/球队聚类）、birdclef-2025、birdclef-2022、pii、essay-scoring、nemotron、eedi、commonlit、kaggle-llm-science-exam、deep-past、g2net、ariel-2024、leap-climsim、rsna-2024、rsna-2022、uw-madison、multimodal、single-cell、polymer、ribonanza、waveform、isic-2024、hubmap、UBC-OCEAN
