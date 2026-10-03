@@ -44,7 +44,26 @@
 2. 与 UBC-OCEAN、RSNA 系列对照：**病理/医学影像的第一优先级是"消除采集差异"**。
 3. 系列赛的往届方案汇总帖是高效起点。
 
-## 6. 出处
+## 6. 轻读结论（2026-10 补）
+
+**一句话**：本场的核心挑战是**域偏移（HPA 的 DAB 染色 → HuBMAP 的 H&E 染色）**——4th 的标题就是"染色归一化就是全部"；配合**按器官重采样到统一物理尺度 + 双流/分组建模**（肺自成一派）。
+
+- 3rd（354683）：剔除再伪标回一批肺；**统一重采样到 HuBMAP 分辨率**（原始尺度跨 30 倍）+ 按器官加降/升采样；**CutMix 只在同器官内**；CNN 512 / SegFormer 1024（更大裁剪对 CNN 反而伤 LB）；非空掩码采样 0.5；**直方图匹配**到 H&E 参考；外部 GTEX ~140 + HPA 5.7–6.1 万/器官伪标签（集成 0.59 HuBMAP / 0.81 HPA+HuBMAP）。
+- 4th（354851）：**双流**（肺单独）+ 训练时把 HPA 随机用 Reinhard/Vahadane 归一化到唯一那张 HuBMAP 测试图；不用外部数据也拿第 4。
+- 2nd（354857）：重编码器 + 大分辨率（768/1024/1472 × 5 折）；coat_lite 单模最好、CNN 集成更强；**辅助预测 organ 与 pixel_size**。
+- 社区：HPA/HuBMAP 兼容性质疑（78 票）、切片厚度对染色影响（56 票）、外部数据源（55 票）、Heather Couture 的域偏移鲁棒性（47 票）。
+
+**裁决**：病理赛先做染色/协议审计；像素尺度差异要重采样到统一物理尺度并多分辨率训练；冲突子分布（肺）分组建模；外部数据非必需。
+
+**悬案**：**1st 方案未入库**；3rd 的伪标签收益未精确量化；4th 无"不归一化"对照。
+
+## 7. 图表证据
+
+![各主干在 5 器官上的逐折基准](../../intel/hubmap-organ-segmentation/bodies/332941_img/01.png)
+
+**图 1**（topic 332941）：5 折 × 5 器官 Dice——lung 普遍仅 0.18–0.25（其余 0.75–0.95），量化印证"肺是特殊子分布"。
+
+## 8. 出处
 
 - 讨论区索引：`intel/hubmap-organ-segmentation/topics.md`（80 条）
 - 已收录 write-up（6 篇）：
@@ -52,3 +71,9 @@
   - 3rd（70 票）：https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/354683
   - 高票单折方案（259 票）：https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/332941
   - 4th 染色归一化与往届方案汇总：见讨论区对应主题
+  - 4th（50 票）：https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/354851
+  - 2nd（56 票）：https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/354857
+  - HPA/HuBMAP 数据质疑（78 票）：https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/332714
+  - 外部数据源（55 票）：https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/333886
+  - 1st（未入库，待补）：https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/356201
+- 轻读全本：`analysis/deep/hubmap-organ-segmentation.md`（Tier B 轻读：对照矩阵/裁决/证据分级/悬案 + 1 图证）

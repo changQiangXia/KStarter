@@ -3,7 +3,7 @@
 > 选取规则：全部 264 场归档赛事减去 Tier A 60 场；按 `analysis/_tier_a_scored.csv` 的材料密度得分降序排列。
 > 轻量深读组件（4）：逐方案对照矩阵 ｜ 共识/分歧与裁决 ｜ 证据分级 ｜ 悬案/缺口；有归档图则内嵌图证。
 > 状态：⬜ 未开始 ｜ 🔄 进行中 ｜ ✅ 完成（轻读 + notes 回写）
-> 进度：**85/204**（2026-10-03；B01–B08 完成；B09 进行中 5/10）
+> 进度：**88/204**（2026-10-03；B01–B08 完成；B09 进行中 8/10）
 
 ## 批次 B01（1–10）
 
@@ -134,9 +134,9 @@
 | 83 | `santa-2022` | sim-agent | Featured | 6/6 | 40.3 | ✅ |
 | 84 | `playground-series-s6e9` | tabular | Playground | 6/21 | 40.0 | ✅ |
 | 85 | `santa-2021` | sim-agent | Featured | 6/4 | 39.5 | ✅ |
-| 86 | `cafa-6-protein-function-prediction` | science | Research | 6/21 | 39.4 | ⬜ |
-| 87 | `hubmap-organ-segmentation` | cv | Research | 6/2 | 39.4 | ⬜ |
-| 88 | `google-universal-image-embedding` | cv | Research | 6/6 | 39.3 | ⬜ |
+| 86 | `cafa-6-protein-function-prediction` | science | Research | 6/21 | 39.4 | ✅ |
+| 87 | `hubmap-organ-segmentation` | cv | Research | 6/2 | 39.4 | ✅ |
+| 88 | `google-universal-image-embedding` | cv | Research | 6/6 | 39.3 | ✅ |
 | 89 | `arc-prize-2024` | nlp | Featured | 6/8 | 39.3 | ⬜ |
 | 90 | `benetech-making-graphs-accessible` | cv | Featured | 6/17 | 39.1 | ⬜ |
 

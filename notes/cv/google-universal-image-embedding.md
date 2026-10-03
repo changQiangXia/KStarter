@@ -43,10 +43,35 @@
 2. **难负样本挖掘是检索任务的必备环节**。
 3. 与 Happywhale、AI4Code、Otto 对照：**检索/排序类任务统一强调嵌入质量 + 负样本策略**。
 
-## 6. 出处
+## 6. 轻读结论（2026-10 补）
+
+**一句话**：无数据赛（不提供训练集）的胜负 = **预训练权重选择 + 数据组合 + 训练顺序 + 嵌入空间对齐式集成**；1st 的时间线（0.499→0.560→0.610→0.671→0.680）展示了每一步的实际做法与踩坑。
+
+- 1st（359316）：CLIP ViT-L（LAION-400M 31ep）起步 0.499；"只取部分嵌入算均值" +0.010；GLDv2 + 线性头 + ArcFace（m=0.5,s=30）6 epoch → 0.560；迭代加 8 个数据集 → 0.610；**解冻骨干（10× 低 LR、3 epoch）+ 冻结最后一层 FC**（依据"线性投影权重 F(C,X) 是类中心几何、剧烈抖动=过拟合"）→ 0.650–0.660；Products-10k 专项精调 → 0.671；**朴素集成无效**（各模型 F(C,X) 不同）→ (a) 同空间 model soup（224+280）0.680；(b) **跨空间线性对齐**后集成差异更大的模型（更优）。
+- 2nd（359525）：14 个数据集 + ViT-H/14-224 + fc(dropout 0.2)，"量大不筛选"。
+- 4th（359487）：9 个模型（4×ViT-L-336 + 5×ViT-H-14）→ 权重平均成 2 个 soup → 各 512 维拼接 1024 → **PCA 到 64**；sub-center ArcFace + 自适应 margin；只用 GLD2020+Products-10k（覆盖约 50% 分布），**更多数据无益**。
+- 5th（359161）：只训头 + ArcFace + 强正则（wd=0.1）+ 原始尺寸特征 + TTA + antialias resize。
+- 事件：数据集许可一度是全场风险，1st 发帖后 host 放宽（论坛提到的公开数据集可用）。
+
+**裁决**：先做权重普查；度量学习集成要在嵌入空间（同空间 soup 或跨空间对齐/拼接降维）；数据要匹配目标分布而非堆量；骨干微调必须极保守。
+
+**悬案**：3rd/6th–9th 方案缺失；跨空间对齐的实现细节未展开；降维方法缺乏统一对照。
+
+## 7. 图表证据
+
+![4th 的双模型集成与降维](../../intel/google-universal-image-embedding/bodies/359487_img/02.jpg)
+
+**图 1**（topic 359487）：ViT-H-14 + ViT-L-336 各 512 维 → 拼接 1024 → PCA → L2 → 64 维嵌入。
+
+## 8. 出处
 
 - 讨论区索引：`intel/google-universal-image-embedding/topics.md`（80 条）
 - 已收录 write-up（6 篇）：
   - 1st（162 票）：https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/359316
   - 5th NS embedding（65 票）：https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/359161
   - 4th（26 票）：https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/359487
+  - 2nd：https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/359525
+  - 外部数据帖（108 票）：https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/337384
+  - 自定义训练集（110 票）：https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/336574
+  - 预训练模型汇总（65 票）：https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/340043
+- 轻读全本：`analysis/deep/google-universal-image-embedding.md`（Tier B 轻读：对照矩阵/裁决/证据分级/悬案 + 1 图证）
