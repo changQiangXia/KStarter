@@ -3,7 +3,7 @@
 > 选取规则：全部 264 场归档赛事减去 Tier A 60 场；按 `analysis/_tier_a_scored.csv` 的材料密度得分降序排列。
 > 轻量深读组件（4）：逐方案对照矩阵 ｜ 共识/分歧与裁决 ｜ 证据分级 ｜ 悬案/缺口；有归档图则内嵌图证。
 > 状态：⬜ 未开始 ｜ 🔄 进行中 ｜ ✅ 完成（轻读 + notes 回写）
-> 进度：**175/204**（2026-10-03；B01–B17 完成；B18 进行中 5/10）
+> 进度：**178/204**（2026-10-03；B01–B17 完成；B18 进行中 8/10）
 
 ## 批次 B01（1–10）
 
@@ -269,9 +269,9 @@
 | 173 | `data-assistants-with-gemma` | other | Community | 6/2 | 18.7 | ✅ |
 | 174 | `2023-kaggle-ai-report` | other | Community | 6/2 | 18.7 | ✅ |
 | 175 | `gemini-long-context` | other | Community | 6/1 | 18.1 | ✅ |
-| 176 | `gemma-language-tuning` | other | Community | 6/0 | 18.0 | ⬜ |
-| 177 | `pokemon-tcg-ai-battle-challenge-strategy` | sim-agent | Featured | 6/0 | 18.0 | ⬜ |
-| 178 | `med-gemma-impact-challenge` | other | Featured | 6/0 | 16.6 | ⬜ |
+| 176 | `gemma-language-tuning` | other | Community | 6/0 | 18.0 | ✅ |
+| 177 | `pokemon-tcg-ai-battle-challenge-strategy` | sim-agent | Featured | 6/0 | 18.0 | ✅ |
+| 178 | `med-gemma-impact-challenge` | other | Featured | 6/0 | 16.6 | ✅ |
 | 179 | `bigquery-ai-hackathon` | other | Featured | 6/0 | 16.5 | ⬜ |
 | 180 | `nfl-big-data-bowl-2022` | other | Community | 6/0 | 16.3 | ⬜ |
 
