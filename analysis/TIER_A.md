@@ -3,7 +3,7 @@
 > 选取规则：材料密度（正文数/方案帖数/机制帖数/图片数）× 系列重要性 × 主题平衡。
 > 计分明细见 `analysis/_tier_a_scored.csv`（票数项已封顶）。
 > 状态：⬜ 未开始 ｜ 🔄 进行中 ｜ ✅ 完成（深读 + 笔记回写 + 图证内嵌）
-> 进度：Batch 1 ✅ 10/10 ｜ Batch 2 ✅ 10/10 ｜ Batch 3 ✅ 10/10 ｜ Batch 4 🔄 4/10 ｜ 总计 **34/60**（2026-10-03）
+> 进度：Batch 1 ✅ 10/10 ｜ Batch 2 ✅ 10/10 ｜ Batch 3 ✅ 10/10 ｜ Batch 4 🔄 5/10 ｜ 总计 **35/60**（2026-10-03）
 
 ## 批次 1（10）
 
@@ -58,7 +58,7 @@
 | 32 | `hubmap-hacking-the-human-vasculature` | cv | 标注噪声；细管损失 | ✅ |
 | 33 | `rsna-2024-lumbar-spine-degenerative-classification` | cv | 定位→分类；每条件子模型（已做图证样板） | ✅ |
 | 34 | `rsna-2022-cervical-spine-fracture-detection` | cv | 两阶段+分割辅助 | ✅ |
-| 35 | `uw-madison-gi-tract-image-segmentation` | cv | 部分标注 masked loss | ⬜ |
+| 35 | `uw-madison-gi-tract-image-segmentation` | cv | 部分标注 masked loss | ✅ |
 | 36 | `open-problems-multimodal` | science | IR 方法迁移到单细胞 | ⬜ |
 | 37 | `open-problems-single-cell-perturbations` | science | 度量学习/对抗验证 | ⬜ |
 | 38 | `neurips-open-polymer-prediction-2025` | science | 外部数据偏移 20°C；伪标签预训练 | ⬜ |
@@ -99,6 +99,6 @@
 
 ## 进度小结
 
-- Tier A 完成：**34/60**；Batch 1–3 收官（30 场），Batch 4：**#31 isic-2024** ✅、**#32 hubmap-vasculature** ✅、**#33 rsna-2024-lumbar** ✅、**#34 rsna-2022-cervical** ✅（图证 6 张）
-- Batch 4 待办：#35 uw-madison-gi-tract → #40 waveform-inversion（共 6 场）
-- 图证样板：rsna-2024、rsna-2022-cervical（87 例分割撬动 2k 标签图链）、isic-2024、hubmap-vasculature、UBC-OCEAN
+- Tier A 完成：**35/60**；Batch 1–3 收官（30 场），Batch 4：**#31 isic-2024** ✅、**#32 hubmap-vasculature** ✅、**#33 rsna-2024-lumbar** ✅、**#34 rsna-2022-cervical** ✅、**#35 uw-madison-gi-tract** ✅（数据分层+2.5D/3D 融合，图证 3 张）
+- Batch 4 待办：#36 open-problems-multimodal → #40 waveform-inversion（共 5 场）
+- 图证样板：rsna-2024、rsna-2022-cervical（标签工程）、uw-madison-gi-tract（1st 三分层管线）、isic-2024、hubmap-vasculature、UBC-OCEAN
