@@ -41,8 +41,28 @@
 - "噪声类"是一种低成本的关系注入：让模型在判别时有个明确的"都不是"参照。
 - 2nd 是第一次完整参赛的学生——**特征极简 + 认真验证**同样能拿亚军。
 
-## 7. 出处
+## 8. 轻读结论（2026-10 补）
+
+**一句话**：7 个缺陷标签 + 多类原数据 → 本场核心是"问题形态选择"：1st 用 **noise-contrastive 多分类（8 类 + 噪声第 9 类）+ 8 个二分类堆叠**；2nd 用 4 个多类模型 + OOF Nelder-Mead 权重（再用等权公开混合）；3rd 坚持多标签并称 CV/LB 略优。三者都进前三，说明形态不是唯一解，但必须显式对照。
+
+- 1st（488065）：4 个 9 类 XGB + 8 个二分类 XGB → 12 模型堆叠（细节未公开）。
+- 2nd（488106）：合并原数据并剔除多标签行；3 个新特征、丢 7 个；4 模型 ×10 折 + Optuna；公开 notebook 等权混合公 0.89684/私 0.88923；伪标签/元堆叠无效。
+- 3rd（488127）：多标签（PyBoost+AutoGluon+公开提交）；选中私 0.88936，未选的最佳私 0.88944（本可第 2）。
+- 数据：原数据多类、竞赛数据仅 21 行多标签；多标签方法论讨论 60 票；特征精简（drop 6）33 票。
+
+**裁决**：多标签问题先做形态对照（多类/多标签/逐标签二分类）；特征先做减法；公开 OOF 等权混合是强基线；提交选择独立于建模。
+
+**悬案**：1st 细节缺失；21 个多标签行处理未定论；本场 0 图。
+
+## 9. 图表证据
+
+无可用图证（本场归档 0 图，图证缺口已登记）。
+
+## 10. 出处
 
 - 1st：noise contrastive xgb：https://www.kaggle.com/competitions/playground-series-s4e3/discussion/488065
 - 2nd：OOF 集成：https://www.kaggle.com/competitions/playground-series-s4e3/discussion/488106
 - 3rd：Mediocres et Impera（多标签路线）：https://www.kaggle.com/competitions/playground-series-s4e3/discussion/488127
+- 目标与特征解释（63 票）：https://www.kaggle.com/competitions/playground-series-s4e3/discussion/481015
+- 多标签 vs 多类（60 票）：https://www.kaggle.com/competitions/playground-series-s4e3/discussion/480817
+- 丢掉 6 个特征（33 票）：https://www.kaggle.com/competitions/playground-series-s4e3/discussion/482401

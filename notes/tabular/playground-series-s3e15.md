@@ -40,8 +40,34 @@
 - groupby 一个循环即可发现大量确定性映射——本场 5th 的核心发现工具就是它。
 - 领域知识（author 的物理实验惯例）能同时解决插补与降噪两件事。
 
-## 7. 出处
+## 8. 轻读结论（2026-10 补）
+
+**一句话**：临界热通量回归的胜负手是**插补**——原始数据里作者↔几何、D_h↔D_e 等确定性映射让"纯规则查表 + 最近邻回退"（5th）胜过通用插补器；1st 用领域裁剪 + 迭代树插补 + 异质集成拿 CV 0.07265；2nd 的未选版本本可夺冠，"提交选择失血"是本场共性。
+
+- 1st（414048）：树+NN+线性+KNN 集成；author 范围裁剪降噪；10 折 CV 0.07265±0.00202；有私榜更好但 CV 更差的提交未选。
+- 2nd（413826）：GBDT + 原数据唯一对/三元组查找插补 + MICE 兜底；把插补值取整到原数据唯一值反而更差；未选的过采样版可第 1。
+- 5th（413742）：自写规则插补（作者/几何/直径/长度映射）；圆柱几何 FE；Ridge 负权重融合。
+- 14th（413749）：hillclimbers 负权重；自模型私 0.072698 优于最终 0.072741（未选）。
+- 社区：插补技术（47 票）、CHF 关联式（29 票 / 29 评论）、Peculiar Findings（21 票）。
+
+**裁决**：先解插补（查表优先），原数据仅训练；用异质集成提升稳定性；提交选择保留"CV 最优 + 稳健异质"两种。
+
+**悬案**：3rd/4th、6th–13th 未收录；洗牌幅度未量化。
+
+## 9. 图表证据
+
+![hillclimbers 集成结构](../../intel/playground-series-s3e15/bodies/413749_img/01.png)
+
+**图 1**（topic 413749）：私榜更好的自模型（0.072698）被弃选。
+
+![1st 的提交对比](../../intel/playground-series-s3e15/bodies/414048_img/01.png)
+
+**图 2**（topic 414048）：被选/未选提交的分数对照。
+
+## 10. 出处
 
 - 1st：多样集成与领域插补：https://www.kaggle.com/competitions/playground-series-s3e15/discussion/414048
 - 5th：没有插补器的插补：https://www.kaggle.com/competitions/playground-series-s3e15/discussion/413742
 - 2nd：原数据的力量：https://www.kaggle.com/competitions/playground-series-s3e15/discussion/413826
+- 14th：hillclimbers：https://www.kaggle.com/competitions/playground-series-s3e15/discussion/413749
+- 插补技术与代码（47 票）：https://www.kaggle.com/competitions/playground-series-s3e15/discussion/410645
