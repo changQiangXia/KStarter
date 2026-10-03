@@ -19,7 +19,25 @@
 - 人工评审类比赛：先读评审标准，再决定投入方向。
 - 对建模能力训练价值有限，但能训练"如何定义好问题"。
 
+## 轻读结论（2026-10 补）
+
+- **规模与奖池**：1063 队、5 条认知赛道（Executive Functions / Learning / Metacognition / Social Cognition / Attention）、>1000 份提交；**Grand $25k ×4 + Track $10k ×10 = $200k**（724918）。
+- **冠军设计范式**：MEDLEY-BENCH（社会压力下的元认知信念更新）、LearningBench（会话内学新系统）、GAUGE（监测 vs 控制，某前沿模型 270 题零弃权）、Metaproteus（对自身输出分布的认知）；EphLangBench 用程序生成的"临时语言"把通过率拉到 7%–89%（724918）。
+- **争议**：rubric 里 **Community upvotes 占 15%**（28 票质疑 upvote farming，683674）；另有一次 rubric 变更公告（684184）。
+- **硬门槛**：数据集必须公开（"Action needed if your dataset is private" 66 评论，702378）；提交系统有 bug 与错过窗口案例（692560 / 692776）。
+- **节奏**：4 月收官 → 6 月评审 → 再延 1–2 周 → 最终公布（692562 / 716405 / 724918）。
+
+## 图表证据
+
+![投票争议帖引用的社区回复](../../intel/kaggle-measuring-agi/bodies/683674_img/01.png)
+
+**图**（topic 683674）：质疑帖截图——"跑 14/27 个模型""判别力占分""$50/天预算"等社区回复，反映讨论区推广与互助的边界。
+
 ## 出处
 
 - 讨论区索引：`intel/kaggle-measuring-agi/topics.md`
-- 获奖公布与收尾说明：见该比赛讨论区
+- 获奖公布：https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/724918
+- 收官说明：https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/692562
+- 社区投票质疑：https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/683674
+- rubric 变更：https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/684184
+- 数据集公开要求：https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/702378

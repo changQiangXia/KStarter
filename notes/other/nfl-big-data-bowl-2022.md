@@ -20,6 +20,17 @@
 - 追踪数据通用预处理：坐标标准化/朝向归一 → 可视化动画 → 派生指标（如偏移量）→ 叙事。
 - 系列赛的"组别"（高校/开放）影响投稿定位；同一数据可产多种故事（策略、球员评估、战术演化）。
 
+## 轻读结论（2026-10 补）
+
+- **赛制**：第四届 BDB、特勤组主题；NGS 2018–2020 追踪 + PFF 球探数据；无目标指标、评审制；提交须公开；高校组别（274053 / 274066）。
+- **上手链**：NFL 规则入门（18 票）→ 特勤组 10 分钟（17 票）→ 官方 demo"踢球手偏移量"R/Python 双教程（读数/清洗/动画/绘图）→ 位置标准化（Tom Bliss）→ 往届获奖作品模板（274258 / 274376 / 275296 / 274056）。
+- **数据质量坑**：身高不一致、tracking 精度、飞行球运动学异常、无效值、PFF/tracking 不匹配、PFF hangTime NaN——派生指标前先审计（276122 / 295359 / 284774 / 284166 / 298160）。
+- **领域活动**：首次 Coaches Corner + film study（Usama Young 复盘弃踢）；评审看问题定义/叙事/notebook 质量（300722）。
+
+## 图表证据
+
+本场 0 张归档图（目录为空），**图证缺口已登记**。
+
 ## 出处
 
 - 官方欢迎帖（组别与规则）：https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/274053
@@ -28,3 +39,5 @@
 - NFL 入门指南：https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/274258
 - 官方 demo（踢球手偏移量）：https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/275296
 - film study 说明：https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/283822
+- judging 与 next steps：https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/300722
+- 2022 Winners：https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/307969

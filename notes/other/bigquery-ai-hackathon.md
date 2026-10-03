@@ -17,7 +17,23 @@
 - **平台工具类黑客松的收益主要是上手新工具链**（BigQuery AI 的数据工作流）。
 - 评审口径通常公开在讨论区，先读再动手；提交格式（模板）优先于技术细节。
 
+## 轻读结论（2026-10 补）
+
+- **评审硬门槛（官方 612730）**：逐份人工阅读；必须用 GenAI / Vector Search / Multimodal 三类之一；必须公开可访问；缺 artifact 直接过滤；**每个获奖提交都被评委实际复现**；每份至少两名评审；违反负责任 AI 政策过滤。
+- **规模与节奏**：276 队、250+ 提交；10/13 公布延期到 10/20 那周（609100 / 610964）。
+- **成本门槛**：$300/90 天试用 + 免费层 + $50 追加 + $5 无卡额度（598576）；仍有账单担忧与 GCP 项目暂停帖（604156 / 608490）。
+- **提交事故**：多人遇到提交按钮失效/保存锁定（608992 15 评论、608986 10 评论、609004），→ 提前 48h 提交 + 留截图。
+- 获奖作品（TriLink、AI Patent Analyst、SpeakAura AI、ReDrugAI、OncOmix AI 等）均强调可量化的 impact/ROI。
+
+## 图表证据
+
+本场 0 张归档图（0/0），**图证缺口已登记**。
+
 ## 出处
 
 - 讨论区索引：`intel/bigquery-ai-hackathon/topics.md`
-- 结赛与获奖公告：见该比赛讨论区 "And that's a Wrap! Congratulations to our Winners!"
+- 结赛与获奖公告：https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/612730
+- 云额度支持：https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/598576
+- 官方欢迎：https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/598594
+- 结赛致谢（250+ 提交）：https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/609100
+- 评审延期：https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/610964
