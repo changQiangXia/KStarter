@@ -41,8 +41,28 @@
 - 合成赛里"数据无聊"不等于"比赛无技巧"：生成痕迹与集成工程仍是可积累的能力。
 - 学会把"原数据随机"写成结论帖分享——社区侦查本身也是贡献（本场最高价值帖子正是如此）。
 
-## 7. 出处
+## 7. 轻读结论（2026-10 补）
+
+- **随机目标检验是本场头号产物**：原目标 XGB vs 100 个打乱目标 XGB，S5E9 z=-0.83 落进随机分布；近 6 场回归 3/6 随机（S4E12、S5E2、S5E9）——入场 10 分钟即可判断"这题有没有真实信号"（604028）。
+- **榜首分数带极窄**（约 26.38–26.41）：作者有未选用的提交 private 26.40277 / public 26.38692，自称会大幅击败现第一；社区讨论"26.38 是否真优于 26.39"——LB 排名近似噪声，应以 CV 决策（609999 / 608579 / 603432）。
+- **前排工程配方**：26th 用 54 特征（重要性+permutation+SHAP）+ 18 模型 + 约 92,804 条（30%）伪标签 + 残差 stacking + 几何平均混公开方案；573rd 单 LGBM 10 折 private 26.40632（其折间 RMSE 3.1 与 LB 26.4 量纲矛盾，登记为悬案）（610264 / 610016）。
+- 1st–25th 方案未发布（610185），本场可学的是"侦查 + 稳集成"，不是冠军配方。
+
+## 8. 图表证据
+
+![S5E9 随机目标 z 检验](../../intel/playground-series-s5e9/bodies/604028_img/06.png)
+
+**图**（topic 604028）：蓝柱为 100 次打乱目标的 CV RMSE 分布，黑线为原始目标（z=-0.83）——原数据近似随机的直接证据。
+
+![未选用提交分数](../../intel/playground-series-s5e9/bodies/609999_img/01.png)
+
+**图**（topic 609999）：未选用提交 private 26.40277 / public 26.38692 的截图——佐证分数带极窄。
+
+## 9. 出处
 
 - 随机目标分析（6 场中 3 场随机）：https://www.kaggle.com/competitions/playground-series-s5e9/discussion/604028
 - 26th：FE + 伪标签 + 残差：https://www.kaggle.com/competitions/playground-series-s5e9/discussion/610264
 - 573rd 复盘：https://www.kaggle.com/competitions/playground-series-s5e9/discussion/610016
+- MIR/DJ 背景：https://www.kaggle.com/competitions/playground-series-s5e9/discussion/603307
+- Potential first place：https://www.kaggle.com/competitions/playground-series-s5e9/discussion/609999
+- No solutions：https://www.kaggle.com/competitions/playground-series-s5e9/discussion/610185

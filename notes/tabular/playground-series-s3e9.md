@@ -48,8 +48,28 @@ ambrosm（1st）的统计论点：
 - 重复行、低基数非线性列：两类被忽视的信号源。
 - 12th 的六步流程值得抄进自己的实验日志模板。
 
-## 7. 出处
+## 7. 轻读结论（2026-10 补）
+
+- **CV 是测量、公开榜是随机变量**：CV 5407 样本 vs 公开榜 721 样本，1st 只用 CV 选模型、主张提交 ≤2 次（他用了 7 次只是好奇）；不抄无 CV 证明的高分公开 notebook（394592）。
+- **多样性优于缩小模型组合**：1st 的 GB+RF+Ridge 最终对比约 12.03 优于单 Ridge 约 12.16；391644 的 CV 图 GB+RF+GP+Ridge 约 12.06 优于 GB/RF/GP/Ridge 各自单跑——跨范式集成是默认配方。
+- **重复行是信号**：12th 按各列对重复行分组、取目标均值做分箱特征，线性模型 RMSE 从约 14 降到 12；直接去重会丢信息（394600 / 391011）。
+- **调参要过种子稳定性检验**：1st 与 12th 都用"换 KFold 种子"证明 Optuna 参数不稳而改手工；44th 的 LR 系数统计特征路线虽用 Optuna，但公开了 train/test 不一致的两处 bug（394592 / 394641）。
+
+## 8. 图表证据
+
+![1st 最终模型对比](../../intel/playground-series-s3e9/bodies/394592_img/01.png)
+
+**图**（topic 394592）：GB+RF+Ridge（约 12.03）vs 单 Ridge（约 12.16）等——异质集成优于单模型的直接证据。
+
+![多样性 CV 对比](../../intel/playground-series-s3e9/bodies/391644_img/01.png)
+
+**图**（topic 391644）：GB+RF+GP+Ridge（约 12.06）vs GB/RF/GP/Ridge 单模型——与 1st 结论互相印证。
+
+## 9. 出处
 
 - 1st：CV 与多样性（含种子稳定性检验）：https://www.kaggle.com/competitions/playground-series-s3e9/discussion/394592
 - 12th：六步竞赛流程：https://www.kaggle.com/competitions/playground-series-s3e9/discussion/394600
 - 44th：线性回归派生特征：https://www.kaggle.com/competitions/playground-series-s3e9/discussion/394641
+- 结构工程师背景：https://www.kaggle.com/competitions/playground-series-s3e9/discussion/391237
+- 别缩减模型组合：https://www.kaggle.com/competitions/playground-series-s3e9/discussion/391644
+- 重复行讨论：https://www.kaggle.com/competitions/playground-series-s3e9/discussion/391011
