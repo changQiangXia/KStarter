@@ -3,7 +3,7 @@
 > 选取规则：全部 264 场归档赛事减去 Tier A 60 场；按 `analysis/_tier_a_scored.csv` 的材料密度得分降序排列。
 > 轻量深读组件（4）：逐方案对照矩阵 ｜ 共识/分歧与裁决 ｜ 证据分级 ｜ 悬案/缺口；有归档图则内嵌图证。
 > 状态：⬜ 未开始 ｜ 🔄 进行中 ｜ ✅ 完成（轻读 + notes 回写）
-> 进度：**58/204**（2026-10-03；B01–B05 完成；B06 进行中 8/10）
+> 进度：**61/204**（2026-10-03；B01–B06 完成；B07 进行中 1/10）
 
 ## 批次 B01（1–10）
 
@@ -92,14 +92,14 @@
 | 56 | `mens-march-mania-2022` | tabular | Featured | 8/8 | 43.4 | ✅ |
 | 57 | `playground-series-s4e11` | tabular | Playground | 6/7 | 43.3 | ✅ |
 | 58 | `playground-series-s5e5` | tabular | Playground | 6/7 | 43.3 | ✅ |
-| 59 | `image-matching-challenge-2024` | cv | Research | 6/28 | 43.2 | ⬜ |
-| 60 | `rsna-intracranial-aneurysm-detection` | cv | Featured | 6/30 | 43.2 | ⬜ |
+| 59 | `image-matching-challenge-2024` | cv | Research | 6/28 | 43.2 | ✅ |
+| 60 | `rsna-intracranial-aneurysm-detection` | cv | Featured | 6/30 | 43.2 | ✅ |
 
 ## 批次 B07（61–70）
 
 | # | slug | 主题 | 类别 | 材料(正文/图) | 得分 | 状态 |
 | --- | --- | --- | --- | --- | --- | --- |
-| 61 | `google-code-golf-2025` | sim-agent | Research | 6/21 | 43.1 | ⬜ |
+| 61 | `google-code-golf-2025` | sim-agent | Research | 6/21 | 43.1 | ✅ |
 | 62 | `sartorius-cell-instance-segmentation` | cv | Featured | 6/8 | 42.9 | ⬜ |
 | 63 | `byu-locating-bacterial-flagellar-motors-2025` | cv | Research | 6/14 | 42.8 | ⬜ |
 | 64 | `stanford-rna-3d-folding-2` | science | Featured | 7/1 | 42.8 | ⬜ |

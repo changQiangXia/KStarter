@@ -44,10 +44,33 @@
 2. **评分含位置时，输出必须带位置**——先读清指标。
 3. 与 RSNA 2024 腰椎、RSNA 乳腺对照：RSNA 系列赛事的"两阶段 + 领域先验"模式非常稳定。
 
-## 6. 出处
+## 6. 轻读结论（2026-10 补）
+
+**一句话**：3D 医学影像的"先定位再分类"范式——**血管分割提供结构先验，位置感知分类头提供上限**；正例极稀时用"重建动脉瘤球"这类辅助任务压住过拟合。
+
+- 1st（611846）：nnU-Net 三级分割（粗定位 1mm + 两套细分割 Dice/Tversky + SkeletonRecall）→ 140³mm ROI → **用分割预训练 nnU-Net 当分类骨干** + Vessel Region-Masked Pooling + Location-Aware Transformer；辅助球重建损失权重 1.0 > 分类 0.1/0.05；EMA + 4 折 + 左右翻转 TTA；失败回退 OOF 均值。
+- 3rd（611856）：YOLOv8 检测血管区（MIP 框，mAP@0.5>0.95）→ 3D ResNet-18 逐特征图 14 类分类；把部分 stride 2→1 放大特征图。
+- 4th（611893）：**DINOv3 直接回归 ROI 框坐标**（48 切片输入）；54.5 万样本仅 2.2k 正例（1:250）。
+- 9th（611908）：YOLO 2.5D + 3D CenterNet + 三个元分类器平均；**2.5D 不做 Z 重采样反而 +0.02 CV**；13 位置当 13 个检测类。
+
+**裁决**：位置型标签必须保留空间对应（掩码池化/特征图分类/检测类）；辅助定位任务权重高于分类；各向异性数据的 Z 对齐要靠实验而非直觉；预留数据清洗与失败兜底。
+
+**悬案**：2nd/6th–8th 方案缺失；1st 的 Transformer 超参与消融未给。
+
+## 7. 图表证据
+
+![1st 的 ROI 分类器结构](../../intel/rsna-intracranial-aneurysm-detection/bodies/611846_img/03.png)
+
+**图 1**（topic 611846）：nnU-Net 骨干 + 13 掩码池化 + Location-Aware Transformer + 存在性头 + 辅助球重建（紫色体）的整体结构。
+
+## 8. 出处
 
 - 讨论区索引：`intel/rsna-intracranial-aneurysm-detection/topics.md`（80 条）
 - 已收录 write-up（6 篇）：
   - 1st（158 票）：https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/611846
   - 5th（54 票）：https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/611849
   - 9th（47 票）：https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/611908
+  - 3rd（46 票）：https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/611856
+  - 4th（44 票）：https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/611893
+  - 临床背景（90 票）：https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/591648
+- 轻读全本：`analysis/deep/rsna-intracranial-aneurysm-detection.md`（Tier B 轻读：对照矩阵/裁决/证据分级/悬案 + 1 图证）
