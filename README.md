@@ -18,7 +18,7 @@
 | 追一个技法的来龙去脉 | `analysis/lineage.md`（9 族 52 节点 + 传播链 + 失败传播链） |
 | 赛前避坑 / 开赛流程 | `analysis/failures.md`（12 类失败模式 + 1964 条）、`analysis/SOP.md`（操作手册） |
 | 评估结论能不能用 | `analysis/limitations.md`（材料/证据/复现边界与使用建议） |
-| 研究顶尖选手 / 按人找经验 | `people/profiles/<handle>.md`（竞赛榜前 50 人档）→ `analysis/people/PLAYBOOK.md`（跨人专题） |
+| 研究顶尖选手 / 按人找经验 | `people/profiles/<handle>.md`（竞赛榜前 50 人档）→ `analysis/people/PLAYBOOK.md`（跨人专题）→ `analysis/people/GENERALIZED_PROCESS.md`（可泛化 7 阶段流程与选手原型） |
 | 找外部题解 / 补链接 / 看历史场 | `analysis/external/EXTERNAL.md`（721 场 / 4768 条链接索引）→ `delta_links.csv`；找 agent 工作流与高级配方看 `analysis/external/KAGGLE_SKILLS.md` |
 | 从零打第一场 | `LEARNING_PATH.md` + `playbook/00-通用方法论.md` |
 | 看原始材料（正文/评论/图） | `intel/<slug>/`（`topics.json` / `*.html` / `*.txt` / `*_img/`） |
