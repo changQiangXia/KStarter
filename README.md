@@ -19,6 +19,7 @@
 | 赛前避坑 / 开赛流程 | `analysis/failures.md`（12 类失败模式 + 1964 条）、`analysis/SOP.md`（操作手册） |
 | 评估结论能不能用 | `analysis/limitations.md`（材料/证据/复现边界与使用建议） |
 | 研究顶尖选手 / 按人找经验 | `people/profiles/<handle>.md`（竞赛榜前 50 人档）→ `analysis/people/PLAYBOOK.md`（跨人专题） |
+| 找外部题解 / 补链接 / 看历史场 | `analysis/external/EXTERNAL.md`（721 场 / 4768 条链接索引）→ `delta_links.csv`（本仓库尚未收录的 2934 条） |
 | 从零打第一场 | `LEARNING_PATH.md` + `playbook/00-通用方法论.md` |
 | 看原始材料（正文/评论/图） | `intel/<slug>/`（`topics.json` / `*.html` / `*.txt` / `*_img/`） |
 | 做一份新场次的分析 | `analysis/SOP.md` §9 复盘模板 + `templates/` |
@@ -34,7 +35,7 @@ notes/            264 篇结构化摘要：任务/数据、验证、模型家族
    │ 深读
 analysis/deep/    264 篇深读：Tier A 60（完整 11 组件）+ Tier B 204（轻量 6 组件）
    │ 跨场归纳
-analysis/         THEORY(v0.7) · evidence_map · claims · failures · lineage · limitations · SOP
+analysis/         THEORY(v0.7) · evidence_map · claims · failures · lineage · limitations · SOP · external(外部题解索引)
    │ 回写
 playbook/ 七册     通用 / 表格 / CV / NLP-LLM / 科学 / Agent / 多模态-音频-元类（v2 增补 + 检查清单）
 LEARNING_PATH.md  新手分阶段路径（含跨领域迁移、黑箱迭代、提交与定稿）
@@ -52,6 +53,7 @@ LEARNING_PATH.md  新手分阶段路径（含跨领域迁移、黑箱迭代、�
 | 证据 | **evidence_map 394 行 / claims 1850 行** | 规律×数字证据；claims 带 `可复算-官方/图证/原文数字/自述/矛盾` 标记 |
 | 失败学 | **12 类 + 1964 条** | `analysis/failures.md` + `failures.csv`（覆盖全部 264 场） |
 | 图像索引 | **1666 行** | P1 已作证 502 / P2 待用 1164；归档图文件 1689 个（png 1486/jpg 136/jpeg 9/gif 28/svg 23/webp 5/bmp 2） |
+| 外部题解索引 | **721 场 / 4768 条** | kaggle-solutions 派生（MIT）：228 场覆盖场内 2402 条（未收录 700）、35 场零链接、1 场缺；见 `analysis/external/` |
 | 谱系/批判 | **52 节点 + 1 篇** | `lineage.md`（含失败传播链）；`limitations.md` |
 | 校验门禁 | 链接 **1564** / 图路径 **823** | 全通过；另对 `topics.json` 全量校验 1177（claims URL）/1666（图 URL）/448（failures topic id），0 错 |
 
@@ -79,6 +81,7 @@ LEARNING_PATH.md  新手分阶段路径（含跨领域迁移、黑箱迭代、�
 | `analysis/claims.csv` | 全量可量化断言（含 evidence_type / topic ids / source URL） |
 | `analysis/failures.md` + `failures.csv` | 失败学手册与 1964 条原始条目 |
 | `analysis/images_index.csv` | 1666 张归档图索引（路径/来源/上下文/优先级/内嵌位置） |
+| `analysis/external/` | 外部题解索引（kaggle-solutions）：`kaggle_solutions_index.csv` 全量、`coverage_by_comp.csv` 覆盖明细、`delta_links.csv` 未收录链接、`EXTERNAL.md` 口径与用法 |
 | `analysis/lineage.md` / `limitations.md` | 方法谱系（52 节点） / 批判与边界 |
 | `analysis/SOP.md` | 开赛—收官操作手册（侦查/验证/指标/建模/评审交付/提交/复盘） |
 | `analysis/people/OVERVIEW.md` | 竞赛榜前 50 总览（战绩/领域/发言/方法词），明细档案见 `people/profiles/` |
@@ -116,6 +119,9 @@ $PY scripts/build_images_index.py            # → analysis/images_index.csv
 $PY scripts/build_failures.py                # → analysis/failures.csv
 $PY scripts/build_failures_md.py             # → analysis/failures.md
 $PY scripts/build_evidence_map.py            # → analysis/evidence_map.md
+
+# 外部索引（需要 data/cache/kaggle-solutions clone，见 analysis/external/EXTERNAL.md）
+$PY scripts/build_external_index.py          # → analysis/external/{kaggle_solutions_index,coverage_by_comp,delta_links}.csv
 ```
 
 ## 维护约定（新增一场 / 一批）
